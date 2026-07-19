@@ -1,11 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { FormLogin } from "./Components/ComponentsForm/formLogin.jsx";
-import { FormRegister } from "./Components/ComponentsForm/formRegister.jsx";
-
+import { FormLogin } from "./Components/formLogin.jsx";
+import { FormRegister } from "./Components/formRegister.jsx";
+import { Header } from "./Components/ComponentesFeed/header.jsx";
+import { SubHeader } from "./Components/ComponentesFeed/subHeader.jsx";
 import "./index.css";
-import App from "./App.jsx";
+// import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -19,7 +20,8 @@ createRoot(document.getElementById("root")).render(
           ></Route>
         </Route>
 
-        <Route path="*" element={<FormLogin></FormLogin>}></Route>
+        {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
+        <Route path="*" element={<SubHeader></SubHeader>}></Route>
       </Routes>
     </BrowserRouter>
     {/* <App /> */}
