@@ -3,8 +3,9 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { FormLogin } from "./Components/formLogin.jsx";
 import { FormRegister } from "./Components/formRegister.jsx";
-import { Header } from "./Components/ComponentesFeed/header.jsx";
-import { SubHeader } from "./Components/ComponentesFeed/subHeader.jsx";
+// import { Header } from "./Components/ComponentesFeed/header.jsx";
+// import { SubHeader } from "./Components/ComponentesFeed/subHeader.jsx"
+import { Post } from "./Components/ComponentesFeed/post.jsx";
 import "./index.css";
 // import App from "./App.jsx";
 
@@ -21,7 +22,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
 
         {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
-        <Route path="*" element={<SubHeader></SubHeader>}></Route>
+        <Route path="*" element={<Post></Post>}></Route>
       </Routes>
     </BrowserRouter>
     {/* <App /> */}

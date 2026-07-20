@@ -4,6 +4,7 @@ import searchIcon from "../../assets/svgIcons/search-line.svg";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
+import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 export function Header() {
   return (
     <header className="border border-border p-2">
@@ -22,7 +23,7 @@ export function Header() {
             <input
               type="text"
               placeholder="Buscar livros, autores, leitores..."
-              className="bg-white rounded-4xl placeholder:pl-8  h-10 border border-border
+              className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
               w-[clamp(7rem,50vw,30rem)]"
             ></input>
           </div>
@@ -40,9 +41,7 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-5"></img>
           </button>
 
-          <button>
-            <div className="bg-amber-800 rounded-4xl p-4"></div>
-          </button>
+          <PerfilIcon></PerfilIcon>
         </div>
       </nav>
     </header>
