@@ -1,5 +1,5 @@
-export function Lines ({children}){
+export function Lines ({children, ...props}){
     return(
-        <div className="flex-grow border-t border-gray-300">{children}</div>
+        <div className="grow border-t border-border" {...props}>{children}</div>
     )
 }

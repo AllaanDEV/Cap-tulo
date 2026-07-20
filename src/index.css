@@ -7,10 +7,17 @@
   --color-wine: #722F37;
   --color-primary: #FFFBF7;
   --color-border: #EFE7DD;
+  --color-background: #F5EFE6;
+  --color-gray: #A28F7A;
+
+  /* icons */
+  --color-star: rgb(201 154 69);
+  --color-ebook: rgb(91 107 79);
+  --color-gallery:rgb(124 114 100)
 }
 
 @layer colorDefault {
   html {
-    @apply bg-primary;
+    @apply bg-background;
   }
 }
