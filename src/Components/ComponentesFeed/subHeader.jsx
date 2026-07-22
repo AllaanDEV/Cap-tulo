@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Header } from "./header";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Lines } from "../ComponentsForm/lines";
+
 import { star } from "../svgCode";
 import { ebook } from "../svgCode";
 import { quotation } from "../svgCode";
 import { gallery } from "../svgCode";
 import { Div } from "./div";
-import { Container } from "./container";
+// import { Container } from "./container";
 
 const navigation = [
   { name: "Para você" },
@@ -21,13 +21,14 @@ const pages = [
   { icon: ebook },
   { icon: gallery },
 ];
+
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
+
   return (
     <>
-      <Header></Header>
-      <div className="pt-7 pb-5">
-        <Container>
+
+        <section className="pb-5 flex flex-col gap-5">
           <div
             className="bg-primary rounded-4xl h-12 border border-border
               w-full flex justify-around py-1 px-1"
@@ -44,7 +45,7 @@ export function SubHeader({ children }) {
               );
             })}
           </div>
-
+          {/* card a Div */}
           <Div>
             <div className="flex gap-3">
               <PerfilIcon></PerfilIcon>
@@ -73,8 +74,7 @@ export function SubHeader({ children }) {
 
             {children}
           </Div>
-        </Container>
-      </div>
+        </section>
     </>
   );
 }

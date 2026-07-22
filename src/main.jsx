@@ -8,6 +8,7 @@ import { FormRegister } from "./Components/formRegister.jsx";
 import { Post } from "./Components/ComponentesFeed/post.jsx";
 import "./index.css";
 // import App from "./App.jsx";
+import { Feed } from "./Components/feed.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -22,7 +23,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
 
         {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
-        <Route path="*" element={<Post></Post>}></Route>
+        <Route path="*" element={<Feed></Feed>}></Route>
       </Routes>
     </BrowserRouter>
     {/* <App /> */}
