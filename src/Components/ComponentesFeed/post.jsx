@@ -7,7 +7,7 @@ import { share } from "../svgCode";
 import { comment } from "../svgCode";
 import { like } from "../svgCode";
 import { save } from "../svgCode";
-import daenerys from "../../assets/dragoes-daenerys.webp";
+// import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 
 
@@ -16,7 +16,7 @@ const Icon = configuration;
 
 const buttons = [{ icon: like }, { icon: comment }, { icon: share }];
 
-export function Post() {
+export function Post({post}) {
   return (
     <>
           <Div>
@@ -25,9 +25,9 @@ export function Post() {
                 <div className="flex gap-3 items-center">
                   <PerfilIcon></PerfilIcon>
                   <p>
-                    Vasco <span className="text-gray">resenhou</span>
-                    <span className="text-wine"> Como treinar seu Dragão</span>
-                    <p className="text-gray text-xs">@teste1234</p>
+                    {post.user} <span className="text-gray">resenhou</span>
+                    <span className="text-wine">{post.midia}</span>
+                    <p className="text-gray text-xs">{post.user}</p>
                   </p>
                 </div>
 
@@ -37,14 +37,12 @@ export function Post() {
               </div>
 
               <p className="text">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
-                quibusdam nostrum ratione aspernatur provident consequatur quod,
-                eius eligendi, iure et sunt inventore libero ex modi eos.
-                Deleniti quibusdam assumenda corporis!
+                {post.text}
               </p>
 
-              <Info className="bg-background border border-border rounded-3xl w-full h-auto flex items-center">
-                <img src={daenerys}></img>
+              <Info>
+                <img src={post.img}></img>
+                {/* <img src={daenerys}></img> */}
               </Info>
             </section>
 

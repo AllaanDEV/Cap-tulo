@@ -9,6 +9,7 @@ import { book } from "../svgCode";
 import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
+import { useState } from "react";
 
 const Spiral = spiral;
 
@@ -32,10 +33,13 @@ const options = [
   { icon: group, name: "Clubes de leitura" },
   { icon: save, name: "Quero ler" },
 ];
+
 export function SideBar() {
+  const [option, setOption]= useState("Feed")
+
   return (
-    <section className="hidden lg:block w-ful">
-      <div className=" flex flex-col gap-3 w-full">
+    <section className="hidden lg:block w-60 relative">
+      <div className=" flex flex-col gap-3 fixed w-60">
         <Div>
           <button className="flex gap-2">
             <PerfilIcon></PerfilIcon>
@@ -47,7 +51,7 @@ export function SideBar() {
           <Info className="flex gap-3 bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
-                <div key={index} className="text-xs flex flex-col items-center">
+                <div key={index} className={`text-xs flex flex-col items-center`}>
                   <p>{s.number}</p>
                   <p>{s.status}</p>
                 </div>
@@ -56,11 +60,11 @@ export function SideBar() {
           </Info>
         </Div>
 
-        <div className="flex flex-col gap-4 ">
+        <div className="flex flex-col gap-1 ">
           {options.map((o, index) => {
             const Icon = o.icon;
             return (
-              <button key={index} className="flex gap-2 items-center">
+              <button key={index} className={`flex gap-2 items-center hover:bg-border py-2 pl-2 rounded-2xl ${option == o.name ? "bg-wine/15 text-wine enabled:hover:bg-border" : ""}`} onClick={() => setOption(o.name)}>
                 <Icon></Icon>
                 <p>{o.name}</p>
               </button>

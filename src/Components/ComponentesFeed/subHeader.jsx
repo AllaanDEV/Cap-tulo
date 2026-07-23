@@ -16,10 +16,10 @@ const navigation = [
 ];
 
 const pages = [
-  { icon: star },
-  { icon: quotation },
-  { icon: ebook },
-  { icon: gallery },
+  { icon: star, name: "Resenha"},
+  { icon: quotation, name: "Citação" },
+  { icon: ebook, name: "Lendo agora" },
+  { icon: gallery, name: "Foto" },
 ];
 
 export function SubHeader({ children }) {
@@ -64,9 +64,10 @@ export function SubHeader({ children }) {
                 return (
                   <button
                     key={index}
-                    className={`hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors`}
+                    className={`hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center`}
                   >
                     <Icon></Icon>
+                    <p>{p.name}</p>
                   </button>
                 );
               })}
