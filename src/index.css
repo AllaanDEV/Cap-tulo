@@ -10,6 +10,9 @@
   --color-background: #F5EFE6;
   --color-gray: #A28F7A;
 
+  /* options */
+  --color-hover: #C85A32;
+
   /* icons */
   --color-star: rgb(201 154 69);
   --color-ebook: rgb(91 107 79);

@@ -5,13 +5,13 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
+
 export function Header() {
   return (
     <header className="border border-border p-2">
       <nav className="flex items-center gap-3 justify-between p-1">
         <div className="flex gap-2">
           <img src={logo} className="w-auto h-10"></img>
-
           <div className="relative">
             <div className="">
               <img
@@ -24,21 +24,21 @@ export function Header() {
               type="text"
               placeholder="Buscar livros, autores, leitores..."
               className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
-              w-[clamp(7rem,50vw,30rem)]"
+              w-[clamp(2rem,40vw,30rem)]"
             ></input>
           </div>
         </div>
 
-        <div className="hidden sm:block ">
-          <button className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1">
-            <img src={addIcon}></img>
-            Publicar
-          </button>
-        </div>
+        <div className="flex items-center gap-5">
+          <div className="hidden sm:block w-50">
+            <button className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center">
+              <img src={addIcon}></img>
+              Publicar
+            </button>
+          </div>
 
-        <div className="flex items-center gap-2">
           <button>
-            <img src={notificationIcon} className="w-auto h-5"></img>
+            <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
           <PerfilIcon></PerfilIcon>

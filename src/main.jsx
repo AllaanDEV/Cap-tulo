@@ -5,7 +5,7 @@ import { FormLogin } from "./Components/formLogin.jsx";
 import { FormRegister } from "./Components/formRegister.jsx";
 // import { Header } from "./Components/ComponentesFeed/header.jsx";
 // import { SubHeader } from "./Components/ComponentesFeed/subHeader.jsx"
-import { Post } from "./Components/ComponentesFeed/post.jsx";
+// import { Post } from "./Components/ComponentesFeed/post.jsx";
 import "./index.css";
 // import App from "./App.jsx";
 import { Feed } from "./Components/feed.jsx";
