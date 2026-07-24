@@ -9,7 +9,7 @@ export function Feed() {
   return (
     <>
       <Header></Header>
-      <div className="flex pt-7 px-4 lg:gap-4">
+      <main className="flex pt-7 px-4 lg:gap-4">
         <section>
           <SideBar></SideBar>
         </section>
@@ -20,7 +20,7 @@ export function Feed() {
             <ArrayPost></ArrayPost>
           </Container>
         </section>
-      </div>
+      </main>
     </>
   );
 }
