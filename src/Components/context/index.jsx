@@ -49,10 +49,10 @@ export function Context({ children }) {
     }
   };
 
-   const [post, setPost] = useState([]);
+   const [publication, setPublication] = useState([]);
 
   return (
-    <AppContext.Provider value={{ openOrCloseDialog, dialog, Register, Login, post, setPost}}>
+    <AppContext.Provider value={{ openOrCloseDialog, dialog, Register, Login, publication, setPublication}}>
       {children}
     </AppContext.Provider>
   );

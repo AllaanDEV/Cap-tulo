@@ -43,20 +43,20 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
- const {post, setPost}= useContext(AppContext)
+ const {publication, setPublication}= useContext(AppContext)
 
   useEffect(() => {
     fetch("/api/posts")
       .then((response) => {
         return response.json();
       })
-      .then((data) => setPost(data));
+      .then((data) => setPublication(data));
       // os dados dps da promessa
   }, []);
 
   return (
     <ul className="flex flex-col gap-5">
-      {post.map((p, index) => {
+      {publication.map((p, index) => {
         return (
           <li key={index}>
             <Post post={p}></Post>
