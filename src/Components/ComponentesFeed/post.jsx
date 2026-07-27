@@ -10,22 +10,24 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AppContext from "../context";
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
+  const { publication, setPublication } = useContext(AppContext);
   const [like, setLike] = useState(post.likes);
 
-  const token=   localStorage.getItem("token")
+  const token = localStorage.getItem("token");
 
   const LikeButton = () => {
     fetch(`/api/posts/${post.id}/like`, {
       method: "POST",
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }).then((response) => {
       if (response.ok) {
         setLike(like + 1);
@@ -33,13 +35,24 @@ export function Post({ post }) {
     });
   };
 
+  // mudar os nomes pq esta dando conflitokkkkkk
   const Saves = () => {
     fetch(`/api/posts/${post.id}/save`, {
       method: "POST",
     }).then((response) => response.json());
   };
 
-
+  const postDelete = () => {
+    fetch(`http://localhost:3000/api/posts/${post.id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const newFeed = publication.filter((p) => p.id != data.id);
+        return setPublication(newFeed);
+      });
+  };
   return (
     <>
       <Div>
@@ -59,9 +72,16 @@ export function Post({ post }) {
               </p>
             </div>
 
-            <button>
-              <Icon></Icon>
-            </button>
+            <details className="flex flex-col items-end relative">
+              <summary className="list-none marker:hidden">
+                <Icon></Icon>
+              </summary>
+              <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
+                <button className="hover:text-wine" onClick={postDelete}>
+                  Deletar
+                </button>
+              </div>
+            </details>
           </div>
 
           <p className="text">{post.content}</p>
@@ -97,7 +117,11 @@ export function Post({ post }) {
               <p className="text-sm">{}</p>
             </div>
           </div>
-          <button className="hover:text-yellow-600" onClick={Saves} to={"saves"}>
+          <button
+            className="hover:text-yellow-600"
+            onClick={Saves}
+            to={"saves"}
+          >
             <Save></Save>
           </button>
         </div>
