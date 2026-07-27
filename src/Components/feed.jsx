@@ -4,6 +4,7 @@ import { Header } from "./ComponentesFeed/header";
 // import { Post } from "./ComponentesFeed/post";
 import { SideBar } from "./ComponentesFeed/sideBar";
 import { SubHeader } from "./ComponentesFeed/subHeader";
+import { Dialog } from "./ComponentesFeed/dialog";
 
 export function Feed() {
   return (
@@ -13,7 +14,7 @@ export function Feed() {
         <section>
           <SideBar></SideBar>
         </section>
-
+        <Dialog></Dialog>
         <section>
           <Container className="lg:min-w-[50vw]">
             <SubHeader></SubHeader>

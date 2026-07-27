@@ -9,7 +9,7 @@ import { book } from "../svgCode";
 import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
-import { useState } from "react";
+import {useState } from "react";
 
 const Spiral = spiral;
 
@@ -35,6 +35,10 @@ const options = [
 ];
 
 export function SideBar() {
+ const user=localStorage.getItem("user")
+
+ const userObj= user ? JSON.parse(user) : "anonimo"
+
   const [option, setOption]= useState("Feed")
 
   return (
@@ -44,8 +48,8 @@ export function SideBar() {
           <button className="flex gap-2">
             <PerfilIcon></PerfilIcon>
             <div className="text-start">
-              <p>teste</p>
-              <p>@teste123</p>
+              <p>{userObj?.name ||"anonimo"}</p>
+              <p>@{userObj?.name ||"anonimo"}</p>
             </div>
           </button>
           <Info className="flex gap-3 bg-border rounded-lg p-3">

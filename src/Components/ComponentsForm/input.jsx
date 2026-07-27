@@ -1,8 +1,9 @@
 export function Input({ type, ...props }) {
   return (
-    <div className="">
+    <div>
       <p>{type.charAt(0).toUpperCase() + type.slice(1)}</p>
       <input
+      name={type}
         type={type}
         className="bg-white w-full rounded-sm p-1"
         required

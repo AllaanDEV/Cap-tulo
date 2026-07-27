@@ -8,14 +8,39 @@ import { QuestionButton } from "./ComponentsForm/questionButton";
 import { Form } from "./ComponentsForm/form";
 import { ContainerForm } from "./ComponentsForm/containerForm";
 import { Remenber } from "./ComponentsForm/remenber";
+import { useContext } from "react";
+import { useNavigate } from "react-router";
+import AppContext from "./context";
 
 export function FormLogin() {
+
+  const navigate= useNavigate()
+
+  const {Login}= useContext(AppContext)
+
+  const loginData = async (e) => {
+   e.preventDefault()
+
+   const dataFormRegister= new FormData(e.target)
+
+    const email = dataFormRegister.get("email");
+    const password = dataFormRegister.get("password")
+  
+    const data = await Login ({ email, password });
+
+    if (data.success == true) {
+      navigate("/feed");
+    } else {
+      console.log("Erro ao enviar dados");
+    }
+  };
+
   return (
     <ContainerForm>
       <img src={logo} className="w-auto h-15"></img>
       <h1>Bem vindo de volta!</h1>
       <div className=" px-5 flex flex-col gap-2">
-        <Form>
+        <Form active={loginData}>
           <Input type="email" placeholder="Example@email.com"></Input>
           <Input type="password" placeholder="Digite sua senha"></Input>
 

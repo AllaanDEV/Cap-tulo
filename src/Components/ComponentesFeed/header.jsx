@@ -5,8 +5,11 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-
+import { useContext } from "react";
+import AppContext from "../context";
 export function Header() {
+  const { openOrCloseDialog} = useContext(AppContext);
+
   return (
     <header className="border border-border p-2">
       <nav className="flex items-center gap-3 justify-between p-1">
@@ -31,7 +34,10 @@ export function Header() {
 
         <div className="flex items-center gap-5">
           <div className="hidden sm:block w-50">
-            <button className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center">
+            <button
+              className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center"
+              onClick={openOrCloseDialog}
+            >
               <img src={addIcon}></img>
               Publicar
             </button>
