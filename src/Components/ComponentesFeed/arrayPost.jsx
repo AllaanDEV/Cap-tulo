@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Post } from "./post";
+import AppContext from "../context";
 
 // const post = [
 //   {
@@ -42,10 +43,10 @@ import { Post } from "./post";
 // ];
 
 export function ArrayPost() {
-  const [post, setPost] = useState([]);
+ const {post, setPost}= useContext(AppContext)
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/posts")
+    fetch("/api/posts")
       .then((response) => {
         return response.json();
       })

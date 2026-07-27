@@ -10,25 +10,29 @@ import "./index.css";
 // import App from "./App.jsx";
 import { Feed } from "./Components/feed.jsx";
 import { Saves } from "./Components/saves.jsx";
+import { Context } from "./Components/context/index.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="auth">
-          <Route path="login" element={<FormLogin></FormLogin>}></Route>
-          <Route
-            path="register"
-            element={<FormRegister></FormRegister>}
-          ></Route>
-        </Route>
+    <Context>
+      <BrowserRouter>
+        <Routes>
+          <Route path="auth">
+            <Route path="login" element={<FormLogin></FormLogin>}></Route>
+            <Route
+              path="register"
+              element={<FormRegister></FormRegister>}
+            ></Route>
+          </Route>
 
-        <Route path="save" element={<Saves></Saves>}></Route>
+          <Route path="save" element={<Saves></Saves>}></Route>
+          <Route path="feed" element={<Feed></Feed>}></Route>
 
-        {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
-        <Route path="*" element={<Feed></Feed>}></Route>
-      </Routes>
-    </BrowserRouter>
-    {/* <App /> */}
+          {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
+          <Route path="*" element={<FormLogin></FormLogin>}></Route>
+        </Routes>
+      </BrowserRouter>
+      {/* <App /> */}
+    </Context>
   </StrictMode>,
 );

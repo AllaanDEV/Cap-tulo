@@ -18,9 +18,14 @@ const Icon = configuration;
 export function Post({ post }) {
   const [like, setLike] = useState(post.likes);
 
+  const token=   localStorage.getItem("token")
+
   const LikeButton = () => {
     fetch(`/api/posts/${post.id}/like`, {
       method: "POST",
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
     }).then((response) => {
       if (response.ok) {
         setLike(like + 1);
@@ -29,10 +34,11 @@ export function Post({ post }) {
   };
 
   const Saves = () => {
-    fetch("http://localhost:3000/api/posts/:id/save", {
+    fetch(`/api/posts/${post.id}/save`, {
       method: "POST",
     }).then((response) => response.json());
   };
+
 
   return (
     <>
@@ -49,7 +55,7 @@ export function Post({ post }) {
                     <span className="text-wine">{post.midia}</span>
                   </div>
                 )}
-                <p className="text-gray text-xs">{post.author}</p>
+                <p className="text-gray text-xs">@{post.author}</p>
               </p>
             </div>
 
