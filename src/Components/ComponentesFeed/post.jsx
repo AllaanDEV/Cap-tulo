@@ -48,11 +48,45 @@ export function Post({ post }) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => {
-        const newFeed = publication.filter((p) => p.id != data.id);
+      .then(() => {
+        const newFeed = publication.filter((p) => p.id != post.id);
         return setPublication(newFeed);
       });
   };
+
+  const [comments, setComments] = useState(false);
+  const commentsOpenOrClose = () => {
+    setComments(!comments);
+  };
+
+  const user = localStorage.getItem("user");
+  const userObj = JSON.parse(user);
+
+  const [comment, setComment] = useState([]);
+
+  const addComment = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    try {
+      const response = await fetch(`/api/posts/${post.id}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: Date.now().toString(),
+          author: userObj.name,
+          text: formData.get("comment"),
+        }),
+      });
+
+      const data = await response.json();
+      const allComments = [data, ...post.comments];
+      return setComment(allComments);
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
   return (
     <>
       <Div>
@@ -105,7 +139,7 @@ export function Post({ post }) {
               </ButtonPost>
             </div>
             <div>
-              <ButtonPost>
+              <ButtonPost onClick={commentsOpenOrClose}>
                 <Comment></Comment>
               </ButtonPost>
               <p className="text-sm">{}</p>
@@ -125,6 +159,42 @@ export function Post({ post }) {
             <Save></Save>
           </button>
         </div>
+
+        {comments && (
+          <>
+            <Lines></Lines>
+            <form onSubmit={addComment}>
+              <textarea
+                name="comment"
+                className="w-full bg-amber-200 flex placeholder:items-center"
+                placeholder="DIGITE UM COMENTÁRIO"
+              ></textarea>
+              <button>lançar</button>
+            </form>
+            <ul className=" fit-content py-3 flex flex-col gap-6">
+              {comment.length == 0 ? (
+                <div>Ainda não há comentários</div>
+              ) : (
+                comment.map((c, index) => {
+                  return (
+                    <li className="flex gap-2" key={index}>
+                      <div className="flex flex-col items-start">
+                        <PerfilIcon></PerfilIcon>
+                      </div>
+                      <div className="p-2 bg-background border border-border items-center  rounded-b-3xl rounded-tr-3xl">
+                        <div className="flex gap-2">
+                          <p>{c?.author}</p>
+                          <p>@{c?.author}</p>
+                        </div>
+                        <p>{c?.text}</p>
+                      </div>
+                    </li>
+                  );
+                })
+              )}
+            </ul>
+          </>
+        )}
       </Div>
     </>
   );
