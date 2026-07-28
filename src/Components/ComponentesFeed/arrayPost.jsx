@@ -56,9 +56,9 @@ export function ArrayPost() {
 
   return (
     <ul className="flex flex-col gap-5">
-      {publication.map((p, index) => {
+      {publication.map((p) => {
         return (
-          <li key={index}>
+          <li key={p.id}>
             <Post post={p}></Post>
           </li>
         );

@@ -7,7 +7,8 @@ export function Dialog() {
 
   const userObj = user ? JSON.parse(user) : "anonimo";
 
-  const { openOrCloseDialog, dialog, publication, setPublication } = useContext(AppContext);
+  const { openOrCloseDialog, dialog, publication, setPublication } =
+    useContext(AppContext);
 
   const dialogRef = useRef(null);
 
