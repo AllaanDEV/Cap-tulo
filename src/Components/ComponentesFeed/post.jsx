@@ -10,8 +10,9 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
+import { Form } from "../ComponentsForm/form";
 
 const Save = save;
 const Icon = configuration;
@@ -55,14 +56,35 @@ export function Post({ post }) {
   };
 
   const [comments, setComments] = useState(false);
-  const commentsOpenOrClose = () => {
-    setComments(!comments);
+  const [editComments, setEditComments] = useState(false);
+
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    if (editComments) {
+      dialogRef.current.showModal();
+    } else {
+      dialogRef.current.close();
+    }
+  }, [editComments]);
+
+  const toggleComments = (c) => {
+    if (c == 1) {
+      setComments(!comments);
+    } else if (c == 2) {
+      setEditComments(!editComments);
+      console.log(editComments);
+    }
   };
 
   const user = localStorage.getItem("user");
   const userObj = JSON.parse(user);
 
-  const [comment, setComment] = useState([]);
+  const [comment, setComment] = useState({});
+
+  useEffect(() => {
+    setComment(post.comments);
+  }, [post]);
 
   const addComment = async (e) => {
     e.preventDefault();
@@ -80,11 +102,54 @@ export function Post({ post }) {
       });
 
       const data = await response.json();
-      const allComments = [data, ...post.comments];
+      const allComments = data.comments;
+      //reverter a ordem, ficando os comentários novos em primeiro
+      e.target.reset();
       return setComment(allComments);
     } catch (error) {
       return { success: false, error: error.message };
     }
+  };
+
+  const commentEdit = async (e, EDIT) => {
+    e.preventDefault();
+    setEditComments(!editComments);
+    const formData = new FormData(e.target);
+
+    const response = await fetch(
+      `
+http://localhost:3000/api/posts/${post.id}/${EDIT}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...EDIT,
+          text: formData.get("content"),
+        }),
+      },
+    );
+
+    const resJson = await response.json();
+
+    return setPublication(
+      publication.map((p) => (p.id === resJson.id ? resJson : p)),
+    );
+  };
+  const [EDIT, SETEDIT] = useState(null);
+
+  const commentDelete = async (c) => {
+    await fetch(`http://localhost:3000/api/posts/${post.id}/${c.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        const commentFilter = comment.filter((d) => d.id != c.id);
+        return setComment(commentFilter);
+      });
   };
 
   return (
@@ -139,7 +204,7 @@ export function Post({ post }) {
               </ButtonPost>
             </div>
             <div>
-              <ButtonPost onClick={commentsOpenOrClose}>
+              <ButtonPost onClick={() => toggleComments(1)}>
                 <Comment></Comment>
               </ButtonPost>
               <p className="text-sm">{}</p>
@@ -175,9 +240,9 @@ export function Post({ post }) {
               {comment.length == 0 ? (
                 <div>Ainda não há comentários</div>
               ) : (
-                comment.map((c, index) => {
+                [...comment].reverse().map((c) => {
                   return (
-                    <li className="flex gap-2" key={index}>
+                    <li className="flex gap-2" key={c.id}>
                       <div className="flex flex-col items-start">
                         <PerfilIcon></PerfilIcon>
                       </div>
@@ -187,6 +252,30 @@ export function Post({ post }) {
                           <p>@{c?.author}</p>
                         </div>
                         <p>{c?.text}</p>
+                        <details className="flex flex-col items-end relative">
+                          <summary className="list-none marker:hidden">
+                            <Icon></Icon>
+                          </summary>
+                          <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
+                            <button
+                              className="hover:text-wine"
+                              onClick={() => {
+                                toggleComments(2);
+                                SETEDIT(c.id);
+                              }}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              className="hover:text-wine"
+                              onClick={ () => {
+                                commentDelete(c);
+                              }}
+                            >
+                              Excluir
+                            </button>
+                          </div>
+                        </details>
                       </div>
                     </li>
                   );
@@ -195,6 +284,19 @@ export function Post({ post }) {
             </ul>
           </>
         )}
+        <dialog
+          ref={dialogRef}
+          className="w-200 bg-white h-100 m-auto"
+          onCancel={() => toggleComments(2)}
+          method="dialog"
+        >
+          <Form active={(e) => commentEdit(e, EDIT)}>
+            <textarea name="content"></textarea>
+            <img name="midia"></img>
+            <p>TESTE</p>
+            <button>AI CLOSE</button>
+          </Form>
+        </dialog>
       </Div>
     </>
   );
