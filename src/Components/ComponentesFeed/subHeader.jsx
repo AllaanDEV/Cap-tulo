@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useContext, useState } from "react";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Lines } from "../ComponentsForm/lines";
 
@@ -7,6 +7,7 @@ import { ebook } from "../svgCode";
 import { quotation } from "../svgCode";
 import { gallery } from "../svgCode";
 import { Div } from "./div";
+import AppContext from "../context";
 // import { Container } from "./container";
 
 const navigation = [
@@ -24,7 +25,7 @@ const pages = [
 
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
-
+const {ui}= useContext(AppContext)
   return (
     <>
 
@@ -48,7 +49,7 @@ export function SubHeader({ children }) {
           {/* card a Div */}
           <Div>
             <div className="flex gap-3">
-              <PerfilIcon></PerfilIcon>
+              <PerfilIcon>{(ui?.name[0] + ui?.name[1]).toUpperCase()}</PerfilIcon>
               <p
                 className="bg-background rounded-4xl h-12 border border-border
               w-full flex justify-around py-1 px-1 items-center placeholder:py-1 placeholder:pl-3 placeholder:text-[10px] text-gray"

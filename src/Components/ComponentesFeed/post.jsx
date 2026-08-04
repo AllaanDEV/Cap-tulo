@@ -46,7 +46,7 @@ export function Post({ post }) {
   const postDelete = () => {
     fetch(`http://localhost:3000/api/posts/${post.id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",},
     })
       .then((res) => res.json())
       .then(() => {
@@ -93,7 +93,7 @@ export function Post({ post }) {
     try {
       const response = await fetch(`/api/posts/${post.id}/comments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", },
         body: JSON.stringify({
           id: Date.now().toString(),
           author: userObj.name,
@@ -121,7 +121,7 @@ export function Post({ post }) {
 http://localhost:3000/api/posts/${post.id}/${EDIT}`,
       {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", },
         body: JSON.stringify({
           ...EDIT,
           text: formData.get("content"),
@@ -147,7 +147,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
     })
       .then((response) => response.json())
       .then(() => {
-        const commentFilter = comment.filter((d) => d.id != c.id);
+        const commentFilter = comment.filter((a) => a.id != c.id);
         return setComment(commentFilter);
       });
   };
@@ -158,7 +158,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
-              <PerfilIcon></PerfilIcon>
+              <PerfilIcon>{(post?.author[0] + post?.author[1]).toUpperCase()}</PerfilIcon>
               <p>
                 {post.author}
                 {post?.midia && (
@@ -268,7 +268,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
                             </button>
                             <button
                               className="hover:text-wine"
-                              onClick={ () => {
+                              onClick={() => {
                                 commentDelete(c);
                               }}
                             >
