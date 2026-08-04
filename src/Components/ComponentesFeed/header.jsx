@@ -8,7 +8,7 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { useContext } from "react";
 import AppContext from "../context";
 export function Header() {
-  const { openOrCloseDialog} = useContext(AppContext);
+  const { openOrCloseDialog, ui} = useContext(AppContext);
 
   return (
     <header className="border border-border p-2">
@@ -47,7 +47,7 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon></PerfilIcon>
+          <PerfilIcon>{(ui?.name[0] + ui?.name[1]).toUpperCase()}</PerfilIcon>
         </div>
       </nav>
     </header>

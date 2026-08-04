@@ -1,7 +1,9 @@
 import { useState } from "react";
 import AppContext from ".";
+import { useComments } from "./hooks/useComments";
 
 export function Context({ children }) {
+  const comments = useComments();
   const [dialog, setDialog] = useState(false);
 
   const openOrCloseDialog = () => {
@@ -26,11 +28,14 @@ export function Context({ children }) {
     }
   };
 
+  const [ui, setUi] = useState();
+
+
   const Login = async ({ email, password }) => {
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", },
         body: JSON.stringify({ email, password }),
       });
 
@@ -39,10 +44,11 @@ export function Context({ children }) {
       }
 
       const responseJson = await response.json();
-
       localStorage.setItem("token", JSON.stringify(responseJson.token));
       localStorage.setItem("user", JSON.stringify(responseJson.user));
 
+      const user = JSON.parse(localStorage.getItem("user"));
+      setUi(user);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -55,13 +61,15 @@ export function Context({ children }) {
   const userObj = JSON.parse(user);
 
   const addComment = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     const formData = new FormData(e.target);
 
     try {
       const response = await fetch(`/api/posts/${publication.id}/comments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           id: Date.now().toString(),
           author: userObj.name,
@@ -70,7 +78,7 @@ export function Context({ children }) {
       });
 
       const data = await response.json();
-      
+
       return data;
     } catch (error) {
       return { success: false, error: error.message };
@@ -88,6 +96,8 @@ export function Context({ children }) {
         setPublication,
         addComment,
         user,
+        ...comments,
+        ui,
       }}
     >
       {children}
