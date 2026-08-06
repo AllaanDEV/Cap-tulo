@@ -58,9 +58,9 @@ export function FormLogin() {
             Faça login
           </ButtonLogin>
         </Form>
-        <div class="flex items-center my-2">
+        <div className="flex items-center my-2">
           <Lines></Lines>
-          <span class="mx-4 text-gray-500 font-medium text-xs">
+          <span className="mx-4 text-gray-500 font-medium text-xs">
             ou continue com
           </span>
           <Lines></Lines>

@@ -25,7 +25,8 @@ const pages = [
 
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
-const {ui}= useContext(AppContext)
+const {nameIcon, user}= useContext(AppContext)
+
   return (
     <>
 
@@ -49,12 +50,14 @@ const {ui}= useContext(AppContext)
           {/* card a Div */}
           <Div>
             <div className="flex gap-3">
-              <PerfilIcon>{(ui?.name[0] + ui?.name[1]).toUpperCase()}</PerfilIcon>
+              <PerfilIcon>
+                {nameIcon} 
+                </PerfilIcon>
               <p
                 className="bg-background rounded-4xl h-12 border border-border
               w-full flex justify-around py-1 px-1 items-center placeholder:py-1 placeholder:pl-3 placeholder:text-[10px] text-gray"
               >
-                O que você está lendo, vasco?
+                O que você está lendo, {user.name}?
               </p>
             </div>
             <Lines></Lines>

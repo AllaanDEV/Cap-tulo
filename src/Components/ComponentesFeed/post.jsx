@@ -18,10 +18,10 @@ const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const { publication, setPublication } = useContext(AppContext);
+  const { publication, setPublication, comments, setComments, editComments, setEditComments,token, nameIcon  } = useContext(AppContext);
+  
   const [like, setLike] = useState(post.likes);
 
-  const token = localStorage.getItem("token");
 
   const LikeButton = () => {
     fetch(`/api/posts/${post.id}/like`, {
@@ -46,7 +46,7 @@ export function Post({ post }) {
   const postDelete = () => {
     fetch(`http://localhost:3000/api/posts/${post.id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json",},
+      headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
       .then(() => {
@@ -54,9 +54,6 @@ export function Post({ post }) {
         return setPublication(newFeed);
       });
   };
-
-  const [comments, setComments] = useState(false);
-  const [editComments, setEditComments] = useState(false);
 
   const dialogRef = useRef(null);
 
@@ -70,6 +67,7 @@ export function Post({ post }) {
 
   const toggleComments = (c) => {
     if (c == 1) {
+    
       setComments(!comments);
     } else if (c == 2) {
       setEditComments(!editComments);
@@ -90,10 +88,14 @@ export function Post({ post }) {
     e.preventDefault();
     const formData = new FormData(e.target);
 
+    if (formData.get("comment") == "") {
+      return;
+    }
+
     try {
       const response = await fetch(`/api/posts/${post.id}/comments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: Date.now().toString(),
           author: userObj.name,
@@ -116,12 +118,16 @@ export function Post({ post }) {
     setEditComments(!editComments);
     const formData = new FormData(e.target);
 
+    if (formData.get("content") == "") {
+      return;
+    }
+
     const response = await fetch(
       `
 http://localhost:3000/api/posts/${post.id}/${EDIT}`,
       {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...EDIT,
           text: formData.get("content"),
@@ -158,7 +164,10 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
-              <PerfilIcon>{(post?.author[0] + post?.author[1]).toUpperCase()}</PerfilIcon>
+              <PerfilIcon>
+                {(post.author[0] + (post.author[1] ? post.author[1] : "")).toUpperCase()}
+                {console.log(post.author)}
+              </PerfilIcon>
               <p>
                 {post.author}
                 {post?.midia && (
@@ -204,8 +213,9 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
               </ButtonPost>
             </div>
             <div>
-              <ButtonPost onClick={() => toggleComments(1)}>
+              <ButtonPost onClick={(e) => toggleComments(1, e)}>
                 <Comment></Comment>
+                {comment.length}
               </ButtonPost>
               <p className="text-sm">{}</p>
             </div>
@@ -244,7 +254,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
                   return (
                     <li className="flex gap-2" key={c.id}>
                       <div className="flex flex-col items-start">
-                        <PerfilIcon></PerfilIcon>
+                        <PerfilIcon>{(c.author[0] + (c.author[1] ? c.author[1] : "")).toUpperCase()}</PerfilIcon>
                       </div>
                       <div className="p-2 bg-background border border-border items-center  rounded-b-3xl rounded-tr-3xl">
                         <div className="flex gap-2">

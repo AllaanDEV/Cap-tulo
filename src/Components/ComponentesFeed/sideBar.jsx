@@ -10,6 +10,8 @@ import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
 import {useState } from "react";
+import { useContext } from "react";
+import AppContext from "../context";
 
 const Spiral = spiral;
 
@@ -35,6 +37,7 @@ const options = [
 ];
 
 export function SideBar() {
+  const {nameIcon}= useContext(AppContext)
  const user=localStorage.getItem("user")
 
  const userObj= user ? JSON.parse(user) : "anonimo"
@@ -46,10 +49,10 @@ export function SideBar() {
       <div className=" flex flex-col gap-3 fixed w-60">
         <Div>
           <button className="flex gap-2">
-            <PerfilIcon></PerfilIcon>
+            <PerfilIcon>{nameIcon}</PerfilIcon>
             <div className="text-start">
               <p>{userObj?.name ||"anonimo"}</p>
-              <p>@{userObj?.name ||"anonimo"}</p>
+              <p className="flex items-center">@{userObj?.name ||"anonimo"}</p>
             </div>
           </button>
           <Info className="flex gap-3 bg-border rounded-lg p-3">

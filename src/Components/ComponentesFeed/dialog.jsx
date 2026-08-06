@@ -25,11 +25,15 @@ export function Dialog() {
 
     const formData = new FormData(e.target);
 
+    if (formData.get("content") == "") {
+      return;
+    }
+
     fetch("http://localhost:3000/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: formData.get("contend"),
+        content: formData.get("content"),
         midia: formData.get("midia"),
         author: userObj.name,
         likes: 0,
@@ -37,7 +41,9 @@ export function Dialog() {
       }),
     }).then((res) =>
       res.json().then((data) => {
+  
         const posts = [data, ...publication];
+        console.log(posts)
         return setPublication(posts);
       }),
     );
@@ -45,11 +51,12 @@ export function Dialog() {
   return (
     <dialog ref={dialogRef} className="w-200 bg-white h-100 m-auto">
       <Form active={newPost}>
-        <textarea name="contend"></textarea>
+        <textarea name="content"></textarea>
         <img name="midia"></img>
         <p>TESTE</p>
         <button onClick={openOrCloseDialog}>AI CLOSE</button>
       </Form>
+      <button onClick={openOrCloseDialog}>vasco</button>
     </dialog>
   );
 }
