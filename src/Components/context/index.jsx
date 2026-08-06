@@ -1,9 +1,12 @@
 import { useState } from "react";
 import AppContext from ".";
-import { useComments } from "./hooks/useComments";
 
+import { useComments } from "./hooks/useComments";
+import { useRequisicoes } from "./hooks/useRequisicoes";
 export function Context({ children }) {
-  const comments = useComments();
+  const 
+  comments = useComments();
+  const requisicoes = useRequisicoes();
   const [dialog, setDialog] = useState(false);
 
   const openOrCloseDialog = () => {
@@ -28,14 +31,12 @@ export function Context({ children }) {
     }
   };
 
-  const [ui, setUi] = useState();
-
 
   const Login = async ({ email, password }) => {
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json", },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -47,8 +48,6 @@ export function Context({ children }) {
       localStorage.setItem("token", JSON.stringify(responseJson.token));
       localStorage.setItem("user", JSON.stringify(responseJson.user));
 
-      const user = JSON.parse(localStorage.getItem("user"));
-      setUi(user);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -57,11 +56,13 @@ export function Context({ children }) {
 
   const [publication, setPublication] = useState([]);
 
-  const user = localStorage.getItem("user");
-  const userObj = JSON.parse(user);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const addComment = async (e) => {
     e.preventDefault();
+    e.target.setComments(!comments)
+
     const formData = new FormData(e.target);
 
     try {
@@ -72,7 +73,7 @@ export function Context({ children }) {
         },
         body: JSON.stringify({
           id: Date.now().toString(),
-          author: userObj.name,
+          author: user.name,
           text: formData.get("comment"),
         }),
       });
@@ -85,6 +86,8 @@ export function Context({ children }) {
     }
   };
 
+
+  const nameIcon= (user.name[0] + (user.name[1]? user.name[1] : "")).toUpperCase()
   return (
     <AppContext.Provider
       value={{
@@ -95,9 +98,11 @@ export function Context({ children }) {
         publication,
         setPublication,
         addComment,
-        user,
         ...comments,
-        ui,
+        ...requisicoes,
+        token,
+        user,
+        nameIcon
       }}
     >
       {children}
