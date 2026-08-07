@@ -18,7 +18,7 @@ const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const { publication, setPublication, comments, setComments, editComments, setEditComments,token, nameIcon  } = useContext(AppContext);
+  const { publication, setPublication, comments, setComments, editComments, setEditComments,token} = useContext(AppContext);
   
   const [like, setLike] = useState(post.likes);
 
@@ -158,6 +158,12 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
       });
   };
 
+  const [postComment, setPostComment]= useState(!post)
+
+  const openComments= () =>{
+setPostComment(!postComment)
+  }
+
   return (
     <>
       <Div>
@@ -213,7 +219,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
               </ButtonPost>
             </div>
             <div>
-              <ButtonPost onClick={(e) => toggleComments(1, e)}>
+              <ButtonPost onClick={openComments}>
                 <Comment></Comment>
                 {comment.length}
               </ButtonPost>
@@ -235,7 +241,7 @@ http://localhost:3000/api/posts/${post.id}/${EDIT}`,
           </button>
         </div>
 
-        {comments && (
+        {postComment && (
           <>
             <Lines></Lines>
             <form onSubmit={addComment}>
