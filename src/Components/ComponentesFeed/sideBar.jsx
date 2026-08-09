@@ -10,8 +10,7 @@ import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
 import {useState } from "react";
-import { useContext } from "react";
-import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 const Spiral = spiral;
 
@@ -37,7 +36,8 @@ const options = [
 ];
 
 export function SideBar() {
-  const {nameIcon}= useContext(AppContext)
+  const {nameIcon}= useRequisicoes({})
+
  const user=localStorage.getItem("user")
 
  const userObj= user ? JSON.parse(user) : "anonimo"

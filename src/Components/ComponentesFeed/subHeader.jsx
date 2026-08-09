@@ -1,4 +1,3 @@
-import {  useContext, useState } from "react";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Lines } from "../ComponentsForm/lines";
 
@@ -7,7 +6,9 @@ import { ebook } from "../svgCode";
 import { quotation } from "../svgCode";
 import { gallery } from "../svgCode";
 import { Div } from "./div";
-import AppContext from "../context";
+
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useState } from "react";
 // import { Container } from "./container";
 
 const navigation = [
@@ -25,7 +26,7 @@ const pages = [
 
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
-const {nameIcon, user}= useContext(AppContext)
+const {nameIcon, user}= useRequisicoes({})
 
   return (
     <>

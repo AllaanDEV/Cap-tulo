@@ -7,8 +7,11 @@ import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { useContext } from "react";
 import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+
 export function Header() {
-  const { openOrCloseDialog, nameIcon} = useContext(AppContext);
+  const { openOrCloseDialog} = useContext(AppContext);
+  const {nameIcon}= useRequisicoes({})
 
   return (
     <header className="border border-border p-2">
