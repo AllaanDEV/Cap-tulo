@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
-import { useRequisicoes } from "./hooks/useRequisicoes";
+// import { useRequisicoes } from "./hooks/useRequisicoes";
+
 export function Context({ children }) {
-  const 
-  comments = useComments();
-  const requisicoes = useRequisicoes();
+  const comments = useComments();
+  // const requisicoes = useRequisicoes();
+
   const [dialog, setDialog] = useState(false);
+ const [publication, setPublication] = useState([]);
 
   const openOrCloseDialog = () => {
     setDialog(!dialog);
@@ -54,40 +56,25 @@ export function Context({ children }) {
     }
   };
 
-  const [publication, setPublication] = useState([]);
+  const dialogRef= useRef(null)
 
-  const token = JSON.parse(localStorage.getItem("token"));
-  const user = JSON.parse(localStorage.getItem("user"));
+    const [editComments, setEditComments] = useState(false);
 
-  const addComment = async (e) => {
-    e.preventDefault();
-    e.target.setComments(!comments)
+  const [EDIT, SETEDIT] = useState();
+  const [postEdit, setPostEdit]= useState()
 
-    const formData = new FormData(e.target);
-
-    try {
-      const response = await fetch(`/api/posts/${publication.id}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: Date.now().toString(),
-          author: user.name,
-          text: formData.get("comment"),
-        }),
-      });
-
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+  const toggleComments = () => {
+    setEditComments(!editComments);
   };
 
+  useEffect(() => {
+    if (editComments) {
+      dialogRef.current.showModal();
+    } else {
+      dialogRef.current.close();
+    }
+  }, [editComments]);
 
-  const nameIcon= (user.name[0] + (user.name[1]? user.name[1] : "")).toUpperCase()
   return (
     <AppContext.Provider
       value={{
@@ -97,12 +84,13 @@ export function Context({ children }) {
         Login,
         publication,
         setPublication,
-        addComment,
         ...comments,
-        ...requisicoes,
-        token,
-        user,
-        nameIcon
+        toggleComments,
+        dialogRef,
+        EDIT,
+        SETEDIT,
+        postEdit,
+        setPostEdit,
       }}
     >
       {children}

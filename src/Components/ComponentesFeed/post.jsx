@@ -10,159 +10,47 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useContext, useEffect, useRef, useState } from "react";
-import AppContext from "../context";
-import { Form } from "../ComponentsForm/form";
+import { useState } from "react";
+// import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { CommentsList } from "./comments";
+
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const { publication, setPublication, comments, setComments, editComments, setEditComments,token} = useContext(AppContext);
-  
+
+  console.log(
+  "POST RENDER:",
+  post.id,
+  post.comments
+);
+
+  // const [comment, setComment] = useState(post.comments || []);
+
   const [like, setLike] = useState(post.likes);
 
+  const {
+    postDelete,
+    LikeButton,
+  } = useRequisicoes({
+    post,
+    like,
+    setLike,
+  });
 
-  const LikeButton = () => {
-    fetch(`/api/posts/${post.id}/like`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((response) => {
-      if (response.ok) {
-        setLike(like + 1);
-      }
-    });
-  };
-
-  // mudar os nomes pq esta dando conflitokkkkkk
   const Saves = () => {
     fetch(`/api/posts/${post.id}/save`, {
       method: "POST",
     }).then((response) => response.json());
   };
 
-  const postDelete = () => {
-    fetch(`http://localhost:3000/api/posts/${post.id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then(() => {
-        const newFeed = publication.filter((p) => p.id != post.id);
-        return setPublication(newFeed);
-      });
+  const [postComment, setPostComment] = useState(!post);
+
+  const openComments = () => {
+    setPostComment(!postComment);
   };
-
-  const dialogRef = useRef(null);
-
-  useEffect(() => {
-    if (editComments) {
-      dialogRef.current.showModal();
-    } else {
-      dialogRef.current.close();
-    }
-  }, [editComments]);
-
-  const toggleComments = (c) => {
-    if (c == 1) {
-    
-      setComments(!comments);
-    } else if (c == 2) {
-      setEditComments(!editComments);
-      console.log(editComments);
-    }
-  };
-
-  const user = localStorage.getItem("user");
-  const userObj = JSON.parse(user);
-
-  const [comment, setComment] = useState({});
-
-  useEffect(() => {
-    setComment(post.comments);
-  }, [post]);
-
-  const addComment = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-
-    if (formData.get("comment") == "") {
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/posts/${post.id}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: Date.now().toString(),
-          author: userObj.name,
-          text: formData.get("comment"),
-        }),
-      });
-
-      const data = await response.json();
-      const allComments = data.comments;
-      //reverter a ordem, ficando os comentários novos em primeiro
-      e.target.reset();
-      return setComment(allComments);
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  };
-
-  const commentEdit = async (e, EDIT) => {
-    e.preventDefault();
-    setEditComments(!editComments);
-    const formData = new FormData(e.target);
-
-    if (formData.get("content") == "") {
-      return;
-    }
-
-    const response = await fetch(
-      `
-http://localhost:3000/api/posts/${post.id}/${EDIT}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...EDIT,
-          text: formData.get("content"),
-        }),
-      },
-    );
-
-    const resJson = await response.json();
-
-    return setPublication(
-      publication.map((p) => (p.id === resJson.id ? resJson : p)),
-    );
-  };
-  const [EDIT, SETEDIT] = useState(null);
-
-  const commentDelete = async (c) => {
-    await fetch(`http://localhost:3000/api/posts/${post.id}/${c.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then(() => {
-        const commentFilter = comment.filter((a) => a.id != c.id);
-        return setComment(commentFilter);
-      });
-  };
-
-  const [postComment, setPostComment]= useState(!post)
-
-  const openComments= () =>{
-setPostComment(!postComment)
-  }
 
   return (
     <>
@@ -171,8 +59,9 @@ setPostComment(!postComment)
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
               <PerfilIcon>
-                {(post.author[0] + (post.author[1] ? post.author[1] : "")).toUpperCase()}
-                {console.log(post.author)}
+                {(
+                  post.author[0] + (post.author[1] ? post.author[1] : "")
+                ).toUpperCase()}
               </PerfilIcon>
               <p>
                 {post.author}
@@ -221,7 +110,7 @@ setPostComment(!postComment)
             <div>
               <ButtonPost onClick={openComments}>
                 <Comment></Comment>
-                {comment.length}
+                {post.comments.length}
               </ButtonPost>
               <p className="text-sm">{}</p>
             </div>
@@ -241,78 +130,22 @@ setPostComment(!postComment)
           </button>
         </div>
 
-        {postComment && (
-          <>
-            <Lines></Lines>
-            <form onSubmit={addComment}>
-              <textarea
-                name="comment"
-                className="w-full bg-amber-200 flex placeholder:items-center"
-                placeholder="DIGITE UM COMENTÁRIO"
-              ></textarea>
-              <button>lançar</button>
-            </form>
-            <ul className=" fit-content py-3 flex flex-col gap-6">
-              {comment.length == 0 ? (
-                <div>Ainda não há comentários</div>
-              ) : (
-                [...comment].reverse().map((c) => {
-                  return (
-                    <li className="flex gap-2" key={c.id}>
-                      <div className="flex flex-col items-start">
-                        <PerfilIcon>{(c.author[0] + (c.author[1] ? c.author[1] : "")).toUpperCase()}</PerfilIcon>
-                      </div>
-                      <div className="p-2 bg-background border border-border items-center  rounded-b-3xl rounded-tr-3xl">
-                        <div className="flex gap-2">
-                          <p>{c?.author}</p>
-                          <p>@{c?.author}</p>
-                        </div>
-                        <p>{c?.text}</p>
-                        <details className="flex flex-col items-end relative">
-                          <summary className="list-none marker:hidden">
-                            <Icon></Icon>
-                          </summary>
-                          <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                            <button
-                              className="hover:text-wine"
-                              onClick={() => {
-                                toggleComments(2);
-                                SETEDIT(c.id);
-                              }}
-                            >
-                              Editar
-                            </button>
-                            <button
-                              className="hover:text-wine"
-                              onClick={() => {
-                                commentDelete(c);
-                              }}
-                            >
-                              Excluir
-                            </button>
-                          </div>
-                        </details>
-                      </div>
-                    </li>
-                  );
-                })
-              )}
-            </ul>
-          </>
-        )}
-        <dialog
+        {postComment && <CommentsList  post={post} ></CommentsList>}
+
+        {/* <dialog
           ref={dialogRef}
           className="w-200 bg-white h-100 m-auto"
           onCancel={() => toggleComments(2)}
           method="dialog"
         >
           <Form active={(e) => commentEdit(e, EDIT)}>
+            {console.log(EDIT)}
             <textarea name="content"></textarea>
             <img name="midia"></img>
             <p>TESTE</p>
             <button>AI CLOSE</button>
           </Form>
-        </dialog>
+        </dialog> */}
       </Div>
     </>
   );

@@ -5,8 +5,10 @@ import { Header } from "./ComponentesFeed/header";
 import { SideBar } from "./ComponentesFeed/sideBar";
 import { SubHeader } from "./ComponentesFeed/subHeader";
 import { Dialog } from "./ComponentesFeed/dialog";
+import { DialogComments } from "./ComponentesFeed/dialogComments";
 
 export function Feed() {
+
   return (
     <>
       <Header></Header>
@@ -21,6 +23,7 @@ export function Feed() {
             <ArrayPost></ArrayPost>
           </Container>
         </section>
+          <DialogComments></DialogComments>
       </main>
     </>
   );
