@@ -10,9 +10,7 @@ const Icon = configuration;
 export function CommentsList({ post }) {
   const { toggleComments, SETEDIT,setPostEdit} = useContext(AppContext);
   const { commentDelete, addComment } = useRequisicoes({
-    // comment,
     post,
-    // setComment,
   });
 
   const dataCommentForm = (e) => {

@@ -43,7 +43,7 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
- const {publication, setPublication}= useContext(AppContext)
+ const {publication, setPublication, search}= useContext(AppContext)
 
   useEffect(() => {
     fetch("/api/posts")
@@ -56,7 +56,7 @@ export function ArrayPost() {
 
   return (
     <ul className="flex flex-col gap-5">
-      {publication.map((p) => {
+      {(!search ? publication : search).map((p) => {
         return (
           <li key={p.id}>
             <Post post={p}></Post>
