@@ -7,7 +7,7 @@ export function Dialog() {
 
   const userObj = user ? JSON.parse(user) : "anonimo";
 
-  const { openOrCloseDialog, dialog, publication, setPublication } =
+  const { openOrCloseDialog, dialog, publication, setPublication, setSearch } =
     useContext(AppContext);
 
   const dialogRef = useRef(null);
@@ -43,7 +43,7 @@ export function Dialog() {
       res.json().then((data) => {
   
         const posts = [data, ...publication];
-        console.log(posts)
+        setSearch(posts);
         return setPublication(posts);
       }),
     );
