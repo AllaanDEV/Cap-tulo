@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import AppContext from "..";
 
 export function useRequisicoes({ post, like, setLike }) {
-  const { setEditComments, publication, setPublication } =
+  const { publication, setPublication, setSearch, toggleComments} =
     useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -22,6 +22,8 @@ export function useRequisicoes({ post, like, setLike }) {
       .then((res) => res.json())
       .then(() => {
         const newFeed = publication.filter((p) => p.id != post.id);
+
+        setSearch(newFeed);
         return setPublication(newFeed);
       });
   };
@@ -51,17 +53,18 @@ export function useRequisicoes({ post, like, setLike }) {
         },
       );
 
-const resJson = await response.json();
-console.log("POST RETORNADO:", resJson);
-setPublication((prev) =>
-  prev.map((p) =>
-    p.id === resJson.id
-      ? { ...resJson }
-      : p
-  )
-);
+      const resJson = await response.json();
+      console.log("POST RETORNADO:", resJson);
+      setPublication((prev) =>
+        prev.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+      );
 
-setEditComments(false);
+      setSearch((prev) =>
+        prev.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+      );
+
+      // setEditComments(false);
+      toggleComments()
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +82,11 @@ setEditComments(false);
       .then((data) => {
         // const commentFilter = comment.filter((a) => a.id != c.id);
         // return setComment(commentFilter);
-        setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
+        setPublication((prev) =>
+          prev.map((p) => (p.id === data.id ? data : p)),
+        );
+
+        setSearch((prev) => prev.map((p) => (p.id === data.id ? data : p)));
       });
   };
 
@@ -106,6 +113,7 @@ setEditComments(false);
       // const allComments = data.comments;
       //reverter a ordem, ficando os comentários novos em primeiro
 
+      setSearch((prev) => prev.map((p) => (p.id === data.id ? data : p)));
       setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
       e.target.reset();
     } catch (error) {
