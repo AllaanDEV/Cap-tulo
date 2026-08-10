@@ -1,40 +1,28 @@
-// import { Container } from "./container";
 import { Div } from "./div";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { configuration, Like } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { Share } from "../svgCode";
 import { Comment } from "../svgCode";
-// import { Like } from "../svgCode";
+
 import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
 import { useState } from "react";
-// import AppContext from "../context";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { CommentsList } from "./comments";
 
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { CommentsList } from "./commentsList";
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-
-  console.log(
-  "POST RENDER:",
-  post.id,
-  post.comments
-);
-
-  // const [comment, setComment] = useState(post.comments || []);
+  console.log("POST RENDER:", post.id, post.comments);
 
   const [like, setLike] = useState(post.likes);
 
-  const {
-    postDelete,
-    LikeButton,
-  } = useRequisicoes({
+  const { postDelete, LikeButton } = useRequisicoes({
     post,
     like,
     setLike,
@@ -130,22 +118,7 @@ export function Post({ post }) {
           </button>
         </div>
 
-        {postComment && <CommentsList  post={post} ></CommentsList>}
-
-        {/* <dialog
-          ref={dialogRef}
-          className="w-200 bg-white h-100 m-auto"
-          onCancel={() => toggleComments(2)}
-          method="dialog"
-        >
-          <Form active={(e) => commentEdit(e, EDIT)}>
-            {console.log(EDIT)}
-            <textarea name="content"></textarea>
-            <img name="midia"></img>
-            <p>TESTE</p>
-            <button>AI CLOSE</button>
-          </Form>
-        </dialog> */}
+        {postComment && <CommentsList post={post}></CommentsList>}
       </Div>
     </>
   );

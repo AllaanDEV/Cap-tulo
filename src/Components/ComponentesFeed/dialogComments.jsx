@@ -17,7 +17,7 @@ const {dialogRef,  EDIT, toggleComments, postEdit}= useContext(AppContext)
       method="dialog"
     >
       <Form active={(e) => commentEdit(e, EDIT)}>
-        {console.log(EDIT)}
+        {/* {console.log(EDIT)} */}
         <textarea name="content"></textarea>
         <img name="midia"></img>
         <p>TESTE</p>

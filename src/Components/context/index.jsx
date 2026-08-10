@@ -69,12 +69,13 @@ export function Context({ children }) {
 
   useEffect(() => {
     if (editComments) {
-      dialogRef.current.showModal();
+      dialogRef.current?.showModal();
     } else {
-      dialogRef.current.close();
+      dialogRef.current?.close();
     }
   }, [editComments]);
 
+  const [search, setSearch]= useState()
   return (
     <AppContext.Provider
       value={{
@@ -91,6 +92,8 @@ export function Context({ children }) {
         SETEDIT,
         postEdit,
         setPostEdit,
+        search,
+        setSearch
       }}
     >
       {children}
