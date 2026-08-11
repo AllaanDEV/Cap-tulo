@@ -70,7 +70,7 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon>{nameIcon}</PerfilIcon>
+          <PerfilIcon to={"/perfil"}>{nameIcon}</PerfilIcon>
         </div>
       </nav>
     </header>

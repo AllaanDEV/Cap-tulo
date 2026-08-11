@@ -1,6 +1,6 @@
 import { ArrayPost } from "./ComponentesFeed/arrayPost";
 import { Container } from "./ComponentesFeed/container";
-import { Header } from "./ComponentesFeed/header";
+
 // import { Post } from "./ComponentesFeed/post";
 import { SideBar } from "./ComponentesFeed/sideBar";
 import { SubHeader } from "./ComponentesFeed/subHeader";
@@ -8,10 +8,8 @@ import { Dialog } from "./ComponentesFeed/dialog";
 import { DialogComments } from "./ComponentesFeed/dialogComments";
 
 export function Feed() {
-
   return (
     <>
-      <Header></Header>
       <main className="flex pt-7 px-4 lg:gap-4">
         <section>
           <SideBar></SideBar>
@@ -23,7 +21,7 @@ export function Feed() {
             <ArrayPost></ArrayPost>
           </Container>
         </section>
-          <DialogComments></DialogComments>
+        <DialogComments></DialogComments>
       </main>
     </>
   );

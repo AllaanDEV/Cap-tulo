@@ -11,6 +11,8 @@ import "./index.css";
 import { Feed } from "./Components/feed.jsx";
 import { Saves } from "./Components/saves.jsx";
 import { Context } from "./Components/context/index.jsx";
+import { HeaderLayout } from "./Components/headerLayout.jsx";
+import { Icon } from "./Components/ComponentsPerfil/icon.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -25,11 +27,13 @@ createRoot(document.getElementById("root")).render(
             ></Route>
           </Route>
 
-          <Route path="save" element={<Saves></Saves>}></Route>
-          <Route path="feed" element={<Feed></Feed>}></Route>
+          <Route element={<HeaderLayout></HeaderLayout>}>
+            <Route path="save" element={<Saves></Saves>}></Route>
+            <Route path="feed" element={<Feed></Feed>}></Route>
+            <Route path="perfil" element={<Icon></Icon>}></Route>
+          </Route>
 
-          {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
-          <Route path="*" element={<FormLogin></FormLogin>}></Route>
+          <Route path="*" element={<Icon></Icon>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <App /> */}
