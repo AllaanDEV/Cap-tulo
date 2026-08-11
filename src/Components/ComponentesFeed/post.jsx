@@ -88,7 +88,7 @@ export function Post({ post }) {
 
         <Lines></Lines>
         <div className="flex justify-between px-5 ">
-          <div className="flex justify-between w-50">
+          <div className="flex justify-between w-55  items-center">
             <div>
               <ButtonPost onClick={LikeButton}>
                 <Like></Like>
@@ -105,6 +105,7 @@ export function Post({ post }) {
             <div>
               <ButtonPost>
                 <Share></Share>
+                Compartilhar
               </ButtonPost>
               <p className="text-sm">{}</p>
             </div>
