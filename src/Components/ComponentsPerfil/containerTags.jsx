@@ -1,7 +1,7 @@
-export function ContainerTags({children}){
+export function ContainerTags({children, className}){
     return(
-         <div className="rounded-full h-10 border-[2px] border-border p-3.5 text-center flex items-center gap-1 ">
+         <button className={`rounded-full h-10 border border-border p-3.5 text-center flex items-center gap-1 ${className}`}>
                     {children}
-                </div>
+                </button>
     )
 }

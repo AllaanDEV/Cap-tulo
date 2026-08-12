@@ -33,7 +33,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="perfil" element={<Icon></Icon>}></Route>
           </Route>
 
-          <Route path="*" element={<Icon></Icon>}></Route>
+          <Route path="*" element={<FormLogin></FormLogin>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <App /> */}
