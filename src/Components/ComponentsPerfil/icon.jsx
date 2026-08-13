@@ -1,11 +1,15 @@
+import { useContext} from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
-import { Info } from "../ComponentesFeed/info";
+import { Post } from "../ComponentesFeed/post";
 import { pencil, calendar, maps, link, ebook } from "../svgCode";
 import { ContainerTags } from "./containerTags";
+import { EbookProgress } from "./ebookProgress";
 import { SpanDescription } from "./spanDescriotion";
 import { SpanName } from "./spanName";
 import { Table } from "./table";
+import AppContext from "../context";
+import { useLocation } from "react-router";
 
 const Pencil = pencil;
 const Ebook = ebook;
@@ -39,16 +43,18 @@ const buttons = [
 ];
 
 export function Icon() {
-  // const [tags, setTags]= useState([{
-
-  // }])
+  const { publication, search} = useContext(AppContext);
+const { state } = useLocation();
 
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary">
-      <div className="bg-amber-300 w-full h-30 max-h-30 relative">
-        <div className="absolute w-20 h-20 bg-red-400 bottom-[-40px] left-5 rounded-full "></div>
+      <div className="bg-amber-300 w-full h-30 max-h-30 relative sm:h-50 sm:max-h-50 2xl:h-60  2xl:max-h-70">
+        <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center     grid place-items-center">
+          <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">{state.author}</span>
+          
+          </div>
       </div>
-      <div className="flex flex-col py-10 justify-end gap-5 text-black p-2">
+      <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
         <div className="flex justify-end gap-2 text-black">
           <ContainerTags>
             <img src={notificationIcon} className="w-auto h-5"></img>
@@ -63,8 +69,8 @@ export function Icon() {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl">USER</h1>
-            <p className="text-xs">@USER</p>
+            <h1 className="text-3xl">{state.author}</h1>
+            <p className="text-xs">@{state.author}</p>
           </div>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -73,7 +79,7 @@ export function Icon() {
             minima molestiae vel, consequuntur libero qui possimus!
           </p>
         </div>
-        <div>
+        <div className="md:flex gap-5">
           {bios.map((b, index) => {
             const BioIcon = b.bio;
             return (
@@ -98,7 +104,7 @@ export function Icon() {
           })}
         </div>
 
-        <div class="grid grid-cols-2 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center">
+        <div class="grid grid-cols-2 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-4 lg:divide-y-0">
           <Table>
             <SpanName>Lidos</SpanName>
             <SpanDescription>142</SpanDescription>
@@ -135,31 +141,17 @@ export function Icon() {
             <Ebook></Ebook>
             Lendo Agora
           </h2>
-          <Info>
-            <div className="p-3 flex gap-5 items-start">
-              <div className="h-30 w-20 bg-bermuda rounded-lg"></div>
-              <div className="flex flex-col gap-5">
-                <div>
-                  <p>vasco silencioso</p>
-                  <p>gama</p>
-                </div>
-                <div>
-                  <div className="flex justify-between">
-                    <p>progresso</p> 40%
-                  </div>
-                  <div className="w-full rounded-2xl bg-gray/30">
-                    <div
-                      className="w-full py-1 bg-wine rounded-2xl"
-                      style={{
-                        width: "40%",
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Info>
+          <div className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
+            <EbookProgress></EbookProgress>
+            <EbookProgress></EbookProgress>
+          </div>
         </Div>
+
+        {(!search ? publication : search).filter((p) => p.author == state.author).map((p) => {
+          return(
+            <Post key={p.id} post={p}></Post>
+          )
+        })}
       </div>
     </section>
   );
