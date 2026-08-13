@@ -49,7 +49,7 @@ export function SideBar() {
       <div className=" flex flex-col gap-3 fixed w-60">
         <Div>
           <button className="flex gap-2">
-            <PerfilIcon>{nameIcon}</PerfilIcon>
+            <PerfilIcon to="/perfil">{nameIcon}</PerfilIcon>
             <div className="text-start">
               <p>{userObj?.name ||"anonimo"}</p>
               <p className="flex items-center">@{userObj?.name ||"anonimo"}</p>

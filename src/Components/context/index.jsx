@@ -76,6 +76,7 @@ export function Context({ children }) {
   }, [editComments]);
 
   const [search, setSearch]= useState()
+  const [post, setPost]= useState([])
   return (
     <AppContext.Provider
       value={{
@@ -93,7 +94,9 @@ export function Context({ children }) {
         postEdit,
         setPostEdit,
         search,
-        setSearch
+        setSearch,
+        setPost,
+        post
       }}
     >
       {children}

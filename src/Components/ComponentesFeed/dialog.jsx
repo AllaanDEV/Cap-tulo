@@ -41,7 +41,8 @@ export function Dialog() {
       }),
     }).then((res) =>
       res.json().then((data) => {
-  
+        console.log(userObj)
+  console.log(data)
         const posts = [data, ...publication];
         setSearch(posts);
         return setPublication(posts);

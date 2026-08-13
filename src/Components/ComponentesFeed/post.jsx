@@ -9,17 +9,17 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useState } from "react";
+import { useState} from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
+
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  console.log("POST RENDER:", post.id, post.comments);
-
+  // console.log("POST RENDER:", post.id, post.comments);
   const [like, setLike] = useState(post.likes);
 
   const { postDelete, LikeButton } = useRequisicoes({
@@ -40,15 +40,23 @@ export function Post({ post }) {
     setPostComment(!postComment);
   };
 
+  // const Pos = () => {
+  //  fetch(`/api/posts/${post.id}`, {
+  //     headers: { "Content-Type": "application/json" },
+  //   }).then((res) => res.json().then((data)=>{
+  //     console.log(data)
+  //   }))
+  // };
+
   return (
     <>
       <Div>
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
-              <PerfilIcon>
+              <PerfilIcon to={`/perfil/`} state={post}>
                 {(
-                  post.author[0] + (post.author[1] ? post.author[1] : "")
+                  post?.author[0] + (post?.author[1] ? post.author[1] : "")
                 ).toUpperCase()}
               </PerfilIcon>
               <p>
@@ -107,7 +115,7 @@ export function Post({ post }) {
                 <Share></Share>
                 Compartilhar
               </ButtonPost>
-              <p className="text-sm">{}</p>
+              <p className="text-sm">{""}</p>
             </div>
           </div>
           <button
