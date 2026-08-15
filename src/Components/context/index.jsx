@@ -77,6 +77,7 @@ export function Context({ children }) {
 
   const [search, setSearch]= useState()
   const [post, setPost]= useState([])
+    const [perfilComments, setPerfilComments] = useState();
   return (
     <AppContext.Provider
       value={{
@@ -96,7 +97,9 @@ export function Context({ children }) {
         search,
         setSearch,
         setPost,
-        post
+        post,
+        setPerfilComments,
+        perfilComments,
       }}
     >
       {children}

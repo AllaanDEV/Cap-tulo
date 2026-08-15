@@ -9,7 +9,7 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useState} from "react";
+import {  useState } from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
@@ -47,6 +47,7 @@ export function Post({ post }) {
   //     console.log(data)
   //   }))
   // };
+
 
   return (
     <>
