@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext, useEffect, } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
 import { Post } from "../ComponentesFeed/post";
@@ -43,16 +43,29 @@ const buttons = [
 ];
 
 export function Icon() {
-  const { publication, search} = useContext(AppContext);
-const { state } = useLocation();
+  const { publication, search, setPublication} = useContext(AppContext);
+  const { state } = useLocation();
+
+
+  useEffect(() => {
+    fetch("/api/posts")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => setPublication(data));
+      // os dados dps da promessa
+  }, []);
+
+
 
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary">
       <div className="bg-amber-300 w-full h-30 max-h-30 relative sm:h-50 sm:max-h-50 2xl:h-60  2xl:max-h-70">
         <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center     grid place-items-center">
-          <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">{state.author}</span>
-          
-          </div>
+          <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">
+            {state.author}
+          </span>
+        </div>
       </div>
       <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
         <div className="flex justify-end gap-2 text-black">
@@ -147,11 +160,11 @@ const { state } = useLocation();
           </div>
         </Div>
 
-        {(!search ? publication : search).filter((p) => p.author == state.author).map((p) => {
-          return(
-            <Post key={p.id} post={p}></Post>
-          )
-        })}
+        {(!search ? publication : search)
+          .filter((p) => p.author == state.author)
+          .map((p) => {
+            return <Post key={p.id} post={p}></Post>;
+          })}
       </div>
     </section>
   );
