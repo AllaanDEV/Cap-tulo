@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import AppContext from "..";
 
 export function useRequisicoes({ post, like, setLike }) {
-  const { publication, setPublication, setSearch, toggleComments} =
+  const { publication, setPublication, setSearch, toggleComments } =
     useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -17,15 +17,23 @@ export function useRequisicoes({ post, like, setLike }) {
   const postDelete = () => {
     fetch(`http://localhost:3000/api/posts/${post.id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then((res) => res.json())
-      .then(() => {
-        const newFeed = publication.filter((p) => p.id != post.id);
+      .then((res) => {
+        if (res.status == 200) {
+          const newFeed = publication.filter((p) => p.id != post.id);
 
-        setSearch(newFeed);
-        return setPublication(newFeed);
-      });
+          setSearch(newFeed);
+          return setPublication(newFeed);
+        } else {
+          return;
+        } 
+      })
+
+    
   };
 
   const commentEdit = async (e, EDIT) => {
@@ -64,7 +72,7 @@ export function useRequisicoes({ post, like, setLike }) {
       );
 
       // setEditComments(false);
-      toggleComments()
+      toggleComments();
     } catch (error) {
       console.log(error);
     }
