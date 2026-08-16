@@ -1,22 +1,30 @@
 import { useContext, useEffect, useRef } from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function Dialog() {
   const user = localStorage.getItem("user");
 
   const userObj = user ? JSON.parse(user) : "anonimo";
 
-  const { openOrCloseDialog, dialog, publication, setPublication, setSearch } =
-    useContext(AppContext);
+  const {
+    openOrCloseDialog,
+    dialog,
+    publication,
+    setPublication,
+    setSearch,
+  } = useContext(AppContext);
+
+  const {token}= useRequisicoes({})
 
   const dialogRef = useRef(null);
 
   useEffect(() => {
     if (dialog) {
-      dialogRef.current.showModal();
+      dialogRef.current?.showModal();
     } else {
-      dialogRef.current.close();
+      dialogRef.current?.close();
     }
   }, [dialog]);
 
@@ -31,7 +39,10 @@ export function Dialog() {
 
     fetch("http://localhost:3000/api/posts", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         content: formData.get("content"),
         midia: formData.get("midia"),
@@ -41,8 +52,7 @@ export function Dialog() {
       }),
     }).then((res) =>
       res.json().then((data) => {
-        console.log(userObj)
-  console.log(data)
+        localStorage.setItem("newPost", JSON.stringify(data));
         const posts = [data, ...publication];
         setSearch(posts);
         return setPublication(posts);

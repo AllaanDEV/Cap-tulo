@@ -45,6 +45,9 @@ import AppContext from "../context";
 export function ArrayPost() {
  const {publication, setPublication, search}= useContext(AppContext)
 
+ const o = publication.map((p) => p.author === "t")
+ console.log(o)
+
   useEffect(() => {
     fetch("/api/posts")
       .then((response) => {

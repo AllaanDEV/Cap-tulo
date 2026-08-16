@@ -8,11 +8,13 @@ import { Comment } from "../svgCode";
 import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
-import { ButtonPost } from "./buttonPost";
-import {  useState } from "react";
+import {
+   ButtonPost } from "./buttonPost";
+import { useState } from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
+
 
 
 const Save = save;
@@ -22,7 +24,8 @@ export function Post({ post }) {
   // console.log("POST RENDER:", post.id, post.comments);
   const [like, setLike] = useState(post.likes);
 
-  const { postDelete, LikeButton } = useRequisicoes({
+console.log(post)
+  const { postDelete, LikeButton, user} = useRequisicoes({
     post,
     like,
     setLike,
@@ -47,7 +50,6 @@ export function Post({ post }) {
   //     console.log(data)
   //   }))
   // };
-
 
   return (
     <>
@@ -77,9 +79,10 @@ export function Post({ post }) {
                 <Icon></Icon>
               </summary>
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                <button className="hover:text-wine" onClick={postDelete}>
+                {post.author === user.name ? <button className="hover:text-wine" onClick={postDelete}>
                   Deletar
-                </button>
+                </button> : "" }
+          
               </div>
             </details>
           </div>

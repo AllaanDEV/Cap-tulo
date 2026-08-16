@@ -9,8 +9,9 @@ import { book } from "../svgCode";
 import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
-import {useState } from "react";
+import { useState, } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useNavigate } from "react-router";
 
 const Spiral = spiral;
 
@@ -33,32 +34,48 @@ const options = [
   { icon: book, name: "Minha estante" },
   { icon: group, name: "Clubes de leitura" },
   { icon: save, name: "Quero ler" },
+  { icon: save, name: "sair" },
 ];
 
 export function SideBar() {
-  const {nameIcon}= useRequisicoes({})
 
- const user=localStorage.getItem("user")
 
- const userObj= user ? JSON.parse(user) : "anonimo"
+  const { nameIcon } = useRequisicoes({});
 
-  const [option, setOption]= useState("Feed")
+  const user = localStorage.getItem("user");
+  const userObj = user ? JSON.parse(user) : "anonimo";
+
+  const [option, setOption] = useState("Feed");
+
+  const navigate = useNavigate();
+
+  const logout = (index) => {
+    if (index != 5) {
+      return;
+    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("auth/login");
+  };
 
   return (
-    <section className="hidden lg:block w-60 relative">
-      <div className=" flex flex-col gap-3 fixed w-60">
+    <section className="fixed top-20">
+      <div className=" flex flex-col gap-3 fixed w-80">
         <Div>
           <button className="flex gap-2">
             <PerfilIcon to="/perfil">{nameIcon}</PerfilIcon>
             <div className="text-start">
-              <p>{userObj?.name ||"anonimo"}</p>
-              <p className="flex items-center">@{userObj?.name ||"anonimo"}</p>
+              <p>{userObj?.name || "anonimo"}</p>
+              <p className="flex items-center">@{userObj?.name || "anonimo"}</p>
             </div>
           </button>
           <Info className="flex gap-3 bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
-                <div key={index} className={`text-xs flex flex-col items-center`}>
+                <div
+                  key={index}
+                  className={`text-xs flex flex-col items-center`}
+                >
                   <p>{s.number}</p>
                   <p>{s.status}</p>
                 </div>
@@ -71,7 +88,14 @@ export function SideBar() {
           {options.map((o, index) => {
             const Icon = o.icon;
             return (
-              <button key={index} className={`flex gap-2 items-center hover:bg-border py-2 pl-2 rounded-2xl ${option == o.name ? "bg-wine/15 text-wine enabled:hover:bg-border" : ""}`} onClick={() => setOption(o.name)}>
+              <button
+                key={index}
+                className={`flex gap-2 items-center hover:bg-border py-2 pl-2 rounded-2xl ${option == o.name ? "bg-wine/15 text-wine enabled:hover:bg-border" : ""}`}
+                onClick={() => {
+                  setOption(o.name);
+                  logout(index);
+                }}
+              >
                 <Icon></Icon>
                 <p>{o.name}</p>
               </button>
@@ -91,7 +115,6 @@ export function SideBar() {
                 width: "40%",
                 backgroundColor: "var(--color-wine)",
               }}
-
               className="h-full rounded-3xl"
             ></div>
           </div>

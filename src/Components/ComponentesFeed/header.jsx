@@ -32,7 +32,7 @@ export function Header() {
   };
 
   return (
-    <header className="border border-border p-2">
+    <header className="border border-border p-2 fixed w-full bg-border z-1">
       <nav className="flex items-center gap-3 justify-between p-1">
         <div className="flex gap-2">
           <img src={logo} className="w-auto h-10"></img>
