@@ -24,8 +24,7 @@ export function Post({ post }) {
   // console.log("POST RENDER:", post.id, post.comments);
   const [like, setLike] = useState(post.likes);
 
-console.log(post)
-  const { postDelete, LikeButton, user} = useRequisicoes({
+  const { postDelete, LikeButton, nameIcon, user} = useRequisicoes({
     post,
     like,
     setLike,
@@ -58,9 +57,7 @@ console.log(post)
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
               <PerfilIcon to={`/perfil/`} state={post}>
-                {(
-                  post?.author[0] + (post?.author[1] ? post.author[1] : "")
-                ).toUpperCase()}
+               {nameIcon(post.author)}
               </PerfilIcon>
               <p>
                 {post.author}

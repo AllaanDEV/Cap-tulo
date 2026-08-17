@@ -52,7 +52,7 @@ const {nameIcon, user}= useRequisicoes({})
           <Div>
             <div className="flex gap-3">
               <PerfilIcon>
-                {nameIcon} 
+                {nameIcon(user.name)} 
                 </PerfilIcon>
               <p
                 className="bg-background rounded-4xl h-12 border border-border

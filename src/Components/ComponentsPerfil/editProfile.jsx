@@ -1,12 +1,14 @@
 import { useContext, useEffect, useRef } from "react";
 import AppContext from "../context";
+import { Form } from "../ComponentsForm/form";
+import { useLocation } from "react-router";
 
 export function EditProfile() {
   const dialogRef = useRef(null);
-  const { dialog, openOrCloseDialog } = useContext(AppContext);
+  const { dialog, openOrCloseDialog, setEdit, setAtualizar, edit } =
+    useContext(AppContext);
 
   useEffect(() => {
-    console.log("vasco");
     if (dialog) {
       dialogRef.current?.showModal();
     } else {
@@ -14,6 +16,29 @@ export function EditProfile() {
     }
   }, [dialog]);
 
+  useEffect(() => {
+    setEdit(edit);
+  }, [edit]);
+
+  const editProfile = (e) => {
+    openOrCloseDialog();
+    setAtualizar(true);
+
+    const formData = new FormData(e.target);
+
+    const newData = {
+      name: formData.get("name").trim(),
+      username: formData.get("username").trim(),
+      bios: formData.get("bio")?.trim() || null,
+      location: formData.get("location")?.trim() || null,
+      link: formData.get("link")?.trim() || null,
+    };
+
+    console.log(newData.username);
+    return setEdit(newData);
+  };
+
+  const { state } = useLocation();
   return (
     <>
       <dialog
@@ -34,7 +59,7 @@ export function EditProfile() {
           shadow-2xl
         "
       >
-        <form className="flex flex-col">
+        <Form active={editProfile} method="dialog">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[#e8dece] px-6 py-4">
             <div>
@@ -95,7 +120,8 @@ export function EditProfile() {
                 <input
                   type="text"
                   name="name"
-                  defaultValue="Helena Braga"
+                  defaultValue={state.name}
+                  required
                   className="
                     rounded-xl
                     border border-[#ded2c1]
@@ -117,7 +143,8 @@ export function EditProfile() {
                   <input
                     type="text"
                     name="username"
-                    defaultValue="helenalê"
+                    required
+                    defaultValue={state.name}
                     className="w-full bg-transparent px-1 py-3 outline-none"
                   />
                 </div>
@@ -256,7 +283,7 @@ export function EditProfile() {
               Salvar alterações
             </button>
           </div>
-        </form>
+        </Form>
       </dialog>
     </>
   );
