@@ -11,7 +11,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function Header() {
   const { openOrCloseDialog, publication, setSearch } = useContext(AppContext);
-  const { nameIcon } = useRequisicoes({});
+  const { nameIcon, user} = useRequisicoes({});
   const inputRef = useRef(null);
 
   const SearchUsers = (e) => {
@@ -70,7 +70,7 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon to={"/perfil"}>{nameIcon}</PerfilIcon>
+          <PerfilIcon to={"/perfil"}>{nameIcon(user.name)}</PerfilIcon>
         </div>
       </nav>
     </header>

@@ -40,10 +40,10 @@ const options = [
 export function SideBar() {
 
 
-  const { nameIcon } = useRequisicoes({});
+  const { nameIcon,user } = useRequisicoes({});
 
-  const user = localStorage.getItem("user");
-  const userObj = user ? JSON.parse(user) : "anonimo";
+  // const user = localStorage.getItem("user");
+  // const userObj = user ? JSON.parse(user) : "anonimo";
 
   const [option, setOption] = useState("Feed");
 
@@ -63,10 +63,10 @@ export function SideBar() {
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div>
           <button className="flex gap-2">
-            <PerfilIcon to="/perfil">{nameIcon}</PerfilIcon>
+            <PerfilIcon to="/perfil">{nameIcon(user.name)}</PerfilIcon>
             <div className="text-start">
-              <p>{userObj?.name || "anonimo"}</p>
-              <p className="flex items-center">@{userObj?.name || "anonimo"}</p>
+              <p>{user.name || "anonimo"}</p>
+              <p className="flex items-center">@{user.name || "anonimo"}</p>
             </div>
           </button>
           <Info className="flex gap-3 bg-border rounded-lg p-3">

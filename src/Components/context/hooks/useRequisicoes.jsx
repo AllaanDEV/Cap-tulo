@@ -8,9 +8,11 @@ export function useRequisicoes({ post, like, setLike }) {
   const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const nameIcon = (
-    user.name[0] + (user.name[1] ? user.name[1] : "")
-  ).toUpperCase();
+  const nameIcon = (name) => {
+    if (name) {
+      return (name[0] + (name[1] ? name[1] : "")).toUpperCase();
+    }
+  };
 
   const [comments, setComments] = useState(false);
 
@@ -21,19 +23,16 @@ export function useRequisicoes({ post, like, setLike }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res) => {
-        if (res.status == 200) {
-          const newFeed = publication.filter((p) => p.id != post.id);
+    }).then((res) => {
+      if (res.status == 200) {
+        const newFeed = publication.filter((p) => p.id != post.id);
 
-          setSearch(newFeed);
-          return setPublication(newFeed);
-        } else {
-          return;
-        } 
-      })
-
-    
+        setSearch(newFeed);
+        return setPublication(newFeed);
+      } else {
+        return;
+      }
+    });
   };
 
   const commentEdit = async (e, EDIT) => {

@@ -9,7 +9,7 @@ export function Context({ children }) {
   // const requisicoes = useRequisicoes();
 
   const [dialog, setDialog] = useState(false);
- const [publication, setPublication] = useState([]);
+  const [publication, setPublication] = useState([]);
 
   const openOrCloseDialog = () => {
     setDialog(!dialog);
@@ -33,7 +33,6 @@ export function Context({ children }) {
     }
   };
 
-
   const Login = async ({ email, password }) => {
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
@@ -56,12 +55,12 @@ export function Context({ children }) {
     }
   };
 
-  const dialogRef= useRef(null)
+  const dialogRef = useRef(null);
 
-    const [editComments, setEditComments] = useState(false);
+  const [editComments, setEditComments] = useState(false);
 
   const [EDIT, SETEDIT] = useState();
-  const [postEdit, setPostEdit]= useState()
+  const [postEdit, setPostEdit] = useState();
 
   const toggleComments = () => {
     setEditComments(!editComments);
@@ -75,9 +74,21 @@ export function Context({ children }) {
     }
   }, [editComments]);
 
-  const [search, setSearch]= useState()
-  const [post, setPost]= useState([])
+  const [search, setSearch] = useState();
+  const [post, setPost] = useState([]);
+  const [edit, setEdit] = useState({});
+  const [atualizar, setAtualizar] = useState(false);
+const [iconsProfile, setIconsProfile]= useState({})
 
+console.log(iconsProfile)
+
+  useEffect(() => {
+    setAtualizar(atualizar);
+  }, [atualizar]);
+
+    useEffect(() => {
+    setIconsProfile(iconsProfile);
+  }, [iconsProfile]);
 
   return (
     <AppContext.Provider
@@ -99,6 +110,12 @@ export function Context({ children }) {
         setSearch,
         setPost,
         post,
+        edit,
+        setEdit,
+        atualizar,
+        setAtualizar,
+        iconsProfile,
+        setIconsProfile
       }}
     >
       {children}
