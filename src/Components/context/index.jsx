@@ -78,15 +78,18 @@ export function Context({ children }) {
   const [post, setPost] = useState([]);
   const [edit, setEdit] = useState({});
   const [atualizar, setAtualizar] = useState(false);
-const [iconsProfile, setIconsProfile]= useState({})
+  const [iconsProfile, setIconsProfile] = useState({});
 
-console.log(iconsProfile)
+  console.log(iconsProfile);
+  const [ebooks, setEbooks] = useState([]);
+  const [bookSearch, setBookSearch] = useState([]);
 
+  const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
 
-    useEffect(() => {
+  useEffect(() => {
     setIconsProfile(iconsProfile);
   }, [iconsProfile]);
 
@@ -115,7 +118,13 @@ console.log(iconsProfile)
         atualizar,
         setAtualizar,
         iconsProfile,
-        setIconsProfile
+        setIconsProfile,
+        ebooks,
+        setEbooks,
+        bookSearch,
+        setBookSearch,
+        searchValue,
+        setSearchValue,
       }}
     >
       {children}

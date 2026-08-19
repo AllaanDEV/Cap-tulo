@@ -60,6 +60,7 @@ export function ArrayPost() {
   return (
     <ul className="flex flex-col gap-5">
       {(!search ? publication : search).map((p) => {
+  
         return (
           <li key={p.id}>
             <Post post={p}></Post>

@@ -13,7 +13,8 @@ import { Saves } from "./Components/saves.jsx";
 import { Context } from "./Components/context/index.jsx";
 import { HeaderLayout } from "./Components/headerLayout.jsx";
 import { Icon } from "./Components/ComponentsPerfil/icon.jsx";
-import { ArrayEbooks } from "./Components/ComponentsEbooks/arrayEbooks.jsx";
+
+import { EbooksPage } from "./Components/ebooksPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -34,7 +35,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="perfil/" element={<Icon></Icon>}></Route>
           </Route>
 
-          <Route path="*" element={<ArrayEbooks></ArrayEbooks>}></Route>
+          <Route path="*" element={<EbooksPage></EbooksPage>}></Route>
           {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
         </Routes>
       </BrowserRouter>
