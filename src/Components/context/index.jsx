@@ -12,6 +12,7 @@ export function Context({ children }) {
   const [publication, setPublication] = useState([]);
 
   const openOrCloseDialog = () => {
+    console.log("vasco");
     setDialog(!dialog);
   };
 
@@ -79,12 +80,15 @@ export function Context({ children }) {
   const [edit, setEdit] = useState({});
   const [atualizar, setAtualizar] = useState(false);
   const [iconsProfile, setIconsProfile] = useState({});
+  const [ebookSaved, setEbookSaved] = useState([]);
 
   console.log(iconsProfile);
   const [ebooks, setEbooks] = useState([]);
+
   const [bookSearch, setBookSearch] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -125,6 +129,8 @@ export function Context({ children }) {
         setBookSearch,
         searchValue,
         setSearchValue,
+        ebookSaved,
+        setEbookSaved,
       }}
     >
       {children}

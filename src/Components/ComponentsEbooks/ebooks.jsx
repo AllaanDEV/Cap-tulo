@@ -1,15 +1,40 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Lines } from "../ComponentsForm/lines";
 import { DetailsBook } from "./detailsBook";
 
+import { save } from "../svgCode";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import AppContext from "../context";
+
 export function Ebook(ebook) {
-  console.log(ebook);
+  const SaveIcon = save;
+  const { ebookSaved, setEbookSaved }=useContext(AppContext)
+  
+  const { token } = useRequisicoes({});
+
   const [details, setDetails] = useState(false);
 
   const toggleDetails = () => {
     setDetails(!details);
   };
-  
+
+  const saveBook = async () => {
+    const response = await fetch("http://localhost:3000/api/books/saved", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(ebook.ebook),
+    });
+
+    const res = await response.json();
+    const data = [...ebookSaved, res];
+
+    console.log(ebookSaved);
+    return setEbookSaved(data);
+  };
+
   return (
     <article className="overflow-hidden rounded-lg border border-[#e1d1ba] bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative overflow-hidden rounded-md bg-[#f1eadf]">
@@ -37,12 +62,23 @@ export function Ebook(ebook) {
         </p>
 
         <Lines></Lines>
-        <button
-          onClick={toggleDetails}
-          className="mt-4 font-serif text-[12px] text-[#995d43]/80 hover:text-[#995d43]"
-        >
-          Detalhes
-        </button>
+
+        <div className="flex items-center justify-between mt-4">
+          <button
+            onClick={toggleDetails}
+            className="font-serif text-[12px] text-[#995d43]/80 hover:text-[#995d43]"
+          >
+            Detalhes
+          </button>
+
+          <button
+            className="text-[#995d43] transition-colors hover:text-yellow-600"
+            onClick={saveBook}
+          >
+            <SaveIcon />
+          </button>
+        </div>
+
         {details && (
           <>
             {ebook.ebook.volumeInfo.description && (

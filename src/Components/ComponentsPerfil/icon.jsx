@@ -40,7 +40,7 @@ export function Icon() {
     useContext(AppContext);
   const { state } = useLocation();
 
-  const { nameIcon } = useRequisicoes({});
+  const { nameIcon, user } = useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -69,7 +69,21 @@ export function Icon() {
     },
   ];
 
-console.log("RENDER ICON:", edit);
+  console.log("RENDER ICON:", edit);
+
+  useEffect(() => {
+    const getBook = async () => {
+      const response = await fetch("http://localhost:3000/api/books/saved");
+
+      const res = await response.json();
+      console.log("vasco", res);
+      // const data = [...ebookSaved, res];
+
+      // return setEbookSaved(data)
+    };
+    getBook();
+  }, []);
+
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary w-[70vw] mx-auto">
       <div className="bg-amber-300 w-full h-30 max-h-30 relative sm:h-50 sm:max-h-50 2xl:h-60  2xl:max-h-70">
@@ -94,8 +108,12 @@ console.log("RENDER ICON:", edit);
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl">{edit.name || state.author}</h1>
-            <span className="text-xs">@{edit.username || state.author}</span>
+            <h1 className="text-3xl">
+              {edit?.name || state?.author || user?.name}
+            </h1>
+            <span className="text-xs">
+              @{edit?.username || state?.author || user?.name}
+            </span>
             <span className="text-xs">TESTE: {edit.username}</span>
           </div>
           <p>{edit.bios || "coloque uma descrição sobre você!"}</p>
@@ -167,17 +185,22 @@ console.log("RENDER ICON:", edit);
             <Ebook></Ebook>
             Lendo Agora
           </h2>
-          <div className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
-            <EbookProgress></EbookProgress>
-            <EbookProgress></EbookProgress>
-          </div>
+          <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
+            {RuleTester.map((bookSave,index) => {
+              return (
+                <li key={index}>
+                  <EbookProgress book={bookSave}></EbookProgress>
+                </li>
+              );
+            })}
+          </ul>
         </Div>
 
-        {(!search ? publication : search)
+        {/* {(!search ? publication : search)
           .filter((p) => p.author == state.author)
           .map((p) => {
             return <Post key={p.id} post={p}></Post>;
-          })}
+          })} */}
       </div>
       <EditProfile></EditProfile>
     </section>

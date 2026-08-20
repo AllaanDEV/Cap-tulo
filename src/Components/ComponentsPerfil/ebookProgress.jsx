@@ -1,4 +1,4 @@
-export function EbookProgress({children}){
+export function EbookProgress({children, book}){
     return(
         <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg">
               <div className="p-3 flex gap-5 items-start">
