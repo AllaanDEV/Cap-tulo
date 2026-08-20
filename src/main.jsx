@@ -33,10 +33,10 @@ createRoot(document.getElementById("root")).render(
             <Route path="save" element={<Saves></Saves>}></Route>
             <Route path="feed" element={<Feed></Feed>}></Route>
             <Route path="perfil/" element={<Icon></Icon>}></Route>
+            <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route>
           </Route>
 
-          <Route path="*" element={<EbooksPage></EbooksPage>}></Route>
-          {/* <Route path="*" element={<FormLogin></FormLogin>}></Route> */}
+          <Route path="*" element={<FormLogin></FormLogin>}></Route>
         </Routes>
       </BrowserRouter>
       {/* <App /> */}

@@ -1,72 +1,57 @@
-import { useContext,} from "react";
-import { SelectBookCase } from "./selectBookCase";
-import AppContext from "../context";
 
 export function SearchBook() {
-  const { ebooks, setBookSearch, setSearchValue } = useContext(AppContext);
 
-  const searchBook = (e) => {
-    setSearchValue(e.target.value);
+  // const categoriesSearch = (e) => {
+  //     setSearchValue(e.target.value);
 
-    const booksFilter = ebooks.filter((ebook) => {
-      const padrao = (text) => {
-        return String(text ?? "")
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .trim();
-      };
+  //   if (e.target.value === "Mais recentes") {
+  //     const booksFilterDate = [...ebooks].sort((a, b) => {
+  //       const formatDateA = parseInt(a.volumeInfo?.publishedDate) || 0;
+  //       const formatDateB = parseInt(b.volumeInfo?.publishedDate) || 0;
 
-      return (
-        padrao(ebook.volumeInfo?.authors?.join(" ")).includes(
-          padrao(e.target.value),
-        ) || padrao(ebook.volumeInfo?.title).includes(padrao(e.target.value))
-      );
-    });
+  //       return formatDateB - formatDateA;
+  //     });
 
-    return setBookSearch(booksFilter);
-  };
-
-  const categoriesSearch= () =>{
-
-  }
+  //     console.log(booksFilterDate);
+  //     return setBookSearch(booksFilterDate);
+  //   }
+  // };
 
   return (
-    <section className="py-14">
-      <div className="mb-8 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-        <div>
-          <h3 className="font-serif text-3xl font-semibold">Toda a estante</h3>
-
+    <section className="py-5 flex flex-col justify-center border-b border-[#e7d8c3] mb-5">
+        <div className="mx-auto text-center">
+          <h3 className="font-serif text-6xl font-semibold">Toda a estante</h3>
           <p className="mt-1 text-sm text-[#866653]">
             9 títulos novos este mês
           </p>
         </div>
 
-        <div className="grid gap-2 sm:grid-cols-3">
-          <div className="flex h-11 items-center gap-2 rounded-md border border-[#dfcfb8] bg-[#fffaf3] px-4">
+        {/* <div className="grid gap-2 sm:grid-cols-3"> */}
+          {/* <div className="flex h-11 items-center gap-2 rounded-md border border-[#dfcfb8] bg-[#fffaf3] px-4 w-[50vw]">
             <span className="text-[#9b806f]">⌕</span>
             <input
               type="text"
+              ref={inputRef}
               onInput={searchBook}
               placeholder="Título ou autor"
               className="w-full bg-transparent text-sm outline-none placeholder:text-[#a88f7d]"
             />
-          </div>
+          </div> */}
 
-          <SelectBookCase>
+          {/* <SelectBookCase>
             <option>Todos os idiomas</option>
             <option>Português</option>
             <option>Inglês</option>
             <option>Espanhol</option>
           </SelectBookCase>
 
-          <SelectBookCase onChange={categoriesSearch}>
+          <SelectBookCase>
             <option>Mais lidos</option>
             <option>Mais recentes</option>
             <option>Melhor avaliados</option>
-          </SelectBookCase>
-        </div>
-      </div>
+          </SelectBookCase> */}
+
+      {/* </div> */}
     </section>
   );
 }

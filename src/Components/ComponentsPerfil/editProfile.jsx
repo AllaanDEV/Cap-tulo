@@ -120,7 +120,7 @@ export function EditProfile() {
                 <input
                   type="text"
                   name="name"
-                  defaultValue={state.name}
+                  defaultValue={state?.name}
                   required
                   className="
                     rounded-xl
@@ -144,7 +144,7 @@ export function EditProfile() {
                     type="text"
                     name="username"
                     required
-                    defaultValue={state.name}
+                    defaultValue={state?.name}
                     className="w-full bg-transparent px-1 py-3 outline-none"
                   />
                 </div>

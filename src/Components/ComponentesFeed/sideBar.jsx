@@ -9,7 +9,7 @@ import { book } from "../svgCode";
 import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
-import { useState, } from "react";
+import { useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
 
@@ -38,9 +38,7 @@ const options = [
 ];
 
 export function SideBar() {
-
-
-  const { nameIcon,user } = useRequisicoes({});
+  const { nameIcon, user } = useRequisicoes({});
 
   // const user = localStorage.getItem("user");
   // const userObj = user ? JSON.parse(user) : "anonimo";
@@ -50,12 +48,13 @@ export function SideBar() {
   const navigate = useNavigate();
 
   const logout = (index) => {
-    if (index != 5) {
-      return;
+    if (index === 5) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      navigate("auth/login");
+    }else if(index === 1){
+      navigate("/ebooks/")
     }
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    navigate("auth/login");
   };
 
   return (

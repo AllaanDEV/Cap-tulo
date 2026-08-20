@@ -4,24 +4,27 @@ import { ButtonBook } from "./buttonBook";
 import AppContext from "../context";
 
 export function ArrayEbooks() {
-  const {ebooks, setEbooks, bookSearch,  searchValue }= useContext(AppContext)
+  const { ebooks, setEbooks, bookSearch, searchValue } = useContext(AppContext);
 
   const [page, setPage] = useState(0);
   const [booksContador, setBooksContador] = useState(0);
 
   const categorias = [
-    "null",
-    "fiction",
+    "Sousou no Frieren",
+    "evangelion",
+    "game of thrones",
+    "Stranger Things",
+    "DragonBall",
+    "Codigo Da Vinci",
+    "breaking bad",
+    "The Sopranos",
+    "Balduino",
     "Fantasy",
     "Romance",
-    "Mystery",
-    "Thriller",
-    "Horror",
+    "agostinho",
+    "maquiavel",
     "Science Fiction",
-    "Biography",
-    "History",
     "Technology",
-    "Business",
     "Self-Help",
     "Poetry",
   ];
@@ -42,12 +45,25 @@ export function ArrayEbooks() {
     setBooksContador(booksContador + 1);
   }, [allBooks]);
 
+  const arraySetEbooks = [
+    ...new Map(ebooks.map((book) => [book.id, book])).values(),
+  ];
+
+  const arraySetBook = [
+    ...new Map(bookSearch.map((book) => [book.id, book])).values(),
+  ];
+
+  const displayedBooks = searchValue ? arraySetBook : arraySetEbooks;
+
+
+
+  
   return (
     <>
       <ul className="grid gap-x-3 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-        {( searchValue ? bookSearch  : ebooks ).map((e) => {
+        {displayedBooks.map((e) => {
           return (
-            <li key={e.etag} className="">
+            <li key={e.etag}>
               <Ebook ebook={e}></Ebook>
             </li>
           );

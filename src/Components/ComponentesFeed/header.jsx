@@ -5,34 +5,68 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
+import { useLocation, useNavigate} from "react-router";
+
 export function Header() {
-  const { openOrCloseDialog, publication, setSearch } = useContext(AppContext);
-  const { nameIcon, user} = useRequisicoes({});
+  const navigate= useNavigate()
+  const location = useLocation();
+
+  const {
+    openOrCloseDialog,
+    publication,
+    setSearch,
+    ebooks,
+    setBookSearch,
+    setSearchValue,
+    dialog,
+  } = useContext(AppContext);
+
+  const { nameIcon, user } = useRequisicoes({});
+  
   const inputRef = useRef(null);
 
-  const SearchUsers = (e) => {
-    const filterPublications = publication.filter((p) => {
-      const padrao = (text) => {
-        return text
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .trim();
-      };
+  const Search = (e) => {
+    const padrao = (text) => {
+      return String(text ?? "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    };
 
-      return padrao(p.content).includes(padrao(e.target.value)) ||
-      padrao(p.author).includes(padrao(e.target.value));
-    });
+    if (location.pathname === "/feed/" || location.pathname === "/perfil/") {
+      const filterPublications = publication.filter((p) => {
+        return (
+          padrao(p.content).includes(padrao(e.target.value)) ||
+          padrao(p.author).includes(padrao(e.target.value))
+        );
+      });
 
-    return setSearch(filterPublications);
+      return setSearch(filterPublications);
+    } else if (location.pathname === "/ebooks/") {
+      setSearchValue(e.target.value);
+      const booksFilter = ebooks.filter((ebook) => {
+        return (
+          padrao(ebook.volumeInfo?.authors?.join(" ")).includes(
+            padrao(e.target.value),
+          ) || padrao(ebook.volumeInfo?.title).includes(padrao(e.target.value))
+        );
+      });
+
+      return setBookSearch(booksFilter);
+    }
   };
 
+
+  useEffect(()=>{
+
+  },[dialog])
   return (
-    <header className="border border-border p-2 fixed w-full bg-border z-1">
+    <header className="border border-border p-2 fixed w-full bg-border z-2">
       <nav className="flex items-center gap-3 justify-between p-1">
         <div className="flex gap-2">
           <img src={logo} className="w-auto h-10"></img>
@@ -50,7 +84,7 @@ export function Header() {
               placeholder="Buscar livros, autores, leitores..."
               className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
               w-[clamp(2rem,40vw,30rem)]"
-              onInput={(e) => SearchUsers(e)}
+              onInput={(e) => Search(e)}
             ></input>
           </div>
         </div>
@@ -59,7 +93,7 @@ export function Header() {
           <div className="hidden sm:block w-50">
             <button
               className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center"
-              onClick={openOrCloseDialog}
+              onClick={() => openOrCloseDialog (location.pathname === "/feed/" ? null : navigate("/feed/"))}
             >
               <img src={addIcon}></img>
               Publicar

@@ -60,7 +60,7 @@ export function Dialog() {
     );
   };
   return (
-    <dialog ref={dialogRef} className="w-200 bg-white h-100 m-auto">
+    <dialog ref={dialogRef} className="w-200 bg-white h-100 m-auto" onCancel={openOrCloseDialog}>
       <Form active={newPost}>
         <textarea name="content"></textarea>
         <img name="midia"></img>
