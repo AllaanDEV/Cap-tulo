@@ -120,7 +120,7 @@ console.log("papisd",user)
       // const allComments = data.comments;
       //reverter a ordem, ficando os comentários novos em primeiro
 
-      setSearch((prev) => prev.map((p) => (p.id === data.id ? data : p)));
+      setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
       e.target.reset();
     } catch (error) {
@@ -129,13 +129,14 @@ console.log("papisd",user)
   };
 
   const LikeButton = () => {
-    fetch(`/api/posts/${post.id}/like`, {
+    fetch(`http://localhost:3000/api/posts/${post.id}/like`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((response) => {
       if (response.ok) {
+        console.log("alou")
         setLike(like + 1);
       }
     });

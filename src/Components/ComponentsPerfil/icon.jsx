@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
 import { Post } from "../ComponentesFeed/post";
@@ -12,6 +12,7 @@ import AppContext from "../context";
 import { useLocation } from "react-router";
 import { EditProfile } from "./editProfile";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { Lines } from "../ComponentsForm/lines";
 
 const Pencil = pencil;
 const Ebook = ebook;
@@ -29,18 +30,25 @@ const tags = [
 ];
 
 const buttons = [
+  { name: "Todos" },
   { name: "Publicações" },
   { name: "Estantes" },
-  { name: "Resenha" },
   { name: "Sobre" },
 ];
 
 export function Icon() {
-  const { publication, search, setPublication, openOrCloseDialog, edit } =
-    useContext(AppContext);
+  const {
+    publication,
+    search,
+    setPublication,
+    openOrCloseDialog,
+    edit,
+    ebookSaved,
+    setEbookSaved,
+  } = useContext(AppContext);
   const { state } = useLocation();
 
-  const { nameIcon, user } = useRequisicoes({});
+  const { nameIcon, user, token } = useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -69,20 +77,34 @@ export function Icon() {
     },
   ];
 
-  console.log("RENDER ICON:", edit);
-
   useEffect(() => {
-    const getBook = async () => {
-      const response = await fetch("http://localhost:3000/api/books/saved");
+    const getBookSave = async () => {
+      const response = await fetch("http://localhost:3000/api/books/saved", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const res = await response.json();
-      console.log("vasco", res);
-      // const data = [...ebookSaved, res];
 
-      // return setEbookSaved(data)
+      return setEbookSaved(res);
     };
-    getBook();
+    getBookSave();
   }, []);
+
+  const [feedfilter, setFeedFilter] = useState(null);
+
+  const filterFeed = (index) => {
+    if (index === 1) {
+      setFeedFilter(false);
+    } else if (index === 0) {
+      setFeedFilter(null);
+    } else if (index === 2) {
+      setFeedFilter(true);
+    }
+  };
+
+  const [buttonFocus, setButtonFocus] = useState("Todos");
 
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary w-[70vw] mx-auto">
@@ -114,7 +136,6 @@ export function Icon() {
             <span className="text-xs">
               @{edit?.username || state?.author || user?.name}
             </span>
-            <span className="text-xs">TESTE: {edit.username}</span>
           </div>
           <p>{edit.bios || "coloque uma descrição sobre você!"}</p>
         </div>
@@ -173,35 +194,82 @@ export function Icon() {
         <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
           {buttons.map((b, index) => {
             return (
-              <button key={index} className={`text-gray`}>
+              <button
+                className="text-gray"
+                onClick={() => {
+                  filterFeed(index);
+                  setButtonFocus(b.name);
+                }}
+              >
                 {b.name}
+
+                {buttonFocus === b.name && (
+                  <span className="mt-1 block border-t-[2px] border-wine" />
+                )}
               </button>
             );
           })}
         </nav>
 
-        <Div>
-          <h2 className="flex gap-1 items-center text-lg">
-            <Ebook></Ebook>
-            Lendo Agora
-          </h2>
-          <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
-            {RuleTester.map((bookSave,index) => {
-              return (
-                <li key={index}>
-                  <EbookProgress book={bookSave}></EbookProgress>
-                </li>
-              );
-            })}
-          </ul>
-        </Div>
+        <Lines></Lines>
 
-        {/* {(!search ? publication : search)
-          .filter((p) => p.author == state.author)
-          .map((p) => {
-            return <Post key={p.id} post={p}></Post>;
-          })} */}
+        {feedfilter === null ? (
+          <Div>
+            <h2 className="flex gap-1 items-center text-lg">
+              <Ebook></Ebook>
+              Lendo Agora
+            </h2>
+            <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
+              {ebookSaved.length === 0 ? (
+                <p>Nenhum livro salvo.</p>
+              ) : (
+                ebookSaved.map((bookSave) => {
+                  return (
+                    <li key={bookSave.ebook.etag}>
+                      <EbookProgress book={bookSave} />
+                    </li>
+                  );
+                })
+              )}
+            </ul>
+          </Div>
+        ) : feedfilter === false ? null : (
+          <Div>
+            <h4 className="flex gap-1 items-center text-lg">
+              <Ebook></Ebook>
+              Lendo Agora
+            </h4>
+            <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
+              {ebookSaved.length === 0 ? (
+                <p>Nenhum livro salvo.</p>
+              ) : (
+                ebookSaved.map((bookSave) => {
+                  return (
+                    <li key={bookSave.ebook.etag}>
+                      <EbookProgress book={bookSave} />
+                    </li>
+                  );
+                })
+              )}
+            </ul>
+          </Div>
+        )}
+
+        {feedfilter === null
+          ? (!search ? publication : search)
+              .filter((p) => p.author == (state?.author || user?.name))
+              .map((p) => {
+                return <Post key={p.id} post={p}></Post>;
+              })
+          : feedfilter === false
+            ? (!search ? publication : search)
+                .filter((p) => p.author == (state?.author || user?.name))
+                .map((p) => {
+                  return <Post key={p.id} post={p}></Post>;
+                })
+            : null}
       </div>
+
       <EditProfile></EditProfile>
     </section>
   );

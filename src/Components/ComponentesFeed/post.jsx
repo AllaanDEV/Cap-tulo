@@ -56,7 +56,7 @@ export function Post({ post }) {
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
-              <PerfilIcon to={`/perfil/`} state={post}>
+              <PerfilIcon to={`/perfil/${post.authorId}`} state={post}>
                {nameIcon(post.author)}
               </PerfilIcon>
               <p>
@@ -78,7 +78,7 @@ export function Post({ post }) {
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
                 {post.author === user.name ? <button className="hover:text-wine" onClick={postDelete}>
                   Deletar
-                </button> : "" }
+                </button> : null }
           
               </div>
             </details>

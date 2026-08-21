@@ -9,9 +9,10 @@ import { book } from "../svgCode";
 import { group } from "../svgCode";
 import { save } from "../svgCode";
 import { spiral } from "../svgCode";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
+import AppContext from "../context";
 
 const Spiral = spiral;
 
@@ -39,7 +40,7 @@ const options = [
 
 export function SideBar() {
   const { nameIcon, user } = useRequisicoes({});
-
+  const { setEbookSaved } = useContext(AppContext);
   // const user = localStorage.getItem("user");
   // const userObj = user ? JSON.parse(user) : "anonimo";
 
@@ -51,9 +52,11 @@ export function SideBar() {
     if (index === 5) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+      setEbookSaved([]);
+
       navigate("auth/login");
-    }else if(index === 1){
-      navigate("/ebooks/")
+    } else if (index === 1) {
+      navigate("/ebooks");
     }
   };
 
