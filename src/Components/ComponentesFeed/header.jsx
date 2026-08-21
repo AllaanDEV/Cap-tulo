@@ -38,7 +38,7 @@ export function Header() {
         .trim();
     };
 
-    if (location.pathname === "/feed/" || location.pathname === "/perfil/") {
+    if (location.pathname === "/feed/" || location.pathname === `/perfil/${user.id || author?.authorId}`) {
       const filterPublications = publication.filter((p) => {
         return (
           padrao(p.content).includes(padrao(e.target.value)) ||
@@ -104,7 +104,7 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon to={"/perfil"}>{nameIcon(user.name)}</PerfilIcon>
+          <PerfilIcon to={`/perfil/${user.id}`}>{nameIcon(user.name)}</PerfilIcon>
         </div>
       </nav>
     </header>

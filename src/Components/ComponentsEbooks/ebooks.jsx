@@ -4,12 +4,10 @@ import { DetailsBook } from "./detailsBook";
 
 import { save } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import AppContext from "../context";
 
 export function Ebook(ebook) {
   const SaveIcon = save;
-  const { ebookSaved, setEbookSaved }=useContext(AppContext)
-  
+
   const { token } = useRequisicoes({});
 
   const [details, setDetails] = useState(false);
@@ -27,12 +25,7 @@ export function Ebook(ebook) {
       },
       body: JSON.stringify(ebook.ebook),
     });
-
-    const res = await response.json();
-    const data = [...ebookSaved, res];
-
-    console.log(ebookSaved);
-    return setEbookSaved(data);
+    return response;
   };
 
   return (

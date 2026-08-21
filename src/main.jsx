@@ -32,7 +32,7 @@ createRoot(document.getElementById("root")).render(
           <Route element={<HeaderLayout></HeaderLayout>}>
             <Route path="save" element={<Saves></Saves>}></Route>
             <Route path="feed" element={<Feed></Feed>}></Route>
-            <Route path="perfil/" element={<Icon></Icon>}></Route>
+            <Route path="perfil/:id" element={<Icon></Icon>}></Route>
             <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route>
           </Route>
 
