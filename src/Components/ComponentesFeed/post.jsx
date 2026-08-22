@@ -10,10 +10,11 @@ import { save } from "../svgCode";
 import { Info } from "./info";
 import {
    ButtonPost } from "./buttonPost";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
+import AppContext from "../context";
 
 
 
@@ -21,7 +22,7 @@ const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  // console.log("POST RENDER:", post.id, post.comments);
+const {setPostId}= useContext(AppContext)
   const [like, setLike] = useState(post.likes);
 
   const { postDelete, LikeButton, nameIcon, user} = useRequisicoes({
@@ -42,14 +43,7 @@ export function Post({ post }) {
     setPostComment(!postComment);
   };
 
-  // const Pos = () => {
-  //  fetch(`/api/posts/${post.id}`, {
-  //     headers: { "Content-Type": "application/json" },
-  //   }).then((res) => res.json().then((data)=>{
-  //     console.log(data)
-  //   }))
-  // };
-
+  setPostId(post)
   return (
     <>
       <Div>

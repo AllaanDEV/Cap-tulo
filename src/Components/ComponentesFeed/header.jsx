@@ -5,7 +5,7 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
@@ -22,8 +22,9 @@ export function Header() {
     ebooks,
     setBookSearch,
     setSearchValue,
-    dialog,
+    postId, 
   } = useContext(AppContext);
+
 
   const { nameIcon, user } = useRequisicoes({});
   
@@ -38,7 +39,10 @@ export function Header() {
         .trim();
     };
 
-    if (location.pathname === "/feed/" || location.pathname === `/perfil/${user.id || author?.authorId}`) {
+    if (location.pathname === "/feed/" || location.pathname === `/perfil/${postId.authorId || user.id}`) 
+      {
+
+
       const filterPublications = publication.filter((p) => {
         return (
           padrao(p.content).includes(padrao(e.target.value)) ||
@@ -62,9 +66,6 @@ export function Header() {
   };
 
 
-  useEffect(()=>{
-
-  },[dialog])
   return (
     <header className="border border-border p-2 fixed w-full bg-border z-2">
       <nav className="flex items-center gap-3 justify-between p-1">

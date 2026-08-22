@@ -82,7 +82,6 @@ export function Context({ children }) {
   const [iconsProfile, setIconsProfile] = useState({});
   const [ebookSaved, setEbookSaved] = useState([]);
 
-  console.log(iconsProfile);
   const [ebooks, setEbooks] = useState([]);
 
   const [bookSearch, setBookSearch] = useState([]);
@@ -97,6 +96,7 @@ export function Context({ children }) {
     setIconsProfile(iconsProfile);
   }, [iconsProfile]);
 
+  const [postId, setPostId] = useState();
   return (
     <AppContext.Provider
       value={{
@@ -131,6 +131,8 @@ export function Context({ children }) {
         setSearchValue,
         ebookSaved,
         setEbookSaved,
+        postId,
+        setPostId,
       }}
     >
       {children}
