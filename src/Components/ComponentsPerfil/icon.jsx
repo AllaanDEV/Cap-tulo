@@ -1,21 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
-import { Post } from "../ComponentesFeed/post";
-import { pencil, calendar, maps, link, ebook } from "../svgCode";
+import { pencil, calendar, maps, link } from "../svgCode";
 import { ContainerTags } from "./containerTags";
-import { EbookProgress } from "./ebookProgress";
-import { SpanDescription } from "./spanDescriotion";
-import { SpanName } from "./spanName";
-import { Table } from "./table";
+
+import { ArrayTable } from "./arrayTable";
 import AppContext from "../context";
 import { useLocation } from "react-router";
 import { EditProfile } from "./editProfile";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Lines } from "../ComponentsForm/lines";
+import { ArrayBookSaved } from "./arrayBookSaved";
+import { ArrayPosts } from "./arrayPosts";
+import { useParams } from "react-router";
 
 const Pencil = pencil;
-const Ebook = ebook;
 
 const Calendar = calendar;
 const Maps = maps;
@@ -37,15 +36,10 @@ const buttons = [
 ];
 
 export function Icon() {
-  const {
-    publication,
-    search,
-    setPublication,
-    openOrCloseDialog,
-    edit,
-    ebookSaved,
-    setEbookSaved,
-  } = useContext(AppContext);
+  const { id: profileId } = useParams();
+
+  const { setPublication, openOrCloseDialog, edit, setEbookSaved } =
+    useContext(AppContext);
   const { state } = useLocation();
 
   const { nameIcon, user, token } = useRequisicoes({});
@@ -79,18 +73,35 @@ export function Icon() {
 
   useEffect(() => {
     const getBookSave = async () => {
-      const response = await fetch("http://localhost:3000/api/books/saved", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      try {
+        setEbookSaved([]);
 
-      const res = await response.json();
+        const response = await fetch(
+          `http://localhost:3000/api/books/saved/${profileId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-      return setEbookSaved(res);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Erro ao buscar livros");
+        }
+
+        setEbookSaved(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error(error.message);
+        setEbookSaved([]);
+      }
     };
-    getBookSave();
-  }, []);
+
+    if (profileId) {
+      getBookSave();
+    }
+  }, [profileId, token]);
 
   const [feedfilter, setFeedFilter] = useState(null);
 
@@ -170,25 +181,7 @@ export function Icon() {
         </div>
 
         <div class="grid grid-cols-2 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-4 lg:divide-y-0">
-          <Table>
-            <SpanName>Lidos</SpanName>
-            <SpanDescription>142</SpanDescription>
-          </Table>
-
-          <Table>
-            <SpanName>resenhas</SpanName>
-            <SpanDescription>87</SpanDescription>
-          </Table>
-
-          <Table>
-            <SpanName>seguindo</SpanName>
-            <SpanDescription>318</SpanDescription>
-          </Table>
-
-          <Table>
-            <SpanName>seguidores</SpanName>
-            <SpanDescription>1,2k</SpanDescription>
-          </Table>
+          <ArrayTable></ArrayTable>
         </div>
 
         <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
@@ -215,59 +208,19 @@ export function Icon() {
 
         {feedfilter === null ? (
           <Div>
-            <h2 className="flex gap-1 items-center text-lg">
-              <Ebook></Ebook>
-              Lendo Agora
-            </h2>
-            <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
-              {ebookSaved.length === 0 ? (
-                <p>Nenhum livro salvo.</p>
-              ) : (
-                ebookSaved.map((bookSave) => {
-                  return (
-                    <li key={bookSave.ebook.etag}>
-                      <EbookProgress book={bookSave} />
-                    </li>
-                  );
-                })
-              )}
-            </ul>
+            <ArrayBookSaved></ArrayBookSaved>
           </Div>
         ) : feedfilter === false ? null : (
           <Div>
-            <h4 className="flex gap-1 items-center text-lg">
-              <Ebook></Ebook>
-              Lendo Agora
-            </h4>
-            <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
-              {ebookSaved.length === 0 ? (
-                <p>Nenhum livro salvo.</p>
-              ) : (
-                ebookSaved.map((bookSave) => {
-                  return (
-                    <li key={bookSave.ebook.etag}>
-                      <EbookProgress book={bookSave} />
-                    </li>
-                  );
-                })
-              )}
-            </ul>
+            <ArrayBookSaved></ArrayBookSaved>
           </Div>
         )}
 
-        {feedfilter === null
-          ? (!search ? publication : search)
-              .filter((p) => p.author == (state?.author || user?.name))
-              .map((p) => {
-                return <Post key={p.id} post={p}></Post>;
-              })
-          : feedfilter === false
-            ? (!search ? publication : search)
-                .filter((p) => p.author == (state?.author || user?.name))
-                .map((p) => {
-                  return <Post key={p.id} post={p}></Post>;
-                })
-            : null}
+        {feedfilter === null ? (
+          <ArrayPosts></ArrayPosts>
+        ) : feedfilter === false ? (
+          <ArrayPosts></ArrayPosts>
+        ) : null}
       </div>
 
       <EditProfile></EditProfile>

@@ -61,7 +61,7 @@ export function SideBar() {
   };
 
   return (
-    <section className="fixed top-20">
+    <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div>
           <button className="flex gap-2">
@@ -122,6 +122,6 @@ export function SideBar() {
           </div>
         </Info>
       </div>
-    </section>
+    </aside>
   );
 }
