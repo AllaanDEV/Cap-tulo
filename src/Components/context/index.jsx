@@ -88,6 +88,10 @@ export function Context({ children }) {
 
   const [searchValue, setSearchValue] = useState("");
 
+  const [editRequsicao, setEditRequisicao] = useState(false);
+
+  const [editValue, setEditValue] = useState({});
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -133,6 +137,10 @@ export function Context({ children }) {
         setEbookSaved,
         postId,
         setPostId,
+        editRequsicao,
+        setEditRequisicao,
+        editValue,
+        setEditValue,
       }}
     >
       {children}

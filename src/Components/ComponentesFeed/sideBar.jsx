@@ -40,7 +40,7 @@ const options = [
 
 export function SideBar() {
   const { nameIcon, user } = useRequisicoes({});
-  const { setEbookSaved } = useContext(AppContext);
+  const { setEbookSaved, setEditValue } = useContext(AppContext);
   // const user = localStorage.getItem("user");
   // const userObj = user ? JSON.parse(user) : "anonimo";
 
@@ -52,7 +52,9 @@ export function SideBar() {
     if (index === 5) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+      
       setEbookSaved([]);
+      setEditValue({});
 
       navigate("auth/login");
     } else if (index === 1) {
