@@ -1,12 +1,30 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function EditProfile() {
   const dialogRef = useRef(null);
-  const { dialog, openOrCloseDialog, setEdit, setAtualizar, edit } =
-    useContext(AppContext);
+  const { id: profileId } = useParams();
+
+  const { state } = useLocation();
+
+  const [defaultValue, setDefaultValue] = useState({});
+
+  const {
+    dialog,
+    openOrCloseDialog,
+    setEdit,
+    setAtualizar,
+    edit,
+    editRequsicao,
+    setEditRequisicao,
+    setEditValue,
+    editValue,
+  } = useContext(AppContext);
+
+  const { token } = useRequisicoes({});
 
   useEffect(() => {
     if (dialog) {
@@ -20,26 +38,88 @@ export function EditProfile() {
     setEdit(edit);
   }, [edit]);
 
-  const editProfile = (e) => {
+  useEffect(() => {
+    setDefaultValue(defaultValue)
+  }, [defaultValue]);
+
+  const editProfile = async (e) => {
     openOrCloseDialog();
     setAtualizar(true);
 
     const formData = new FormData(e.target);
+    try {
+      const edit = await fetch(
+        `
+http://localhost:3000/profileEdit/${profileId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: formData.get("name").trim(),
+            username: formData.get("username").trim(),
+            bios: formData.get("bio")?.trim() || null,
+            location: formData.get("location")?.trim() || null,
+            link: formData.get("link")?.trim() || null,
+          }),
+        },
+      );
 
-    const newData = {
-      name: formData.get("name").trim(),
-      username: formData.get("username").trim(),
-      bios: formData.get("bio")?.trim() || null,
-      location: formData.get("location")?.trim() || null,
-      link: formData.get("link")?.trim() || null,
-    };
+      if (editRequsicao) {
+        setEditRequisicao(false);
+      } else {
+        setEditRequisicao(true);
+      }
 
-    console.log(newData.username);
-    return setEdit(newData);
+      return edit;
+    } catch (error) {
+      return error;
+    }
   };
 
-  const { state } = useLocation();
+  useEffect(() => {
+    const reset = () => {
+      setEditValue({});
+    };
+
+    reset();
+  }, [profileId]);
+
+
+    const [form, setForm] = useState({
+    name: "",
+    username: "",
+    bios: "",
+    location: "",
+    link: "",
+  });
+
+  useEffect(() => {
+    setForm({
+      name: editValue?.name ?? "",
+      username: editValue?.username ?? "",
+      bios: editValue?.bios ?? "",
+      location: editValue?.location ?? "",
+      link: editValue?.link ?? "",
+    });
+  }, [editValue]);
+  
+
+
+
+  const changeInput = (event) => {
+    const { name, value } = event.target;
+
+    setForm((previousForm) => ({
+      ...previousForm,
+      [name]: value,
+    }));
+  };
+
   return (
+
     <>
       <dialog
         ref={dialogRef}
@@ -120,7 +200,8 @@ export function EditProfile() {
                 <input
                   type="text"
                   name="name"
-                  defaultValue={state?.name}
+                  onChange={changeInput}
+                  defaultValue={form.name}
                   required
                   className="
                     rounded-xl
@@ -144,7 +225,8 @@ export function EditProfile() {
                     type="text"
                     name="username"
                     required
-                    defaultValue={state?.name}
+                    onChange={changeInput}
+                    defaultValue={form.username}
                     className="w-full bg-transparent px-1 py-3 outline-none"
                   />
                 </div>
@@ -161,7 +243,8 @@ export function EditProfile() {
               <textarea
                 name="bio"
                 rows="4"
-                defaultValue="Leio devagar e anoto tudo nas margens. Ficção literária, ensaios e uma queda incurável por romances familiares. Organizo o clube “Leituras de Terça”."
+                onChange={changeInput}
+                defaultValue={form.bios}
                 className="
                   resize-none
                   rounded-xl
@@ -182,7 +265,8 @@ export function EditProfile() {
               <input
                 type="text"
                 name="location"
-                defaultValue="Porto Alegre, RS"
+                onChange={changeInput}
+                defaultValue={form.location}
                 placeholder="Cidade, Estado"
                 className="
                   rounded-xl
@@ -203,7 +287,8 @@ export function EditProfile() {
               <input
                 type="text"
                 name="link"
-                defaultValue="marginalia.club/helena"
+                onChange={changeInput}
+                defaultValue={form.link}
                 placeholder="https://..."
                 className="
                   rounded-xl

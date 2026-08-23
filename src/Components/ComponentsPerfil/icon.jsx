@@ -36,9 +36,11 @@ const buttons = [
 ];
 
 export function Icon() {
+
+
   const { id: profileId } = useParams();
 
-  const { setPublication, openOrCloseDialog, edit, setEbookSaved } =
+  const { setPublication, openOrCloseDialog, setEbookSaved, editRequsicao, editValue, setEditValue } =
     useContext(AppContext);
   const { state } = useLocation();
 
@@ -56,12 +58,12 @@ export function Icon() {
   const bios = [
     {
       bio: Maps,
-      description: edit.location,
+      description: editValue.location,
       id: "location",
     },
     {
       bio: Link,
-      description: edit.link,
+      description: editValue.link,
       id: "link",
     },
     {
@@ -73,6 +75,7 @@ export function Icon() {
 
   useEffect(() => {
     const getBookSave = async () => {
+
       try {
         setEbookSaved([]);
 
@@ -117,12 +120,35 @@ export function Icon() {
 
   const [buttonFocus, setButtonFocus] = useState("Todos");
 
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+      if (!profileId || !token) return;
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/profileEdit/${profileId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        const data = await response.json();
+      setEditValue(data);
+      } catch (error) {
+        console.error("Erro ao buscar perfil:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [profileId, token, editRequsicao]);
+
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary w-[70vw] mx-auto">
       <div className="bg-amber-300 w-full h-30 max-h-30 relative sm:h-50 sm:max-h-50 2xl:h-60  2xl:max-h-70">
         <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center     grid place-items-center">
           <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">
-            {nameIcon(edit.name || state?.author)}
+            {nameIcon(editValue.name || state?.author)}
           </span>
         </div>
       </div>
@@ -142,13 +168,13 @@ export function Icon() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl">
-              {edit?.name || state?.author || user?.name}
+              {editValue?.name || state?.author || user?.name}
             </h1>
             <span className="text-xs">
-              @{edit?.username || state?.author || user?.name}
+              @{editValue?.username || state?.author || user?.name}
             </span>
           </div>
-          <p>{edit.bios || "coloque uma descrição sobre você!"}</p>
+          <p>{editValue.bios || "coloque uma descrição sobre você!"}</p>
         </div>
         <div className="md:flex gap-5">
           {bios
@@ -188,6 +214,7 @@ export function Icon() {
           {buttons.map((b, index) => {
             return (
               <button
+                key={index}
                 className="text-gray"
                 onClick={() => {
                   filterFeed(index);
