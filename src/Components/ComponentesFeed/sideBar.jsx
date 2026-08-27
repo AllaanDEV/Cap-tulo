@@ -13,6 +13,7 @@ import { useContext, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
 import AppContext from "../context";
+import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 const Spiral = spiral;
 
@@ -40,7 +41,7 @@ const options = [
 
 export function SideBar() {
   const { nameIcon, user } = useRequisicoes({});
-  const { setEbookSaved, setEditValue } = useContext(AppContext);
+  const { setEbookSaved, setEditValue, editValue} = useContext(AppContext);
   // const user = localStorage.getItem("user");
   // const userObj = user ? JSON.parse(user) : "anonimo";
 
@@ -67,7 +68,13 @@ export function SideBar() {
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div>
           <button className="flex gap-2">
-            <PerfilIcon to="/perfil">{nameIcon(user.name)}</PerfilIcon>
+                     <PerfilIcon to={`/perfil/${user.id}`}>
+                       {!editValue.dataPerfil?.midiaIcon ? (
+                         nameIcon(user.name)
+                       ) : (
+                         <ImgPerfil src={editValue.dataPerfil.midiaIcon} className="rounded-full text-center"></ImgPerfil>
+                       )}
+                     </PerfilIcon>
             <div className="text-start">
               <p>{user.name || "anonimo"}</p>
               <p className="flex items-center">@{user.name || "anonimo"}</p>

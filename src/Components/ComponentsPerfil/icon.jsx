@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
 import { pencil, calendar, maps, link } from "../svgCode";
@@ -13,6 +13,7 @@ import { Lines } from "../ComponentsForm/lines";
 import { ArrayBookSaved } from "./arrayBookSaved";
 import { ArrayPosts } from "./arrayPosts";
 import { useParams } from "react-router";
+import { ImgPerfil } from "./imgPerfil";
 
 const Pencil = pencil;
 
@@ -36,12 +37,19 @@ const buttons = [
 ];
 
 export function Icon() {
-
-
+  const theme = useRef(null);
   const { id: profileId } = useParams();
+  const [midiaOn, setMidiaOn] = useState(false);
+  const [midiaTheme, setMidiaTheme] = useState(null);
 
-  const { setPublication, openOrCloseDialog, setEbookSaved, editRequsicao, editValue, setEditValue } =
-    useContext(AppContext);
+  const {
+    setPublication,
+    openOrCloseDialog,
+    setEbookSaved,
+    editRequisicao,
+    editValue,
+    setEditValue,
+  } = useContext(AppContext);
   const { state } = useLocation();
 
   const { nameIcon, user, token } = useRequisicoes({});
@@ -58,12 +66,12 @@ export function Icon() {
   const bios = [
     {
       bio: Maps,
-      description: editValue.location,
+      description: editValue.dataPerfil?.location,
       id: "location",
     },
     {
       bio: Link,
-      description: editValue.link,
+      description: editValue.dataPerfil?.link,
       id: "link",
     },
     {
@@ -75,7 +83,6 @@ export function Icon() {
 
   useEffect(() => {
     const getBookSave = async () => {
-
       try {
         setEbookSaved([]);
 
@@ -121,7 +128,6 @@ export function Icon() {
   const [buttonFocus, setButtonFocus] = useState("Todos");
 
   useEffect(() => {
-
     const fetchProfile = async () => {
       if (!profileId || !token) return;
 
@@ -133,25 +139,122 @@ export function Icon() {
           },
         );
 
-        const data = await response.json();
-      setEditValue(data);
+        const dataPerfil = await response.json();
+        setEditValue((prev) => ({ ...prev, dataPerfil }));
       } catch (error) {
         console.error("Erro ao buscar perfil:", error);
       }
     };
 
     fetchProfile();
-  }, [profileId, token, editRequsicao]);
+  }, [profileId, token, editRequisicao]);
+
+  const responseSrc = async () => {
+    const responsePost = await fetch(
+      `http://localhost:3000/profileTheme/${profileId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          midiaTheme: midiaTheme || null,
+        }),
+      },
+    );
+
+    if (responsePost.ok) {
+      const responseGet = await fetch(
+        `http://localhost:3000/profileTheme/${profileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await responseGet.json();
+      console.log("data", data);
+      setEditValue((prev) => ({ ...prev, data }));
+    }
+  };
+
+  useEffect(() => {
+    if (midiaTheme === null) {
+      return;
+    }
+    const res = async () => {
+      await responseSrc();
+    };
+
+    res();
+  }, [midiaTheme]);
+
+  useEffect(() => {
+    const get = async () => {
+      const responseGet = await fetch(
+        `http://localhost:3000/profileTheme/${profileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await responseGet.json();
+      setEditValue((prev) => ({ ...prev, data }));
+    };
+    get();
+  }, [profileId, token]);
+
+  console.log("edit", editValue);
+
+  const photoTheme = (evento) => {
+    setMidiaOn(!midiaOn);
+    const file = evento.target.files[0];
+
+    if (file) {
+      const content = new FileReader();
+
+      content.onload = (e) => {
+        theme.current.src = e.target.result;
+        theme.current.style.display = "block";
+
+        setMidiaTheme(content.result);
+      };
+
+      content.readAsDataURL(file);
+    }
+  };
 
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary w-[70vw] mx-auto">
-      <div className="bg-amber-300 w-full h-30 max-h-30 relative sm:h-50 sm:max-h-50 2xl:h-60  2xl:max-h-70">
-        <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center     grid place-items-center">
-          <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">
-            {nameIcon(editValue.name || state?.author)}
-          </span>
+      <div className="bg-amber-300 w-full h-30 max-h-30 relative  sm:h-50 sm:max-h-50 2xl:h-60 2xl:max-h-70 flex justify-center">
+
+        <label className="relative cursor-pointer w-full h-full">
+          <ImgPerfil ref={theme} src={editValue?.data?.midiaTheme}></ImgPerfil>
+          <input
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            type="file"
+            onChange={photoTheme}
+          ></input>
+        </label>
+
+        <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center grid place-items-center overflow-hidden">
+          {editValue.dataPerfil?.midiaIcon ? (
+            <ImgPerfil
+              src={editValue.dataPerfil.midiaIcon}
+              alt="Foto de perfil"
+            />
+          ) : (
+            <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">
+              {nameIcon(
+                editValue?.dataPerfil?.name || state?.author || user?.name,
+              )}
+            </span>
+          )}
         </div>
       </div>
+
       <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
         <div className="flex justify-end gap-2 text-black">
           <ContainerTags>
@@ -168,14 +271,17 @@ export function Icon() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl">
-              {editValue?.name || state?.author || user?.name}
+              {editValue?.dataPerfil?.name || state?.author || user?.name}
             </h1>
             <span className="text-xs">
-              @{editValue?.username || state?.author || user?.name}
+              @{editValue?.dataPerfil?.username || state?.author || user?.name}
             </span>
           </div>
-          <p>{editValue.bios || "coloque uma descrição sobre você!"}</p>
+          <p>
+            {editValue?.dataPerfil?.bios || "coloque uma descrição sobre você!"}
+          </p>
         </div>
+
         <div className="md:flex gap-5">
           {bios
             .filter((b) => b.description)

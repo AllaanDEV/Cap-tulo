@@ -11,25 +11,25 @@ import { Remenber } from "./ComponentsForm/remenber";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 import AppContext from "./context";
+import { useRequisicoes } from "./context/hooks/useRequisicoes";
 
 export function FormLogin() {
+  const navigate = useNavigate();
 
-  const navigate= useNavigate()
-
-  const {Login}= useContext(AppContext)
-
+  const { Login } = useContext(AppContext);
+  const { user } = useRequisicoes({});
   const loginData = async (e) => {
-   e.preventDefault()
+    e.preventDefault();
 
-   const dataFormRegister= new FormData(e.target)
+    const dataFormRegister = new FormData(e.target);
 
     const email = dataFormRegister.get("email");
-    const password = dataFormRegister.get("password")
-  
-    const data = await Login ({ email, password });
+    const password = dataFormRegister.get("password");
+
+    const data = await Login({ email, password });
 
     if (data.success == true) {
-      navigate("/feed");
+      navigate(`${user.id}`);
     } else {
       console.log("Erro ao enviar dados");
     }

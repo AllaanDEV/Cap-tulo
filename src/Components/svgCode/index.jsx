@@ -175,7 +175,7 @@ export const save = () => {
       width="18"
       height="18"
       viewBox="0 0 24 24"
-      fill= "none"
+      fill="none"
       stroke="currentColor"
       stroke-width="1.8"
       stroke-linecap="round"
@@ -306,20 +306,101 @@ export const pencil = () => {
   );
 };
 
-export const maps= ()=>{
-  return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin" aria-hidden="true" data-id="element-177" data-mp="983v0wz957jq"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-  )
-}
+export const maps = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-map-pin"
+      aria-hidden="true"
+      data-id="element-177"
+      data-mp="983v0wz957jq"
+    >
+      <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+      <circle cx="12" cy="10" r="3"></circle>
+    </svg>
+  );
+};
 
-export const calendar= () =>{
-  return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar" aria-hidden="true" data-id="element-179" data-mp="ntzx4ogfq7kn"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
-  )
-}
+export const calendar = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-calendar"
+      aria-hidden="true"
+      data-id="element-179"
+      data-mp="ntzx4ogfq7kn"
+    >
+      <path d="M8 2v4"></path>
+      <path d="M16 2v4"></path>
+      <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+      <path d="M3 10h18"></path>
+    </svg>
+  );
+};
 
-export const link = () =>{
-  return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link" aria-hidden="true" data-id="element-181" data-mp="ssumk98wqudq"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-  )
-}
+export const link = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-link"
+      aria-hidden="true"
+      data-id="element-181"
+      data-mp="ssumk98wqudq"
+    >
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+    </svg>
+  );
+};
+
+export const camera = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 21 21"
+    >
+      <title xmlns="">camera</title>
+      <g fill="none" fill-rule="evenodd">
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.5 14.5v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2"
+        />
+        <path fill="currentColor" d="M17 9a1 1 0 1 0-2 0a1 1 0 0 0 2 0" />
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M13.5 11.5a3 3 0 1 0-6 0a3 3 0 0 0 6 0m-4-7h2a1 1 0 0 1 1 1v1h-4v-1a1 1 0 0 1 1-1"
+        />
+      </g>
+    </svg>
+  );
+};

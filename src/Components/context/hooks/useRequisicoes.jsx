@@ -7,7 +7,7 @@ export function useRequisicoes({ post, like, setLike }) {
 
   const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
-console.log("papisd",user)
+
   const nameIcon = (name) => {
     if (name) {
       return (name[0] + (name[1] ? name[1] : "")).toUpperCase();

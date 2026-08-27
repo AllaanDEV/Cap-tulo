@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
-// import { useRequisicoes } from "./hooks/useRequisicoes";
+
 
 export function Context({ children }) {
+
   const comments = useComments();
   // const requisicoes = useRequisicoes();
 
@@ -12,7 +13,6 @@ export function Context({ children }) {
   const [publication, setPublication] = useState([]);
 
   const openOrCloseDialog = () => {
-    console.log("vasco");
     setDialog(!dialog);
   };
 
@@ -88,7 +88,7 @@ export function Context({ children }) {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const [editRequsicao, setEditRequisicao] = useState(false);
+  const [editRequisicao, setEditRequisicao] = useState(false);
 
   const [editValue, setEditValue] = useState({});
 
@@ -101,6 +101,8 @@ export function Context({ children }) {
   }, [iconsProfile]);
 
   const [postId, setPostId] = useState();
+
+
   return (
     <AppContext.Provider
       value={{
@@ -137,10 +139,11 @@ export function Context({ children }) {
         setEbookSaved,
         postId,
         setPostId,
-        editRequsicao,
+        editRequisicao,
         setEditRequisicao,
         editValue,
         setEditValue,
+
       }}
     >
       {children}

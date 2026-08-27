@@ -1,30 +1,26 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { ImgPerfil } from "./imgPerfil";
 
 export function EditProfile() {
+  const inputFile = useRef(null);
+  const [midiaIcon, setMidiaIcon] = useState();
+
   const dialogRef = useRef(null);
   const { id: profileId } = useParams();
 
-  const { state } = useLocation();
-
-  const [defaultValue, setDefaultValue] = useState({});
-
+  const { token, user} = useRequisicoes({});
   const {
     dialog,
     openOrCloseDialog,
-    setEdit,
     setAtualizar,
-    edit,
-    editRequsicao,
     setEditRequisicao,
     setEditValue,
     editValue,
   } = useContext(AppContext);
-
-  const { token } = useRequisicoes({});
 
   useEffect(() => {
     if (dialog) {
@@ -33,14 +29,6 @@ export function EditProfile() {
       dialogRef.current?.close();
     }
   }, [dialog]);
-
-  useEffect(() => {
-    setEdit(edit);
-  }, [edit]);
-
-  useEffect(() => {
-    setDefaultValue(defaultValue)
-  }, [defaultValue]);
 
   const editProfile = async (e) => {
     openOrCloseDialog();
@@ -60,35 +48,27 @@ http://localhost:3000/profileEdit/${profileId}`,
           body: JSON.stringify({
             name: formData.get("name").trim(),
             username: formData.get("username").trim(),
-            bios: formData.get("bio")?.trim() || null,
+            bios: formData.get("bios")?.trim() || null,
             location: formData.get("location")?.trim() || null,
             link: formData.get("link")?.trim() || null,
+            midiaIcon: midiaIcon || null,
           }),
         },
       );
 
-      if (editRequsicao) {
-        setEditRequisicao(false);
-      } else {
-        setEditRequisicao(true);
-      }
+      setEditRequisicao((previousValue) => !previousValue);
 
       return edit;
     } catch (error) {
-      return error;
+      console.error("Erro ao editar perfil:", error);
     }
   };
 
   useEffect(() => {
-    const reset = () => {
-      setEditValue({});
-    };
-
-    reset();
+    setEditValue({});
   }, [profileId]);
 
-
-    const [form, setForm] = useState({
+  const [form, setForm] = useState({
     name: "",
     username: "",
     bios: "",
@@ -105,9 +85,6 @@ http://localhost:3000/profileEdit/${profileId}`,
       link: editValue?.link ?? "",
     });
   }, [editValue]);
-  
-
-
 
   const changeInput = (event) => {
     const { name, value } = event.target;
@@ -118,8 +95,23 @@ http://localhost:3000/profileEdit/${profileId}`,
     }));
   };
 
-  return (
+  const photoIcon = (evento) => {
+    const file = evento.target.files[0];
 
+    if (file) {
+      const content = new FileReader();
+      content.onload = (e) => {
+        inputFile.current.src = e.target.result;
+        inputFile.current.style.display = "block";
+
+        setMidiaIcon(content.result);
+      };
+
+      content.readAsDataURL(file);
+    }
+  };
+
+  return (
     <>
       <dialog
         ref={dialogRef}
@@ -169,13 +161,23 @@ http://localhost:3000/profileEdit/${profileId}`,
           <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 py-6">
             {/* Foto */}
             <div className="flex items-center gap-4">
-              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf]">
-                <span className="font-serif text-2xl">HB</span>
+              <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl shrink-0">
+                <ImgPerfil
+                  ref={inputFile}
+                  src={midiaIcon || editValue.midiaIcon}
+                ></ImgPerfil>
+                <label>
+                  <input
+                    className="hidden"
+                    type="file"
+                    onChange={photoIcon}
+                  ></input>
+                </label>
               </div>
 
               <div>
-                <button
-                  type="button"
+                <label
+                  type="file"
                   className="
                     rounded-full
                     border border-[#d9cbb8]
@@ -185,8 +187,9 @@ http://localhost:3000/profileEdit/${profileId}`,
                     transition
                   "
                 >
+                  <input type="file" onChange={photoIcon}></input>
                   Alterar foto
-                </button>
+                </label>
 
                 <p className="mt-2 text-xs text-[#998875]">JPG, PNG ou WEBP.</p>
               </div>
@@ -201,7 +204,7 @@ http://localhost:3000/profileEdit/${profileId}`,
                   type="text"
                   name="name"
                   onChange={changeInput}
-                  defaultValue={form.name}
+                  defaultValue={form.name || user.name }
                   required
                   className="
                     rounded-xl
@@ -226,7 +229,7 @@ http://localhost:3000/profileEdit/${profileId}`,
                     name="username"
                     required
                     onChange={changeInput}
-                    defaultValue={form.username}
+                    defaultValue={form.username || user.name }
                     className="w-full bg-transparent px-1 py-3 outline-none"
                   />
                 </div>
@@ -241,7 +244,7 @@ http://localhost:3000/profileEdit/${profileId}`,
               </div>
 
               <textarea
-                name="bio"
+                name="bios"
                 rows="4"
                 onChange={changeInput}
                 defaultValue={form.bios}
