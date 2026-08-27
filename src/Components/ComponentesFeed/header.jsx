@@ -9,10 +9,11 @@ import { useContext, useRef } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-import { useLocation, useNavigate} from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 export function Header() {
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
 
   const {
@@ -22,12 +23,12 @@ export function Header() {
     ebooks,
     setBookSearch,
     setSearchValue,
-    postId, 
+    postId,
+    editValue,
   } = useContext(AppContext);
 
-
   const { nameIcon, user } = useRequisicoes({});
-  
+
   const inputRef = useRef(null);
 
   const Search = (e) => {
@@ -39,10 +40,10 @@ export function Header() {
         .trim();
     };
 
-    if (location.pathname === "/feed/" || location.pathname === `/perfil/${postId.authorId || user.id}`) 
-      {
-
-
+    if (
+      location.pathname === `/feed/${user.id}` ||
+      location.pathname === `/perfil/${postId.authorId || user.id}`
+    ) {
       const filterPublications = publication.filter((p) => {
         return (
           padrao(p.content).includes(padrao(e.target.value)) ||
@@ -64,7 +65,6 @@ export function Header() {
       return setBookSearch(booksFilter);
     }
   };
-
 
   return (
     <header className="border border-border p-2 fixed w-full bg-border z-2">
@@ -94,7 +94,13 @@ export function Header() {
           <div className="hidden sm:block w-50">
             <button
               className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center"
-              onClick={() => openOrCloseDialog (location.pathname === "/feed/" ? null : navigate("/feed/"))}
+              onClick={() =>
+                openOrCloseDialog(
+                  location.pathname === "/feed"
+                    ? null
+                    : navigate(`/feed/${user.id}`),
+                )
+              }
             >
               <img src={addIcon}></img>
               Publicar
@@ -105,7 +111,17 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon to={`/perfil/${user.id}`}>{nameIcon(user.name)}</PerfilIcon>
+          <PerfilIcon to={`/perfil/${user.id}`}>
+            {!editValue.dataPerfil?.midiaIcon &&
+            editValue.dataPerfil?.userId !== user.id ? (
+              nameIcon(user.name)
+            ) : (
+              <ImgPerfil
+                src={editValue.dataPerfil.midiaIcon}
+                className="rounded-full text-center"
+              ></ImgPerfil>
+            )}
+          </PerfilIcon>
         </div>
       </nav>
     </header>

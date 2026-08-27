@@ -19,7 +19,7 @@ export function ArrayBookSaved() {
       </h4>
       <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
         {ebookSaved.length === 0 ? (
-          <p>Nenhum livro salvo.</p>
+          <p>Salve um livro!</p>
         ) : (
           <>
             {ebookSaved.map((bookSave) => {

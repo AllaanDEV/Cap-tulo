@@ -8,24 +8,22 @@ import { Comment } from "../svgCode";
 import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
-import {
-   ButtonPost } from "./buttonPost";
-import { useContext, useState } from "react";
+import { ButtonPost } from "./buttonPost";
+import { useContext, useEffect, useState } from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
 import AppContext from "../context";
-
-
+import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-const {setPostId}= useContext(AppContext)
+  const { setPostId, editValue, setEditRequisicao } = useContext(AppContext);
   const [like, setLike] = useState(post.likes);
 
-  const { postDelete, LikeButton, nameIcon, user} = useRequisicoes({
+  const { postDelete, LikeButton, nameIcon, user } = useRequisicoes({
     post,
     like,
     setLike,
@@ -43,18 +41,31 @@ const {setPostId}= useContext(AppContext)
     setPostComment(!postComment);
   };
 
-  setPostId(post)
+  setPostId(post);
+
+  useEffect(() => {
+    setEditRequisicao((previousValue) => !previousValue);
+  }, []);
   return (
     <>
       <Div>
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center">
-              <PerfilIcon to={`/perfil/${post.authorId}`} state={post}>
-               {nameIcon(post.author)}
+              <PerfilIcon to={`/perfil/${post.authorId}`}>
+                {!editValue.dataPerfil?.midiaIcon ? (
+                  nameIcon(post.author)
+                ) : editValue.dataPerfil.userId === post.authorId ? (
+                  <ImgPerfil
+                    src={editValue.dataPerfil.midiaIcon}
+                    className="rounded-full text-center"
+                  ></ImgPerfil>
+                ) : (
+                  nameIcon(post.author)
+                )}
               </PerfilIcon>
-              <p>
-                {post.author}
+              <div>
+                <span>{post.author}</span>
                 {post?.midia && (
                   <div className="flex gap-3 items-center">
                     <span className="text-gray">resenhou</span>
@@ -62,7 +73,7 @@ const {setPostId}= useContext(AppContext)
                   </div>
                 )}
                 <p className="text-gray text-xs">@{post.author}</p>
-              </p>
+              </div>
             </div>
 
             <details className="flex flex-col items-end relative">
@@ -70,10 +81,11 @@ const {setPostId}= useContext(AppContext)
                 <Icon></Icon>
               </summary>
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                {post.author === user.name ? <button className="hover:text-wine" onClick={postDelete}>
-                  Deletar
-                </button> : null }
-          
+                {post.author === user.name ? (
+                  <button className="hover:text-wine" onClick={postDelete}>
+                    Deletar
+                  </button>
+                ) : null}
               </div>
             </details>
           </div>
