@@ -3,6 +3,7 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
 import { pencil, calendar, maps, link } from "../svgCode";
 import { ContainerTags } from "./containerTags";
+import Camera from "../../assets/camera-1-remix.png";
 
 import { ArrayTable } from "./arrayTable";
 import AppContext from "../context";
@@ -174,7 +175,6 @@ export function Icon() {
         },
       );
       const data = await responseGet.json();
-      console.log("data", data);
       setEditValue((prev) => ({ ...prev, data }));
     }
   };
@@ -206,8 +206,6 @@ export function Icon() {
     get();
   }, [profileId, token]);
 
-  console.log("edit", editValue);
-
   const photoTheme = (evento) => {
     setMidiaOn(!midiaOn);
     const file = evento.target.files[0];
@@ -226,12 +224,25 @@ export function Icon() {
     }
   };
 
-  return (
-    <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary w-[70vw] mx-auto">
-      <div className="bg-amber-300 w-full h-30 max-h-30 relative  sm:h-50 sm:max-h-50 2xl:h-60 2xl:max-h-70 flex justify-center">
+  const bioNull =
+    editValue?.dataPerfil?.userId == user.id
+      ? "coloque uma descrição sobre você!"
+      : null;
 
-        <label className="relative cursor-pointer w-full h-full">
-          <ImgPerfil ref={theme} src={editValue?.data?.midiaTheme}></ImgPerfil>
+  return (
+    <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary sm:w-[70vw] mx-auto">
+      <div className="bg-wine w-full h-40 max-h-40 relative  sm:h-50 sm:max-h-50 2xl:h-70 2xl:max-h-70 flex justify-center">
+        {!editValue?.data?.midiaTheme && (
+          <span className="h-20 w-20 py-30">
+            <img src={Camera}></img>
+          </span>
+        )}
+        <label className="absolute cursor-pointer w-full h-full">
+          <ImgPerfil
+            ref={theme}
+            src={editValue?.data?.midiaTheme}
+            alt="foto de capa"
+          ></ImgPerfil>
           <input
             className="absolute inset-0 opacity-0 cursor-pointer"
             type="file"
@@ -239,14 +250,14 @@ export function Icon() {
           ></input>
         </label>
 
-        <div className="absolute w-20 h-20 sm:w-40 sm:h-40 bg-red-400 bottom-[-40px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center grid place-items-center overflow-hidden">
+        <div className="absolute w-25 h-25 sm:w-40 sm:h-40 bg-red-400 bottom-[-60px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
           {editValue.dataPerfil?.midiaIcon ? (
             <ImgPerfil
               src={editValue.dataPerfil.midiaIcon}
               alt="Foto de perfil"
             />
           ) : (
-            <span className="text-5xl absolute bottom-5.5 flex items-center justify-center">
+            <span className="text-5xl absolute bottom-5.5 flex items-center justify-center m-auto">
               {nameIcon(
                 editValue?.dataPerfil?.name || state?.author || user?.name,
               )}
@@ -256,7 +267,7 @@ export function Icon() {
       </div>
 
       <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
-        <div className="flex justify-end gap-2 text-black">
+        <div className="flex justify-end gap-2 text-black mt-5">
           <ContainerTags>
             <img src={notificationIcon} className="w-auto h-5"></img>
           </ContainerTags>
@@ -277,9 +288,7 @@ export function Icon() {
               @{editValue?.dataPerfil?.username || state?.author || user?.name}
             </span>
           </div>
-          <p>
-            {editValue?.dataPerfil?.bios || "coloque uma descrição sobre você!"}
-          </p>
+          <p>{editValue?.dataPerfil?.bios || bioNull}</p>
         </div>
 
         <div className="md:flex gap-5">

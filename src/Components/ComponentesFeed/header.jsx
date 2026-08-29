@@ -5,14 +5,17 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 export function Header() {
+  const { id: profileId } = useParams();
+
+  const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,12 +27,18 @@ export function Header() {
     setBookSearch,
     setSearchValue,
     postId,
-    editValue,
+    editRequisicao,
   } = useContext(AppContext);
 
-  const { nameIcon, user } = useRequisicoes({});
+  const { nameIcon, user, fetchProfile, photoValueFeed } = useRequisicoes({});
 
-  const inputRef = useRef(null);
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == user.id,
+  );
+
+  useEffect(() => {
+    fetchProfile();
+  }, [location.pathname, editRequisicao]);
 
   const Search = (e) => {
     const padrao = (text) => {
@@ -112,14 +121,12 @@ export function Header() {
           </button>
 
           <PerfilIcon to={`/perfil/${user.id}`}>
-            {!editValue.dataPerfil?.midiaIcon &&
-            editValue.dataPerfil?.userId !== user.id ? (
-              nameIcon(user.name)
+            {photo?.midiaIcon ? (
+              <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
             ) : (
-              <ImgPerfil
-                src={editValue.dataPerfil.midiaIcon}
-                className="rounded-full text-center"
-              ></ImgPerfil>
+              <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                {nameIcon(user.name)}
+              </p>
             )}
           </PerfilIcon>
         </div>

@@ -1,22 +1,14 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef} from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function Dialog() {
-  const user = localStorage.getItem("user");
 
-  const userObj = user ? JSON.parse(user) : "anonimo";
+  const { openOrCloseDialog, dialog, publication, setPublication, setSearch } =
+    useContext(AppContext);
 
-  const {
-    openOrCloseDialog,
-    dialog,
-    publication,
-    setPublication,
-    setSearch,
-  } = useContext(AppContext);
-
-  const {token}= useRequisicoes({})
+  const { token, user } = useRequisicoes({});
 
   const dialogRef = useRef(null);
 
@@ -46,7 +38,7 @@ export function Dialog() {
       body: JSON.stringify({
         content: formData.get("content"),
         midia: formData.get("midia"),
-        author: userObj.name,
+        author: user.name,
         likes: 0,
         comments: [],
       }),
@@ -55,12 +47,17 @@ export function Dialog() {
         localStorage.setItem("newPost", JSON.stringify(data));
         const posts = [data, ...publication];
         setSearch(posts);
+        e.target.reset()
         return setPublication(posts);
       }),
     );
   };
   return (
-    <dialog ref={dialogRef} className="w-200 bg-white h-100 m-auto" onCancel={openOrCloseDialog}>
+    <dialog
+      ref={dialogRef}
+      className="w-200 bg-white h-100 m-auto"
+      onCancel={openOrCloseDialog}
+    >
       <Form active={newPost}>
         <textarea name="content"></textarea>
         <img name="midia"></img>

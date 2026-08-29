@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { ImgPerfil } from "./imgPerfil";
 
@@ -12,7 +12,7 @@ export function EditProfile() {
   const dialogRef = useRef(null);
   const { id: profileId } = useParams();
 
-  const { token, user} = useRequisicoes({});
+  const { token, user, fetchProfile, photoValueFeed } = useRequisicoes({});
   const {
     dialog,
     openOrCloseDialog,
@@ -21,6 +21,16 @@ export function EditProfile() {
     setEditValue,
     editValue,
   } = useContext(AppContext);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == user.id,
+  );
+
+  console.log("VA", photo);
 
   useEffect(() => {
     if (dialog) {
@@ -161,11 +171,8 @@ http://localhost:3000/profileEdit/${profileId}`,
           <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 py-6">
             {/* Foto */}
             <div className="flex items-center gap-4">
-              <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl shrink-0">
-                <ImgPerfil
-                  ref={inputFile}
-                  src={midiaIcon || editValue.midiaIcon}
-                ></ImgPerfil>
+              <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center">
+                <ImgPerfil ref={inputFile} src={photo?.midiaIcon}></ImgPerfil>
                 <label>
                   <input
                     className="hidden"
@@ -204,7 +211,7 @@ http://localhost:3000/profileEdit/${profileId}`,
                   type="text"
                   name="name"
                   onChange={changeInput}
-                  defaultValue={form.name || user.name }
+                  defaultValue={form.name || user.name}
                   required
                   className="
                     rounded-xl
@@ -229,7 +236,7 @@ http://localhost:3000/profileEdit/${profileId}`,
                     name="username"
                     required
                     onChange={changeInput}
-                    defaultValue={form.username || user.name }
+                    defaultValue={form.username || user.name}
                     className="w-full bg-transparent px-1 py-3 outline-none"
                   />
                 </div>

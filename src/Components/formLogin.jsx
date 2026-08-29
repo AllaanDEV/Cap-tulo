@@ -29,7 +29,7 @@ export function FormLogin() {
     const data = await Login({ email, password });
 
     if (data.success == true) {
-      navigate(`${user.id}`);
+      navigate(`/feed/${user?.id}`);
     } else {
       console.log("Erro ao enviar dados");
     }
