@@ -1,11 +1,9 @@
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
 
-
 export function Context({ children }) {
-
   const comments = useComments();
   // const requisicoes = useRequisicoes();
 
@@ -92,6 +90,9 @@ export function Context({ children }) {
 
   const [editValue, setEditValue] = useState({});
 
+
+
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -99,9 +100,6 @@ export function Context({ children }) {
   useEffect(() => {
     setIconsProfile(iconsProfile);
   }, [iconsProfile]);
-
-  const [postId, setPostId] = useState();
-
 
   return (
     <AppContext.Provider
@@ -137,13 +135,10 @@ export function Context({ children }) {
         setSearchValue,
         ebookSaved,
         setEbookSaved,
-        postId,
-        setPostId,
         editRequisicao,
         setEditRequisicao,
         editValue,
         setEditValue,
-
       }}
     >
       {children}

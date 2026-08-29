@@ -5,11 +5,8 @@ import { Info } from "./info";
 
 import { house } from "../svgCode";
 import { compass } from "../svgCode";
-import { book } from "../svgCode";
-import { group } from "../svgCode";
-import { save } from "../svgCode";
-import { spiral } from "../svgCode";
-import { useContext, useState } from "react";
+import { book, logout, group, save,  spiral } from "../svgCode";
+import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
 import AppContext from "../context";
@@ -34,16 +31,18 @@ const options = [
   { icon: house, name: "Feed" },
   { icon: compass, name: "Explorar" },
   { icon: book, name: "Minha estante" },
-  { icon: group, name: "Clubes de leitura" },
+  { icon: group, name: "Seguindo" },
   { icon: save, name: "Quero ler" },
-  { icon: save, name: "sair" },
+  { icon: logout, name: "sair" },
 ];
 
 export function SideBar() {
-  const { nameIcon, user } = useRequisicoes({});
-  const { setEbookSaved, setEditValue, editValue} = useContext(AppContext);
-  // const user = localStorage.getItem("user");
-  // const userObj = user ? JSON.parse(user) : "anonimo";
+  const { nameIcon, user, fetchProfile, photoValueFeed } = useRequisicoes({});
+  const { setEbookSaved, setEditValue } = useContext(AppContext);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   const [option, setOption] = useState("Feed");
 
@@ -53,8 +52,9 @@ export function SideBar() {
     if (index === 5) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      
+
       setEbookSaved([]);
+      setEditValue({});
       setEditValue({});
 
       navigate("auth/login");
@@ -62,25 +62,30 @@ export function SideBar() {
       navigate("/ebooks");
     }
   };
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == user.id,
+  );
 
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div>
-          <button className="flex gap-2">
-                     <PerfilIcon to={`/perfil/${user.id}`}>
-                       {!editValue.dataPerfil?.midiaIcon ? (
-                         nameIcon(user.name)
-                       ) : (
-                         <ImgPerfil src={editValue.dataPerfil.midiaIcon} className="rounded-full text-center"></ImgPerfil>
-                       )}
-                     </PerfilIcon>
+          <div className="flex gap-2">
+            <PerfilIcon to={`/perfil/${user.id}`}>
+              {photo?.midiaIcon ? (
+                <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+              ) : (
+                <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                  {nameIcon(user.name)}
+                </p>
+              )}
+            </PerfilIcon>
             <div className="text-start">
               <p>{user.name || "anonimo"}</p>
               <p className="flex items-center">@{user.name || "anonimo"}</p>
             </div>
-          </button>
-          <Info className="flex gap-3 bg-border rounded-lg p-3">
+          </div>
+          <Info className="grid grid-cols-3 divide-x divide-gray bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
                 <div

@@ -9,21 +9,28 @@ import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
 import { ButtonPost } from "./buttonPost";
-import { useContext, useEffect, useState } from "react";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
-import AppContext from "../context";
+
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+import { useEffect, useState } from "react";
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const { setPostId, editValue, setEditRequisicao } = useContext(AppContext);
   const [like, setLike] = useState(post.likes);
+  const [postComment, setPostComment] = useState(!post);
 
-  const { postDelete, LikeButton, nameIcon, user } = useRequisicoes({
+  const {
+    postDelete,
+    LikeButton,
+    nameIcon,
+    user,
+    photoValueFeed,
+    fetchProfile,
+  } = useRequisicoes({
     post,
     like,
     setLike,
@@ -35,33 +42,35 @@ export function Post({ post }) {
     }).then((response) => response.json());
   };
 
-  const [postComment, setPostComment] = useState(!post);
-
   const openComments = () => {
     setPostComment(!postComment);
   };
 
-  setPostId(post);
-
   useEffect(() => {
-    setEditRequisicao((previousValue) => !previousValue);
+    fetchProfile();
   }, []);
+
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == post.authorId,
+  );
+
+  console.log("id da foto", photo?.userId);
+  console.log("id de quem tirou a foto", user.id);
   return (
     <>
       <Div>
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-3 items-center text-center justify-center">
               <PerfilIcon to={`/perfil/${post.authorId}`}>
-                {!editValue.dataPerfil?.midiaIcon ? (
-                  nameIcon(post.author)
-                ) : editValue.dataPerfil.userId === post.authorId ? (
-                  <ImgPerfil
-                    src={editValue.dataPerfil.midiaIcon}
-                    className="rounded-full text-center"
-                  ></ImgPerfil>
+                {photo?.userId == post?.authorId ? (
+        
+                    <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+           
                 ) : (
-                  nameIcon(post.author)
+                  <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                    {nameIcon(post.author)}
+                  </p>
                 )}
               </PerfilIcon>
               <div>

@@ -8,6 +8,7 @@ export function useRequisicoes({ post, like, setLike }) {
   const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
 
+  console.log(user);
   const nameIcon = (name) => {
     if (name) {
       return (name[0] + (name[1] ? name[1] : "")).toUpperCase();
@@ -15,6 +16,7 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const [comments, setComments] = useState(false);
+  const [photoValueFeed, setPhotoValueFeed] = useState([]);
 
   const postDelete = () => {
     fetch(`http://localhost:3000/api/posts/${post.id}`, {
@@ -61,7 +63,7 @@ export function useRequisicoes({ post, like, setLike }) {
       );
 
       const resJson = await response.json();
-      console.log("POST RETORNADO:", resJson);
+
       setPublication((prev) =>
         prev.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
       );
@@ -136,10 +138,27 @@ export function useRequisicoes({ post, like, setLike }) {
       },
     }).then((response) => {
       if (response.ok) {
-        console.log("alou")
+        console.log("alou");
         setLike(like + 1);
       }
     });
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/profileEdit/?t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const data = await response.json();
+      console.log("direto", data.userId);
+      setPhotoValueFeed(data);
+    } catch (error) {
+      console.error("Erro ao buscar perfil:", error);
+    }
   };
 
   return {
@@ -155,5 +174,7 @@ export function useRequisicoes({ post, like, setLike }) {
     commentDelete,
     addComment,
     LikeButton,
+    fetchProfile,
+    photoValueFeed
   };
 }
