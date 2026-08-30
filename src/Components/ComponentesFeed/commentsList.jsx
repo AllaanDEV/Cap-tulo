@@ -3,15 +3,18 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { configuration } from "../svgCode";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../context";
+import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+
 const Icon = configuration;
 
 export function CommentsList({ post }) {
-  const { toggleComments, SETEDIT,setPostEdit} = useContext(AppContext);
-  const { commentDelete, addComment } = useRequisicoes({
-    post,
-  });
+  const { toggleComments, SETEDIT, setPostEdit } = useContext(AppContext);
+  const { commentDelete, addComment, photoValueFeed, fetchProfile, nameIcon } =
+    useRequisicoes({
+      post,
+    });
 
   const dataCommentForm = (e) => {
     e.preventDefault();
@@ -20,6 +23,14 @@ export function CommentsList({ post }) {
     const content = formData.get("comment");
     addComment(e, content);
   };
+
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == post.authorId,
+  );
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <>
@@ -37,19 +48,24 @@ export function CommentsList({ post }) {
           <div>Ainda não há comentários</div>
         ) : (
           [...post.comments].reverse().map((c) => {
+            console.log("AUTH", c.author)
             return (
               <li className="flex gap-2" key={c.id}>
                 <div className="flex flex-col items-start">
-                  <PerfilIcon>
-                    {(
-                      c.author[0] + (c.author[1] ? c.author[1] : "")
-                    ).toUpperCase()}
+                  <PerfilIcon to={`/perfil/${post.authorId}`} state={post}>
+                    {photo?.midiaIcon ? (
+                      <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+                    ) : (
+                      <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                        {nameIcon(post.author)}
+                      </p>
+                    )}
                   </PerfilIcon>
                 </div>
                 <div className="p-2 bg-background border border-border items-center  rounded-b-3xl rounded-tr-3xl">
                   <div className="flex gap-2">
-                    <p>{c?.author}</p>
-                    <p>@{c?.author}</p>
+                    <p>{post?.comments.author}</p>
+                    <p>@{post?.comments.userName}</p>
                   </div>
                   <p>{c?.text}</p>
                   <details className="flex flex-col items-end relative">
@@ -61,7 +77,7 @@ export function CommentsList({ post }) {
                         className="hover:text-wine"
                         onClick={() => {
                           SETEDIT(c.id);
-                          setPostEdit(post)
+                          setPostEdit(post);
                           toggleComments();
                         }}
                       >

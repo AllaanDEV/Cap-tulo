@@ -39,6 +39,10 @@ const buttons = [
 
 export function Icon() {
   const theme = useRef(null);
+
+  const location= useLocation()
+  const post = location.state
+
   const { id: profileId } = useParams();
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
@@ -229,6 +233,7 @@ export function Icon() {
       ? "coloque uma descrição sobre você!"
       : null;
 
+      console.log("USERRRR", user.name)
   return (
     <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary sm:w-[70vw] mx-auto">
       <div className="bg-wine w-full h-40 max-h-40 relative  sm:h-50 sm:max-h-50 2xl:h-70 2xl:max-h-70 flex justify-center">
@@ -259,7 +264,7 @@ export function Icon() {
           ) : (
             <span className="text-5xl absolute bottom-5.5 flex items-center justify-center m-auto">
               {nameIcon(
-                editValue?.dataPerfil?.name || state?.author || user?.name,
+                editValue?.dataPerfil?.name || post?.author || user?.name,
               )}
             </span>
           )}
@@ -271,21 +276,25 @@ export function Icon() {
           <ContainerTags>
             <img src={notificationIcon} className="w-auto h-5"></img>
           </ContainerTags>
-          <ContainerTags onClick={openOrCloseDialog}>
-            <Pencil></Pencil>
-            editar perfil
-          </ContainerTags>
-          <ContainerTags className="bg-wine text-white">
-            <p>seguir</p>
-          </ContainerTags>
+          {profileId !== user.id ? null : (
+            <ContainerTags onClick={openOrCloseDialog}>
+              <Pencil></Pencil>
+              editar perfil
+            </ContainerTags>
+          )}
+          {profileId === user.id ? null : (
+            <ContainerTags className="bg-wine text-white">
+              <p>seguir</p>
+            </ContainerTags>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl">
-              {editValue?.dataPerfil?.name || state?.author || user?.name}
+              {editValue?.dataPerfil?.name || post?.author || user?.name}
             </h1>
             <span className="text-xs">
-              @{editValue?.dataPerfil?.username || state?.author || user?.name}
+              @{editValue?.dataPerfil?.username || post?.userName || user.userName}
             </span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>

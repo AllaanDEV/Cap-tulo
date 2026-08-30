@@ -4,7 +4,7 @@ import { ContainerForm } from "./ComponentsForm/containerForm";
 import { Form } from "./ComponentsForm/form";
 import { ButtonLogin } from "./ComponentsForm/buttonLogin";
 import { Remenber } from "./ComponentsForm/remenber";
-import { useContext } from "react";
+import { use, useContext } from "react";
 import AppContext from "./context";
 import { useNavigate } from "react-router";
 
@@ -18,11 +18,12 @@ export function FormRegister() {
    const dataFormRegister= new FormData(e.target)
 
     const name = dataFormRegister.get("name");
+    const userName = dataFormRegister.get("userName");
     const email = dataFormRegister.get("email");
     const password = dataFormRegister.get("password");
 
   
-    const data = await Register({ name, email, password });
+    const data = await Register({email, password, name, userName});
   console.log(data);
     if (data.success == true) {
       navigate("/auth/login");
@@ -37,7 +38,8 @@ export function FormRegister() {
       <h1>Seja muito bem vindo(a)!</h1>
       <div className="text-start px-5 flex flex-col gap-2">
         <Form active={registerData}>
-          <Input type="name" placeholder="Seu nome completo"></Input>
+          <Input type="name" placeholder="Como as pessoas vão te chamar?"></Input>
+          <Input type="userName" placeholder="Digite seu usuario"></Input>
           <Input type="email" placeholder="Example@email.com"></Input>
           <Input type="password" placeholder="Digite sua senha"></Input>
 
