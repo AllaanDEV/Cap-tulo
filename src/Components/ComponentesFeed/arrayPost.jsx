@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Post } from "./post";
 import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 // const post = [
 //   {
@@ -43,10 +44,29 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
- const {publication, setPublication, search}= useContext(AppContext)
+  const { user } = useRequisicoes({});
+  const { publication, setPublication, search } = useContext(AppContext);
 
- const o = publication.map((p) => p.author === "t")
- console.log(o)
+  const updatePublication = publication.find(
+    (post) => post.authorId === user.id && post.author !== user.name,
+  );
+
+  if (updatePublication) {
+    updatePublication.author = user.name;
+    updatePublication.userName = user.userName;
+  }
+
+  const updateComments = publication.find((post) => {
+    const comment = post.comments.find(
+      (c) => c.authorId === user.id && c.author !== user.name,
+    );
+    return comment;
+  });
+
+  if (updateComments) {
+    updateComments.comments.author = user.name;
+    updateComments.comments.userName = user.userName;
+  }
 
   useEffect(() => {
     fetch("/api/posts")
@@ -54,13 +74,12 @@ export function ArrayPost() {
         return response.json();
       })
       .then((data) => setPublication(data));
-      // os dados dps da promessa
-  }, []);
+    // os dados dps da promessa
+  }, [updateComments, updatePublication]);
 
   return (
     <ul className="flex flex-col gap-5">
       {(!search ? publication : search).map((p) => {
-  
         return (
           <li key={p.id}>
             <Post post={p}></Post>

@@ -14,12 +14,12 @@ export function Context({ children }) {
     setDialog(!dialog);
   };
 
-  const Register = async ({ name, email, password }) => {
+  const Register = async ({ name, email, password, userName}) => {
     try {
       const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, userName}),
       });
 
       if (!response.ok) {
@@ -90,6 +90,7 @@ export function Context({ children }) {
 
   const [editValue, setEditValue] = useState({});
 
+    const [midiaIcon, setMidiaIcon] = useState();
 
 
 
@@ -138,7 +139,7 @@ export function Context({ children }) {
         editRequisicao,
         setEditRequisicao,
         editValue,
-        setEditValue,
+        setEditValue, midiaIcon, setMidiaIcon
       }}
     >
       {children}

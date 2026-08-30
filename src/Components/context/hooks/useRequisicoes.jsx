@@ -8,7 +8,6 @@ export function useRequisicoes({ post, like, setLike }) {
   const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
 
-  console.log(user);
   const nameIcon = (name) => {
     if (name) {
       return (name[0] + (name[1] ? name[1] : "")).toUpperCase();
@@ -102,8 +101,7 @@ export function useRequisicoes({ post, like, setLike }) {
   const addComment = async (e, content) => {
     e.preventDefault();
 
-    console.log(content);
-    if (content == "") {
+    if (content === "") {
       return;
     }
 
@@ -113,18 +111,19 @@ export function useRequisicoes({ post, like, setLike }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           author: user.name,
+          userName: user.userName,
           text: content,
+          authorId: user.id,
         }),
       });
 
       const data = await response.json();
 
-      // const allComments = data.comments;
-      //reverter a ordem, ficando os comentários novos em primeiro
-
       setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
+
       e.target.reset();
+
     } catch (error) {
       return { success: false, error: error.message };
     }

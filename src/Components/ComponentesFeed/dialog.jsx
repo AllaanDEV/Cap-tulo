@@ -39,6 +39,7 @@ export function Dialog() {
         content: formData.get("content"),
         midia: formData.get("midia"),
         author: user.name,
+        userName: user.userName,
         likes: 0,
         comments: [],
       }),
@@ -47,11 +48,14 @@ export function Dialog() {
         localStorage.setItem("newPost", JSON.stringify(data));
         const posts = [data, ...publication];
         setSearch(posts);
+
         e.target.reset()
+
         return setPublication(posts);
       }),
     );
   };
+  
   return (
     <dialog
       ref={dialogRef}

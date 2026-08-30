@@ -14,7 +14,8 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
 
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
+
 
 const Save = save;
 const Icon = configuration;
@@ -54,19 +55,16 @@ export function Post({ post }) {
     (photo) => photo.userId == post.authorId,
   );
 
-  console.log("id da foto", photo?.userId);
-  console.log("id de quem tirou a foto", user.id);
+  console.log(post)
   return (
     <>
       <Div>
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center text-center justify-center">
-              <PerfilIcon to={`/perfil/${post.authorId}`}>
-                {photo?.userId == post?.authorId ? (
-        
-                    <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-           
+              <PerfilIcon to={`/perfil/${post.authorId}`} state={post}>
+                {photo?.midiaIcon ? (
+                  <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
                 ) : (
                   <p className="m-auto text-[1rem] font-medium font-serif text-white">
                     {nameIcon(post.author)}
@@ -81,7 +79,7 @@ export function Post({ post }) {
                     <span className="text-wine">{post.midia}</span>
                   </div>
                 )}
-                <p className="text-gray text-xs">@{post.author}</p>
+                <p className="text-gray text-xs">@{post.userName}</p>
               </div>
             </div>
 
@@ -90,7 +88,7 @@ export function Post({ post }) {
                 <Icon></Icon>
               </summary>
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                {post.author === user.name ? (
+                {post.authorId === user.id ? (
                   <button className="hover:text-wine" onClick={postDelete}>
                     Deletar
                   </button>
