@@ -14,12 +14,12 @@ export function Context({ children }) {
     setDialog(!dialog);
   };
 
-  const Register = async ({ name, email, password, userName}) => {
+  const Register = async ({ name, email, password, userName }) => {
     try {
       const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, userName}),
+        body: JSON.stringify({ name, email, password, userName }),
       });
 
       if (!response.ok) {
@@ -79,20 +79,15 @@ export function Context({ children }) {
   const [atualizar, setAtualizar] = useState(false);
   const [iconsProfile, setIconsProfile] = useState({});
   const [ebookSaved, setEbookSaved] = useState([]);
-
   const [ebooks, setEbooks] = useState([]);
-
   const [bookSearch, setBookSearch] = useState([]);
-
   const [searchValue, setSearchValue] = useState("");
-
   const [editRequisicao, setEditRequisicao] = useState(false);
-
   const [editValue, setEditValue] = useState({});
-
-    const [midiaIcon, setMidiaIcon] = useState();
-
-
+  const [midiaIcon, setMidiaIcon] = useState();
+  const [postId, setPostId] = useState();
+  const [progressEbook, setProgressEbook] = useState();
+  const [read, setRead] = useState(0);
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -139,7 +134,15 @@ export function Context({ children }) {
         editRequisicao,
         setEditRequisicao,
         editValue,
-        setEditValue, midiaIcon, setMidiaIcon
+        setEditValue,
+        midiaIcon,
+        setMidiaIcon,
+        postId,
+        setPostId,
+        progressEbook,
+        setProgressEbook,
+        read,
+        setRead,
       }}
     >
       {children}

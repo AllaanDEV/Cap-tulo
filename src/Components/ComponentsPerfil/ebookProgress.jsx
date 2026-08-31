@@ -1,4 +1,10 @@
+import { useContext } from "react";
+import AppContext from "../context";
+
 export function EbookProgress({ children, book, progress }) {
+  const { setProgressEbook } = useContext(AppContext);
+
+  setProgressEbook(progress);
 
   return (
     <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -27,9 +33,8 @@ export function EbookProgress({ children, book, progress }) {
               <div
                 className="w-full py-1 bg-wine rounded-2xl"
                 style={{
-                  width: `${progress}%`,
-                  backgroundColor: `${progress === 100 ? "green" : progress < 100 ? "var(--color-wine: #722F37)" : null}`
-                  
+                  width: `${progress === 100 ? "100" : progress}%`,
+                  backgroundColor: `${progress === 100 ? "green" : progress < 100 ? "var(--color-wine: #722F37)" : null}`,
                 }}
               ></div>
             </div>

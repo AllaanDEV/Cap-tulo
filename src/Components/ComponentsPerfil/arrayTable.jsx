@@ -1,11 +1,27 @@
-const tableObj = [
-  { name: "Lidos", number: 142 },
-  { name: "Resenhas", number: 82 },
-  { name: "Seguindo", number: 318 },
-  { name: "Seguidores", number: "1,2k" },
-];
+import { useContext, useEffect, useState } from "react";
+import AppContext from "../context";
 
-export function ArrayTable() {
+export function ArrayTable({ post }) {
+  const { publication, ebookSaved, progressEbook, read, setRead} = useContext(AppContext);
+
+  const userPublications = publication?.filter(
+    (p) => p?.authorId === post?.authorId,
+  );
+
+  useEffect(() => {
+    if (progressEbook == 100) {
+      setRead((prev) => prev + 1);
+    }
+  }, [progressEbook]);
+
+  const tableObj = [
+    { name: "Lidos", number: read },
+    { name: "Lendo", number: ebookSaved.length },
+    { name: "Resenhas", number: userPublications.length },
+    // { name: "Seguindo", number: 318 },
+    // { name: "Seguidores", number: "1,2k" },
+  ];
+
   return (
     <>
       {tableObj.map((t, index) => {
