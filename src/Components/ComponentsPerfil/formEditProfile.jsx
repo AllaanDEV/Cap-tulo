@@ -4,11 +4,14 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { ImgPerfil } from "./imgPerfil";
 import { Form } from "../ComponentsForm/form";
-
+import { x } from "../svgCode";
+import DeleteImgIcon from "./deleteImgPerfil";
 export function FormEditProfile({ active, ...props }) {
   const inputFile = useRef(null);
+  const X = x;
 
-  const { openOrCloseDialog, editValue, setMidiaIcon} = useContext(AppContext);
+  const { openOrCloseDialog, editValue, setMidiaIcon, midiaIcon } =
+    useContext(AppContext);
   const { user, fetchProfile, photoValueFeed } = useRequisicoes({});
 
   useEffect(() => {
@@ -29,8 +32,8 @@ export function FormEditProfile({ active, ...props }) {
 
   useEffect(() => {
     setForm({
-      name: editValue?.name ?? "",
-      username: editValue?.username ?? "",
+      // name: editValue?.name ?? "",
+      // username: editValue?.username ?? "",
       bios: editValue?.bios ?? "",
       location: editValue?.location ?? "",
       link: editValue?.link ?? "",
@@ -77,6 +80,10 @@ export function FormEditProfile({ active, ...props }) {
     },
   ];
 
+  // const midiaIconX = editValue?.data?.midiaIcon || midiaIcon ? null : (
+  //   <DeleteImgIcon></DeleteImgIcon>
+  // );
+
   return (
     <Form active={active} method="dialog" {...props}>
       <div className="flex items-center justify-between border-b border-[#e8dece] px-6 py-4">
@@ -107,8 +114,19 @@ export function FormEditProfile({ active, ...props }) {
       <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 py-6">
         {/* Foto */}
         <div className="flex items-center gap-4">
-          <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center">
-            <ImgPerfil ref={inputFile} src={photo?.midiaIcon}></ImgPerfil>
+          <div className="group flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center relative">
+            <img
+              ref={inputFile}
+              src={photo?.midiaIcon}
+              className={` w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105`}
+            ></img>
+
+            {editValue?.data?.midiaIcon || midiaIcon ? (
+              <DeleteImgIcon></DeleteImgIcon>
+            ) : (
+              <DeleteImgIcon></DeleteImgIcon>
+            )}
+
             <label>
               <input
                 className="hidden"
@@ -133,7 +151,6 @@ export function FormEditProfile({ active, ...props }) {
               <input type="file" onChange={photoIcon}></input>
               Alterar foto
             </label>
-
             <p className="mt-2 text-xs text-[#998875]">JPG, PNG ou WEBP.</p>
           </div>
         </div>
@@ -146,8 +163,9 @@ export function FormEditProfile({ active, ...props }) {
             <InputDefault
               type="text"
               name="name"
+              pattern=".*\S+.*"
               onChange={changeInput}
-              defaultValue={form.name || user.name}
+              defaultValue={user.name}
               required
             />
           </label>
@@ -162,8 +180,9 @@ export function FormEditProfile({ active, ...props }) {
                 type="text"
                 name="username"
                 required
+                pattern=".*\S+.*"
                 onChange={changeInput}
-                defaultValue={form.username || user.name}
+                defaultValue={user.userName}
                 className="w-full bg-transparent px-1 py-3 outline-none"
               />
             </div>

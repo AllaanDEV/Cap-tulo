@@ -21,12 +21,6 @@ const formatarParaK = (numero) => {
   }).format(numero);
 };
 
-const stats = [
-  { status: "Lidos", number: formatarParaK(142) },
-  { status: "Seguindo", number: formatarParaK(318) },
-  { status: "Seguidores", number: formatarParaK(1200) },
-];
-
 const options = [
   { icon: house, name: "Feed" },
   { icon: compass, name: "Explorar" },
@@ -38,7 +32,7 @@ const options = [
 
 export function SideBar() {
   const { nameIcon, user, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { setEbookSaved, setEditValue } = useContext(AppContext);
+  const { setEbookSaved, setEditValue, read } = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
@@ -66,6 +60,13 @@ export function SideBar() {
     (photo) => photo.userId == user.id,
   );
 
+  const stats = [
+  { status: "Lidos", number: formatarParaK(read) },
+  { status: "Seguindo", number: formatarParaK(318) },
+  { status: "Seguidores", number: formatarParaK(1200) },
+];
+
+
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
@@ -82,7 +83,7 @@ export function SideBar() {
             </PerfilIcon>
             <div className="text-start">
               <p>{user.name || "anonimo"}</p>
-              <p className="flex items-center">@{user.name || "anonimo"}</p>
+              <p className="flex items-center">@{user.userName}</p>
             </div>
           </div>
           <Info className="grid grid-cols-3 divide-x divide-gray bg-border rounded-lg p-3">

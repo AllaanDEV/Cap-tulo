@@ -32,6 +32,7 @@ export function CommentsList({ post }) {
     fetchProfile();
   }, []);
 
+  console.log("author comennet", post?.author)
   return (
     <>
       <Lines></Lines>
@@ -64,8 +65,8 @@ export function CommentsList({ post }) {
                 </div>
                 <div className="p-2 bg-background border border-border items-center  rounded-b-3xl rounded-tr-3xl">
                   <div className="flex gap-2">
-                    <p>{post?.comments.author}</p>
-                    <p>@{post?.comments.userName}</p>
+                    <p>{post?.comments.author || c?.author}</p>
+                    <p>@{post?.comments.userName || c?.author}</p>
                   </div>
                   <p>{c?.text}</p>
                   <details className="flex flex-col items-end relative">

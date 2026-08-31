@@ -14,17 +14,20 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
 
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import {useEffect, useState } from "react";
+import {useContext, useEffect, useState } from "react";
+import AppContext from "../context";
 
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
+  const {setPostId}= useContext(AppContext)
   const [like, setLike] = useState(post.likes);
   const [postComment, setPostComment] = useState(!post);
+setPostId(post)
 
-  const {
+const {
     postDelete,
     LikeButton,
     nameIcon,
@@ -55,7 +58,7 @@ export function Post({ post }) {
     (photo) => photo.userId == post.authorId,
   );
 
-  console.log(post)
+
   return (
     <>
       <Div>

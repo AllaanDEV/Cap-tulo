@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Post } from "./post";
 import AppContext from "../context";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
+
 
 // const post = [
 //   {
@@ -44,29 +44,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 // ];
 
 export function ArrayPost() {
-  const { user } = useRequisicoes({});
   const { publication, setPublication, search } = useContext(AppContext);
-
-  const updatePublication = publication.find(
-    (post) => post.authorId === user.id && post.author !== user.name,
-  );
-
-  if (updatePublication) {
-    updatePublication.author = user.name;
-    updatePublication.userName = user.userName;
-  }
-
-  const updateComments = publication.find((post) => {
-    const comment = post.comments.find(
-      (c) => c.authorId === user.id && c.author !== user.name,
-    );
-    return comment;
-  });
-
-  if (updateComments) {
-    updateComments.comments.author = user.name;
-    updateComments.comments.userName = user.userName;
-  }
 
   useEffect(() => {
     fetch("/api/posts")
@@ -75,7 +53,7 @@ export function ArrayPost() {
       })
       .then((data) => setPublication(data));
     // os dados dps da promessa
-  }, [updateComments, updatePublication]);
+  }, []);
 
   return (
     <ul className="flex flex-col gap-5">

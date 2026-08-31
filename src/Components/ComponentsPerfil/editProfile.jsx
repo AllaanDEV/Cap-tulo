@@ -10,26 +10,20 @@ export function EditProfile() {
   const dialogRef = useRef(null);
   const { id: profileId } = useParams();
 
-  const { token, user, fetchProfile, photoValueFeed } = useRequisicoes({});
+  const { token, fetchProfile } = useRequisicoes({});
   const {
     dialog,
     openOrCloseDialog,
     setAtualizar,
     setEditRequisicao,
     setEditValue,
-
     midiaIcon,
+
   } = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
   }, []);
-
-  const photo = (photoValueFeed ? photoValueFeed : []).find(
-    (photo) => photo.userId == user.id,
-  );
-
-  console.log("VA", photo);
 
   useEffect(() => {
     if (dialog) {
@@ -44,6 +38,7 @@ export function EditProfile() {
     setAtualizar(true);
 
     const formData = new FormData(e.target);
+
     try {
       const edit = await fetch(
         `
@@ -55,8 +50,8 @@ http://localhost:3000/profileEdit/${profileId}`,
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            name: formData.get("name").trim(),
-            username: formData.get("username").trim(),
+            // name: formData.get("name").trim(),
+            // username: formData.get("username").trim(),
             bios: formData.get("bios")?.trim() || null,
             location: formData.get("location")?.trim() || null,
             link: formData.get("link")?.trim() || null,
@@ -78,32 +73,36 @@ http://localhost:3000/profileEdit/${profileId}`,
   }, [profileId]);
 
   const editUser = async (e) => {
-    console.log("user", user);
-
     const formData = new FormData(e.target);
 
-    const response = await fetch(
-      `http://localhost:3000/updateUser/${profileId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+    try {
+      const response = await fetch(
+        `http://localhost:3000/updateUser/${profileId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: formData.get("name").trim(),
+            userName: formData.get("username").trim(),
+          }),
         },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          userName: formData.get("username"),
-        }),
-      },
-    );
-    const data = await response.json();
+      );
+      const data = await response.json();
 
-    localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-    return response;
-  };
+      return response;
+    } catch (error) {
+      throw new Error.json({
+        message: "Não foi possivel efetuar a mudança de nome do usuário",
+        error,
+      });
+    }
+  };   
 
-  console.log("provarela", user);
   return (
     <>
       <dialog

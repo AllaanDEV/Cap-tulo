@@ -1,19 +1,18 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
-import { pencil, calendar, maps, link } from "../svgCode";
+import { pencil, calendar, maps, link, x } from "../svgCode";
 import { ContainerTags } from "./containerTags";
 import Camera from "../../assets/camera-1-remix.png";
 
 import { ArrayTable } from "./arrayTable";
 import AppContext from "../context";
-import { useLocation } from "react-router";
 import { EditProfile } from "./editProfile";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Lines } from "../ComponentsForm/lines";
 import { ArrayBookSaved } from "./arrayBookSaved";
 import { ArrayPosts } from "./arrayPosts";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { ImgPerfil } from "./imgPerfil";
 
 const Pencil = pencil;
@@ -40,8 +39,8 @@ const buttons = [
 export function Icon() {
   const theme = useRef(null);
 
-  const location= useLocation()
-  const post = location.state
+  const location = useLocation();
+  const post = location.state;
 
   const { id: profileId } = useParams();
   const [midiaOn, setMidiaOn] = useState(false);
@@ -49,15 +48,16 @@ export function Icon() {
 
   const {
     setPublication,
+    publication,
     openOrCloseDialog,
     setEbookSaved,
     editRequisicao,
     editValue,
     setEditValue,
   } = useContext(AppContext);
-  const { state } = useLocation();
+ 
 
-  const { nameIcon, user, token } = useRequisicoes({});
+  const { nameIcon, user, token, fetchProfile } = useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -65,8 +65,11 @@ export function Icon() {
         return response.json();
       })
       .then((data) => setPublication(data));
-    // os dados dps da promessa
   }, []);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [publication]);
 
   const bios = [
     {
@@ -233,10 +236,10 @@ export function Icon() {
       ? "coloque uma descrição sobre você!"
       : null;
 
-      console.log("USERRRR", user.name)
+
   return (
-    <section className="flex flex-col gap-3 border border-border p-1 rounded-xs bg-primary sm:w-[70vw] mx-auto">
-      <div className="bg-wine w-full h-40 max-h-40 relative  sm:h-50 sm:max-h-50 2xl:h-70 2xl:max-h-70 flex justify-center">
+    <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
+      <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
         {!editValue?.data?.midiaTheme && (
           <span className="h-20 w-20 py-30">
             <img src={Camera}></img>
@@ -255,17 +258,15 @@ export function Icon() {
           ></input>
         </label>
 
-        <div className="absolute w-25 h-25 sm:w-40 sm:h-40 bg-red-400 bottom-[-60px] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
+        <div className="absolute w-[30vw] h-[30vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-15vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
           {editValue.dataPerfil?.midiaIcon ? (
             <ImgPerfil
               src={editValue.dataPerfil.midiaIcon}
               alt="Foto de perfil"
             />
           ) : (
-            <span className="text-5xl absolute bottom-5.5 flex items-center justify-center m-auto">
-              {nameIcon(
-                editValue?.dataPerfil?.name || post?.author || user?.name,
-              )}
+            <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
+              {nameIcon(user.name)}
             </span>
           )}
         </div>
@@ -290,12 +291,8 @@ export function Icon() {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl">
-              {editValue?.dataPerfil?.name || post?.author || user?.name}
-            </h1>
-            <span className="text-xs">
-              @{editValue?.dataPerfil?.username || post?.userName || user.userName}
-            </span>
+            <h1 className="text-3xl">{user.name}</h1>
+            <span className="text-xs">@{user.userName}</span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>
         </div>
@@ -330,8 +327,8 @@ export function Icon() {
           })}
         </div>
 
-        <div class="grid grid-cols-2 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-4 lg:divide-y-0">
-          <ArrayTable></ArrayTable>
+        <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
+          <ArrayTable post={post}></ArrayTable>
         </div>
 
         <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
@@ -357,20 +354,14 @@ export function Icon() {
 
         <Lines></Lines>
 
-        {feedfilter === null ? (
+        {feedfilter === null ||  feedfilter !== false ? (
           <Div>
             <ArrayBookSaved></ArrayBookSaved>
           </Div>
-        ) : feedfilter === false ? null : (
-          <Div>
-            <ArrayBookSaved></ArrayBookSaved>
-          </Div>
-        )}
+        ) : null }
 
-        {feedfilter === null ? (
-          <ArrayPosts></ArrayPosts>
-        ) : feedfilter === false ? (
-          <ArrayPosts></ArrayPosts>
+        {feedfilter === null || feedfilter === false ?  (
+          <ArrayPosts post={post}></ArrayPosts>
         ) : null}
       </div>
 
