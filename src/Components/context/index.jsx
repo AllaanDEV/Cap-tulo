@@ -143,6 +143,7 @@ export function Context({ children }) {
         setProgressEbook,
         read,
         setRead,
+
       }}
     >
       {children}

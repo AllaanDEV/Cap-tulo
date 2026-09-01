@@ -123,7 +123,6 @@ export function useRequisicoes({ post, like, setLike }) {
       setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
 
       e.target.reset();
-
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -160,27 +159,32 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-     const updatePublication = publication.find(
-    (post) => post?.authorId === user.id && post?.author !== user.name,
-  );
-
-  if (updatePublication) {
-    updatePublication.author = user.name;
-    updatePublication.userName = user.userName;
-  }
-
-  const updateComments = publication.find((post) => {
-    const comment = post.comments.find(
-      (c) => c?.authorId === user.id && c?.author !== user.name,
+  if (user) {
+    const updatePublication = publication.find(
+      (post) => post?.authorId === user.id && post?.author !== user.name,
     );
-    return comment;
-  });
 
-  if (updateComments) {
-    updateComments.comments.author = user.name;
-    updateComments.comments.userName = user.userName;
+    if (updatePublication) {
+      updatePublication.author = user.name;
+      updatePublication.userName = user.userName;
+    }
+
+    const updateComments = publication.find((post) => {
+      const comment = post.comments.find(
+        (c) => c?.authorId === user.id && c?.author !== user.name,
+      );
+      console.log("lau", comment)
+      return comment;
+    });
+console.log("DWQEF", publication)
+    if (updateComments) {
+      updateComments.comments.author = user.name;
+      updateComments.comments.userName = user.userName;
+            console.log("lau", updateComments)
+    }
   }
 
+  console.log(user)
   return {
     token,
     postDelete,
@@ -195,6 +199,6 @@ export function useRequisicoes({ post, like, setLike }) {
     addComment,
     LikeButton,
     fetchProfile,
-    photoValueFeed
+    photoValueFeed,
   };
 }

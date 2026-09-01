@@ -1,14 +1,60 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../context";
+import { EventButton } from "./eventButton";
+import { x } from "../svgCode";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useParams } from "react-router";
 
-export function EbookProgress({ children, book, progress }) {
-  const { setProgressEbook } = useContext(AppContext);
+const IconDelete = x;
+export function EbookProgress({ book }) {
+  const { setProgressEbook, setEbookSaved } = useContext(AppContext);
+  const { token, user } = useRequisicoes({});
+  const { id: params } = useParams();
 
-  setProgressEbook(progress);
+  const deleteSavedBook = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/books/ebookDelete/${book.ebook.etag}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          etagBook: book.ebook.etag,
+        }),
+      },
+    );
+    const data = await response.json();
+    setEbookSaved(data);
+    return response;
+  };
+
+  const [progress, setProgress] = useState();
+
+  useEffect(() => {
+    const bar = () => {
+      const randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      setProgress(randomNumber);
+      setProgressEbook(progress);
+    };
+
+    bar();
+  }, []);
 
   return (
-    <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <div className="p-3 flex gap-5 w-full">
+    <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative">
+      {user.id === params && (
+        <EventButton
+          className={"text-black top-0 right-0"}
+          onClick={deleteSavedBook}
+        >
+          <IconDelete></IconDelete>
+        </EventButton>
+      )}
+
+      <div className="px-3 py-4 flex gap-5 w-full">
         <div className="h-30 min-h-30 w-20 rounded-lg aspect-[3/4] ">
           <img
             src={book.ebook.volumeInfo.imageLinks?.thumbnail}
@@ -41,7 +87,6 @@ export function EbookProgress({ children, book, progress }) {
           </div>
         </div>
       </div>
-      {children}
     </div>
   );
 }

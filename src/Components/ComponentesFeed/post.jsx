@@ -22,7 +22,7 @@ const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const {setPostId}= useContext(AppContext)
+  const {setPostId, editValue }= useContext(AppContext)
   const [like, setLike] = useState(post.likes);
   const [postComment, setPostComment] = useState(!post);
 setPostId(post)
@@ -52,7 +52,7 @@ const {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [editValue]);
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == post.authorId,

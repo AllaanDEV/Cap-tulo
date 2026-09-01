@@ -1,5 +1,5 @@
-export function ImgPerfil({...props}){
+export function ImgPerfil({className, ...props}){
     return(
-        <img className="w-full h-full object-cover object-center" {...props}></img>
+        <img className={`w-full h-full object-cover object-center ${className}`} {...props}></img>
     )
 } 

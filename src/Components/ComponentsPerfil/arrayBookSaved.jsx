@@ -1,17 +1,12 @@
-import { useContext } from "react";
+import { useContext} from "react";
 import { EbookProgress } from "./ebookProgress";
 import AppContext from "../context";
 import { ebook } from "../svgCode";
 
 export function ArrayBookSaved() {
   const { ebookSaved } = useContext(AppContext);
-  
 
   const Ebook = ebook;
-  const bar = () => {
-    return Math.floor(Math.random() * 100) + 1;
-  };
-
 
   return (
     <>
@@ -20,15 +15,15 @@ export function ArrayBookSaved() {
         Lendo Agora
       </h4>
       <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2x1:grid-cols-4 gap-3 ">
-        {ebookSaved.length === 0 ? (
+        {ebookSaved?.length === 0 ? (
           <p>Salve um livro!</p>
         ) : (
           <>
-            {ebookSaved.map((bookSave) => {
-              const progressBar = bar();
+            {ebookSaved?.map((bookSave) => {
+
               return (
                 <li key={bookSave.ebook.etag}>
-                  <EbookProgress book={bookSave} progress={progressBar} />
+                  <EbookProgress book={bookSave} />
                 </li>
               );
             })}
