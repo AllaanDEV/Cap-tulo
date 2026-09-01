@@ -8,12 +8,12 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 export function ArrayPosts() {
   const { id: paramsId } = useParams();
   const { state } = useLocation();
-  const { search, publication } = useContext(AppContext);
+  const { search, publication, editValue} = useContext(AppContext);
   const { fetchProfile} = useRequisicoes({});
 
   useEffect(() => {
     fetchProfile();
-  }, [publication]);
+  }, [publication, editValue?.dataPerfil?.midiaIcon]);
 
 
 

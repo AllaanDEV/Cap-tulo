@@ -55,7 +55,6 @@ export function Icon() {
     editValue,
     setEditValue,
   } = useContext(AppContext);
- 
 
   const { nameIcon, user, token, fetchProfile } = useRequisicoes({});
 
@@ -158,6 +157,7 @@ export function Icon() {
   }, [profileId, token, editRequisicao]);
 
   const responseSrc = async () => {
+    console.log("VASCO");
     const responsePost = await fetch(
       `http://localhost:3000/profileTheme/${profileId}`,
       {
@@ -236,23 +236,24 @@ export function Icon() {
       ? "coloque uma descrição sobre você!"
       : null;
 
-
+      console.log("TESTE", editValue)
   return (
     <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
       <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
-        {!editValue?.data?.midiaTheme && (
-          <span className="h-20 w-20 py-30">
-            <img src={Camera}></img>
-          </span>
-        )}
         <label className="absolute cursor-pointer w-full h-full">
+          {!editValue?.data?.midiaTheme && (
+            <span className="w-full my-25 flex justify-center">
+              <img src={Camera} className="h-20 w-20"></img>
+            </span>
+          )}
           <ImgPerfil
             ref={theme}
+            className={editValue?.data?.midiaTheme ? "" : "hidden"}
             src={editValue?.data?.midiaTheme}
-            alt="foto de capa"
-          ></ImgPerfil>
+          />
+
           <input
-            className="absolute inset-0 opacity-0 cursor-pointer"
+            className="absolute inset-0 opacity-0 cursor-pointer bg-transparent"
             type="file"
             onChange={photoTheme}
           ></input>
@@ -266,7 +267,7 @@ export function Icon() {
             />
           ) : (
             <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
-              {nameIcon(user.name)}
+              {nameIcon( editValue.dataPerfil?.name)}
             </span>
           )}
         </div>
@@ -291,8 +292,8 @@ export function Icon() {
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl">{user.name}</h1>
-            <span className="text-xs">@{user.userName}</span>
+            <h1 className="text-3xl">{editValue.dataPerfil?.name || user.name}</h1>
+            <span className="text-xs">@{editValue.dataPerfil?.username || user.userName}</span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>
         </div>
@@ -354,13 +355,13 @@ export function Icon() {
 
         <Lines></Lines>
 
-        {feedfilter === null ||  feedfilter !== false ? (
+        {feedfilter === null || feedfilter !== false ? (
           <Div>
             <ArrayBookSaved></ArrayBookSaved>
           </Div>
-        ) : null }
+        ) : null}
 
-        {feedfilter === null || feedfilter === false ?  (
+        {feedfilter === null || feedfilter === false ? (
           <ArrayPosts post={post}></ArrayPosts>
         ) : null}
       </div>

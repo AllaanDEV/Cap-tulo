@@ -18,7 +18,7 @@ export function EditProfile() {
     setEditRequisicao,
     setEditValue,
     midiaIcon,
-
+    editValue,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -50,12 +50,12 @@ http://localhost:3000/profileEdit/${profileId}`,
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            // name: formData.get("name").trim(),
-            // username: formData.get("username").trim(),
+            name: formData.get("name").trim(),
+            username: formData.get("username").trim(),
             bios: formData.get("bios")?.trim() || null,
             location: formData.get("location")?.trim() || null,
             link: formData.get("link")?.trim() || null,
-            midiaIcon: midiaIcon || null,
+            midiaIcon: midiaIcon || editValue.dataPerfil.midiaIcon || null,
           }),
         },
       );
@@ -101,7 +101,7 @@ http://localhost:3000/profileEdit/${profileId}`,
         error,
       });
     }
-  };   
+  };
 
   return (
     <>

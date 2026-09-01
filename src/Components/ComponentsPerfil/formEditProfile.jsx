@@ -2,17 +2,19 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { InputDefault } from "./inputDefault";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { ImgPerfil } from "./imgPerfil";
+// import { ImgPerfil } from "./imgPerfil";
 import { Form } from "../ComponentsForm/form";
 import { x } from "../svgCode";
-import DeleteImgIcon from "./deleteImgPerfil";
+import { EventButton } from "./eventButton";
+import { useParams } from "react-router";
+
 export function FormEditProfile({ active, ...props }) {
+  const { id: paramsId } = useParams();
   const inputFile = useRef(null);
   const X = x;
 
-  const { openOrCloseDialog, editValue, setMidiaIcon, midiaIcon } =
-    useContext(AppContext);
-  const { user, fetchProfile, photoValueFeed } = useRequisicoes({});
+  const { openOrCloseDialog, editValue, setMidiaIcon } = useContext(AppContext);
+  const { user, fetchProfile, photoValueFeed, token } = useRequisicoes({});
 
   useEffect(() => {
     fetchProfile();
@@ -32,8 +34,8 @@ export function FormEditProfile({ active, ...props }) {
 
   useEffect(() => {
     setForm({
-      // name: editValue?.name ?? "",
-      // username: editValue?.username ?? "",
+      name: editValue?.name ?? "",
+      username: editValue?.username ?? "",
       bios: editValue?.bios ?? "",
       location: editValue?.location ?? "",
       link: editValue?.link ?? "",
@@ -80,9 +82,27 @@ export function FormEditProfile({ active, ...props }) {
     },
   ];
 
-  // const midiaIconX = editValue?.data?.midiaIcon || midiaIcon ? null : (
-  //   <DeleteImgIcon></DeleteImgIcon>
-  // );
+  const deleteIcon = async (e) => {
+    e.preventDefault();
+    openOrCloseDialog();
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/profilePerfilIcon/${paramsId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      return response;
+    } catch (error) {
+      throw new Error("Falha ao deletar a imagem de perfil!", { cause: error });
+    }
+  };
 
   return (
     <Form active={active} method="dialog" {...props}>
@@ -121,11 +141,14 @@ export function FormEditProfile({ active, ...props }) {
               className={` w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105`}
             ></img>
 
-            {editValue?.data?.midiaIcon || midiaIcon ? (
-              <DeleteImgIcon></DeleteImgIcon>
-            ) : (
-              <DeleteImgIcon></DeleteImgIcon>
-            )}
+            <EventButton
+              onClick={deleteIcon}
+              className={
+                "bg-black/40 text-white inset-0 flex items-center justify-center"
+              }
+            >
+              <X></X>
+            </EventButton>
 
             <label>
               <input
