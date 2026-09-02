@@ -105,20 +105,70 @@ export const configuration = () => {
   );
 };
 
-export const Like = () => {
+export const Like = ({
+  filled = false,
+  className = "",
+  ...props
+}) => {
+  const emptyHeart =
+    "M4.24 12.25a4.2 4.2 0 0 1-1.24-3A4.25 4.25 0 0 1 7.25 5c1.58 0 2.96.86 3.69 2.14h1.12A4.24 4.24 0 0 1 15.75 5A4.25 4.25 0 0 1 20 9.25c0 1.17-.5 2.25-1.24 3L11.5 19.5zm15.22.71C20.41 12 21 10.7 21 9.25A5.25 5.25 0 0 0 15.75 4c-1.75 0-3.3.85-4.25 2.17A5.22 5.22 0 0 0 7.25 4A5.25 5.25 0 0 0 2 9.25c0 1.45.59 2.75 1.54 3.71l7.96 7.96z";
+
+  const filledHeart =
+    "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6.02 6.02 0 0 1 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z";
+
+  const particles = [
+    { x: "-14px", y: "-15px", delay: "0ms", size: "text-[0.2em]" },
+    { x: "14px", y: "-13px", delay: "50ms", size: "text-[0.4em]" },
+    { x: "-17px", y: "3px", delay: "100ms", size: "text-[0.5em]" },
+    { x: "17px", y: "4px", delay: "150ms", size: "text-[0.7em]" },
+  ];
+
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-    >
-      <title xmlns="">heart</title>
-      <path
-        fill="currentColor"
-        d="M4.24 12.25a4.2 4.2 0 0 1-1.24-3A4.25 4.25 0 0 1 7.25 5c1.58 0 2.96.86 3.69 2.14h1.12A4.24 4.24 0 0 1 15.75 5A4.25 4.25 0 0 1 20 9.25c0 1.17-.5 2.25-1.24 3L11.5 19.5zm15.22.71C20.41 12 21 10.7 21 9.25A5.25 5.25 0 0 0 15.75 4c-1.75 0-3.3.85-4.25 2.17A5.22 5.22 0 0 0 7.25 4A5.25 5.25 0 0 0 2 9.25c0 1.45.59 2.75 1.54 3.71l7.96 7.96z"
-      ></path>
-    </svg>
+    <span className={`relative inline-flex ${className}`}>
+      <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        className={`
+          relative z-10 origin-center
+          ${
+            filled
+              ? "animate-[like_450ms_ease-out] text-red-500"
+              : "text-current"
+          }
+        `}
+      >
+        <title>heart</title>
+
+        <path
+          d={filled ? filledHeart : emptyHeart}
+          fill="currentColor"
+        />
+      </svg>
+
+      {filled &&
+        particles.map((particle, index) => (
+          <span
+            key={index}
+            style={{
+              "--particle-x": particle.x,
+              "--particle-y": particle.y,
+              animationDelay: particle.delay,
+            }}
+            className={`
+              pointer-events-none
+              absolute left-1/2 top-1/2
+              text-red-500 opacity-0
+              ${particle.size}
+              animate-[heart-particle_600ms_ease-out_both]
+            `}
+          >
+            ♥
+          </span>
+        ))}
+    </span>
   );
 };
 
@@ -422,9 +472,23 @@ export const logout = () => {
   );
 };
 
-
-export const x = () =>{
-  return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">x-circle-outline</title><path fill="none" stroke="#696969" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9l-6 6m0-6l6 6m6-3a9 9 0 1 1-18 0a9 9 0 0 1 18 0"/></svg>
-  )
-}
+export const x = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+    >
+      <title xmlns="">x-circle-outline</title>
+      <path
+        fill="none"
+        stroke="#696969"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="m15 9l-6 6m0-6l6 6m6-3a9 9 0 1 1-18 0a9 9 0 0 1 18 0"
+      />
+    </svg>
+  );
+};

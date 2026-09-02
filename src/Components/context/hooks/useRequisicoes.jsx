@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AppContext from "..";
 
 export function useRequisicoes({ post, like, setLike }) {
@@ -136,7 +136,6 @@ export function useRequisicoes({ post, like, setLike }) {
       },
     }).then((response) => {
       if (response.ok) {
-        console.log("alou");
         setLike(like + 1);
       }
     });
