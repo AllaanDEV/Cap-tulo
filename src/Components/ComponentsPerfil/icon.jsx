@@ -70,7 +70,6 @@ export function Icon() {
     fetchProfile();
   }, [publication,  editValue]);
 
-  fetchProfile()
   const bios = [
     {
       bio: Maps,

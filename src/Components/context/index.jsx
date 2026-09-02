@@ -89,6 +89,7 @@ export function Context({ children }) {
   const [progressEbook, setProgressEbook] = useState();
   const [read, setRead] = useState(0);
 
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -142,8 +143,7 @@ export function Context({ children }) {
         progressEbook,
         setProgressEbook,
         read,
-        setRead,
-
+        setRead, 
       }}
     >
       {children}

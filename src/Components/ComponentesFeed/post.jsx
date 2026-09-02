@@ -14,20 +14,22 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
 
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import {useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
-
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
-  const {setPostId, editValue }= useContext(AppContext)
+  const { setPostId, editValue } = useContext(AppContext);
   const [like, setLike] = useState(post.likes);
+  const [liking, setLiking] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const likeLock = useRef(false);
   const [postComment, setPostComment] = useState(!post);
-setPostId(post)
+  setPostId(post);
 
-const {
+  const {
     postDelete,
     LikeButton,
     nameIcon,
@@ -54,11 +56,28 @@ const {
     fetchProfile();
   }, [editValue]);
 
+  const handleLike = async () => {
+    // Impede outros cliques imediatamente
+    if (likeLock.current) return;
+
+    likeLock.current = true;
+    setLiking(true);
+
+    try {
+      await LikeButton();
+      setLiked(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      likeLock.current = false;
+      setLiking(false);
+    }
+  };
+
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == post.authorId,
   );
 
-console.log("post", post)
   return (
     <>
       <Div>
@@ -115,8 +134,13 @@ console.log("post", post)
         <div className="flex justify-between px-5 ">
           <div className="flex justify-between w-55  items-center">
             <div>
-              <ButtonPost onClick={LikeButton}>
-                <Like></Like>
+              <ButtonPost onClick={handleLike} disabled={liking || liked}>
+                <Like
+                filled={liked} 
+                  fill={liked ? "currentColor" : "none"}
+                  className={liked ? "text-red-500" : ""}
+                />
+
                 <p className="text-sm">{like}</p>
               </ButtonPost>
             </div>
