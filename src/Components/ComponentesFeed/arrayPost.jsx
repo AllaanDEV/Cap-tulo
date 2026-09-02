@@ -44,7 +44,7 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
-  const { publication, setPublication, search } = useContext(AppContext);
+  const { publication, setPublication, search, user, editValue} = useContext(AppContext);
 
   useEffect(() => {
     fetch("/api/posts")
@@ -55,10 +55,24 @@ export function ArrayPost() {
     // os dados dps da promessa
   }, []);
 
+
+  // useEffect(() => {
+  //   setPublication((prev) => ({
+  //     ...prev,
+  //     comments: prev.comments?.map((comment) =>
+  //       (comment.authorId === user.id && comment.author !== user.name) ||
+  //       (comment.userName !== user.userName && comment.authorId === user.id)
+  //         ? { ...comment, author: user.name, userName: user.userName }
+  //         : comment,
+  //     ),
+  //   }));
+  // }, [editValue]);
+
+
   return (
     <ul className="flex flex-col gap-5">
       {(!search ? publication : search).map((p) => {
-        console.log(p.comments)
+        console.log("teste rapdio", p.comments)
         return (
           <li key={p.id}>
             <Post post={p}></Post>

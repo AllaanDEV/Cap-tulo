@@ -7,16 +7,27 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { Comments } from "./comments";
 
 const Icon = configuration;
 
 export function CommentsList({ post }) {
-  const { toggleComments, SETEDIT, setPostEdit,   editValue,    postComment } =
-    useContext(AppContext);
+  const {
+    toggleComments,
+    SETEDIT,
+    setPostEdit,
+    editValue,
+    postComment,
+    setPublication,
+  } = useContext(AppContext);
 
-  const { commentDelete, addComment, photoValueFeed, fetchProfile, nameIcon } =
-    useRequisicoes({ post });
+  const {
+    commentDelete,
+    addComment,
+    photoValueFeed,
+    fetchProfile,
+    nameIcon,
+    user,
+  } = useRequisicoes({ post });
 
   const dataCommentForm = (e) => {
     e.preventDefault();
@@ -30,6 +41,7 @@ export function CommentsList({ post }) {
   useEffect(() => {
     fetchProfile();
   }, [postComment, editValue]);
+
 
   return (
     <>
@@ -50,19 +62,20 @@ export function CommentsList({ post }) {
           <div>Ainda não há comentários</div>
         ) : (
           [...post.comments].reverse().map((c) => {
+            console.log("id", c.id);
             const photo = (photoValueFeed ?? []).find(
               (midia) => midia.userId === c.authorId,
             );
 
             return (
-              <li className="flex gap-2" key={c.id ?? c.comenID ?? c.authorId}>
+              <li className="flex gap-2" key={c.id}>
                 <div className="flex flex-col items-start">
                   <PerfilIcon to={`/perfil/${c.authorId}`} state={post}>
                     {photo?.midiaIcon ? (
                       <ImgPerfil src={photo.midiaIcon} />
                     ) : (
                       <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                        {nameIcon(editValue.dataPerfil?.name)}
+                        {nameIcon(editValue.dataPerfil?.name || c.author)}
                       </p>
                     )}
                   </PerfilIcon>
@@ -70,8 +83,8 @@ export function CommentsList({ post }) {
 
                 <div className="p-2 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
                   <div className="flex gap-2">
-                    <p>{c.author}</p>
-                    <p>@{c.userName}</p>
+                    <h3>{c.author}</h3>
+                    <span>@{c.userName}</span>
                   </div>
 
                   <p>{c.text}</p>
@@ -86,7 +99,7 @@ export function CommentsList({ post }) {
                         type="button"
                         className="hover:text-wine"
                         onClick={() => {
-                          SETEDIT(c.authorId);
+                          SETEDIT(c.id);
                           setPostEdit(post);
                           toggleComments();
                         }}
@@ -106,7 +119,6 @@ export function CommentsList({ post }) {
                     </div>
                   </details>
                 </div>
-
               </li>
             );
           })

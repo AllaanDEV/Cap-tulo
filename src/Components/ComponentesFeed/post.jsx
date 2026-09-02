@@ -58,7 +58,7 @@ const {
     (photo) => photo.userId == post.authorId,
   );
 
-
+console.log("post", post)
   return (
     <>
       <Div>
