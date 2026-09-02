@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "..";
 
 export function useRequisicoes({ post, like, setLike }) {
@@ -91,10 +91,10 @@ export function useRequisicoes({ post, like, setLike }) {
         // const commentFilter = comment.filter((a) => a.id != c.id);
         // return setComment(commentFilter);
         setPublication((prev) =>
-          prev.map((p) => (p.id === data.id ? data : p)),
+          prev?.map((p) => (p.id === data.id ? data : p)),
         );
 
-        setSearch((prev) => prev.map((p) => (p.id === data.id ? data : p)));
+        setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       });
   };
 
@@ -120,7 +120,7 @@ export function useRequisicoes({ post, like, setLike }) {
       const data = await response.json();
 
       setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
-      setPublication((prev) => prev.map((p) => (p.id === data.id ? data : p)));
+      setPublication((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
 
       e.target.reset();
     } catch (error) {
@@ -159,32 +159,32 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  if (user) {
-    const updatePublication = publication.find(
-      (post) => post?.authorId === user.id && post?.author !== user.name,
-    );
+  // if (user) {
+  //   const updatePublication = (publication && []).find(
+  //     (post) => post?.authorId === user.id && post?.author !== user.name,
+  //   );
 
-    if (updatePublication) {
-      updatePublication.author = user.name;
-      updatePublication.userName = user.userName;
-    }
+  //   if (updatePublication) {
+  //     updatePublication.author = user.name;
+  //     updatePublication.userName = user.userName;
+  //   }
 
-    const updateComments = publication.find((post) => {
-      const comment = post.comments.find(
-        (c) => c?.authorId === user.id && c?.author !== user.name,
-      );
-      console.log("lau", comment)
-      return comment;
-    });
-console.log("DWQEF", publication)
-    if (updateComments) {
-      updateComments.comments.author = user.name;
-      updateComments.comments.userName = user.userName;
-            console.log("lau", updateComments)
-    }
-  }
+  //   const updateComments = (publication && []).find((post) => {
+  //     const comment = post.comments.find(
+  //       (c) => c?.authorId === user.id && c?.author !== user.name,
+  //     );
+  //     console.log("lau", comment);
+  //     return comment;
+  //   });
 
-  console.log(user)
+  //   if (updateComments) {
+  //     updateComments.comments.author = user.name;
+  //     updateComments.comments.userName = user.userName;
+  //     console.log("lau", updateComments);
+  //   }
+  // }
+
+  console.log(user);
   return {
     token,
     postDelete,
