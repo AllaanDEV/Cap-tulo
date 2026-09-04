@@ -3,12 +3,14 @@ import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
 
+
 export function Context({ children }) {
   const comments = useComments();
-  // const requisicoes = useRequisicoes();
+
 
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
+
 
   const openOrCloseDialog = () => {
     setDialog(!dialog);
@@ -89,7 +91,6 @@ export function Context({ children }) {
   const [progressEbook, setProgressEbook] = useState();
   const [read, setRead] = useState(0);
 
-
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -97,6 +98,14 @@ export function Context({ children }) {
   useEffect(() => {
     setIconsProfile(iconsProfile);
   }, [iconsProfile]);
+
+  useEffect(() => {
+    fetch("/api/posts")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => setPublication(data));
+  }, [editRequisicao]);
 
   return (
     <AppContext.Provider
@@ -143,7 +152,7 @@ export function Context({ children }) {
         progressEbook,
         setProgressEbook,
         read,
-        setRead, 
+        setRead,
       }}
     >
       {children}

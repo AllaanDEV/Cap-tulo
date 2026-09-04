@@ -2,8 +2,13 @@ import { useContext, useState } from "react";
 import AppContext from "..";
 
 export function useRequisicoes({ post, like, setLike }) {
-  const { publication, setPublication, setSearch, toggleComments } =
-    useContext(AppContext);
+  const {
+    publication,
+    setPublication,
+    setSearch,
+    toggleComments,
+    setEditRequisicao,
+  } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
   const user = JSON.parse(localStorage.getItem("user"));
@@ -128,17 +133,48 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const LikeButton = () => {
-    fetch(`http://localhost:3000/api/posts/${post.id}/like`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
+  //   const LikeButton = () => {
+  // fetch(`http://localhost:3000/api/posts/${post.id}/like`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   ).then((response) => {
+  //       if (response.ok) {
+  //         console.log("curtida", response)
+  //         setLike(like + 1);
+  //       }
+  //     });
+  //   };
+
+  const LikeButton = async () => {
+    const likesPost = await fetch(
+      `http://localhost:3000/api/posts/${post.id}/like`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
       },
-    }).then((response) => {
-      if (response.ok) {
-        setLike(like + 1);
-      }
-    });
+    );
+
+    if (likesPost.ok) {
+      likesGet();
+    }
+
+    return likesPost;
+  };
+
+  const likesGet = async () => {
+    const response= await fetch("http://localhost:3000/api/posts/likes");
+    const data= await response.json()
+    setLike(data)
+    setEditRequisicao((previousValue) => !previousValue);
   };
 
   const fetchProfile = async () => {
@@ -151,37 +187,12 @@ export function useRequisicoes({ post, like, setLike }) {
       );
 
       const data = await response.json();
-      console.log("direto", data.userId);
+
       setPhotoValueFeed(data);
     } catch (error) {
       console.error("Erro ao buscar perfil:", error);
     }
   };
-
-  // if (user) {
-  //   const updatePublication = (publication && []).find(
-  //     (post) => post?.authorId === user.id && post?.author !== user.name,
-  //   );
-
-  //   if (updatePublication) {
-  //     updatePublication.author = user.name;
-  //     updatePublication.userName = user.userName;
-  //   }
-
-  //   const updateComments = (publication && []).find((post) => {
-  //     const comment = post.comments.find(
-  //       (c) => c?.authorId === user.id && c?.author !== user.name,
-  //     );
-  //     console.log("lau", comment);
-  //     return comment;
-  //   });
-
-  //   if (updateComments) {
-  //     updateComments.comments.author = user.name;
-  //     updateComments.comments.userName = user.userName;
-  //     console.log("lau", updateComments);
-  //   }
-  // }
 
   console.log(user);
   return {
@@ -199,5 +210,6 @@ export function useRequisicoes({ post, like, setLike }) {
     LikeButton,
     fetchProfile,
     photoValueFeed,
+    likesGet,
   };
 }

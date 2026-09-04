@@ -56,7 +56,7 @@ export function Icon() {
     setEditValue,
   } = useContext(AppContext);
 
-  const { nameIcon, user, token, fetchProfile } = useRequisicoes({});
+  const { nameIcon, user, token, fetchProfile, likesGet } = useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -68,7 +68,9 @@ export function Icon() {
 
   useEffect(() => {
     fetchProfile();
-  }, [publication,  editValue]);
+    likesGet();
+    
+  }, [publication, editValue]);
 
   const bios = [
     {
@@ -235,7 +237,6 @@ export function Icon() {
     editValue?.dataPerfil?.userId == user.id
       ? "coloque uma descrição sobre você!"
       : null;
-
 
   return (
     <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
