@@ -8,6 +8,8 @@ export function ArrayTable({ post }) {
     (p) => p?.authorId === post?.authorId,
   );
 
+  console.log("table", userPublications)
+
   useEffect(() => {
     if (progressEbook == 100) {
       setRead((prev) => prev + 1);

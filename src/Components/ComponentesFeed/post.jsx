@@ -16,15 +16,18 @@ import { CommentsList } from "./commentsList";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
+import { useParams } from "react-router";
 
 const Save = save;
 const Icon = configuration;
 
 export function Post({ post }) {
+  const { id: paramsId } = useParams();
+
   const { setPostId, editValue } = useContext(AppContext);
-  const [like, setLike] = useState(post.likes);
-  const [liking, setLiking] = useState(false);
+  const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
+  const [liking, setLiking] = useState(false);
   const likeLock = useRef(false);
   const [postComment, setPostComment] = useState(!post);
   setPostId(post);
@@ -36,6 +39,7 @@ export function Post({ post }) {
     user,
     photoValueFeed,
     fetchProfile,
+    likesGet,
   } = useRequisicoes({
     post,
     like,
@@ -54,29 +58,37 @@ export function Post({ post }) {
 
   useEffect(() => {
     fetchProfile();
-  }, [editValue]);
+    likesGet();
+  }, [editValue, paramsId]);
 
-  const handleLike = async () => {
-    // Impede outros cliques imediatamente
-    if (likeLock.current) return;
+const handleLike = async () => {
+  if (likeLock.current) return;
 
-    likeLock.current = true;
-    setLiking(true);
+  likeLock.current = true;
+  setLiking(true);
 
-    try {
-      await LikeButton();
-      setLiked(true);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      likeLock.current = false;
-      setLiking(false);
-    }
-  };
+  try {
+    await LikeButton();
 
+    setLiked((prev) => !prev);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    likeLock.current = false;
+    setLiking(false);
+  }
+};
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == post.authorId,
   );
+
+  useEffect(() => {
+  const likes = like?.find(
+    (p) => p.postId === post.id && p.userId === user.id
+  );
+
+  setLiked(likes?.validation ?? false);
+}, [like, post.id, user.id]);
 
   return (
     <>
@@ -134,14 +146,14 @@ export function Post({ post }) {
         <div className="flex justify-between px-5 ">
           <div className="flex justify-between w-55  items-center">
             <div>
-              <ButtonPost onClick={handleLike} disabled={liking || liked}>
+              <ButtonPost onClick={handleLike} disabled={liking}>
                 <Like
-                filled={liked} 
+                  filled={liked}
                   fill={liked ? "currentColor" : "none"}
                   className={liked ? "text-red-500" : ""}
                 />
 
-                <p className="text-sm">{like}</p>
+                <p className="text-sm">{post?.likes}</p>
               </ButtonPost>
             </div>
             <div>
@@ -149,7 +161,7 @@ export function Post({ post }) {
                 <Comment></Comment>
                 {post.comments.length}
               </ButtonPost>
-              <p className="text-sm">{}</p>
+              {/* <p className="text-sm"></p> */}
             </div>
             <div>
               <ButtonPost>

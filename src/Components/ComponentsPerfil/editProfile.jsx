@@ -60,7 +60,9 @@ http://localhost:3000/profileEdit/${profileId}`,
         },
       );
 
-      setEditRequisicao((previousValue) => !previousValue);
+      if (edit.ok) {
+        setEditRequisicao((previousValue) => !previousValue);
+      }
 
       return edit;
     } catch (error) {

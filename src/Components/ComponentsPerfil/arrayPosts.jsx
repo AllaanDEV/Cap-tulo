@@ -1,26 +1,24 @@
 import { useContext, useEffect } from "react";
 import { Post } from "../ComponentesFeed/post";
 import AppContext from "../context";
-import { useLocation } from "react-router";
 import { useParams } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-export function ArrayPosts() {
+export function ArrayPosts({post}) {
   const { id: paramsId } = useParams();
   // const { state } = useLocation();
-  const { search, publication, editValue} = useContext(AppContext);
-  const { fetchProfile} = useRequisicoes({});
+  const { search, publication, editValue } = useContext(AppContext);
+  const { fetchProfile, likesGet} = useRequisicoes({post});
 
   useEffect(() => {
     fetchProfile();
-  }, [publication, editValue]);
-
-
+    likesGet();
+  }, [publication, editValue, paramsId]);
 
   return (
     <ul>
       {(!search ? publication : search)
-        .filter((p) => p.authorId === (paramsId))
+        .filter((p) => p.authorId === paramsId)
         .map((p) => (
           <li key={p.id}>
             <Post post={p} />

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext,} from "react";
 import { Post } from "./post";
 import AppContext from "../context";
 
@@ -44,35 +44,14 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
-  const { publication, setPublication, search, user, editValue} = useContext(AppContext);
-
-  useEffect(() => {
-    fetch("/api/posts")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => setPublication(data));
-    // os dados dps da promessa
-  }, []);
 
 
-  // useEffect(() => {
-  //   setPublication((prev) => ({
-  //     ...prev,
-  //     comments: prev.comments?.map((comment) =>
-  //       (comment.authorId === user.id && comment.author !== user.name) ||
-  //       (comment.userName !== user.userName && comment.authorId === user.id)
-  //         ? { ...comment, author: user.name, userName: user.userName }
-  //         : comment,
-  //     ),
-  //   }));
-  // }, [editValue]);
-
+  const { publication,search} =
+    useContext(AppContext);
 
   return (
     <ul className="flex flex-col gap-5">
       {(!search ? publication : search).map((p) => {
-        console.log("teste rapdio", p.comments)
         return (
           <li key={p.id}>
             <Post post={p}></Post>
