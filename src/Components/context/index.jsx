@@ -50,6 +50,10 @@ export function Context({ children }) {
       localStorage.setItem("token", JSON.stringify(responseJson.token));
       localStorage.setItem("user", JSON.stringify(responseJson.user));
 
+console.log("RESPOSTA DO LOGIN:", responseJson);
+console.log("TOKEN:", responseJson.token);
+console.log("USER:", responseJson.user);
+
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -88,8 +92,9 @@ export function Context({ children }) {
   const [editValue, setEditValue] = useState({});
   const [midiaIcon, setMidiaIcon] = useState();
   const [postId, setPostId] = useState();
-  const [progressEbook, setProgressEbook] = useState();
+  const [progressEbook, setProgressEbook] = useState([]);
   const [read, setRead] = useState(0);
+const [followers,     setFollowers]= useState([])
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -106,6 +111,18 @@ export function Context({ children }) {
       })
       .then((data) => setPublication(data));
   }, [editRequisicao]);
+
+
+//    useEffect(()=>{
+//     const allFollowers= async() =>{
+//       const response = await fetch ("/allFollowers")
+//       const data= await response.json()
+// setFollowers(data)
+// console.log("ALLflow", data)
+//     }
+//     allFollowers()
+//    },[])
+
 
   return (
     <AppContext.Provider
@@ -152,7 +169,7 @@ export function Context({ children }) {
         progressEbook,
         setProgressEbook,
         read,
-        setRead,
+        setRead, followers,     setFollowers
       }}
     >
       {children}

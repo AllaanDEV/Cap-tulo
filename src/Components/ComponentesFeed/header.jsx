@@ -120,7 +120,13 @@ export function Header() {
             <img src={notificationIcon} className="w-auto h-6"></img>
           </button>
 
-          <PerfilIcon to={`/perfil/${user.id}`}>
+          <PerfilIcon
+            to={
+              location.pathname === `/perfil/${user.id}`
+                ? null
+                : `/perfil/${user.id}`
+            }
+          >
             {photo?.midiaIcon ? (
               <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
             ) : (

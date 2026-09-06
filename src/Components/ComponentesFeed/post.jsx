@@ -59,7 +59,7 @@ export function Post({ post }) {
   useEffect(() => {
     fetchProfile();
     likesGet();
-  }, [editValue, paramsId]);
+  }, [ paramsId]);
 
 const handleLike = async () => {
   if (likeLock.current) return;
