@@ -8,6 +8,8 @@ export function useRequisicoes({ post, like, setLike }) {
     setSearch,
     toggleComments,
     setEditRequisicao,
+    setFollowers,
+    followers
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -69,11 +71,11 @@ export function useRequisicoes({ post, like, setLike }) {
       const resJson = await response.json();
 
       setPublication((prev) =>
-        prev.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+        prev?.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
       );
 
       setSearch((prev) =>
-        prev.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+        prev?.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
       );
 
       // setEditComments(false);
@@ -133,20 +135,6 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  //   const LikeButton = () => {
-  // fetch(`http://localhost:3000/api/posts/${post.id}/like`, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   ).then((response) => {
-  //       if (response.ok) {
-  //         console.log("curtida", response)
-  //         setLike(like + 1);
-  //       }
-  //     });
-  //   };
 
   const LikeButton = async () => {
     const likesPost = await fetch(
@@ -194,7 +182,24 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  console.log(user);
+
+    const allFollowers = async () => {
+    console.log("VASCO");
+    const response = await fetch("http://localhost:3000/allFollowers");
+    const data = await response.json();
+    setFollowers(data);
+    console.log("ALLflow", data);
+  };
+
+
+  //   const seguindo = followers.filter(
+  //   (f) => f.userId === (post?.authorId ?? user.id),
+  // );
+  // console.log("seguindo", seguindo);
+
+  // const seguindoProfileId = followers.filter((f) => f.following === profileId);
+
+
   return {
     token,
     postDelete,
@@ -210,6 +215,6 @@ export function useRequisicoes({ post, like, setLike }) {
     LikeButton,
     fetchProfile,
     photoValueFeed,
-    likesGet,
+    likesGet,  allFollowers
   };
 }

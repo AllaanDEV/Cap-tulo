@@ -38,7 +38,7 @@ const buttons = [
 
 export function Icon() {
   const theme = useRef(null);
-  const { id: paramsId } = useParams();
+  // const { id: paramsId } = useParams();
   const location = useLocation();
   const post = location.state;
 
@@ -46,17 +46,20 @@ export function Icon() {
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
 
+  const [following, setFollowing] = useState([]);
+
   const {
     setPublication,
-    publication,
     openOrCloseDialog,
     setEbookSaved,
     editRequisicao,
     editValue,
     setEditValue,
+    followers,
   } = useContext(AppContext);
 
-  const { nameIcon, user, token, fetchProfile, likesGet } = useRequisicoes({});
+  const { nameIcon, user, token, fetchProfile, likesGet, allFollowers } =
+    useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -66,11 +69,10 @@ export function Icon() {
       .then((data) => setPublication(data));
   }, []);
 
-  useEffect(() => {
-    fetchProfile();
-    likesGet();
-    
-  }, [publication, editValue]);
+  // useEffect(() => {
+  //   fetchProfile();
+  //   likesGet();
+  // }, [publication, editValue]);
 
   const bios = [
     {
@@ -159,7 +161,6 @@ export function Icon() {
   }, [profileId, token, editRequisicao]);
 
   const responseSrc = async () => {
-    console.log("VASCO");
     const responsePost = await fetch(
       `http://localhost:3000/profileTheme/${profileId}`,
       {
@@ -238,10 +239,52 @@ export function Icon() {
       ? "coloque uma descrição sobre você!"
       : null;
 
+  const followersPost = async () => {
+    const response = await fetch(
+      `http://localhost:3000/user/followers/${profileId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: user.name,
+          userId: user.id,
+        }),
+      },
+    );
+
+    if (response.ok) {
+      userUP();
+      allFollowers();
+    }
+  };
+
+  const userUP = async () => {
+    const response = await fetch(`http://localhost:3000/updateUser`);
+    const data = await response.json();
+    setFollowing(data);
+  };
+
+  useEffect(() => {
+    allFollowers();
+  }, [profileId]);
+
+  const validationFollowers = followers.find(
+    (follower) => follower.userId === user.id,
+  );
+
+  const seguindoProfileId = followers.filter((f) => f.following === profileId);
+
+  const seguindo = followers.filter(
+    (f) => f.userId === (post?.authorId ?? user.id),
+  );
+
   return (
     <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
       <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
-        {user.id === paramsId ? (
+        {user.id === profileId ? (
           <label className="absolute cursor-pointer w-full h-full">
             {!editValue?.data?.midiaTheme && (
               <span className="w-full my-25 flex justify-center">
@@ -276,7 +319,7 @@ export function Icon() {
             />
           ) : (
             <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
-              {nameIcon(editValue.dataPerfil?.name || user.name)}
+              {nameIcon(editValue.dataPerfil?.name || post?.author || user.name)}
             </span>
           )}
         </div>
@@ -295,17 +338,19 @@ export function Icon() {
           )}
           {profileId === user.id ? null : (
             <ContainerTags className="bg-wine text-white">
-              <p>seguir</p>
+              <button onClick={followersPost}>
+                {validationFollowers ? "Deixar de seguir" : "Seguir"}
+              </button>
             </ContainerTags>
           )}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl">
-              {editValue.dataPerfil?.name || user.name}
+              {editValue.dataPerfil?.name || post?.author || user.name}
             </h1>
             <span className="text-xs">
-              @{editValue.dataPerfil?.username || user.userName}
+              @{editValue.dataPerfil?.username || post?.author || user.username}
             </span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>
@@ -326,6 +371,10 @@ export function Icon() {
                 </p>
               );
             })}
+        </div>
+        <div className="flex gap-4">
+          <span>seguindo: {seguindo?.length}</span>
+          <span>seguidores: {seguindoProfileId?.length}</span>
         </div>
 
         <div className="flex gap-2 flex-wrap text-black/50">
@@ -375,7 +424,7 @@ export function Icon() {
         ) : null}
 
         {feedfilter === null || feedfilter === false ? (
-          <ArrayPosts post={post}></ArrayPosts>
+          <ArrayPosts></ArrayPosts>
         ) : null}
       </div>
 

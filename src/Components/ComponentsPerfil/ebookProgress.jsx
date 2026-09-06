@@ -7,9 +7,9 @@ import { useParams } from "react-router";
 
 const IconDelete = x;
 export function EbookProgress({ book }) {
-  const { setProgressEbook, setEbookSaved } = useContext(AppContext);
+  const { setProgressEbook, setEbookSaved,progressEbook} = useContext(AppContext);
   const { token, user } = useRequisicoes({});
-  const { id: params } = useParams();
+  const { id: paramsId } = useParams();
 
   const deleteSavedBook = async () => {
     const response = await fetch(
@@ -33,19 +33,21 @@ export function EbookProgress({ book }) {
   const [progress, setProgress] = useState();
 
   useEffect(() => {
-    const bar = () => {
-      const randomNumber = Math.floor(Math.random() * 100) + 1;
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
 
-      setProgress(randomNumber);
-      setProgressEbook(progress);
-    };
+ 
+    setProgress(randomNumber);
 
-    bar();
+    // Estado compartilhado pelo Context
+    setProgressEbook((prev) => [...prev, randomNumber]);
   }, []);
+
+  console.log("progress local:", progress);
+  console.log("progressEbook:", progressEbook);
 
   return (
     <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative">
-      {user.id === params && (
+      {user.id === paramsId && (
         <EventButton
           className={"text-black top-0 right-0"}
           onClick={deleteSavedBook}

@@ -10,10 +10,10 @@ export function ArrayPosts({post}) {
   const { search, publication, editValue } = useContext(AppContext);
   const { fetchProfile, likesGet} = useRequisicoes({post});
 
-  useEffect(() => {
-    fetchProfile();
-    likesGet();
-  }, [publication, editValue, paramsId]);
+  // useEffect(() => {
+  //   fetchProfile();
+  //   likesGet();
+  // }, [publication, editValue, paramsId]);
 
   return (
     <ul>

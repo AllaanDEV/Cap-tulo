@@ -5,7 +5,7 @@ import { Info } from "./info";
 
 import { house } from "../svgCode";
 import { compass } from "../svgCode";
-import { book, logout, group, save,  spiral } from "../svgCode";
+import { book, logout, group, save, spiral } from "../svgCode";
 import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
@@ -31,11 +31,12 @@ const options = [
 ];
 
 export function SideBar() {
-  const { nameIcon, user, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { setEbookSaved, setEditValue, read } = useContext(AppContext);
+  const { nameIcon, user, fetchProfile, photoValueFeed, allFollowers } = useRequisicoes({});
+  const { setEbookSaved, setEditValue, read, followers} = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
+    allFollowers()
   }, []);
 
   const [option, setOption] = useState("Feed");
@@ -60,12 +61,18 @@ export function SideBar() {
     (photo) => photo.userId == user.id,
   );
 
-  const stats = [
-  { status: "Lidos", number: formatarParaK(read) },
-  { status: "Seguindo", number: formatarParaK(318) },
-  { status: "Seguidores", number: formatarParaK(1200) },
-];
 
+    const seguindoProfileId = followers.filter((f) => f.following === user.id);
+
+  const seguindo = followers.filter(
+    (f) => f.userId === user.id
+  );
+
+  const stats = [
+    { status: "Lidos", number: formatarParaK(read) },
+    { status: "Seguindo", number: formatarParaK(seguindo?.length) },
+    { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
+  ];
 
   return (
     <aside className="fixed top-20">
