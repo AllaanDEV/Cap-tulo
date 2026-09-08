@@ -92,7 +92,7 @@ const handleLike = async () => {
 
   return (
     <>
-      <Div>
+      <Div className="w-max-[50vw]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <div className="flex gap-3 items-center text-center justify-center">
