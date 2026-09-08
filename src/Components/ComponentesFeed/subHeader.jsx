@@ -1,4 +1,3 @@
-
 import { Lines } from "../ComponentsForm/lines";
 
 import { faceHappy, star } from "../svgCode";
@@ -8,8 +7,9 @@ import { gallery } from "../svgCode";
 import { Div } from "./div";
 
 // import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TipTapEditor } from "./tiptapEditor";
+import AppContext from "../context";
 
 // import { Container } from "./container";
 
@@ -19,22 +19,20 @@ const navigation = [
   { name: "Clubes" },
 ];
 
-  const buttons = [
-    { icon: star, name: "Resenha" },
-    { icon: quotation, name: "Citação" },
-    { icon: faceHappy, name: "imojis" },
-    { icon: gallery, name: "Foto" },
-  ];
+const buttons = [
+  { icon: star, name: "Resenha" },
+  { icon: quotation, name: "Citação" },
+  { icon: faceHappy, name: "imojis" },
+  { icon: gallery, name: "Foto" },
+];
 
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
-  // const { user } = useRequisicoes({});
-
-
+  const { midia } = useContext(AppContext);
 
   return (
     <>
-      <section className="pb-5 flex flex-col gap-5">
+      <section className="pb-5 flex flex-col gap-5 w-[50vw]">
         {/* <div
             className="bg-primary rounded-4xl h-12 border border-border
               w-full flex justify-around py-1 px-1"
@@ -86,13 +84,23 @@ export function SubHeader({ children }) {
           <nav className="flex justify-around">
             {buttons.map((p, index) => {
               const Icon = p.icon;
+
+              if (index === 3) {
+                return (
+                  <label key={index} className="hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center">
+                    <Icon />
+                    <input type="file" className="hidden" onChange={midia}></input>
+                    {p.name}
+                  </label>
+                );
+              }
               return (
                 <button
                   key={index}
-                  className={`hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center`}
+                  className="hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center"
                 >
-                  <Icon></Icon>
-                  <p>{p.name}</p>
+                  <Icon />
+                  <span>{p.name}</span>
                 </button>
               );
             })}

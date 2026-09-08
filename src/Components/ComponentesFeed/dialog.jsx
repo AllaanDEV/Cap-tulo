@@ -56,19 +56,19 @@ export function Dialog() {
     );
   };
 
-  const photoIcon = (evento) => {
-    const file = evento.target.files[0];
+  // const photoIcon = (evento) => {
+  //   const file = evento.target.files[0];
 
-    if (file) {
-      const content = new FileReader();
-      content.onload = (e) => {
-        midiaRef.current.src = e.target.result;
-        midiaRef.current.style.display = "block";
-      };
+  //   if (file) {
+  //     const content = new FileReader();
+  //     content.onload = (e) => {
+  //       midiaRef.current.src = e.target.result;
+  //       midiaRef.current.style.display = "block";
+  //     };
 
-      content.readAsDataURL(file);
-    }
-  };
+  //     content.readAsDataURL(file);
+  //   }
+  // };
 
   return (
     <dialog
@@ -78,9 +78,9 @@ export function Dialog() {
     >
       <Form active={newPost}>
         <textarea name="content"></textarea>
-        <label>
+        {/* <label>
           <input type="file" onChange={photoIcon}></input>
-        </label>
+        </label> */}
 
         <img name="midia" ref={midiaRef}></img>
         <p>TESTE</p>

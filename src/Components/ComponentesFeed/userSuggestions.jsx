@@ -62,7 +62,7 @@ export const UserSuggestions = forwardRef((props, ref) => {
                 : ""
             }`}
           >
-            {user.name}
+            @{user.userName}
           </button>
         ))
       ) : (

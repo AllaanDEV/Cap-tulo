@@ -120,6 +120,29 @@ export function Context({ children }) {
   //     allFollowers()
   //    },[])
 
+  const imgId = document.getElementById("post-midia");
+
+  const [imgIdUrl, setImgIdUrl] = useState([]);
+
+  const midia = (evento) => {
+    const file = evento.target.files[0];
+
+    if (file) {
+      const content = new FileReader();
+      content.onload = (e) => {
+        const urlObj = {
+          id: Date.now().toString(),
+          url: e.target.result,
+        };
+        // imgId.src = e.target.result;
+        // imgId.style.display = "block";
+        setImgIdUrl((prev) => [...prev, urlObj]);
+      };
+
+      content.readAsDataURL(file);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -168,6 +191,10 @@ export function Context({ children }) {
         setRead,
         followers,
         setFollowers,
+        midia,
+        imgId,
+        imgIdUrl,
+        setImgIdUrl,
       }}
     >
       {children}

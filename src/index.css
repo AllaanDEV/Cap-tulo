@@ -21,7 +21,7 @@
 
 @layer colorDefault {
   html {
-    @apply bg-background;
+    @apply bg-background min-w-screen min-h-screen;
   }
 }
 
