@@ -1,16 +1,16 @@
-import { useContext, useEffect, useRef} from "react";
+import { useContext, useEffect, useRef } from "react";
 import AppContext from "../context";
 import { Form } from "../ComponentsForm/form";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function Dialog() {
-
   const { openOrCloseDialog, dialog, publication, setPublication, setSearch } =
     useContext(AppContext);
 
   const { token, user } = useRequisicoes({});
 
   const dialogRef = useRef(null);
+  const midiaRef = useRef(null);
 
   useEffect(() => {
     if (dialog) {
@@ -49,13 +49,27 @@ export function Dialog() {
         const posts = [data, ...publication];
         setSearch(posts);
 
-        e.target.reset()
+        e.target.reset();
 
         return setPublication(posts);
       }),
     );
   };
-  
+
+  const photoIcon = (evento) => {
+    const file = evento.target.files[0];
+
+    if (file) {
+      const content = new FileReader();
+      content.onload = (e) => {
+        midiaRef.current.src = e.target.result;
+        midiaRef.current.style.display = "block";
+      };
+
+      content.readAsDataURL(file);
+    }
+  };
+
   return (
     <dialog
       ref={dialogRef}
@@ -64,7 +78,11 @@ export function Dialog() {
     >
       <Form active={newPost}>
         <textarea name="content"></textarea>
-        <img name="midia"></img>
+        <label>
+          <input type="file" onChange={photoIcon}></input>
+        </label>
+
+        <img name="midia" ref={midiaRef}></img>
         <p>TESTE</p>
         <button onClick={openOrCloseDialog}>AI CLOSE</button>
       </Form>

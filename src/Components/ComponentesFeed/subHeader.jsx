@@ -1,14 +1,16 @@
-import { PerfilIcon } from "../ComponentsForm/perfilIcon";
+
 import { Lines } from "../ComponentsForm/lines";
 
-import { star } from "../svgCode";
-import { ebook } from "../svgCode";
+import { faceHappy, star } from "../svgCode";
+// import { ebook } from "../svgCode"
 import { quotation } from "../svgCode";
 import { gallery } from "../svgCode";
 import { Div } from "./div";
 
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
+// import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useState } from "react";
+import { TipTapEditor } from "./tiptapEditor";
+
 // import { Container } from "./container";
 
 const navigation = [
@@ -17,16 +19,19 @@ const navigation = [
   { name: "Clubes" },
 ];
 
-const pages = [
-  { icon: star, name: "Resenha" },
-  { icon: quotation, name: "Citação" },
-  { icon: ebook, name: "Lendo agora" },
-  { icon: gallery, name: "Foto" },
-];
+  const buttons = [
+    { icon: star, name: "Resenha" },
+    { icon: quotation, name: "Citação" },
+    { icon: faceHappy, name: "imojis" },
+    { icon: gallery, name: "Foto" },
+  ];
 
 export function SubHeader({ children }) {
   const [button, setButton] = useState("Para você");
-  const { user } = useRequisicoes({});
+  // const { user } = useRequisicoes({});
+
+
+
   return (
     <>
       <section className="pb-5 flex flex-col gap-5">
@@ -64,18 +69,22 @@ export function SubHeader({ children }) {
               );
             })}
           </div>
-          <div className="flex gap-3">
-            <p
-              className="bg-background rounded-4xl h-12 border border-border
+          {/* <form className="flex gap-3">
+     
+              <textarea
+                className="bg-background rounded-4xl h-12 border border-border
               w-full flex py-1 px-4 items-center text-right placeholder:py-1 placeholder:pl-3 placeholder:text-[10px] text-gray"
-            >
-              O que você está lendo, {user.name}?
-            </p>
-          </div>
+              placeholder={`       O que você está lendo, ${user.name}?`}
+              >
+         
+              </textarea>
+    
+          </form> */}
+          <TipTapEditor></TipTapEditor>
           <Lines></Lines>
 
           <nav className="flex justify-around">
-            {pages.map((p, index) => {
+            {buttons.map((p, index) => {
               const Icon = p.icon;
               return (
                 <button

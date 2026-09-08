@@ -2,15 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
-
+import { faceHappy, gallery, quotation, star } from "../svgCode";
 
 export function Context({ children }) {
   const comments = useComments();
 
-
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
-
 
   const openOrCloseDialog = () => {
     setDialog(!dialog);
@@ -50,9 +48,9 @@ export function Context({ children }) {
       localStorage.setItem("token", JSON.stringify(responseJson.token));
       localStorage.setItem("user", JSON.stringify(responseJson.user));
 
-console.log("RESPOSTA DO LOGIN:", responseJson);
-console.log("TOKEN:", responseJson.token);
-console.log("USER:", responseJson.user);
+      console.log("RESPOSTA DO LOGIN:", responseJson);
+      console.log("TOKEN:", responseJson.token);
+      console.log("USER:", responseJson.user);
 
       return { success: true };
     } catch (error) {
@@ -94,7 +92,7 @@ console.log("USER:", responseJson.user);
   const [postId, setPostId] = useState();
   const [progressEbook, setProgressEbook] = useState([]);
   const [read, setRead] = useState(0);
-const [followers,     setFollowers]= useState([])
+  const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -112,17 +110,15 @@ const [followers,     setFollowers]= useState([])
       .then((data) => setPublication(data));
   }, [editRequisicao]);
 
-
-//    useEffect(()=>{
-//     const allFollowers= async() =>{
-//       const response = await fetch ("/allFollowers")
-//       const data= await response.json()
-// setFollowers(data)
-// console.log("ALLflow", data)
-//     }
-//     allFollowers()
-//    },[])
-
+  //    useEffect(()=>{
+  //     const allFollowers= async() =>{
+  //       const response = await fetch ("/allFollowers")
+  //       const data= await response.json()
+  // setFollowers(data)
+  // console.log("ALLflow", data)
+  //     }
+  //     allFollowers()
+  //    },[])
 
   return (
     <AppContext.Provider
@@ -169,7 +165,9 @@ const [followers,     setFollowers]= useState([])
         progressEbook,
         setProgressEbook,
         read,
-        setRead, followers,     setFollowers
+        setRead,
+        followers,
+        setFollowers,
       }}
     >
       {children}

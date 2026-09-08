@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../context";
 import { EventButton } from "./eventButton";
-import { x } from "../svgCode";
+import { XSavedEbook } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useParams } from "react-router";
 
-const IconDelete = x;
 export function EbookProgress({ book }) {
-  const { setProgressEbook, setEbookSaved,progressEbook} = useContext(AppContext);
+  const { setProgressEbook, setEbookSaved, progressEbook } =
+    useContext(AppContext);
   const { token, user } = useRequisicoes({});
   const { id: paramsId } = useParams();
 
@@ -35,7 +35,6 @@ export function EbookProgress({ book }) {
   useEffect(() => {
     const randomNumber = Math.floor(Math.random() * 100) + 1;
 
- 
     setProgress(randomNumber);
 
     // Estado compartilhado pelo Context
@@ -49,10 +48,10 @@ export function EbookProgress({ book }) {
     <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative">
       {user.id === paramsId && (
         <EventButton
-          className={"text-black top-0 right-0"}
+          className={"text-black top-1 right-1"}
           onClick={deleteSavedBook}
         >
-          <IconDelete></IconDelete>
+          <XSavedEbook></XSavedEbook>
         </EventButton>
       )}
 

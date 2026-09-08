@@ -4,14 +4,14 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 // import { ImgPerfil } from "./imgPerfil";
 import { Form } from "../ComponentsForm/form";
-import { x } from "../svgCode";
+import { XIconProfile  } from "../svgCode";
 import { EventButton } from "./eventButton";
 import { useParams } from "react-router";
 
 export function FormEditProfile({ active, ...props }) {
   const { id: paramsId } = useParams();
   const inputFile = useRef(null);
-  const X = x;
+
 
   const { openOrCloseDialog, editValue, setMidiaIcon } = useContext(AppContext);
   const { user, fetchProfile, photoValueFeed, token } = useRequisicoes({});
@@ -147,7 +147,7 @@ export function FormEditProfile({ active, ...props }) {
                 "bg-black/40 text-white inset-0 flex items-center justify-center"
               }
             >
-              <X></X>
+              <XIconProfile ></XIconProfile >
             </EventButton>
 
             <label>

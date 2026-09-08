@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
-import { pencil, calendar, maps, link, x } from "../svgCode";
+import { pencil, calendar, maps, link, XIconProfile } from "../svgCode";
 import { ContainerTags } from "./containerTags";
 import Camera from "../../assets/camera-1-remix.png";
 
@@ -38,15 +38,17 @@ const buttons = [
 
 export function Icon() {
   const theme = useRef(null);
-  // const { id: paramsId } = useParams();
+
   const location = useLocation();
   const post = location.state;
-
   const { id: profileId } = useParams();
+
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
+  // const [following, setFollowing] = useState([]);
 
-  const [following, setFollowing] = useState([]);
+  const { nameIcon, user, token, fetchProfile, likesGet, allFollowers } =
+    useRequisicoes({});
 
   const {
     setPublication,
@@ -56,10 +58,9 @@ export function Icon() {
     editValue,
     setEditValue,
     followers,
+    publication,
   } = useContext(AppContext);
 
-  const { nameIcon, user, token, fetchProfile, likesGet, allFollowers } =
-    useRequisicoes({});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -69,10 +70,10 @@ export function Icon() {
       .then((data) => setPublication(data));
   }, []);
 
-  // useEffect(() => {
-  //   fetchProfile();
-  //   likesGet();
-  // }, [publication, editValue]);
+  useEffect(() => {
+    fetchProfile();
+    likesGet();
+  }, [publication, editValue]);
 
   const bios = [
     {
@@ -256,16 +257,16 @@ export function Icon() {
     );
 
     if (response.ok) {
-      userUP();
+      // userUP();
       allFollowers();
     }
   };
 
-  const userUP = async () => {
-    const response = await fetch(`http://localhost:3000/updateUser`);
-    const data = await response.json();
-    setFollowing(data);
-  };
+  // const userUP = async () => {
+  //   const response = await fetch(`http://localhost:3000/updateUser`);
+  //   const data = await response.json();
+  //   setFollowing(data);
+  // };
 
   useEffect(() => {
     allFollowers();
@@ -319,7 +320,9 @@ export function Icon() {
             />
           ) : (
             <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
-              {nameIcon(editValue.dataPerfil?.name || post?.author || user.name)}
+              {nameIcon(
+                editValue.dataPerfil?.name || post?.author || user.name,
+              )}
             </span>
           )}
         </div>
