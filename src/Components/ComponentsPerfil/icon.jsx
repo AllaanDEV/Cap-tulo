@@ -422,7 +422,7 @@ export function Icon() {
 
         {feedfilter === null || feedfilter !== false ? (
           <Div>
-            <ArrayBookSaved></ArrayBookSaved>
+            <ArrayBookSaved post={post}></ArrayBookSaved>
           </Div>
         ) : null}
 

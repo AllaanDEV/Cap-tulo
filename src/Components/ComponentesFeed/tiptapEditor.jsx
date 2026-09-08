@@ -5,10 +5,15 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import Mention from "@tiptap/extension-mention";
 import { UserSuggestions } from "./userSuggestions";
 import { ReactRenderer } from "@tiptap/react";
+import { useContext } from "react";
+import AppContext from "../context";
+import { EventButton } from "../ComponentsPerfil/eventButton";
+import { XIconProfile } from "../svgCode";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
   const { user } = useRequisicoes({});
+  const { imgIdUrl, urls, setImgIdUrl } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
   //   useEffect(() => {
@@ -20,6 +25,27 @@ export function TipTapEditor() {
 
   //     usersList();
   //   }, []);
+
+  // const     [&_.ProseMirror]:outline-none
+  // [&_.ProseMirror]:min-h-8
+  // [&_.ProseMirror]:px-5
+  // [&_.ProseMirror]:py-3
+  // [&_.ProseMirror]:rounded-4xl
+  // [&_.ProseMirror]:bg-background
+
+  const filterUrl = (id) => {
+    console.log("ID clicado:", id);
+    setImgIdUrl((prev) => prev.filter((midia) => midia.id !== id));
+  };
+
+  const styles = imgIdUrl.length >= 2 ? "w-[20vw] h-[20vw]" : "w-[20vw] h-auto";
+
+  const stylesGrid =
+    imgIdUrl.length === 1
+      ? "grid-cols-1 w-[22vw] max-h-[25vw]"
+      : imgIdUrl.length === 2
+        ? "grid-cols-2 gap-1 w-full h-[20vw] " // Limita a altura com 2 imagens
+        : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 h-[20vw] "; // LIMITA A ALTURA AQUI PARA 3 OU 4 IMAGENS
 
   const editor = useEditor({
     extensions: [
@@ -95,17 +121,13 @@ export function TipTapEditor() {
     <>
       <EditorContent
         editor={editor}
-        className="                [&_.ProseMirror]:outline-none
-        [&_.ProseMirror]:min-h-8
-        [&_.ProseMirror]:px-5
-        [&_.ProseMirror]:py-3
-        [&_.ProseMirror]:rounded-4xl
-        [&_.ProseMirror]:bg-background
-        
+        className="            
+   [&_.ProseMirror]:outline-none
+   [&_.ProseMirror]:px-5
         
         
   [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-black/40
+  [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-gray
   [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left
   [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
   [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0
@@ -117,7 +139,37 @@ export function TipTapEditor() {
 [&_.ProseMirror_[data-type='mention']]:rounded-md
 [&_.ProseMirror_[data-type='mention']]:px-1
         "
-      />
+      ></EditorContent>
+      {imgIdUrl.length > 0 ? (
+        <div className={`grid overflow-hidden rounded-2xl ${stylesGrid}`}>
+          {(imgIdUrl || []).map((midia, index) => {
+            const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
+
+            return (
+              <div
+                key={midia.id}
+                className={`relative group h-full w-full ${isFirstOfThree ? "row-span-2" : ""} ${styles || ""}`}
+              >
+                <img
+                  id="post-midia"
+                  className="w-full h-full object-cover object-center"
+                  src={midia.url}
+                  alt="post media"
+                />
+
+                <EventButton
+                  className={
+                    "bg-black/40 text-white inset-0 flex items-center justify-center rounded-2xl absolute"
+                  }
+                  onClick={() => filterUrl(midia.id)}
+                >
+                  <XIconProfile />
+                </EventButton>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </>
   );
 }
