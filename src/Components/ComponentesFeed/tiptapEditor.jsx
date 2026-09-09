@@ -9,12 +9,19 @@ import { useContext } from "react";
 import AppContext from "../context";
 import { EventButton } from "../ComponentsPerfil/eventButton";
 import { XIconProfile } from "../svgCode";
+import { PerfilIcon } from "../ComponentsForm/perfilIcon";
+import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
-  const { user } = useRequisicoes({});
   const { imgIdUrl, urls, setImgIdUrl } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
+
+  const { nameIcon, user, photoValueFeed } = useRequisicoes({});
+
+  const photo = (photoValueFeed ? photoValueFeed : []).find(
+    (photo) => photo.userId == user.id,
+  );
 
   //   useEffect(() => {
   //     const usersList = async () => {
@@ -38,14 +45,14 @@ export function TipTapEditor() {
     setImgIdUrl((prev) => prev.filter((midia) => midia.id !== id));
   };
 
-  const styles = imgIdUrl.length >= 2 ? "w-[20vw] h-[20vw]" : "w-[20vw] h-auto";
+  // const styles = imgIdUrl.length >= 2 ? "w-[20vw] h-[20vw]" : "w-[20vw] h-auto";
 
   const stylesGrid =
     imgIdUrl.length === 1
-      ? "grid-cols-1 w-[22vw] max-h-[25vw]"
+      ? "grid-cols-1 w-[50vw] max-h-[60vw] sm:max-w-[20vw] sm:max-h-[20vw] "
       : imgIdUrl.length === 2
-        ? "grid-cols-2 gap-1 w-full h-[20vw] " // Limita a altura com 2 imagens
-        : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 h-[20vw] "; // LIMITA A ALTURA AQUI PARA 3 OU 4 IMAGENS
+        ? "grid-cols-2 gap-1 w-full max-h-[60vw]  sm:max-w-[40vw] sm:h-[20vw] mx-auto" // Limita a altura com 2 imagens
+        : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[20vw]"; // LIMITA A ALTURA AQUI PARA 3 OU 4 IMAGENS
 
   const editor = useEditor({
     extensions: [
@@ -118,10 +125,28 @@ export function TipTapEditor() {
   });
 
   return (
-    <>
-      <EditorContent
-        editor={editor}
-        className="            
+    <div className="flex items-center">
+   
+      <PerfilIcon
+        to={
+          location.pathname === `/perfil/${user.id}`
+            ? null
+            : `/perfil/${user.id}`
+        }
+      >
+        {photo?.midiaIcon ? (
+          <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+        ) : (
+          <p className="m-auto text-[1rem] font-medium font-serif text-white">
+            {nameIcon(user.name)}
+          </p>
+        )}
+      </PerfilIcon>
+
+      <div>
+        <EditorContent
+          editor={editor}
+          className="            
    [&_.ProseMirror]:outline-none
    [&_.ProseMirror]:px-5
         
@@ -139,37 +164,38 @@ export function TipTapEditor() {
 [&_.ProseMirror_[data-type='mention']]:rounded-md
 [&_.ProseMirror_[data-type='mention']]:px-1
         "
-      ></EditorContent>
-      {imgIdUrl.length > 0 ? (
-        <div className={`grid overflow-hidden rounded-2xl ${stylesGrid}`}>
-          {(imgIdUrl || []).map((midia, index) => {
-            const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
+        ></EditorContent>
+        {imgIdUrl.length > 0 ? (
+          <div className={`grid overflow-hidden rounded-2xl ${stylesGrid}`}>
+            {(imgIdUrl || []).map((midia, index) => {
+              const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
 
-            return (
-              <div
-                key={midia.id}
-                className={`relative group h-full w-full ${isFirstOfThree ? "row-span-2" : ""} ${styles || ""}`}
-              >
-                <img
-                  id="post-midia"
-                  className="w-full h-full object-cover object-center"
-                  src={midia.url}
-                  alt="post media"
-                />
-
-                <EventButton
-                  className={
-                    "bg-black/40 text-white inset-0 flex items-center justify-center rounded-2xl absolute"
-                  }
-                  onClick={() => filterUrl(midia.id)}
+              return (
+                <div
+                  key={midia.id}
+                  className={`relative group h-full w-full ${isFirstOfThree ? "row-span-2" : ""} `}
                 >
-                  <XIconProfile />
-                </EventButton>
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
-    </>
+                  <img
+                    id="post-midia"
+                    className="w-full h-full object-cover object-center"
+                    src={midia.url}
+                    alt="post media"
+                  />
+
+                  <EventButton
+                    className={
+                      "bg-black/40 text-white inset-0 flex items-center justify-center rounded-2xl absolute"
+                    }
+                    onClick={() => filterUrl(midia.id)}
+                  >
+                    <XIconProfile />
+                  </EventButton>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 }

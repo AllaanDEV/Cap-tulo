@@ -74,6 +74,7 @@ export function SideBar() {
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
 
+  console.log("AIAIIA", user)
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">

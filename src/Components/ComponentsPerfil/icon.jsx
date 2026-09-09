@@ -353,7 +353,7 @@ export function Icon() {
               {editValue.dataPerfil?.name || post?.author || user.name}
             </h1>
             <span className="text-xs">
-              @{editValue.dataPerfil?.username || post?.author || user.username}
+              @{editValue.dataPerfil?.username || post?.author || user.userName}
             </span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>
