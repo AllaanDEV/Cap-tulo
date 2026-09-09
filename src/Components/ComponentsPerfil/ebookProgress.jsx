@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../context";
 import { EventButton } from "./eventButton";
-import { XSavedEbook } from "../svgCode";
+import { Active, XSavedEbook } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 export function EbookProgress({ book }) {
   const { setProgressEbook, setEbookSaved, progressEbook } =
     useContext(AppContext);
   const { token, user } = useRequisicoes({});
   const { id: paramsId } = useParams();
+  const location = useLocation();
 
   const deleteSavedBook = async () => {
     const response = await fetch(
@@ -44,16 +45,28 @@ export function EbookProgress({ book }) {
   console.log("progress local:", progress);
   console.log("progressEbook:", progressEbook);
 
+  const [styleCardActive, setStyleCardActive] = useState(false);
+
+  const ebookCardActive = () => {
+    if (location.pathname === `/feed/${user.id}`) {
+      setStyleCardActive((prev) => !prev);
+    }
+  };
+
   return (
-    <div className="bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative">
-      {user.id === paramsId && (
+    <div
+      className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative ${styleCardActive ? "bg-wine/30 border-wine" : null}`}
+      onClick={ebookCardActive}
+    >
+           {location.pathname === `/feed/${user.id}` ||
+      location.pathname === `/perfil/${user.id}` ? (
         <EventButton
           className={"text-black top-1 right-1"}
           onClick={deleteSavedBook}
         >
           <XSavedEbook></XSavedEbook>
         </EventButton>
-      )}
+      ) : null}
 
       <div className="px-3 py-4 flex gap-5 w-full">
         <div className="h-30 min-h-30 w-20 rounded-lg aspect-[3/4] ">
@@ -70,6 +83,8 @@ export function EbookProgress({ book }) {
               {book.ebook.volumeInfo.subtitle}
             </p>
           </div>
+
+          {styleCardActive && <span className="rounded-full bg-wine relative z-10 w-fit p-1 text-white left-0 right-0"><Active></Active></span>}
 
           <div className="flex flex-col gap-1 mt-auto">
             <div className="flex justify-between">

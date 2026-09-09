@@ -90,6 +90,7 @@ const handleLike = async () => {
   setLiked(likes?.validation ?? false);
 }, [like, post.id, user.id]);
 
+console.log(post)
   return (
     <>
       <Div className="w-max-[50vw]">
