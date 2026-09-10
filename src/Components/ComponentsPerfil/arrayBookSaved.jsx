@@ -1,37 +1,41 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { EbookProgress } from "./ebookProgress";
 import AppContext from "../context";
-import { ebook, compass, Active} from "../svgCode";
+import { ebook, compass, Active } from "../svgCode";
 import { Link, useLocation } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayBookSaved({ post }) {
   const location = useLocation();
-  const { ebookSaved } = useContext(AppContext);
+  const { ebookSaved, styleCardActive, setStyleCardActive} = useContext(AppContext);
   const { user } = useRequisicoes({});
 
   const Ebook = ebook;
   const Compass = compass;
 
-  console.log("PATch", location.pathname);
-  console.log("PATch", user);
+  const stylePatchFeed = location.pathname === `/feed/${user.id}`;
+  const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
-  console.log(location.pathname, user?.id, typeof user?.id);
+  const styleFeed = stylePatchFeed ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]" : "2xl:grid-cols-4";
+
+// const [styleCardActive, setStyleCardActive] = useState(
+//   ebookSaved[0]?.ebook.volumeInfo.title ?? null
+// );
+
   return (
     <>
       <h4 className="flex gap-1 items-center text-lg">
-        {location.pathname === `/feed/${user?.id}` ? null : (
+        {stylePatchFeed ? null : stylePatchProfile ? (
           <>
             <Ebook />
             Lendo Agora
           </>
-        )}
+        ) : null}
       </h4>
 
       {ebookSaved?.length === 0 ? (
         <div className="flex items-center gap-1">
-          {location.pathname === `/perfil/${user?.id}` ||
-          location.pathname === `/feed/${user?.id}` ? (
+          {stylePatchProfile || stylePatchFeed ? (
             <>
               <span>Salve um livro!</span>
 
@@ -48,7 +52,9 @@ export function ArrayBookSaved({ post }) {
           )}
         </div>
       ) : (
-        <ul className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
+        <ul
+          className={`grid grid-rows-1 md:grid-cols-2  gap-3 w-full ${styleFeed}`}
+        >
           {ebookSaved?.map((bookSave) => {
             return (
               <li key={bookSave.ebook.etag}>

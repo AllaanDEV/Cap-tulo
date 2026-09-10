@@ -17,7 +17,7 @@ export function FormLogin() {
   const navigate = useNavigate();
 
   const { Login } = useContext(AppContext);
-  const { user } = useRequisicoes({});
+  // const { user } = useRequisicoes({});
   const loginData = async (e) => {
     e.preventDefault();
 
@@ -29,7 +29,7 @@ export function FormLogin() {
     const data = await Login({ email, password });
 
     if (data.success == true) {
-      navigate(`/feed/${user?.id}`);
+      navigate(`/feed/${data.userId}`);
     } else {
       console.log("Erro ao enviar dados");
     }

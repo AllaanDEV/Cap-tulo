@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
-import { faceHappy, gallery, quotation, star } from "../svgCode";
 
 export function Context({ children }) {
   const comments = useComments();
@@ -45,14 +44,13 @@ export function Context({ children }) {
       }
 
       const responseJson = await response.json();
-      localStorage.setItem("token", JSON.stringify(responseJson.token));
-      localStorage.setItem("user", JSON.stringify(responseJson.user));
 
-      console.log("RESPOSTA DO LOGIN:", responseJson);
-      console.log("TOKEN:", responseJson.token);
-      console.log("USER:", responseJson.user);
+      if (response.ok) {
+        localStorage.setItem("token", JSON.stringify(responseJson.token));
+        localStorage.setItem("user", JSON.stringify(responseJson.user));
+      }
 
-      return { success: true };
+      return { success: true, userId: responseJson.user.id };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -83,6 +81,8 @@ export function Context({ children }) {
   const [atualizar, setAtualizar] = useState(false);
   const [iconsProfile, setIconsProfile] = useState({});
   const [ebookSaved, setEbookSaved] = useState([]);
+  const [styleCardActive, setStyleCardActive] = useState(null);
+
   const [ebooks, setEbooks] = useState([]);
   const [bookSearch, setBookSearch] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -176,6 +176,8 @@ export function Context({ children }) {
         searchValue,
         setSearchValue,
         ebookSaved,
+        styleCardActive,
+        setStyleCardActive,
         setEbookSaved,
         editRequisicao,
         setEditRequisicao,

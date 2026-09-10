@@ -6,13 +6,18 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useLocation, useParams } from "react-router";
 
 export function EbookProgress({ book }) {
-  const { setProgressEbook, setEbookSaved, progressEbook } =
+  const { setProgressEbook, setEbookSaved, styleCardActive, setStyleCardActive} =
     useContext(AppContext);
+
   const { token, user } = useRequisicoes({});
   const { id: paramsId } = useParams();
   const location = useLocation();
 
+  
+  const locationPatch = location.pathname === `/feed/${user.id}`;
   const deleteSavedBook = async () => {
+
+
     const response = await fetch(
       `http://localhost:3000/api/books/ebookDelete/${book.ebook.etag}`,
       {
@@ -42,23 +47,19 @@ export function EbookProgress({ book }) {
     setProgressEbook((prev) => [...prev, randomNumber]);
   }, []);
 
-  console.log("progress local:", progress);
-  console.log("progressEbook:", progressEbook);
-
-  const [styleCardActive, setStyleCardActive] = useState(false);
-
-  const ebookCardActive = () => {
-    if (location.pathname === `/feed/${user.id}`) {
-      setStyleCardActive((prev) => !prev);
-    }
-  };
-
+console.log(book)
   return (
     <div
-      className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative ${styleCardActive ? "bg-wine/30 border-wine" : null}`}
-      onClick={ebookCardActive}
+      className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 hover:-translate-y-1 hover:shadow-lg group relative ${styleCardActive?.ebook.volumeInfo.title == book?.ebook.volumeInfo.title && locationPatch  ? "bg-wine/20 border-wine" : null}`}
+      onClick={() =>
+        locationPatch
+          ? styleCardActive?.ebook.volumeInfo.title == book?.ebook.volumeInfo.title
+            ? setStyleCardActive(null)
+            : setStyleCardActive(book)
+          : null
+      }
     >
-           {location.pathname === `/feed/${user.id}` ||
+      {location.pathname === `/feed/${user.id}` ||
       location.pathname === `/perfil/${user.id}` ? (
         <EventButton
           className={"text-black top-1 right-1"}
@@ -84,7 +85,11 @@ export function EbookProgress({ book }) {
             </p>
           </div>
 
-          {styleCardActive && <span className="rounded-full bg-wine relative z-10 w-fit p-1 text-white left-0 right-0"><Active></Active></span>}
+          {styleCardActive?.ebook.volumeInfo.title === book?.ebook.volumeInfo.title && locationPatch ? (
+            <span className="rounded-full bg-wine absolute w-fit p-1 text-white left-1 top-1">
+              <Active></Active>
+            </span>
+          ) : null}
 
           <div className="flex flex-col gap-1 mt-auto">
             <div className="flex justify-between">

@@ -8,8 +8,8 @@ import { Dialog } from "./ComponentesFeed/dialog";
 import { DialogComments } from "./ComponentesFeed/dialogComments";
 import { Buttons } from "./ComponentesFeed/buttons";
 
-export function Feed() {
 
+export function Feed() {
 
   return (
     <>
@@ -18,8 +18,8 @@ export function Feed() {
           <SideBar></SideBar>
         </section>
         <Dialog></Dialog>
-        <section className="mx-auto h-max-[70vw]">
-          <Container className="lg:min-w-[50vw] mt-12.5">
+        <section className="mx-auto w-max-[60vw]">
+          <Container className="lg:min-w-[50vw] mt-12.5 w-[90vw] sm:max-w-[70vw] lg:max-w-[50vw]">
             <Buttons></Buttons>
             <SubHeader></SubHeader>
             <ArrayPost></ArrayPost>
