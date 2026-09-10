@@ -9,13 +9,16 @@ export function useRequisicoes({ post, like, setLike }) {
     toggleComments,
     setEditRequisicao,
     setFollowers,
-    followers
+    followers,
+    Login,
+      setEbookSaved
   } = useContext(AppContext);
 
-  const token = JSON.parse(localStorage.getItem("token"));
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  console.log("IUSER", user)
+  
+ 
+    const token = JSON.parse(localStorage.getItem("token"));
+    const user = JSON.parse(localStorage.getItem("user"));
+  
   const nameIcon = (name) => {
     if (name) {
       return (name[0] + (name[1] ? name[1] : "")).toUpperCase();
@@ -114,16 +117,19 @@ export function useRequisicoes({ post, like, setLike }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/posts/${post.id}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          author: user.name,
-          userName: user.userName,
-          text: content,
-          authorId: user.id,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/posts/${post.id}/comments`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            author: user.name,
+            userName: user.userName,
+            text: content,
+            authorId: user.id,
+          }),
+        },
+      );
 
       const data = await response.json();
 
@@ -135,7 +141,6 @@ export function useRequisicoes({ post, like, setLike }) {
       return { success: false, error: error.message };
     }
   };
-
 
   const LikeButton = async () => {
     const likesPost = await fetch(
@@ -160,9 +165,9 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const likesGet = async () => {
-    const response= await fetch("http://localhost:3000/api/posts/likes");
-    const data= await response.json()
-    setLike(data)
+    const response = await fetch("http://localhost:3000/api/posts/likes");
+    const data = await response.json();
+    setLike(data);
     setEditRequisicao((previousValue) => !previousValue);
   };
 
@@ -183,8 +188,7 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-
-    const allFollowers = async () => {
+  const allFollowers = async () => {
     console.log("VASCO");
     const response = await fetch("http://localhost:3000/allFollowers");
     const data = await response.json();
@@ -192,13 +196,39 @@ export function useRequisicoes({ post, like, setLike }) {
     console.log("ALLflow", data);
   };
 
-
   //   const seguindo = followers.filter(
   //   (f) => f.userId === (post?.authorId ?? user.id),
   // );
   // console.log("seguindo", seguindo);
 
   // const seguindoProfileId = followers.filter((f) => f.following === profileId);
+
+
+    const getBookSave = async (profileId) => {
+      try {
+        setEbookSaved([]);
+
+        const response = await fetch(
+          `http://localhost:3000/api/books/saved/${profileId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Erro ao buscar livros");
+        }
+
+        setEbookSaved(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error(error.message);
+        setEbookSaved([]);
+      }
+    };
 
 
   return {
@@ -216,6 +246,8 @@ export function useRequisicoes({ post, like, setLike }) {
     LikeButton,
     fetchProfile,
     photoValueFeed,
-    likesGet,  allFollowers
+    likesGet,
+    allFollowers,
+    getBookSave
   };
 }

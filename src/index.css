@@ -1,22 +1,27 @@
 @import "tailwindcss";
 
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap");
+
 @theme {
   --color-midnight: #121063;
   --color-tahiti: #3ab7bf;
   --color-bermuda: #78dcca;
-  --color-wine: #722F37;
-  --color-primary: #FFFBF7;
-  --color-border: #EFE7DD;
-  --color-background: #F5EFE6;
-  --color-gray: #A28F7A;
+  --color-wine: #722f37;
+  --color-primary: #fffbf7;
+  --color-border: #efe7dd;
+  --color-background: #f5efe6;
+  --color-gray: #a28f7a;
 
   /* options */
-  --color-hover: #C85A32;
+  --color-hover: #c85a32;
 
   /* icons */
   --color-star: rgb(201 154 69);
   --color-ebook: rgb(91 107 79);
-  --color-gallery:rgb(124 114 100)
+  --color-gallery: rgb(124 114 100);
+
+  /* fonts */
+  --font-fraunce: "Fraunces", serif;
 }
 
 html,
@@ -60,8 +65,7 @@ html {
 
   100% {
     opacity: 0;
-    transform:
-      translate(
+    transform: translate(
         calc(-50% + var(--particle-x)),
         calc(-50% + var(--particle-y))
       )

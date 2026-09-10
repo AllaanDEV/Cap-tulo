@@ -20,20 +20,21 @@ export function quotation() {
   );
 }
 
-export const star = () => {
+export const star = ({ size, fill, onClick }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={fill ? "var(--color-star)" : "none"}
       stroke="var(--color-star)"
       stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"
       class="lucide lucide-star text-gold"
       aria-hidden="true"
+      onClick={onClick}
       data-id="element-12"
       data-mp="32mg35nfwrnvr"
     >
@@ -523,9 +524,47 @@ export const faceHappy = () => {
   );
 };
 
+export const Active = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-check"
+      aria-hidden="true"
+      data-id="element-56"
+      data-mp="2icfbc35kz0k4"
+    >
+      <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+  );
+};
 
-export const Active= () => {
-  return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check" aria-hidden="true" data-id="element-56" data-mp="2icfbc35kz0k4"><path d="M20 6 9 17l-5-5"></path></svg>
-  )
-}
+export const CitationIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="#b45b3e"
+
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-quote mb-2 text-terracotta/60"
+      aria-hidden="true"
+      data-id="element-93"
+      data-mp="34xq81eijd6lp"
+    >
+      <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+      <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+    </svg>
+  );
+};
