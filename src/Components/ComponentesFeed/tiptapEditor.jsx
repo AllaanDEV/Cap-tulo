@@ -5,7 +5,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import Mention from "@tiptap/extension-mention";
 import { UserSuggestions } from "./userSuggestions";
 import { ReactRenderer } from "@tiptap/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../context";
 import { EventButton } from "../ComponentsPerfil/eventButton";
 import { XIconProfile } from "../svgCode";
@@ -14,31 +14,19 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
-  const { imgIdUrl, urls, setImgIdUrl } = useContext(AppContext);
+  const { imgIdUrl, urls, setImgIdUrl, gifData, setGifData } =
+    useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
-  const { nameIcon, user, photoValueFeed } = useRequisicoes({});
+  const { nameIcon, user, photoValueFeed, fetchProfile } = useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
 
-  //   useEffect(() => {
-  //     const usersList = async () => {
-  //       const response = await fetch(`http://localhost:3000/updateUser`);
-  //       const data = await response.json();
-  //       setUsers(data);
-  //     };
-
-  //     usersList();
-  //   }, []);
-
-  // const     [&_.ProseMirror]:outline-none
-  // [&_.ProseMirror]:min-h-8
-  // [&_.ProseMirror]:px-5
-  // [&_.ProseMirror]:py-3
-  // [&_.ProseMirror]:rounded-4xl
-  // [&_.ProseMirror]:bg-background
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   const filterUrl = (id) => {
     console.log("ID clicado:", id);
@@ -125,48 +113,47 @@ export function TipTapEditor() {
   });
 
   return (
-    <div className="flex items-center">
-   
-      <PerfilIcon
-        to={
-          location.pathname === `/perfil/${user.id}`
-            ? null
-            : `/perfil/${user.id}`
-        }
-      >
-        {photo?.midiaIcon ? (
-          <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-        ) : (
-          <p className="m-auto text-[1rem] font-medium font-serif text-white">
-            {nameIcon(user.name)}
-          </p>
-        )}
-      </PerfilIcon>
-
-      <div>
-        <EditorContent
-          editor={editor}
-          className="            
-   [&_.ProseMirror]:outline-none
-   [&_.ProseMirror]:px-5
+    <div className="flex flex-col">
+      <div className="flex items-center">
+        <PerfilIcon to={`/perfil/${user.id}`}>
+          {photo?.midiaIcon ? (
+            <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+          ) : (
+            <p className="m-auto text-[1rem] font-medium font-serif text-white">
+              {nameIcon(user.name)}
+            </p>
+          )}
+        </PerfilIcon>
+        <div>
+          <EditorContent
+            editor={editor}
+            className="            
+          [&_.ProseMirror]:outline-none
+                 [&_.ProseMirror]:px-5
         
         
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-gray
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
-  [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0
+                [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]
+            [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-gray
+              [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left
+           [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
+                [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0
 
 
-  [&_.ProseMirror_[data-type='mention']]:text-black
-[&_.ProseMirror_[data-type='mention']]:font-semibold
+                             [&_.ProseMirror_[data-type='mention']]:text-black
+                           [&_.ProseMirror_[data-type='mention']]:font-semibold
 
-[&_.ProseMirror_[data-type='mention']]:rounded-md
-[&_.ProseMirror_[data-type='mention']]:px-1
-        "
-        ></EditorContent>
-        {imgIdUrl.length > 0 ? (
-          <div className={`grid overflow-hidden rounded-2xl ${stylesGrid}`}>
+                   [&_.ProseMirror_[data-type='mention']]:rounded-md
+                [                           &_.ProseMirror_[data-type='mention']]:px-1
+                                       "
+            onClick={() => console.log("LAAAAAAAAAAAAAAAAAAAAEF")}
+          ></EditorContent>
+        </div>
+      </div>
+      {!gifData ? (
+        imgIdUrl.length > 0 ? (
+          <div
+            className={`grid overflow-hidden rounded-2xl mt-5 ${stylesGrid}`}
+          >
             {(imgIdUrl || []).map((midia, index) => {
               const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
 
@@ -194,8 +181,15 @@ export function TipTapEditor() {
               );
             })}
           </div>
-        ) : null}
-      </div>
+        ) : null
+      ) : (
+        <img
+          src={gifData.images.original.url}
+          alt={gifData.title}
+          className="max-w-full max-h-[25vw] object-contain rounded-lg mt-5 hover:brightness-75"
+          onClick={() => setGifData()}
+        />
+      )}
     </div>
   );
 }

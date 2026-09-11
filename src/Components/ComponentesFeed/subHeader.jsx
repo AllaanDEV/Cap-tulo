@@ -8,7 +8,7 @@ import {
   CitationIcon,
 } from "../svgCode";
 // import { ebook } from "../svgCode"
-import { ebook } from "../svgCode";
+import { ebook, GifIcon } from "../svgCode";
 import { gallery } from "../svgCode";
 import { Div } from "./div";
 
@@ -20,6 +20,7 @@ import { ContainerButtons } from "./containerButtons";
 import { ArrayBookSaved } from "../ComponentsPerfil/arrayBookSaved";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useParams } from "react-router";
+import { DialogGif } from "./dialogGif";
 
 // import { Container } from "./container";
 
@@ -39,32 +40,32 @@ const iconsCitationOpen = [
 ];
 const buttons = [
   { icon: star, name: "Resenha", size: "18" },
-  { icon: quotation, name: "Citação" },
+  { icon: GifIcon, name: "Gif" },
   { icon: faceHappy, name: "imojis" },
   { icon: gallery, name: "Foto" },
+  // { icon: faceHappy, name: "imojis" },
 ];
 
 export function SubHeader() {
   const { id: profileId } = useParams();
 
-  const { midia, styleCardActive } = useContext(AppContext);
+  const { midia, styleCardActive, setDialogGif, imgIdUrl, setGifData } =
+    useContext(AppContext);
 
-  const { getBookSave,  user } = useRequisicoes({});
+  const { getBookSave, user } = useRequisicoes({});
 
   const [postCitation, setPostCitation] = useState(false);
   const [postModified, setPosModified] = useState(false);
 
   const citationOpen = (index) => {
-    if (index === 1) {
+    if (index === 0) {
       setPostCitation((prev) => !prev);
+      setGifData();
       setPosModified(false);
-    } else {
-      setPostCitation((prev) => !prev);
-
-      setPosModified(null);
+    } else if (index === 1) {
+      setDialogGif((prev) => !prev);
     }
   };
-
 
   useEffect(() => {
     getBookSave(profileId);
@@ -95,6 +96,7 @@ export function SubHeader() {
     setValuePostCitation(e.target.value);
   };
 
+  const [styleButton, setStyleButton] = useState("quotation");
   return (
     <>
       <section className="pb-5 flex flex-col gap-5 w-full">
@@ -130,14 +132,21 @@ export function SubHeader() {
                     return (
                       <label
                         key={index}
-                        className="hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center"
+                        className={`py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center ${
+                          imgIdUrl.length === 4
+                            ? "text-gray pointer-events-none"
+                            : "hover:bg-border focus:bg-border"
+                        }`}
                       >
-                        <Icon />
+                        <Icon imgIdUrl={imgIdUrl} />
+
                         <input
                           type="file"
                           className="hidden"
                           onChange={midia}
-                        ></input>
+                          disabled={imgIdUrl.length === 4}
+                        />
+
                         {p.name}
                       </label>
                     );
@@ -163,22 +172,17 @@ export function SubHeader() {
                     {iconsCitationOpen.map((b, index) => {
                       const Icon = b.icon;
 
-                      const active =
-                        postModified === null
-                          ? index === 1
-                          : postModified === false
-                            ? index === 0
-                            : index === 2;
-
                       return (
                         <button
                           key={index}
                           className={`flex items-center rounded-full px-4 w-full hover:text-black ${
-                            active
-                              ? "bg-wine text-white pointer-events-none"
-                              : "bg-transparent text-black"
+                            styleButton === b.name
+                              ? "bg-wine text-white"
+                              : "bg-transparent cursor-pointer"
                           }`}
-                          onClick={() => modified(index)}
+                          onClick={() => {
+                            (modified(index), setStyleButton(b.name));
+                          }}
                         >
                           <Icon size={b.size} />
                         </button>
@@ -262,7 +266,10 @@ export function SubHeader() {
                 </span>
 
                 <div className="flex gap-2 justify-end">
-                  <button className="border-[2px] border-border py-1 px-2 rounded-2xl ">
+                  <button
+                    className="border-[2px] border-border py-1 px-2 hover:bg-black/10 rounded-2xl"
+                    onClick={() => setPostCitation((prev) => !prev)}
+                  >
                     Cancelar
                   </button>
                   <button
@@ -277,6 +284,8 @@ export function SubHeader() {
               </div>
             </section>
           )}
+
+          <DialogGif></DialogGif>
         </Div>
       </section>
     </>
