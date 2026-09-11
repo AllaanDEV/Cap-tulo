@@ -66,7 +66,7 @@ export const ebook = () => {
   );
 };
 
-export const gallery = () => {
+export const gallery = ({ imgIdUrl }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ export const gallery = () => {
       height="18"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--color-gallery)"
+      stroke={`${imgIdUrl.length === 4 ? "var(--color-gray)" : "var(--color-gallery)"}`}
       stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -554,7 +554,6 @@ export const CitationIcon = () => {
       height="18"
       viewBox="0 0 24 24"
       fill="#b45b3e"
-
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -565,6 +564,44 @@ export const CitationIcon = () => {
     >
       <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
       <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+    </svg>
+  );
+};
+
+export const GifIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+    >
+      <title>gift-open-24-regular</title>
+      <path
+        fill="currentColor"
+        d="M16 4a1 1 0 1 0 0-2a1 1 0 0 0 0 2M8 9.5a3 3 0 0 1 3-3a3.75 3.75 0 0 1 3.75 3.75a4.5 4.5 0 0 1-4.5 4.5a.75.75 0 1 0 0 1.5a6 6 0 0 0 6-6C16.25 7.35 13.9 5 11 5a4.5 4.5 0 0 0-4.5 4.5a3.75 3.75 0 0 0 3.75 3.75a3 3 0 0 0 3-3A2.25 2.25 0 0 0 11 8a1.5 1.5 0 0 0-1.5 1.5a.75.75 0 0 0 1.5 0a.75.75 0 0 1 .75.75a1.5 1.5 0 0 1-1.5 1.5A2.25 2.25 0 0 1 8 9.5m11.5-5.25a.75.75 0 0 1 .75.75v.75H21a.75.75 0 0 1 0 1.5h-.75V8a.75.75 0 0 1-1.5 0v-.75H18a.75.75 0 0 1 0-1.5h.75V5a.75.75 0 0 1 .75-.75m-14 8.5a.75.75 0 0 0-1.166-.624l-3 2a.75.75 0 1 0 .832 1.248L4 14.151v4.599A3.25 3.25 0 0 0 7.25 22h9.5A3.25 3.25 0 0 0 20 18.75v-4.599l1.834 1.223a.75.75 0 1 0 .832-1.248l-3-2a.75.75 0 0 0-1.166.624v6a1.75 1.75 0 0 1-1.75 1.75h-9.5a1.75 1.75 0 0 1-1.75-1.75z"
+      />
+    </svg>
+  );
+};
+
+export const Search = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+    >
+      <title>search</title>
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M19 11.5a7.5 7.5 0 1 1-15 0a7.5 7.5 0 0 1 15 0m-2.107 5.42l3.08 3.08"
+      />
     </svg>
   );
 };

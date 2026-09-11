@@ -94,6 +94,10 @@ export function Context({ children }) {
   const [read, setRead] = useState(0);
   const [followers, setFollowers] = useState([]);
 
+  const [dialogGif, setDialogGif]=useState(false)
+
+  const [gifData, setGifData]=useState()
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -196,7 +200,7 @@ export function Context({ children }) {
         midia,
         imgId,
         imgIdUrl,
-        setImgIdUrl,
+        setImgIdUrl, dialogGif, setDialogGif, gifData, setGifData
       }}
     >
       {children}

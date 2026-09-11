@@ -56,8 +56,6 @@ export function ArrayEbooks() {
   const displayedBooks = searchValue ? arraySetBook : arraySetEbooks;
 
 
-
-  
   return (
     <>
       <ul className="grid gap-x-3 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
