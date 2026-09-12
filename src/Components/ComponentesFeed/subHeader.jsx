@@ -60,7 +60,6 @@ export function SubHeader() {
   const citationOpen = (index) => {
     if (index === 0) {
       setPostCitation((prev) => !prev);
-      setGifData();
       setPosModified(false);
     } else if (index === 1) {
       setDialogGif((prev) => !prev);
@@ -137,6 +136,7 @@ export function SubHeader() {
                             ? "text-gray pointer-events-none"
                             : "hover:bg-border focus:bg-border"
                         }`}
+                        onClick={() => setGifData()}
                       >
                         <Icon imgIdUrl={imgIdUrl} />
 
@@ -147,7 +147,7 @@ export function SubHeader() {
                           disabled={imgIdUrl.length === 4}
                         />
 
-                        {p.name}
+                        <span className=" hidden sm:block">{p.name}</span>
                       </label>
                     );
                   }
@@ -158,7 +158,7 @@ export function SubHeader() {
                       className="hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center"
                     >
                       <Icon size={p.size} />
-                      <span>{p.name}</span>
+                      <span className=" hidden sm:block">{p.name}</span>
                     </button>
                   );
                 })}

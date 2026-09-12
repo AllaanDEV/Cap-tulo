@@ -137,6 +137,8 @@ export function TipTapEditor() {
               [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left
            [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none
                 [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0
+                [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-sm
+                [&_.ProseMirror_p.is-editor-empty:first-child::before]:sm:text-lg
 
 
                              [&_.ProseMirror_[data-type='mention']]:text-black
@@ -145,7 +147,6 @@ export function TipTapEditor() {
                    [&_.ProseMirror_[data-type='mention']]:rounded-md
                 [                           &_.ProseMirror_[data-type='mention']]:px-1
                                        "
-            onClick={() => console.log("LAAAAAAAAAAAAAAAAAAAAEF")}
           ></EditorContent>
         </div>
       </div>
@@ -184,8 +185,8 @@ export function TipTapEditor() {
         ) : null
       ) : (
         <img
-          src={gifData.images.original.url}
-          alt={gifData.title}
+          src={gifData?.images.original.url}
+          alt={gifData?.title}
           className="max-w-full max-h-[25vw] object-contain rounded-lg mt-5 hover:brightness-75"
           onClick={() => setGifData()}
         />
