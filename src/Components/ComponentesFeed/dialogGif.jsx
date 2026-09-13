@@ -22,18 +22,24 @@ export function DialogGif({}) {
     }
   }, [dialogGif]);
 
+  const [gifOffset, setGifOffset] = useState();
+
   const getGifs = async (add, searchTerm = busca) => {
     const response = await fetch(
-      `/api/gifs?busca=${encodeURIComponent(searchTerm)}`,
+      `/api/gifs?busca=${encodeURIComponent(searchTerm)}&offset=${gifOffset}`,
     );
+
     const data = await response.json();
 
     if (add) {
       setArrayGifs((prev) => [...prev, ...data]);
+      setGifOffset((prev) => prev + 10);
       return;
     }
 
-    return setArrayGifs(data);
+    setGifOffset();
+    setArrayGifs(data);
+    setGifOffset(10);
   };
 
   const handleDefaultItemClick = async (name) => {
@@ -46,7 +52,7 @@ export function DialogGif({}) {
     await getGifs(false, name);
   };
 
-  const valueDefault = async (exit) => {
+  const valueDefault = (exit) => {
     const valueInput = inputRef.current.value;
     if (valueInput === "") {
       setBusca("options");
@@ -114,7 +120,7 @@ export function DialogGif({}) {
             type="text"
             placeholder="Pesquisar Gifs"
             onInput={(e) => {
-              setBusca(e.target.value.trim());
+              (setBusca(e.target.value.trim()), valueDefault());
             }}
             className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"
             onKeyDown={(e) => {
@@ -146,12 +152,12 @@ export function DialogGif({}) {
           </div>
         )}
 
-        {arrayGifs.length === 0 && busca !== "options" && (
+        {/* {arrayGifs.length === 0 && busca !== "options" && (
           <span className=" mx-auto">Procurando gifs...</span>
-        )}
+        )} */}
 
         <div className="grid grid-cols-2 gap-1 mt-5">
-          {busca === "options" &&
+          {arrayGifs.length === 0 &&
             itemsDefault.map((i) => {
               return (
                 <div
@@ -180,12 +186,7 @@ export function DialogGif({}) {
           </button>
         )}
 
-        <div className="mt-full">
-          {/* <button onClick={() => setDialogGif((prev) => !prev)}>SAIR</button>
-          <button onClick={getGifs} type="button">
-            BUSCAR
-          </button> */}
-        </div>
+        <div className="mt-full"></div>
       </div>
     </dialog>
   );
