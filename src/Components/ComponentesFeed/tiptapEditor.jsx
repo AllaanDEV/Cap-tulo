@@ -5,7 +5,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import Mention from "@tiptap/extension-mention";
 import { UserSuggestions } from "./userSuggestions";
 import { ReactRenderer } from "@tiptap/react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../context";
 import { EventButton } from "../ComponentsPerfil/eventButton";
 import { XIconProfile } from "../svgCode";
@@ -14,33 +14,81 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
-  const { imgIdUrl, urls, setImgIdUrl, gifData, setGifData } =
-    useContext(AppContext);
+  const {
+    imgIdUrl,
+    urls,
+    setImgIdUrl,
+    gifData,
+    setGifData,
+    publication,
+    setPublication,
+    setSearch,
+  } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
-  const { nameIcon, user, photoValueFeed, fetchProfile } = useRequisicoes({});
+  const { nameIcon, user, photoValueFeed, fetchProfile, token } =
+    useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
 
+  const [hasText, setHasText] = useState(false);
+  const [getMidiaUrl, setGetMidiaUrl] = useState();
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  const filterUrl = (id) => {
-    console.log("ID clicado:", id);
-    setImgIdUrl((prev) => prev.filter((midia) => midia.id !== id));
+  const filterUrl = (index) => {
+    setImgIdUrl((prev) => prev.filter((_, i) => i !== index));
+  };
+  const newPost = async () => {
+    // const formData = new FormData(e.target);
+
+    // if (formData.get("content") == "") {
+    //   return;
+    // }
+
+    fetch("http://localhost:3000/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: hasText || null,
+        midia: gifData || imgIdUrl|| null,
+        author: user.name,
+        userName: user.userName,
+        likes: 0,
+        comments: [],
+      }),
+    }).then((res) =>
+      res.json().then((data) => {
+        localStorage.setItem("newPost", JSON.stringify(data));
+        const posts = [data, ...publication];
+        setSearch(posts);
+
+        setGifData();
+        setImgIdUrl();
+        setHasText();
+
+        return setPublication(posts);
+      }),
+    );
   };
 
-  // const styles = imgIdUrl.length >= 2 ? "w-[20vw] h-[20vw]" : "w-[20vw] h-auto";
-
   const stylesGrid =
-    imgIdUrl.length === 1
-      ? "grid-cols-1 w-[50vw] max-h-[60vw] sm:max-w-[20vw] sm:max-h-[20vw] "
-      : imgIdUrl.length === 2
-        ? "grid-cols-2 gap-1 w-full max-h-[60vw]  sm:max-w-[40vw] sm:h-[20vw] mx-auto" // Limita a altura com 2 imagens
-        : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[20vw]"; // LIMITA A ALTURA AQUI PARA 3 OU 4 IMAGENS
+    imgIdUrl?.length === 1
+      ? "grid-cols-1 w-[50vw] max-h-[60vw] sm:max-w-[25vw] sm:max-h-[20vw] "
+      : imgIdUrl?.length === 2
+        ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
+        : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
+
+
+  const canPost = hasText || imgIdUrl?.length > 0 || gifData;
+
 
   const editor = useEditor({
     extensions: [
@@ -110,12 +158,19 @@ export function TipTapEditor() {
       }),
     ],
     content: "",
+    onUpdate: ({ editor }) => {
+      setHasText(editor.getText().trim());
+    },
   });
 
+  console.log("LA PROVA REAL", imgIdUrl);
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
-        <PerfilIcon to={`/perfil/${user.id}`}>
+        <PerfilIcon
+          to={`/perfil/${user.id}`}
+          className="hidden sm:block mb-auto"
+        >
           {photo?.midiaIcon ? (
             <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
           ) : (
@@ -129,7 +184,8 @@ export function TipTapEditor() {
             editor={editor}
             className="            
           [&_.ProseMirror]:outline-none
-                 [&_.ProseMirror]:px-5
+                 [&_.ProseMirror]:px-1
+                 [&_.ProseMirror]:sm:px-5
         
         
                 [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]
@@ -146,35 +202,54 @@ export function TipTapEditor() {
 
                    [&_.ProseMirror_[data-type='mention']]:rounded-md
                 [                           &_.ProseMirror_[data-type='mention']]:px-1
+
+
+
+
+                    w-full
+    max-w-[52vw]
+    sm:max-w-[47vw]
+
+    lg:max-w-[35vw]
+    [&_.ProseMirror]:outline-none
+    [&_.ProseMirror]:sm:px-5
+    [&_.ProseMirror]:break-words
                                        "
           ></EditorContent>
         </div>
+        <button
+          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl cursor-pointer sticky mt-auto ${!canPost && "bg-wine/40 text-white/40"}`}
+          disabled={!canPost}
+          onClick={() => newPost()}
+        >
+          Postar
+        </button>
       </div>
+      {/* {!gifData ? ( */}
       {!gifData ? (
-        imgIdUrl.length > 0 ? (
+        imgIdUrl?.length > 0 ? (
           <div
             className={`grid overflow-hidden rounded-2xl mt-5 ${stylesGrid}`}
           >
-            {(imgIdUrl || []).map((midia, index) => {
+            {imgIdUrl.map((midia, index) => {
               const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
-
+console.log("LALALALLAA", midia)
               return (
                 <div
-                  key={midia.id}
-                  className={`relative group h-full w-full ${isFirstOfThree ? "row-span-2" : ""} `}
+                  key={index}
+                  className={`relative group h-full w-full ${
+                    isFirstOfThree ? "row-span-2" : ""
+                  }`}
                 >
                   <img
-                    id="post-midia"
                     className="w-full h-full object-cover object-center"
-                    src={midia.url}
+                    src={midia}
                     alt="post media"
                   />
 
                   <EventButton
-                    className={
-                      "bg-black/40 text-white inset-0 flex items-center justify-center rounded-2xl absolute"
-                    }
-                    onClick={() => filterUrl(midia.id)}
+                    className="bg-black/40 text-white inset-0 flex items-center justify-center rounded-2xl absolute"
+                    onClick={() => filterUrl(index)}
                   >
                     <XIconProfile />
                   </EventButton>

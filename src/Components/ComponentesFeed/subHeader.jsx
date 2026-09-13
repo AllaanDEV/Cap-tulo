@@ -131,8 +131,8 @@ export function SubHeader() {
                     return (
                       <label
                         key={index}
-                        className={`py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center ${
-                          imgIdUrl.length === 4
+                        className={`py-2  px-3 sm:px-6  rounded-xl group transition-colors flex gap-2 items-center ${
+                          imgIdUrl?.length === 4
                             ? "text-gray pointer-events-none"
                             : "hover:bg-border focus:bg-border"
                         }`}
@@ -144,10 +144,10 @@ export function SubHeader() {
                           type="file"
                           className="hidden"
                           onChange={midia}
-                          disabled={imgIdUrl.length === 4}
+                          disabled={imgIdUrl?.length === 4}
                         />
 
-                        <span className=" hidden sm:block">{p.name}</span>
+                        <span className="hidden sm:block">{p.name}</span>
                       </label>
                     );
                   }
@@ -155,7 +155,7 @@ export function SubHeader() {
                     <button
                       key={index}
                       onClick={() => citationOpen(index)}
-                      className="hover:bg-border focus:bg-border py-2 px-6 rounded-xl group transition-colors flex gap-2 items-center"
+                      className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"
                     >
                       <Icon size={p.size} />
                       <span className=" hidden sm:block">{p.name}</span>

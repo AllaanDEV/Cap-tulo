@@ -59,38 +59,40 @@ export function Post({ post }) {
   useEffect(() => {
     fetchProfile();
     likesGet();
-  }, [ paramsId]);
+  }, [paramsId]);
 
-const handleLike = async () => {
-  if (likeLock.current) return;
+  const handleLike = async () => {
+    if (likeLock.current) return;
 
-  likeLock.current = true;
-  setLiking(true);
+    likeLock.current = true;
+    setLiking(true);
 
-  try {
-    await LikeButton();
+    try {
+      await LikeButton();
 
-    setLiked((prev) => !prev);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    likeLock.current = false;
-    setLiking(false);
-  }
-};
+      setLiked((prev) => !prev);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      likeLock.current = false;
+      setLiking(false);
+    }
+  };
+
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == post.authorId,
   );
 
   useEffect(() => {
-  const likes = like?.find(
-    (p) => p.postId === post.id && p.userId === user.id
-  );
+    const likes = like?.find(
+      (p) => p.postId === post.id && p.userId === user.id,
+    );
 
-  setLiked(likes?.validation ?? false);
-}, [like, post.id, user.id]);
+    setLiked(likes?.validation ?? false);
+  }, [like, post.id, user.id]);
 
-console.log(post)
+  console.log("IDAGI", post?.midia);
+
   return (
     <>
       <Div className="w-max-[50vw]">
@@ -110,8 +112,8 @@ console.log(post)
                 <span>{post.author}</span>
                 {post?.midia && (
                   <div className="flex gap-3 items-center">
-                    <span className="text-gray">resenhou</span>
-                    <span className="text-wine">{post.midia}</span>
+                    {/* <span className="text-gray">resenhou</span> */}
+                    {/* <span className="text-wine">{post.midia}</span> */}
                   </div>
                 )}
                 <p className="text-gray text-xs">@{post.userName}</p>
@@ -134,9 +136,29 @@ console.log(post)
 
           <p className="text">{post.content}</p>
 
-          {post?.img && (
-            <Info>
-              <img src={post.img}></img>
+          {post?.midia && (
+            <Info className="rounded-xs">
+              {/* <img src={post?.midia.images?.original.url || post?.midia?.map((url) =>  url)}></img> */}
+              {post?.midia.length > 0 ? (
+                <div>
+                  {(post?.midia ?? []).map((url, index) => {
+                    return (
+                      <img
+                        key={index}
+                        src={url}
+                        alt="Imagem do post"
+                        className="w-full max-h-[50vw] object-cover"
+                      />
+                    );
+                  })}
+                </div>
+              ) : post?.midia?.images?.original?.url ? (
+                <img
+                  src={post.midia.images.original.url}
+                  alt="GIF do post"
+                  className="w-full object-contain"
+                />
+              ) : null}
             </Info>
           )}
 

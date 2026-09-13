@@ -94,9 +94,9 @@ export function Context({ children }) {
   const [read, setRead] = useState(0);
   const [followers, setFollowers] = useState([]);
 
-  const [dialogGif, setDialogGif]=useState(false)
+  const [dialogGif, setDialogGif] = useState(false);
 
-  const [gifData, setGifData]=useState()
+  const [gifData, setGifData] = useState();
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -129,15 +129,13 @@ export function Context({ children }) {
   const [imgIdUrl, setImgIdUrl] = useState([]);
 
   const midia = (evento) => {
-    const file = evento.target.files[0];
+    const file = evento?.target.files[0];
 
     if (file) {
       const content = new FileReader();
       content.onload = (e) => {
-        const urlObj = {
-          id: Date.now().toString(),
-          url: e.target.result,
-        };
+        const urlObj = e.target.result;
+
         // imgId.src = e.target.result;
         // imgId.style.display = "block";
         setImgIdUrl((prev) => [...prev, urlObj]);
@@ -200,7 +198,11 @@ export function Context({ children }) {
         midia,
         imgId,
         imgIdUrl,
-        setImgIdUrl, dialogGif, setDialogGif, gifData, setGifData
+        setImgIdUrl,
+        dialogGif,
+        setDialogGif,
+        gifData,
+        setGifData,
       }}
     >
       {children}
