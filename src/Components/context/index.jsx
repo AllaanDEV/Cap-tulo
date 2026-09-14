@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
+import { Star } from "../svgCode";
 
 export function Context({ children }) {
   const comments = useComments();
@@ -75,6 +76,15 @@ export function Context({ children }) {
     }
   }, [editComments]);
 
+
+      const stars = [
+    { Star: Star, size: "20" },
+    { Star: Star, size: "20" },
+    { Star: Star, size: "20" },
+    { Star: Star, size: "20" },
+    { Star: Star, size: "20" },
+  ];
+
   const [search, setSearch] = useState();
   const [post, setPost] = useState([]);
   const [edit, setEdit] = useState({});
@@ -82,7 +92,6 @@ export function Context({ children }) {
   const [iconsProfile, setIconsProfile] = useState({});
   const [ebookSaved, setEbookSaved] = useState([]);
   const [styleCardActive, setStyleCardActive] = useState(null);
-
   const [ebooks, setEbooks] = useState([]);
   const [bookSearch, setBookSearch] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -93,10 +102,15 @@ export function Context({ children }) {
   const [progressEbook, setProgressEbook] = useState([]);
   const [read, setRead] = useState(0);
   const [followers, setFollowers] = useState([]);
-
   const [dialogGif, setDialogGif] = useState(false);
-
   const [gifData, setGifData] = useState();
+  const [hasText, setHasText] = useState(false);
+
+  const [valuePostsCitation, setValuePostCitation] = useState();
+  const [postModified, setPosModified] = useState(false);
+  const [containerModified, setContainerModified]=useState(false)
+
+  const [starFilled, setStarFilled] = useState(stars[0]);
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -203,6 +217,10 @@ export function Context({ children }) {
         setDialogGif,
         gifData,
         setGifData,
+        hasText,
+        setHasText,
+        valuePostsCitation, setValuePostCitation, postModified, setPosModified, containerModified, setContainerModified,
+        starFilled, setStarFilled, stars
       }}
     >
       {children}

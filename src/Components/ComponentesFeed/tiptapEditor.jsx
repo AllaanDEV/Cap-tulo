@@ -11,6 +11,8 @@ import { EventButton } from "../ComponentsPerfil/eventButton";
 import { XIconProfile } from "../svgCode";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+import { EbookCitation } from "./ebookCitation";
+import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
@@ -23,17 +25,26 @@ export function TipTapEditor() {
     publication,
     setPublication,
     setSearch,
+    valuePostsCitation,
+    hasText,
+    setHasText,
+    styleCardActive,
+    valuePostCitation,
+    postModified,
+    setValuePostCitation,
+    containerModified,
+    setContainerModified,
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
-  const { nameIcon, user, photoValueFeed, fetchProfile, token } =
+  const { nameIcon, user, photoValueFeed, fetchProfile, newPost } =
     useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
 
-  const [hasText, setHasText] = useState(false);
+  // const [hasText, setHasText] = useState(false);
   const [getMidiaUrl, setGetMidiaUrl] = useState();
 
   useEffect(() => {
@@ -43,41 +54,13 @@ export function TipTapEditor() {
   const filterUrl = (index) => {
     setImgIdUrl((prev) => prev.filter((_, i) => i !== index));
   };
-  const newPost = async () => {
-    // const formData = new FormData(e.target);
 
-    // if (formData.get("content") == "") {
-    //   return;
-    // }
-
-    fetch("http://localhost:3000/api/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        content: hasText || null,
-        midia: gifData || imgIdUrl|| null,
-        author: user.name,
-        userName: user.userName,
-        likes: 0,
-        comments: [],
-      }),
-    }).then((res) =>
-      res.json().then((data) => {
-        localStorage.setItem("newPost", JSON.stringify(data));
-        const posts = [data, ...publication];
-        setSearch(posts);
-
-        setGifData();
-        setImgIdUrl();
-        setHasText();
-
-        return setPublication(posts);
-      }),
-    );
-  };
+  const typePost =
+    postModified === null
+      ? "feedback"
+      : postModified === false
+        ? "citation"
+        : "resenha";
 
   const stylesGrid =
     imgIdUrl?.length === 1
@@ -86,9 +69,7 @@ export function TipTapEditor() {
         ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
 
-
   const canPost = hasText || imgIdUrl?.length > 0 || gifData;
-
 
   const editor = useEditor({
     extensions: [
@@ -218,9 +199,13 @@ export function TipTapEditor() {
           ></EditorContent>
         </div>
         <button
-          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl cursor-pointer sticky mt-auto ${!canPost && "bg-wine/40 text-white/40"}`}
-          disabled={!canPost}
-          onClick={() => newPost()}
+          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl cursor-pointer sticky mt-auto ${!canPost && valuePostCitation && "bg-wine/40 text-white/40"}`}
+          disabled={!canPost && valuePostCitation}
+          onClick={() => {
+            (newPost(typePost),
+              setValuePostCitation(),
+              setContainerModified((prev) => !prev));
+          }}
         >
           Postar
         </button>
@@ -233,7 +218,6 @@ export function TipTapEditor() {
           >
             {imgIdUrl.map((midia, index) => {
               const isFirstOfThree = imgIdUrl.length === 3 && index === 0;
-console.log("LALALALLAA", midia)
               return (
                 <div
                   key={index}
@@ -266,6 +250,22 @@ console.log("LALALALLAA", midia)
           onClick={() => setGifData()}
         />
       )}
+
+      {containerModified && postModified === false ? (
+        <EbookCitation
+          className="mt-5"
+          text={valuePostsCitation}
+          title={styleCardActive?.ebook.volumeInfo.title}
+          authors={styleCardActive?.ebook.volumeInfo.authors}
+        ></EbookCitation>
+      ) : containerModified && postModified === null ? (
+        <ContainerEbooks
+          title={styleCardActive.ebook.volumeInfo.title}
+          subtitle={styleCardActive.ebook.volumeInfo.subtitle}
+          thumbnail={styleCardActive.ebook.volumeInfo.imageLinks?.thumbnail}
+          className={"mt-5"}
+        ></ContainerEbooks>
+      ) : null}
     </div>
   );
 }

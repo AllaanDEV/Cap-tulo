@@ -20,7 +20,7 @@ export function quotation() {
   );
 }
 
-export const star = ({ size, fill, onClick }) => {
+export const Star = ({ size, fill, onClick }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -550,8 +550,8 @@ export const CitationIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
+      width="25"
+      height="25"
       viewBox="0 0 24 24"
       fill="#b45b3e"
       stroke-width="2"

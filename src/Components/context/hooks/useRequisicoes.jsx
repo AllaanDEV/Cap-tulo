@@ -11,14 +11,23 @@ export function useRequisicoes({ post, like, setLike }) {
     setFollowers,
     followers,
     Login,
-      setEbookSaved
+    imgIdUrl,
+    setGifData,
+    setImgIdUrl,
+    gifData,
+    setEbookSaved,
+    hasText,
+    setHasText,
+    valuePostsCitation,
+    styleCardActive,
+    starFilled,
+    setStarFilled,
+    stars,
   } = useContext(AppContext);
 
-  
- 
-    const token = JSON.parse(localStorage.getItem("token"));
-    const user = JSON.parse(localStorage.getItem("user"));
-  
+  const token = JSON.parse(localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const nameIcon = (name) => {
     if (name) {
       return (name[0] + (name[1] ? name[1] : "")).toUpperCase();
@@ -203,33 +212,79 @@ export function useRequisicoes({ post, like, setLike }) {
 
   // const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
+  const getBookSave = async (profileId) => {
+    try {
+      setEbookSaved([]);
 
-    const getBookSave = async (profileId) => {
-      try {
-        setEbookSaved([]);
-
-        const response = await fetch(
-          `http://localhost:3000/api/books/saved/${profileId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+      const response = await fetch(
+        `http://localhost:3000/api/books/saved/${profileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        },
+      );
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || "Erro ao buscar livros");
-        }
-
-        setEbookSaved(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error(error.message);
-        setEbookSaved([]);
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao buscar livros");
       }
-    };
 
+      setEbookSaved(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(error.message);
+      setEbookSaved([]);
+    }
+  };
+
+  const newPost = async (typePost) => {
+    // const formData = new FormData(e.target);
+
+    // if (formData.get("content") == "") {
+    //   return;
+    // }
+
+    fetch("http://localhost:3000/api/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: hasText || null,
+        postModified: {
+          content: valuePostsCitation || null,
+          title: styleCardActive?.ebook?.volumeInfo.title || null,
+          subtitle: styleCardActive?.ebook?.volumeInfo.subtitle || null,
+          thumbnail:
+            styleCardActive?.ebook?.volumeInfo.imageLinks?.thumbnail || null,
+          authors: styleCardActive?.ebook?.volumeInfo.authors || null,
+          starsEbook: starFilled,
+        },
+        midia: gifData || imgIdUrl || null,
+        author: user.name,
+        userName: user.userName,
+        type: typePost,
+        likes: 0,
+        comments: [],
+      }),
+    }).then((res) =>
+      res.json().then((data) => {
+        localStorage.setItem("newPost", JSON.stringify(data));
+        const posts = [data, ...publication];
+        setSearch(posts);
+
+        setGifData();
+        setImgIdUrl();
+        setHasText();
+        setStarFilled(stars[0]);
+
+        
+        return setPublication(posts);
+      }),
+    );
+  };
 
   return {
     token,
@@ -248,6 +303,7 @@ export function useRequisicoes({ post, like, setLike }) {
     photoValueFeed,
     likesGet,
     allFollowers,
-    getBookSave
+    newPost,
+    getBookSave,
   };
 }

@@ -2,7 +2,7 @@ import { Lines } from "../ComponentsForm/lines";
 
 import {
   faceHappy,
-  star,
+  Star,
   XSavedEbook,
   quotation,
   CitationIcon,
@@ -21,11 +21,13 @@ import { ArrayBookSaved } from "../ComponentsPerfil/arrayBookSaved";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useParams } from "react-router";
 import { DialogGif } from "./dialogGif";
+import { EbookCitation } from "./ebookCitation";
+import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
+import { ArrayStars } from "./arrayStars";
 
 // import { Container } from "./container";
 
 const Ebook = ebook;
-const Star = star;
 
 const navigation = [
   { name: "Para você" },
@@ -35,11 +37,11 @@ const navigation = [
 
 const iconsCitationOpen = [
   { icon: quotation, name: "quotation" },
-  { icon: star, name: "star", size: "18" },
+  { icon: Star, name: "star", size: "18" },
   { icon: ebook, name: "ebook" },
 ];
 const buttons = [
-  { icon: star, name: "Resenha", size: "18" },
+  { icon: Star, name: "Resenha", size: "18" },
   { icon: GifIcon, name: "Gif" },
   { icon: faceHappy, name: "imojis" },
   { icon: gallery, name: "Foto" },
@@ -49,13 +51,25 @@ const buttons = [
 export function SubHeader() {
   const { id: profileId } = useParams();
 
-  const { midia, styleCardActive, setDialogGif, imgIdUrl, setGifData } =
-    useContext(AppContext);
+  const {
+    midia,
+    styleCardActive,
+    setDialogGif,
+    imgIdUrl,
+    setGifData,
+    valuePostsCitation,
+    setValuePostCitation,
+    postModified,
+    setPosModified,
+    setContainerModified,
+    stars,
+    starFilled,
+    setStarFilled,
+  } = useContext(AppContext);
 
-  const { getBookSave, user } = useRequisicoes({});
+  const { getBookSave, user, newPost } = useRequisicoes({});
 
   const [postCitation, setPostCitation] = useState(false);
-  const [postModified, setPosModified] = useState(false);
 
   const citationOpen = (index) => {
     if (index === 0) {
@@ -80,22 +94,22 @@ export function SubHeader() {
     }
   };
 
-  const stars = [
-    { Star: Star, size: "20" },
-    { Star: Star, size: "20" },
-    { Star: Star, size: "20" },
-    { Star: Star, size: "20" },
-    { Star: Star, size: "20" },
-  ];
+  // const stars = [
+  //   { Star: Star, size: "20" },
+  //   { Star: Star, size: "20" },
+  //   { Star: Star, size: "20" },
+  //   { Star: Star, size: "20" },
+  //   { Star: Star, size: "20" },
+  // ];
 
-  const [starFilled, setStarFilled] = useState(stars[0]);
-  const [valuePotsCitation, setValuePostCitation] = useState();
+  // const [starFilled, setStarFilled] = useState(stars[0]);
 
   const citationPublication = (e) => {
     setValuePostCitation(e.target.value);
   };
 
   const [styleButton, setStyleButton] = useState("quotation");
+
   return (
     <>
       <section className="pb-5 flex flex-col gap-5 w-full">
@@ -181,7 +195,7 @@ export function SubHeader() {
                               : "bg-transparent cursor-pointer"
                           }`}
                           onClick={() => {
-                            (modified(index), setStyleButton(b.name));
+                            (modified(index), setStyleButton(b.name), setContainerModified(false));
                           }}
                         >
                           <Icon size={b.size} />
@@ -209,26 +223,16 @@ export function SubHeader() {
                     <span className="text-sm text-gray">A CITAÇÃO:</span>
                   ) : postModified === null ? (
                     <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {stars.map((Star, index) => {
-                          const Icon = Star.Star;
-                          return (
-                            <Icon
-                              size={Star.size}
-                              key={index}
-                              fill={starFilled >= index ? true : false}
-                              onClick={() => setStarFilled(index)}
-                            ></Icon>
-                          );
-                        })}
-                      </div>
+                      <ArrayStars
+                        onClick={setStarFilled}
+                      ></ArrayStars>
                       <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
                     </div>
                   ) : (
                     <span className="text-sm text-gray">PROGRESSO</span>
                   )}
                   <textarea
-                    className="bg-background rounded-xl p-4 placeholder:font-medium placeholder:text-md border border-border"
+                    className="bg-background rounded-xl p-4 placeholder:font-medium placeholder:text-md border border-border outline-yellow-600 "
                     placeholder={
                       postModified === false
                         ? " Selecione um livro e copie aqui o trecho que te marcou..."
@@ -239,17 +243,27 @@ export function SubHeader() {
                     rows="3"
                     onInput={citationPublication}
                   ></textarea>
-                  {valuePotsCitation &&
+                  {valuePostsCitation &&
                     styleCardActive &&
                     postModified === false && (
                       <>
-                        <div className="bg-background p-4 border border-border rounded-xl  flex flex-col">
-                          <CitationIcon></CitationIcon>
-                          <h4 className="font-fraunce text-2xl">{`“${valuePotsCitation}”`}</h4>
-                          <span className="text-gray">{`— ${styleCardActive.ebook.volumeInfo.title}, ${styleCardActive.ebook.volumeInfo.authors}`}</span>
-                        </div>
+                        <EbookCitation
+                          text={valuePostsCitation}
+                          title={styleCardActive.ebook.volumeInfo.title}
+                          authors={styleCardActive.ebook.volumeInfo.authors}
+                        ></EbookCitation>
                       </>
                     )}
+
+                  {styleCardActive && postModified === null && (
+                    <ContainerEbooks
+                      title={styleCardActive.ebook.volumeInfo.title}
+                      subtitle={styleCardActive.ebook.volumeInfo.subtitle}
+                      thumbnail={
+                        styleCardActive.ebook.volumeInfo.imageLinks?.thumbnail
+                      }
+                    ></ContainerEbooks>
+                  )}
                 </div>
               </div>
               <Lines className={"my-4"}></Lines>
@@ -274,9 +288,15 @@ export function SubHeader() {
                   </button>
                   <button
                     className={` py-1 px-2 rounded-2xl text-white ${
-                      styleCardActive ? "bg-wine cursor-pointer" : "bg-wine/90"
+                      styleCardActive && valuePostsCitation
+                        ? "bg-wine cursor-pointer"
+                        : "bg-wine/70 text-white/60"
                     }`}
-                    disabled={!styleCardActive}
+                    disabled={!styleCardActive && valuePostsCitation}
+                    onClick={() => {
+                      setPostCitation((prev) => !prev);
+                      setContainerModified((prev) => !prev);
+                    }}
                   >
                     Publicar
                   </button>

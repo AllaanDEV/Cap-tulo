@@ -1,19 +1,19 @@
 import { useContext, useEffect, useEffectEvent, useState } from "react";
 import AppContext from "../context";
 import { ArrayPosts } from "./arrayPosts";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useParams } from "react-router";
 
 export function ArrayTable() {
-  const {
-    publication,
-    ebookSaved,
-    progressEbook,
-    read,
-    setRead,
-  } = useContext(AppContext);
+  const { id: paramsId } = useParams();
+  const { publication, ebookSaved, progressEbook, read, setRead } =
+    useContext(AppContext);
 
-  useEffect(() =>{
-   publication
-  },[])
+  useEffect(() => {
+    publication;
+  }, []);
+
+  const { user } = useRequisicoes({});
 
   useEffect(() => {
     const finished = progressEbook.filter(
@@ -24,10 +24,12 @@ export function ArrayTable() {
   }, [progressEbook]);
 
 
+  const userPublication = publication.filter((p) => p.authorId === paramsId);
+
   const tableObj = [
     { name: "Lidos", number: read },
     { name: "Lendo", number: ebookSaved.length },
-    { name: "Resenhas", number: ArrayPosts.length },
+    { name: "Resenhas", number: userPublication.length },
     // { name: "Seguindo", number: 318 },
     // { name: "Seguidores", number: "1,2k" },
   ];

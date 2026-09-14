@@ -17,6 +17,8 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { useParams } from "react-router";
+import { EbookCitation } from "./ebookCitation";
+import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 
 const Save = save;
 const Icon = configuration;
@@ -24,7 +26,7 @@ const Icon = configuration;
 export function Post({ post }) {
   const { id: paramsId } = useParams();
 
-  const { setPostId, editValue } = useContext(AppContext);
+  const { setPostId, editValue, styleCardActive } = useContext(AppContext);
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
   const [liking, setLiking] = useState(false);
@@ -40,6 +42,7 @@ export function Post({ post }) {
     photoValueFeed,
     fetchProfile,
     likesGet,
+    valuePostsCitation,
   } = useRequisicoes({
     post,
     like,
@@ -91,7 +94,7 @@ export function Post({ post }) {
     setLiked(likes?.validation ?? false);
   }, [like, post.id, user.id]);
 
-  console.log("IDAGI", post?.midia);
+  console.log("IDAGI", post.type);
 
   return (
     <>
@@ -136,10 +139,10 @@ export function Post({ post }) {
 
           <p className="text">{post.content}</p>
 
-          {post?.midia && (
+          {post?.midia?.length > 0 && (
             <Info className="rounded-xs">
               {/* <img src={post?.midia.images?.original.url || post?.midia?.map((url) =>  url)}></img> */}
-              {post?.midia.length > 0 ? (
+              {post?.midia?.length > 0 ? (
                 <div>
                   {(post?.midia ?? []).map((url, index) => {
                     return (
@@ -147,7 +150,7 @@ export function Post({ post }) {
                         key={index}
                         src={url}
                         alt="Imagem do post"
-                        className="w-full max-h-[50vw] object-cover"
+                        className="w-full sm:max-h-[35vw] object-cover"
                       />
                     );
                   })}
@@ -156,11 +159,26 @@ export function Post({ post }) {
                 <img
                   src={post.midia.images.original.url}
                   alt="GIF do post"
-                  className="w-full object-contain"
+                  className="w-full object-contain sm:max-h-[35vw]"
                 />
               ) : null}
             </Info>
           )}
+
+          {post.type === "citation" ? (
+            <EbookCitation
+              text={post.postModified?.content}
+              title={post.postModified?.title}
+              authors={post.postModified?.authors}
+            ></EbookCitation>
+          ) : post.type === "feedback" ? (
+            <ContainerEbooks
+              title={post.postModified?.title}
+              subtitle={post.postModified?.subtitle}
+              thumbnail={post.postModified?.thumbnail}
+              stars={post.postModified?.starsEbook}
+            ></ContainerEbooks>
+          ) : null}
 
           {/* <img src={daenerys}></img> */}
         </section>
