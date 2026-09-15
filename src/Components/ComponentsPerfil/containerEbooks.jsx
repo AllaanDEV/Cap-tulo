@@ -6,7 +6,7 @@ import { XSavedEbook, Star } from "../svgCode";
 import { useLocation, useParams } from "react-router";
 import { ArrayStars } from "../ComponentesFeed/arrayStars";
 
-export function ContainerEbooks({
+export function  ContainerEbooks({
   children,
   styleActive,
   className,
@@ -15,10 +15,16 @@ export function ContainerEbooks({
   subtitle,
   thumbnail,
   starsEbook,
+  starsNumber,
   ...props
 }) {
-  const { setEbookSaved, postModified, starFilled, stars, containerModified } =
-    useContext(AppContext);
+  const {
+    setEbookSaved,
+    postModified,
+    starFilled,
+    containerModified,
+    publication,
+  } = useContext(AppContext);
   const { token, user, getBookSave } = useRequisicoes({});
   const location = useLocation();
   const { id: profileId } = useParams();
@@ -49,6 +55,8 @@ export function ContainerEbooks({
       : "hover:-translate-y-1 hover:shadow-lg";
 
   console.log("conatiner", containerModified);
+
+  const postsFeedbacks = publication.find((p) => p.type === "feedback");
   return (
     <div
       className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${(containerModified === true || location.pathname === `/perfil/`) && location.pathname === `/feed/${user.id}` ? "" : "hover:-translate-y-1 hover:shadow-lg"} group relative ${styleActive} ${className}`}
@@ -75,13 +83,18 @@ export function ContainerEbooks({
         </div>
         <div className={`flex flex-col gap-5  w-[100%]`}>
           <div className={`${title && "my-auto"}`}>
-            <p className={`${title ? "text-lg" : "text-sm"}`}>
+            <p className={`${title ? "text-sm sm:text-lg" : "text-sm"}`}>
               {book?.ebook.volumeInfo.title || title}
             </p>
             <p className="text-xs text-black/70">
               {book?.ebook.volumeInfo.subtitle || subtitle}
             </p>
-            {title && <ArrayStars starsEbook={starsEbook}></ArrayStars>}
+            {title && (
+              <ArrayStars
+                starsEbook={starsEbook}
+                starsNumber={starsNumber}
+              ></ArrayStars>
+            )}
           </div>
           {children}
         </div>

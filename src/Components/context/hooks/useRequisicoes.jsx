@@ -23,6 +23,7 @@ export function useRequisicoes({ post, like, setLike }) {
     starFilled,
     setStarFilled,
     stars,
+    setPostModified,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -265,7 +266,7 @@ export function useRequisicoes({ post, like, setLike }) {
         midia: gifData || imgIdUrl || null,
         author: user.name,
         userName: user.userName,
-        type: typePost,
+        type: typePost || "",
         likes: 0,
         comments: [],
       }),
@@ -278,9 +279,9 @@ export function useRequisicoes({ post, like, setLike }) {
         setGifData();
         setImgIdUrl();
         setHasText();
-        setStarFilled(stars[0]);
+        setPostModified();
 
-        
+        console.log("DATA", data);
         return setPublication(posts);
       }),
     );

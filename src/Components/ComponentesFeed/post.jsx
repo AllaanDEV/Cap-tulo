@@ -19,6 +19,7 @@ import AppContext from "../context";
 import { useParams } from "react-router";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
+import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 
 const Save = save;
 const Icon = configuration;
@@ -26,7 +27,8 @@ const Icon = configuration;
 export function Post({ post }) {
   const { id: paramsId } = useParams();
 
-  const { setPostId, editValue, styleCardActive } = useContext(AppContext);
+  const { setPostId, editValue, styleCardActive, ebookSaved } =
+    useContext(AppContext);
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
   const [liking, setLiking] = useState(false);
@@ -94,7 +96,16 @@ export function Post({ post }) {
     setLiked(likes?.validation ?? false);
   }, [like, post.id, user.id]);
 
-  console.log("IDAGI", post.type);
+  console.log("IDAGI", post);
+
+  // const typeResenha = () => {
+  //   if (post.type !== "resenha") return null;
+
+  //   const cardResenha = ebookSaved.find(
+  //     (e) => e.ebook.volumeInfo.title === post.postModified.title,
+  //   );
+  //   return cardResenha;
+  // };
 
   return (
     <>
@@ -139,32 +150,28 @@ export function Post({ post }) {
 
           <p className="text">{post.content}</p>
 
-          {post?.midia?.length > 0 && (
+          {post?.midia && (
             <Info className="rounded-xs">
-              {/* <img src={post?.midia.images?.original.url || post?.midia?.map((url) =>  url)}></img> */}
-              {post?.midia?.length > 0 ? (
-                <div>
-                  {(post?.midia ?? []).map((url, index) => {
-                    return (
-                      <img
-                        key={index}
-                        src={url}
-                        alt="Imagem do post"
-                        className="w-full sm:max-h-[35vw] object-cover"
-                      />
-                    );
-                  })}
-                </div>
-              ) : post?.midia?.images?.original?.url ? (
+              {post.midia.type === "gif" ? (
                 <img
-                  src={post.midia.images.original.url}
-                  alt="GIF do post"
+                  src={post.midia.images?.original?.url}
+                  alt={post.midia.title}
                   className="w-full object-contain sm:max-h-[35vw]"
                 />
+              ) : Array.isArray(post.midia) ? (
+                <div>
+                  {post.midia.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt="Imagem do post"
+                      className="w-full sm:max-h-[35vw] object-cover"
+                    />
+                  ))}
+                </div>
               ) : null}
             </Info>
           )}
-
           {post.type === "citation" ? (
             <EbookCitation
               text={post.postModified?.content}
@@ -176,9 +183,11 @@ export function Post({ post }) {
               title={post.postModified?.title}
               subtitle={post.postModified?.subtitle}
               thumbnail={post.postModified?.thumbnail}
-              stars={post.postModified?.starsEbook}
+              starsNumber={post.postModified?.starsEbook}
             ></ContainerEbooks>
-          ) : null}
+          ) : null
+          // <EbookProgress book={typeResenha()}></EbookProgress>
+          }
 
           {/* <img src={daenerys}></img> */}
         </section>

@@ -13,6 +13,7 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
+import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
@@ -34,6 +35,9 @@ export function TipTapEditor() {
     setValuePostCitation,
     containerModified,
     setContainerModified,
+    postCitation,
+    typePost,
+    ebookSaved,
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -55,13 +59,6 @@ export function TipTapEditor() {
     setImgIdUrl((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const typePost =
-    postModified === null
-      ? "feedback"
-      : postModified === false
-        ? "citation"
-        : "resenha";
-
   const stylesGrid =
     imgIdUrl?.length === 1
       ? "grid-cols-1 w-[50vw] max-h-[60vw] sm:max-w-[25vw] sm:max-h-[20vw] "
@@ -69,7 +66,29 @@ export function TipTapEditor() {
         ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
 
-  const canPost = hasText || imgIdUrl?.length > 0 || gifData;
+  const canPost =
+    hasText ||
+    imgIdUrl?.length > 0 ||
+    gifData ||
+    valuePostCitation ||
+    containerModified;
+
+  const typeResenha = () => {
+    console.log("postModified:", postModified);
+    console.log("styleCardActive:", styleCardActive);
+    console.log("ebookSaved:", ebookSaved);
+
+    if (postModified !== "resenha") return null;
+
+    const cardResenha = ebookSaved.find(
+      (e) =>
+        e.ebook.volumeInfo.title === styleCardActive?.ebook?.volumeInfo?.title,
+    );
+
+    console.log("LIVRO ENCONTRADO:", cardResenha);
+
+    return cardResenha;
+  };
 
   const editor = useEditor({
     extensions: [
@@ -144,7 +163,7 @@ export function TipTapEditor() {
     },
   });
 
-  console.log("LA PROVA REAL", imgIdUrl);
+  console.log("LA PROVA REAL", gifData);
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
@@ -199,8 +218,8 @@ export function TipTapEditor() {
           ></EditorContent>
         </div>
         <button
-          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl cursor-pointer sticky mt-auto ${!canPost && valuePostCitation && "bg-wine/40 text-white/40"}`}
-          disabled={!canPost && valuePostCitation}
+          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"}`}
+          disabled={!canPost}
           onClick={() => {
             (newPost(typePost),
               setValuePostCitation(),
@@ -210,7 +229,7 @@ export function TipTapEditor() {
           Postar
         </button>
       </div>
-      {/* {!gifData ? ( */}
+
       {!gifData ? (
         imgIdUrl?.length > 0 ? (
           <div
@@ -265,7 +284,12 @@ export function TipTapEditor() {
           thumbnail={styleCardActive.ebook.volumeInfo.imageLinks?.thumbnail}
           className={"mt-5"}
         ></ContainerEbooks>
-      ) : null}
+      ) : (
+        containerModified &&
+        postModified === true && (
+          <EbookProgress book={typeResenha()}></EbookProgress>
+        )
+      )}
     </div>
   );
 }

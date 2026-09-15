@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EbookProgress } from "./ebookProgress";
 import AppContext from "../context";
 import { ebook, compass, Active } from "../svgCode";
@@ -7,7 +7,8 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayBookSaved({ post }) {
   const location = useLocation();
-  const { ebookSaved, styleCardActive, setStyleCardActive} = useContext(AppContext);
+  const { ebookSaved, setStyleCardActive } =
+    useContext(AppContext);
   const { user } = useRequisicoes({});
 
   const Ebook = ebook;
@@ -16,11 +17,13 @@ export function ArrayBookSaved({ post }) {
   const stylePatchFeed = location.pathname === `/feed/${user.id}`;
   const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
-  const styleFeed = stylePatchFeed ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]" : "2xl:grid-cols-4";
+  const styleFeed = stylePatchFeed
+    ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
+    : "2xl:grid-cols-4";
 
-// const [styleCardActive, setStyleCardActive] = useState(
-//   ebookSaved[0]?.ebook.volumeInfo.title ?? null
-// );
+  useEffect(() => {
+    setStyleCardActive(ebookSaved[0] ?? null);
+  }, []);
 
   return (
     <>

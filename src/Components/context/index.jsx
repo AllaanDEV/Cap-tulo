@@ -76,8 +76,7 @@ export function Context({ children }) {
     }
   }, [editComments]);
 
-
-      const stars = [
+  const stars = [
     { Star: Star, size: "20" },
     { Star: Star, size: "20" },
     { Star: Star, size: "20" },
@@ -107,10 +106,11 @@ export function Context({ children }) {
   const [hasText, setHasText] = useState(false);
 
   const [valuePostsCitation, setValuePostCitation] = useState();
-  const [postModified, setPosModified] = useState(false);
-  const [containerModified, setContainerModified]=useState(false)
+  const [postModified, setPostModified] = useState();
+  const [containerModified, setContainerModified] = useState(false);
 
   const [starFilled, setStarFilled] = useState(stars[0]);
+  const [postCitation, setPostCitation] = useState(false);
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -158,6 +158,13 @@ export function Context({ children }) {
       content.readAsDataURL(file);
     }
   };
+
+  const typePost =
+    postModified === null
+      ? "feedback"
+      : postModified === false
+        ? "citation"
+        : postModified === true && "resenha";
 
   return (
     <AppContext.Provider
@@ -219,8 +226,18 @@ export function Context({ children }) {
         setGifData,
         hasText,
         setHasText,
-        valuePostsCitation, setValuePostCitation, postModified, setPosModified, containerModified, setContainerModified,
-        starFilled, setStarFilled, stars
+        valuePostsCitation,
+        setValuePostCitation,
+        postModified,
+        setPostModified,
+        containerModified,
+        setContainerModified,
+        starFilled,
+        setStarFilled,
+        stars,
+        postCitation,
+        setPostCitation,
+        typePost,
       }}
     >
       {children}
