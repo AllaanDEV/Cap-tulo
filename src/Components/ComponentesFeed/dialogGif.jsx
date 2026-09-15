@@ -14,12 +14,23 @@ export function DialogGif({}) {
   const [arrayGifs, setArrayGifs] = useState([]);
 
   useEffect(() => {
-    console.log("vasco");
     if (dialogGif) {
       gifRef?.current.showModal();
     } else {
       gifRef?.current.close();
     }
+  }, [dialogGif]);
+
+  useEffect(() => {
+    if (dialogGif) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [dialogGif]);
 
   const [gifOffset, setGifOffset] = useState();
@@ -95,98 +106,100 @@ export function DialogGif({}) {
     <dialog
       ref={gifRef}
       onCancel={() => setDialogGif((prev) => !prev)}
-      className=" absolute w-full h-[80vh] sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none"
+      className=" absolute w-full h-[80vh] sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden"
     >
-      <div className="flex items center justify-between p-3">
-        <span className="text-2xl font-fraunce">Escolha uma gif</span>
-        <button
-          onClick={() => {
-            (setDialogGif((prev) => !prev),
-              setBusca("options"),
-              valueDefault(true));
-          }}
-        >
-          <XSavedEbook></XSavedEbook>
-        </button>
-      </div>
-      <Lines></Lines>
-      <div className="py-3 px-1">
-        <label className="">
-          <div className="relative top-7 ml-2">
-            <Search></Search>
-          </div>
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Pesquisar Gifs"
-            onInput={(e) => {
-              (setBusca(e.target.value.trim()), valueDefault());
+      <div className="h-full overflow-y-auto scrollbar-none">
+        <div className="flex items center justify-between p-3">
+          <span className="text-2xl font-fraunce">Escolha uma gif</span>
+          <button
+            onClick={() => {
+              (setDialogGif((prev) => !prev),
+                setBusca("options"),
+                valueDefault(true));
             }}
-            className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                getGifs();
-                valueDefault();
-              }
-            }}
-          ></input>
-        </label>
+          >
+            <XSavedEbook></XSavedEbook>
+          </button>
+        </div>
+        <Lines></Lines>
+        <div className="py-3 px-1">
+          <label className="">
+            <div className="relative top-7 ml-2">
+              <Search></Search>
+            </div>
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Pesquisar Gifs"
+              onInput={(e) => {
+                (setBusca(e.target.value.trim()), valueDefault());
+              }}
+              className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  getGifs();
+                  valueDefault();
+                }
+              }}
+            ></input>
+          </label>
 
-        {arrayGifs && (
-          <div className="mt-5 columns-2 gap-1">
-            {arrayGifs?.map((g) => {
-              return (
-                <img
-                  key={g.id}
-                  src={g.images.original.url}
-                  alt={g.title}
-                  className="mb-1 w-full break-inside-avoid rounded-md object-cover transition-transform duration-200 hover:scale-105 cursor-pointer"
-                  onClick={() => {
-                    setGifData(g);
-                    setDialogGif((prev) => !prev);
-                    valueDefault(true);
-                  }}
-                />
-              );
-            })}
-          </div>
-        )}
+          {arrayGifs && (
+            <div className="mt-5 columns-2 gap-1">
+              {arrayGifs?.map((g) => {
+                return (
+                  <img
+                    key={g.id}
+                    src={g.images.original.url}
+                    alt={g.title}
+                    className="mb-1 w-full break-inside-avoid rounded-md object-cover transition-transform duration-200 hover:scale-105 cursor-pointer"
+                    onClick={() => {
+                      setGifData(g);
+                      setDialogGif((prev) => !prev);
+                      valueDefault(true);
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
 
-        {/* {arrayGifs.length === 0 && busca !== "options" && (
+          {/* {arrayGifs.length === 0 && busca !== "options" && (
           <span className=" mx-auto">Procurando gifs...</span>
         )} */}
 
-        <div className="grid grid-cols-2 gap-1 mt-5">
-          {arrayGifs.length === 0 &&
-            itemsDefault.map((i) => {
-              return (
-                <div
-                  key={i.url}
-                  className="relative overflow-hidden rounded-xs"
-                >
-                  <img
-                    src={i.url}
-                    alt={i.name}
-                    className="w-full h-50 object-cover transition-transform duration-200 hover:scale-105 cursor-pointer"
-                    onClick={() => handleDefaultItemClick(i.name)}
-                  />
-                  <span className="absolute bottom-2 left-2 text-lg font-extrabold text-white drop-shadow-md">
-                    {i.name}
-                  </span>
-                </div>
-              );
-            })}
-        </div>
-        {arrayGifs.length > 0 && (
-          <button
-            onClick={() => getGifs(true)}
-            className="w-full mt-2 bg-border/90 border-border py-2 rounded-xs  hover:bg-border"
-          >
-            Buscar mais
-          </button>
-        )}
+          <div className="grid grid-cols-2 gap-1 mt-5">
+            {arrayGifs.length === 0 &&
+              itemsDefault.map((i) => {
+                return (
+                  <div
+                    key={i.url}
+                    className="relative overflow-hidden rounded-xs"
+                  >
+                    <img
+                      src={i.url}
+                      alt={i.name}
+                      className="w-full h-50 object-cover transition-transform duration-200 hover:scale-105 cursor-pointer"
+                      onClick={() => handleDefaultItemClick(i.name)}
+                    />
+                    <span className="absolute bottom-2 left-2 text-lg font-extrabold text-white drop-shadow-md">
+                      {i.name}
+                    </span>
+                  </div>
+                );
+              })}
+          </div>
+          {arrayGifs.length > 0 && (
+            <button
+              onClick={() => getGifs(true)}
+              className="w-full mt-2 bg-border/90 border-border py-2 rounded-xs  hover:bg-border"
+            >
+              Buscar mais
+            </button>
+          )}
 
-        <div className="mt-full"></div>
+          <div className="mt-full"></div>
+        </div>
       </div>
     </dialog>
   );

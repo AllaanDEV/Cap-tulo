@@ -99,38 +99,6 @@ export function Icon() {
     },
   ];
 
-  // useEffect(() => {
-  //   const getBookSave = async () => {
-  //     try {
-  //       setEbookSaved([]);
-
-  //       const response = await fetch(
-  //         `http://localhost:3000/api/books/saved/${profileId}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         },
-  //       );
-
-  //       const data = await response.json();
-
-  //       if (!response.ok) {
-  //         throw new Error(data.error || "Erro ao buscar livros");
-  //       }
-
-  //       setEbookSaved(Array.isArray(data) ? data : []);
-  //     } catch (error) {
-  //       console.error(error.message);
-  //       setEbookSaved([]);
-  //     }
-  //   };
-
-  //   if (profileId) {
-  //     getBookSave();
-  //   }
-  // }, [profileId, token]);
-
   useEffect(() => {
     getBookSave(profileId);
   }, [profileId, token]);

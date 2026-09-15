@@ -1,7 +1,6 @@
 import { useContext,} from "react";
 import { Post } from "./post";
 import AppContext from "../context";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 
 // const post = [
@@ -50,12 +49,10 @@ export function ArrayPost() {
   const { publication,search} =
     useContext(AppContext);
 
-const{user}= useRequisicoes({})
 
   return (
     <ul className="flex flex-col gap-5">
       {(!search ? publication : search).map((p) => {
-        console.log("fqsdqw", user)
         return (
           <li key={p.id}>
             <Post post={p}></Post>

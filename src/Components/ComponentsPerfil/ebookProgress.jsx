@@ -30,6 +30,7 @@ export function EbookProgress({ book }) {
     setProgressEbook((prev) => [...prev, randomNumber]);
   }, []);
 
+  console.log("text",     styleCardActive)
   return (
     <ContainerEbooks
       styleActive={

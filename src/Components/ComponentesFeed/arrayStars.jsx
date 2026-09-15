@@ -1,17 +1,18 @@
 import { useContext } from "react";
 import AppContext from "../context";
 
-export function ArrayStars({ onClick, starsEbook }) {
+export function ArrayStars({ onClick, starsNumber }) {
   const { stars, starFilled } = useContext(AppContext);
+
   return (
-    <div className="flex">
+    <div className="flex gap-1">
       {stars.map((Star, index) => {
         const Icon = Star.Star;
         return (
           <Icon
             size={Star.size}
             key={index}
-            fill={starsEbook || (starFilled >= index ? true : false)}
+            fill={starsNumber >= index || (starFilled >= index ? true : false)}
             onClick={() => onClick(index)}
           ></Icon>
         );
@@ -19,3 +20,4 @@ export function ArrayStars({ onClick, starsEbook }) {
     </div>
   );
 }
+ 
