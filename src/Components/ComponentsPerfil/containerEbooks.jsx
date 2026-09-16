@@ -31,7 +31,7 @@ export function  ContainerEbooks({
 
   const deleteSavedBook = async () => {
     const response = await fetch(
-      `http://localhost:3000/api/books/ebookDelete/${book.ebook.etag}`,
+      `http://localhost:3000/api/books/ebookDelete/${book.ebook.id}`,
       {
         method: "DELETE",
         headers: {
@@ -39,7 +39,7 @@ export function  ContainerEbooks({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          etagBook: book.ebook.etag,
+          userId: user.id,
         }),
       },
     );

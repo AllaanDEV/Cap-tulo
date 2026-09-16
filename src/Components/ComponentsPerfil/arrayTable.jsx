@@ -24,12 +24,12 @@ export function ArrayTable() {
   }, [progressEbook]);
 
 
-  const userPublication = publication.filter((p) => p.authorId === paramsId);
+  const userPublications = publication.filter((p) => p.authorId === paramsId);
 
   const tableObj = [
     { name: "Lidos", number: read },
     { name: "Lendo", number: ebookSaved.length },
-    { name: "Resenhas", number: userPublication.length },
+    { name: "Resenhas", number: userPublications.length },
     // { name: "Seguindo", number: 318 },
     // { name: "Seguidores", number: "1,2k" },
   ];

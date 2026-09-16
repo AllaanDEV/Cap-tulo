@@ -7,15 +7,12 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayBookSaved({ post }) {
   const location = useLocation();
-  const { ebookSaved, setStyleCardActive } =
-    useContext(AppContext);
-  const { user } = useRequisicoes({});
+  const { ebookSaved, setStyleCardActive } = useContext(AppContext);
+  const { stylePatchFeed, stylePatchProfile,  getBookSave } = useRequisicoes({});
 
   const Ebook = ebook;
   const Compass = compass;
 
-  const stylePatchFeed = location.pathname === `/feed/${user.id}`;
-  const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
@@ -58,13 +55,15 @@ export function ArrayBookSaved({ post }) {
         <ul
           className={`grid grid-rows-1 md:grid-cols-2  gap-3 w-full ${styleFeed}`}
         >
-          {ebookSaved?.map((bookSave) => {
-            return (
-              <li key={bookSave.ebook.etag}>
-                <EbookProgress book={bookSave} />
-              </li>
-            );
-          })}
+          {Array.isArray(ebookSaved) &&
+            ebookSaved.map((bookSave) => {
+              console.log("id", ebookSaved)
+              return (
+                <li key={bookSave.ebook.etag}>
+                  <EbookProgress book={bookSave} />
+                </li>
+              );
+            })}
         </ul>
       )}
     </>

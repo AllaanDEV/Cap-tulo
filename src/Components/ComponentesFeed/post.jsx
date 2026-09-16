@@ -4,6 +4,7 @@ import { configuration, Like } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { Share } from "../svgCode";
 import { Comment } from "../svgCode";
+import { memo } from "react";
 
 import { save } from "../svgCode";
 // import daenerys from "../../assets/dragoes-daenerys.webp";
@@ -24,7 +25,7 @@ import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 const Save = save;
 const Icon = configuration;
 
-export function Post({ post }) {
+export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
 
   const { setPostId, editValue, styleCardActive, ebookSaved } =
@@ -107,6 +108,7 @@ export function Post({ post }) {
   //   return cardResenha;
   // };
 
+  console.log("TYPE", post);
   return (
     <>
       <Div className="w-max-[50vw]">
@@ -150,9 +152,9 @@ export function Post({ post }) {
 
           <p className="text">{post.content}</p>
 
-          {post?.midia && (
+          {post.midia !== "listNull"  && (
             <Info className="rounded-xs">
-              {post.midia.type === "gif" ? (
+              {post?.midia?.type === "gif" ? (
                 <img
                   src={post.midia.images?.original?.url}
                   alt={post.midia.title}
@@ -172,27 +174,32 @@ export function Post({ post }) {
               ) : null}
             </Info>
           )}
+
           {post.type === "citation" ? (
             <EbookCitation
               text={post.postModified?.content}
-              title={post.postModified?.title}
-              authors={post.postModified?.authors}
+              title={post.postModified?.ebook?.ebook?.volumeInfo?.title}
+              authors={post.postModified?.ebook?.ebook?.volumeInfo?.authors}
             ></EbookCitation>
           ) : post.type === "feedback" ? (
             <ContainerEbooks
-              title={post.postModified?.title}
-              subtitle={post.postModified?.subtitle}
-              thumbnail={post.postModified?.thumbnail}
+              title={post.postModified?.ebook?.ebook?.volumeInfo?.title}
+              subtitle={post.postModified?.ebook?.ebook?.volumeInfo?.subtitle}
+              thumbnail={
+                post.postModified?.ebook?.ebook?.volumeInfo?.imageLinks
+                  ?.thumbnail
+              }
               starsNumber={post.postModified?.starsEbook}
             ></ContainerEbooks>
-          ) : null
-          // <EbookProgress book={typeResenha()}></EbookProgress>
-          }
+          ) : post.type === "resenha" ? (
+            <EbookProgress book={post.postModified.ebook}></EbookProgress>
+          ) : null}
 
           {/* <img src={daenerys}></img> */}
         </section>
 
         <Lines></Lines>
+
         <div className="flex justify-between px-5 ">
           <div className="flex justify-between w-55  items-center">
             <div>
@@ -234,4 +241,4 @@ export function Post({ post }) {
       </Div>
     </>
   );
-}
+});

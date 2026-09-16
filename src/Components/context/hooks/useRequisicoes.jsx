@@ -23,6 +23,9 @@ export function useRequisicoes({ post, like, setLike }) {
     starFilled,
     setStarFilled,
     stars,
+    postModified,
+    setValuePostCitation,
+    setStyleCardActive,
     setPostModified,
   } = useContext(AppContext);
 
@@ -242,7 +245,7 @@ export function useRequisicoes({ post, like, setLike }) {
   const newPost = async (typePost) => {
     // const formData = new FormData(e.target);
 
-    // if (formData.get("content") == "") {
+    // if (hasText ) {
     //   return;
     // }
 
@@ -256,17 +259,13 @@ export function useRequisicoes({ post, like, setLike }) {
         content: hasText || null,
         postModified: {
           content: valuePostsCitation || null,
-          title: styleCardActive?.ebook?.volumeInfo.title || null,
-          subtitle: styleCardActive?.ebook?.volumeInfo.subtitle || null,
-          thumbnail:
-            styleCardActive?.ebook?.volumeInfo.imageLinks?.thumbnail || null,
-          authors: styleCardActive?.ebook?.volumeInfo.authors || null,
+          ebook: styleCardActive || null,
           starsEbook: starFilled,
         },
-        midia: gifData || imgIdUrl || null,
+        midia: gifData || (imgIdUrl?.length > 0 && imgIdUrl) || "listNull",
         author: user.name,
         userName: user.userName,
-        type: typePost || "",
+        type: postModified || "",
         likes: 0,
         comments: [],
       }),
@@ -274,18 +273,22 @@ export function useRequisicoes({ post, like, setLike }) {
       res.json().then((data) => {
         localStorage.setItem("newPost", JSON.stringify(data));
         const posts = [data, ...publication];
-        setSearch(posts);
 
+        setSearch(posts);
         setGifData();
         setImgIdUrl();
         setHasText();
         setPostModified();
+        setStyleCardActive();
+        setValuePostCitation();
 
-        console.log("DATA", data);
         return setPublication(posts);
       }),
     );
   };
+
+    const stylePatchFeed = location.pathname === `/feed/${user.id}`;
+  const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
   return {
     token,
@@ -305,6 +308,6 @@ export function useRequisicoes({ post, like, setLike }) {
     likesGet,
     allFollowers,
     newPost,
-    getBookSave,
+    getBookSave, stylePatchFeed, stylePatchProfile
   };
 }
