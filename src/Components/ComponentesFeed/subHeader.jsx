@@ -24,16 +24,13 @@ import { DialogGif } from "./dialogGif";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { ArrayStars } from "./arrayStars";
-
-// import { Container } from "./container";
-
 const Ebook = ebook;
 
-const navigation = [
-  { name: "Para você" },
-  { name: "Seguindo" },
-  { name: "Clubes" },
-];
+// const navigation = [
+//   { name: "Para você" },
+//   { name: "Seguindo" },
+//   { name: "Clubes" },
+// ];
 
 const iconsCitationOpen = [
   { icon: quotation, name: "quotation" },
@@ -50,7 +47,7 @@ const buttons = [
 
 export function SubHeader() {
   const { id: profileId } = useParams();
-  const location = useLocation();
+  // const location = useLocation();
 
   const {
     midia,
@@ -69,14 +66,19 @@ export function SubHeader() {
     postCitation,
     setPostCitation,
     typePost,
+    setDisabledCardActive,
+    ebookSaved,
+    setStyleCardActive,
+    publication,
   } = useContext(AppContext);
 
-  const { getBookSave, user, newPost } = useRequisicoes({});
+  const { getBookSave, user, newPost, stylePatchFeed, stylePatchProfile } =
+    useRequisicoes({});
 
   const citationOpen = (index) => {
     if (index === 0) {
       setPostCitation((prev) => !prev);
-      setPostModified(false);
+      setPostModified("citation");
     } else if (index === 1) {
       setDialogGif((prev) => !prev);
     }
@@ -86,15 +88,22 @@ export function SubHeader() {
     getBookSave(profileId);
   }, []);
 
+  useEffect(() => {
+    setStyleCardActive(ebookSaved[0]);
+  }, [ebookSaved, postCitation]);
+
   const modified = (index) => {
     if (index === 1) {
-      setPostModified(null);
+      setPostModified("feedback");
     } else if (index === 0) {
-      setPostModified(false);
-    } else {
-      setPostModified(true);
+      setPostModified("citation");
+      setDisabledCardActive(false);
+    } else if (index === 2) {
+      setPostModified("resenha");
     }
   };
+
+  console.log("ESTILO ACTIVE", styleCardActive);
 
   const citationPublication = (e) => {
     setValuePostCitation(e.target.value);
@@ -176,13 +185,25 @@ export function SubHeader() {
                               setContainerModified(false));
                           }}
                         >
-                          <Icon size={b.size} />
+                          <Icon
+                            size={b.size}
+                            color={
+                              styleButton === b.name
+                                ? "white"
+                                : "var(--color-gray)"
+                            }
+                          />
                         </button>
                       );
                     })}
                   </ContainerButtons>
                 </div>
-                <button onClick={() => setPostCitation((prev) => !prev)}>
+                <button
+                  onClick={() => {
+                    (setPostCitation((prev) => !prev),
+                      setStyleButton("quotation"));
+                  }}
+                >
                   <XSavedEbook></XSavedEbook>
                 </button>
               </div>
@@ -197,25 +218,28 @@ export function SubHeader() {
                   <ArrayBookSaved></ArrayBookSaved>
                 </div>
                 <div className="flex flex-col gap-2">
-                  {postModified === false ? (
-                    <span className="text-sm text-gray">A CITAÇÃO:</span>
-                  ) : postModified === null ? (
-                    <div className="flex items-center gap-2">
-                      <ArrayStars onClick={setStarFilled}></ArrayStars>
-                      <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
-                    </div>
-                  ) : (
-                    <span className="text-sm text-gray">PROGRESSO</span>
-                  )}
-                  {postModified !== null && (
+                  {ebookSaved.length > 0 ? (
+                    postModified === "citation" ? (
+                      <span className="text-sm text-gray">A CITAÇÃO:</span>
+                    ) : (
+                      postModified === "feedback" && (
+                        <div className="flex items-center gap-2">
+                          <ArrayStars onClick={setStarFilled}></ArrayStars>
+                          <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
+                        </div>
+                      )
+                    )
+                  ) : null}
+
+                  {postModified === "citation" && ebookSaved.length > 0 && (
                     <textarea
                       className="bg-background rounded-xl p-4 placeholder:font-medium placeholder:text-md border border-border outline-yellow-600 "
                       placeholder={
-                        postModified === false
-                          ? " Selecione um livro e copie aqui o trecho que te marcou..."
-                          : postModified === null
-                            ? "O que você achou dessa leitura?"
-                            : `O que está achando dessa leitura ${user.name}?`
+                        postModified === "citation" &&
+                        " Selecione um livro e copie aqui o trecho que te marcou..."
+                        // : postModified === null
+                        //   ? "O que você achou dessa leitura?"
+                        //   : `O que está achando dessa leitura ${user.name}?`
                       }
                       rows="3"
                       onInput={citationPublication}
@@ -224,7 +248,7 @@ export function SubHeader() {
 
                   {valuePostsCitation &&
                     styleCardActive &&
-                    postModified === false && (
+                    postModified === "citation" && (
                       <EbookCitation
                         text={valuePostsCitation}
                         title={styleCardActive.ebook.volumeInfo.title}
@@ -232,7 +256,7 @@ export function SubHeader() {
                       ></EbookCitation>
                     )}
 
-                  {styleCardActive && postModified === null && (
+                  {styleCardActive && postModified === "feedback" && (
                     <ContainerEbooks
                       title={styleCardActive.ebook.volumeInfo.title}
                       subtitle={styleCardActive.ebook.volumeInfo.subtitle}
@@ -266,17 +290,25 @@ export function SubHeader() {
                   <button
                     className={` py-1 px-2 rounded-2xl text-white ${
                       (styleCardActive && valuePostsCitation) ||
-                      (postModified === null && styleCardActive)
+                      (postModified === "feedback" && ebookSaved.length > 0) ||
+                      (postModified === "resenha" && styleCardActive)
                         ? "bg-wine cursor-pointer"
                         : "bg-wine/70 text-white/60"
                     }`}
                     disabled={
-                      (!styleCardActive && valuePostsCitation) ||
-                      (postModified === null && !styleCardActive)
+                      (!styleCardActive &&
+                        valuePostsCitation &&
+                        ebookSaved.length > 0) ||
+                      (postModified === "feedback" &&
+                        !styleCardActive &&
+                        ebookSaved.length > 0)
                     }
                     onClick={() => {
                       setPostCitation((prev) => !prev);
-                      setContainerModified((prev) => !prev);
+                      setContainerModified(true);
+                      setDisabledCardActive(true);
+                      setStyleButton("quotation");
+                      setStyleCardActive(ebookSaved[0]);
                     }}
                   >
                     Publicar

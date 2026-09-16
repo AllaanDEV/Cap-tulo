@@ -11,9 +11,11 @@ export function EbookProgress({ book }) {
     setProgressEbook,
     styleCardActive,
     setStyleCardActive,
+    disabledCardActive,
+    publications,
   } = useContext(AppContext);
 
-  const {user } = useRequisicoes({});
+  const { user } = useRequisicoes({});
 
   const location = useLocation();
 
@@ -22,20 +24,21 @@ export function EbookProgress({ book }) {
   const [progress, setProgress] = useState();
 
   useEffect(() => {
-    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    // const randomNumber = Math.floor(Math.random() * 100) + 1;
 
-    setProgress(randomNumber);
+    // setProgress(randomNumber);
 
     // Estado compartilhado pelo Context
-    setProgressEbook((prev) => [...prev, randomNumber]);
+    setProgressEbook((prev) => [book?.progress, ...prev]);
   }, []);
 
-  console.log("text",     styleCardActive)
+  // const validationStyle= publications?.find((publication) => publication.postModified.ebook.ebook.volumeInfo.title === book.ebook.volumeInfo.title)
+
   return (
     <ContainerEbooks
       styleActive={
         styleCardActive?.ebook.volumeInfo.title ==
-          book?.ebook.volumeInfo.title && locationPatch
+          book?.ebook.volumeInfo.title && locationPatch 
           ? "bg-wine/20 border-wine"
           : null
       }
@@ -59,14 +62,14 @@ export function EbookProgress({ book }) {
       <div className="flex flex-col gap-1 mt-auto">
         <div className="flex justify-between">
           <span className="text-xs text-black/70">Progresso</span>
-          <span className="text-xs text-wine">{progress}%</span>
+          <span className="text-xs text-wine">{book?.progress}%</span>
         </div>
         <div className="w-full rounded-2xl bg-gray/30">
           <div
             className="w-full py-1 bg-wine rounded-2xl"
             style={{
-              width: `${progress === 100 ? "100" : progress}%`,
-              backgroundColor: `${progress === 100 ? "green" : progress < 100 ? "var(--color-wine: #722F37)" : null}`,
+              width: `${book?.progress === 100 ? "100" : book?.progress}%`,
+              backgroundColor: `${book?.progress === 100 ? "green" : progress < 100 ? "var(--color-wine: #722F37)" : null}`,
             }}
           ></div>
         </div>

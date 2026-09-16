@@ -1,4 +1,4 @@
-export function quotation() {
+export function quotation({ color = "var(--color-wine)" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +6,7 @@ export function quotation() {
       height="18"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--color-wine)"
+      stroke={color}
       stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -20,15 +20,15 @@ export function quotation() {
   );
 }
 
-export const Star = ({ size, fill, onClick }) => {
+export const Star = ({ size, fill, onClick, color = "var(--color-star)"}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill={fill ? "var(--color-star)" : "none"}
-      stroke="var(--color-star)"
+      fill={fill ? color : "none"}
+      stroke={color}
       stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -43,7 +43,7 @@ export const Star = ({ size, fill, onClick }) => {
   );
 };
 
-export const ebook = () => {
+export const ebook = ({color = "var(--color-ebook)"}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ export const ebook = () => {
       height="18"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="var(--color-ebook)"
+      stroke={color}
       stroke-width="1.8"
       stroke-linecap="round"
       stroke-linejoin="round"

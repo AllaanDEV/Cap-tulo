@@ -66,12 +66,13 @@ export function TipTapEditor() {
         ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
 
-  const canPost =
+  const canPost = Boolean(
     hasText ||
     imgIdUrl?.length > 0 ||
     gifData ||
     valuePostCitation ||
-    containerModified;
+    containerModified,
+  );
 
   const typeResenha = () => {
     console.log("postModified:", postModified);
@@ -221,9 +222,10 @@ export function TipTapEditor() {
           className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"}`}
           disabled={!canPost}
           onClick={() => {
-            (newPost(typePost),
+            (newPost(),
+              editor.commands.clearContent(),
               setValuePostCitation(),
-              setContainerModified((prev) => !prev));
+              setContainerModified(false));
           }}
         >
           Postar
@@ -270,14 +272,14 @@ export function TipTapEditor() {
         />
       )}
 
-      {containerModified && postModified === false ? (
+      {containerModified && postModified === "citation" ? (
         <EbookCitation
           className="mt-5"
           text={valuePostsCitation}
           title={styleCardActive?.ebook.volumeInfo.title}
           authors={styleCardActive?.ebook.volumeInfo.authors}
         ></EbookCitation>
-      ) : containerModified && postModified === null ? (
+      ) : containerModified && postModified === "feedback" ? (
         <ContainerEbooks
           title={styleCardActive.ebook.volumeInfo.title}
           subtitle={styleCardActive.ebook.volumeInfo.subtitle}
@@ -286,7 +288,7 @@ export function TipTapEditor() {
         ></ContainerEbooks>
       ) : (
         containerModified &&
-        postModified === true && (
+        postModified === "resenha" && (
           <EbookProgress book={typeResenha()}></EbookProgress>
         )
       )}

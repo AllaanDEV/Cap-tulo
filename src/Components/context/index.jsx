@@ -109,8 +109,10 @@ export function Context({ children }) {
   const [postModified, setPostModified] = useState();
   const [containerModified, setContainerModified] = useState(false);
 
-  const [starFilled, setStarFilled] = useState(stars[0]);
+  const [starFilled, setStarFilled] = useState(0);
   const [postCitation, setPostCitation] = useState(false);
+
+  const [disabledCardActive, setDisabledCardActive]= useState(false)
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -159,12 +161,13 @@ export function Context({ children }) {
     }
   };
 
-  const typePost =
-    postModified === null
-      ? "feedback"
-      : postModified === false
-        ? "citation"
-        : postModified === true && "resenha";
+  // const typePost =
+  //   postModified === null
+  //     ? "feedback"
+  //     : postModified === false
+  //       ? "citation"
+  //       : postModified === true && "resenha";
+
 
   return (
     <AppContext.Provider
@@ -237,7 +240,7 @@ export function Context({ children }) {
         stars,
         postCitation,
         setPostCitation,
-        typePost,
+   disabledCardActive, setDisabledCardActive
       }}
     >
       {children}
