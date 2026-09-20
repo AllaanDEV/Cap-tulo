@@ -1,7 +1,6 @@
-import { useContext,} from "react";
+import { useContext } from "react";
 import { Post } from "./post";
 import AppContext from "../context";
-
 
 // const post = [
 //   {
@@ -44,21 +43,19 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
-
-
-  const { publication,search} =
-    useContext(AppContext);
-
+  const { publication, search } = useContext(AppContext);
 
   return (
     <ul className="flex flex-col gap-5">
-      {(!search ? publication : search).map((p) => {
-        return (
-          <li key={p.id}>
-            <Post post={p}></Post>
-          </li>
-        );
-      })}
+      {Array.isArray(search) ||
+        (Array.isArray(publication) &&
+          (!search ? publication : search).map((p) => {
+            return (
+              <li key={p.id}>
+                <Post post={p}></Post>
+              </li>
+            );
+          }))}
     </ul>
   );
 }

@@ -109,6 +109,19 @@ export const Post = memo(function Post({ post }) {
   // };
 
   console.log("TYPE", post);
+
+    useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`/api/imojis`);
+      const res = await response.json();
+
+      // setEbooks((prev) => [...prev, ...(res ?? [])]);
+      console.log("MOJI", res);
+      // return setImojis(res);
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <Div className="w-max-[50vw]">
@@ -150,9 +163,12 @@ export const Post = memo(function Post({ post }) {
             </details>
           </div>
 
-          <p className="text">{post.content}</p>
+          <p
+            dangerouslySetInnerHTML={{ __html: post.content }}
+            className="text"
+          />
 
-          {post.midia !== "listNull"  && (
+          {post.midia !== "listNull" && (
             <Info className="rounded-xs">
               {post?.midia?.type === "gif" ? (
                 <img

@@ -7,25 +7,34 @@ import { SubHeader } from "./ComponentesFeed/subHeader";
 import { Dialog } from "./ComponentesFeed/dialog";
 import { DialogComments } from "./ComponentesFeed/dialogComments";
 import { Buttons } from "./ComponentesFeed/buttons";
-
-
 export function Feed() {
-
   return (
     <>
-      <main className="flex pt-7 lg:gap-4">
-        <section className="w-50 hidden lg:block px-5">
-          <SideBar></SideBar>
-        </section>
-        <Dialog></Dialog>
-        <section className="mx-auto w-max-[60vw]">
-          <Container className="lg:min-w-[50vw] mt-12.5 w-[90vw] sm:max-w-[70vw] lg:max-w-[50vw]">
-            <Buttons></Buttons>
-            <SubHeader></SubHeader>
-            <ArrayPost></ArrayPost>
-          </Container>
-        </section>
-        <DialogComments></DialogComments>
+      <main className="pt-7 min-h-screen">
+        <div className="flex justify-center max-w-7xl mx-auto px-4 lg:gap-10">
+          <aside className="hidden lg:block w-80 shrink-0">
+            <div className="sticky top-20">
+              <SideBar />
+            </div>
+          </aside>
+
+          <section className="w-[42vw] shrink-0 mx-auto">
+            <Container className="mt-12.5 w-full">
+              <Buttons />
+              <SubHeader />
+              <ArrayPost />
+            </Container>
+          </section>
+
+          <aside className="hidden xl:block w-80 shrink-0">
+            <div className="sticky top-20">
+              <SideBar />
+            </div>
+          </aside>
+        </div>
+
+        <Dialog />
+        <DialogComments />
       </main>
     </>
   );

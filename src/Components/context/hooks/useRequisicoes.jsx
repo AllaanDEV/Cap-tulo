@@ -27,6 +27,8 @@ export function useRequisicoes({ post, like, setLike }) {
     setValuePostCitation,
     setStyleCardActive,
     setPostModified,
+    contentHtml,
+    setContentHtml,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -242,7 +244,7 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const newPost = async (typePost) => {
+  const newPost = async () => {
     // const formData = new FormData(e.target);
 
     // if (hasText ) {
@@ -256,7 +258,7 @@ export function useRequisicoes({ post, like, setLike }) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        content: hasText || null,
+        content: contentHtml || null,
         postModified: {
           content: valuePostsCitation || null,
           ebook: styleCardActive || null,
@@ -281,13 +283,14 @@ export function useRequisicoes({ post, like, setLike }) {
         setPostModified();
         setStyleCardActive();
         setValuePostCitation();
+        setContentHtml();
 
         return setPublication(posts);
       }),
     );
   };
 
-    const stylePatchFeed = location.pathname === `/feed/${user.id}`;
+  const stylePatchFeed = location.pathname === `/feed/${user.id}`;
   const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
   return {
@@ -308,6 +311,8 @@ export function useRequisicoes({ post, like, setLike }) {
     likesGet,
     allFollowers,
     newPost,
-    getBookSave, stylePatchFeed, stylePatchProfile
+    getBookSave,
+    stylePatchFeed,
+    stylePatchProfile,
   };
 }
