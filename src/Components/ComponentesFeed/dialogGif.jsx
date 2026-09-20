@@ -5,7 +5,7 @@ import { Lines } from "../ComponentsForm/lines";
 
 import searchIcon from "../../assets/svgIcons/search-line.svg";
 
-export function DialogGif({}) {
+export function DialogGif({className}) {
   const gifRef = useRef(null);
   const inputRef = useRef(null);
   const { dialogGif, setDialogGif, setGifData } = useContext(AppContext);
@@ -106,7 +106,9 @@ export function DialogGif({}) {
     <dialog
       ref={gifRef}
       onCancel={() => setDialogGif((prev) => !prev)}
-      className=" absolute w-full h-[80vh] sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden"
+      className={`absolute w-full h-[80vh] 
+
+        sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden ${className}`}
     >
       <div className="h-full overflow-y-auto scrollbar-none">
         <div className="flex items center justify-between p-3">

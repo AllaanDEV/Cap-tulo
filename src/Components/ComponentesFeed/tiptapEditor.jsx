@@ -38,6 +38,8 @@ export function TipTapEditor() {
     postCitation,
     typePost,
     ebookSaved,
+    contentEmoji,
+    setContentHtml,
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -161,8 +163,13 @@ export function TipTapEditor() {
     content: "",
     onUpdate: ({ editor }) => {
       setHasText(editor.getText().trim());
+      setContentHtml(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    editor.commands.setContent(contentEmoji);
+  }, [contentEmoji]);
 
   console.log("LA PROVA REAL", gifData);
   return (

@@ -13,7 +13,7 @@ import { gallery } from "../svgCode";
 import { Div } from "./div";
 
 // import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { TipTapEditor } from "./tiptapEditor";
 import AppContext from "../context";
 import { ContainerButtons } from "./containerButtons";
@@ -24,6 +24,7 @@ import { DialogGif } from "./dialogGif";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { ArrayStars } from "./arrayStars";
+import { DialogImoji } from "./dialogImoji";
 const Ebook = ebook;
 
 // const navigation = [
@@ -46,6 +47,8 @@ const buttons = [
 ];
 
 export function SubHeader() {
+  const emojiContainerRef = useRef(null);
+  const groupRefs = useRef({});
   const { id: profileId } = useParams();
   // const location = useLocation();
 
@@ -70,6 +73,8 @@ export function SubHeader() {
     ebookSaved,
     setStyleCardActive,
     publication,
+    setDialogImoji,
+    dialogImoji,
   } = useContext(AppContext);
 
   const { getBookSave, user, newPost, stylePatchFeed, stylePatchProfile } =
@@ -81,6 +86,8 @@ export function SubHeader() {
       setPostModified("citation");
     } else if (index === 1) {
       setDialogGif((prev) => !prev);
+    } else if (index === 2) {
+      setDialogImoji((prev) => !prev);
     }
   };
 
@@ -148,6 +155,27 @@ export function SubHeader() {
 
                         <span className="hidden sm:block">{p.name}</span>
                       </label>
+                    );
+                  } else if (index === 2) {
+                    return (
+                      <div key={index} className="relative">
+                        <button
+                          onClick={() => citationOpen(index)}
+                          className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"
+                        >
+                          <Icon size={p.size} />
+                          <span className="hidden sm:block">{p.name}</span>
+                        </button>
+
+                        {dialogImoji && (
+                          <div
+                            ref={emojiContainerRef}
+                            className="absolute top-full right-0 z-50 mt-2 bg-white overflow-y-scroll  h-80 border border-border rounded-lg scrollbar-thin scrollbar-thumb-wine/80 "
+                          >
+                            <DialogImoji emojiContainerRef={emojiContainerRef}/>
+                          </div>
+                        )}
+                      </div>
                     );
                   }
                   return (
