@@ -47,15 +47,13 @@ export function ArrayPost() {
 
   return (
     <ul className="flex flex-col gap-5">
-      {Array.isArray(search) ||
-        (Array.isArray(publication) &&
-          (!search ? publication : search).map((p) => {
-            return (
-              <li key={p.id}>
-                <Post post={p}></Post>
-              </li>
-            );
-          }))}
+      {(!search ? publication : search).map((p) => {
+        return (
+          <li key={p.id}>
+            <Post post={p}></Post>
+          </li>
+        );
+      })}
     </ul>
   );
 }

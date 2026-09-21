@@ -57,6 +57,7 @@ export function  ContainerEbooks({
   console.log("conatiner", containerModified);
 
   const postsFeedbacks = publication.find((p) => p.type === "feedback");
+  
   return (
     <div
       className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${(containerModified === true || location.pathname === `/perfil/`) && location.pathname === `/feed/${user.id}` ? "" : "hover:-translate-y-1 hover:shadow-lg"} group relative ${styleActive} ${className}`}

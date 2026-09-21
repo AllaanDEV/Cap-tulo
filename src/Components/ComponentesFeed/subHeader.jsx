@@ -95,9 +95,9 @@ export function SubHeader() {
     getBookSave(profileId);
   }, []);
 
-  useEffect(() => {
-    setStyleCardActive(ebookSaved[0]);
-  }, [ebookSaved, postCitation]);
+  // useEffect(() => {
+  //   setStyleCardActive(ebookSaved[0]);
+  // }, [ebookSaved, postCitation]);
 
   const modified = (index) => {
     if (index === 1) {
@@ -118,7 +118,8 @@ export function SubHeader() {
 
   const [styleButton, setStyleButton] = useState("quotation");
 
-  console.log("DKKDKD", postCitation);
+  console.log("DKKDKD", styleCardActive);
+
 
   return (
     <>
@@ -331,12 +332,14 @@ export function SubHeader() {
                         !styleCardActive &&
                         ebookSaved.length > 0)
                     }
+//                    | botao de fechar o container com o card escolhido 
+                    //v
                     onClick={() => {
                       setPostCitation((prev) => !prev);
                       setContainerModified(true);
                       setDisabledCardActive(true);
                       setStyleButton("quotation");
-                      setStyleCardActive(ebookSaved[0]);
+                      // setStyleCardActive(ebookSaved[0]);
                     }}
                   >
                     Publicar

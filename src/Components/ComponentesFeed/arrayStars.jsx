@@ -4,6 +4,7 @@ import AppContext from "../context";
 export function ArrayStars({ onClick, starsNumber }) {
   const { stars, starFilled } = useContext(AppContext);
 
+  console.log("NOTA", starFilled)
   return (
     <div className="flex gap-1">
       {stars.map((Star, index) => {

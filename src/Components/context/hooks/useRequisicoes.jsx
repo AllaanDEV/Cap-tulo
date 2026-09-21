@@ -29,6 +29,7 @@ export function useRequisicoes({ post, like, setLike }) {
     setPostModified,
     contentHtml,
     setContentHtml,
+    setFeedbacksArray,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -251,6 +252,8 @@ export function useRequisicoes({ post, like, setLike }) {
     //   return;
     // }
 
+console.log("prova REALMENTE", styleCardActive )
+
     fetch("http://localhost:3000/api/posts", {
       method: "POST",
       headers: {
@@ -293,6 +296,14 @@ export function useRequisicoes({ post, like, setLike }) {
   const stylePatchFeed = location.pathname === `/feed/${user.id}`;
   const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
+  const arrayFeedbacksEbooks = async () => {
+    const response = await fetch("http://localhost:5173/api/books/feedbacks");
+
+    const data = await response.json();
+
+    return setFeedbacksArray(data);
+  };
+
   return {
     token,
     postDelete,
@@ -313,6 +324,6 @@ export function useRequisicoes({ post, like, setLike }) {
     newPost,
     getBookSave,
     stylePatchFeed,
-    stylePatchProfile,
+    stylePatchProfile, arrayFeedbacksEbooks
   };
 }

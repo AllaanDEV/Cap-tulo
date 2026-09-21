@@ -5,7 +5,7 @@ import { Info } from "./info";
 
 import { house } from "../svgCode";
 import { compass } from "../svgCode";
-import { book, logout, group, save, spiral } from "../svgCode";
+import { book, logout, Group, save, spiral } from "../svgCode";
 import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
@@ -25,7 +25,7 @@ const options = [
   { icon: house, name: "Feed" },
   { icon: compass, name: "Explorar" },
   { icon: book, name: "Minha estante" },
-  { icon: group, name: "Seguindo" },
+  { icon: Group, name: "Seguindo" },
   { icon: save, name: "Quero ler" },
   { icon: logout, name: "sair" },
 ];

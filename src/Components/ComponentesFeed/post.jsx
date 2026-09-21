@@ -30,6 +30,7 @@ export const Post = memo(function Post({ post }) {
 
   const { setPostId, editValue, styleCardActive, ebookSaved } =
     useContext(AppContext);
+
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
   const [liking, setLiking] = useState(false);
@@ -46,6 +47,7 @@ export const Post = memo(function Post({ post }) {
     fetchProfile,
     likesGet,
     valuePostsCitation,
+    arrayFeedbacksEbooks,
   } = useRequisicoes({
     post,
     like,
@@ -97,20 +99,7 @@ export const Post = memo(function Post({ post }) {
     setLiked(likes?.validation ?? false);
   }, [like, post.id, user.id]);
 
-  console.log("IDAGI", post);
-
-  // const typeResenha = () => {
-  //   if (post.type !== "resenha") return null;
-
-  //   const cardResenha = ebookSaved.find(
-  //     (e) => e.ebook.volumeInfo.title === post.postModified.title,
-  //   );
-  //   return cardResenha;
-  // };
-
-  console.log("TYPE", post);
-
-    useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const response = await fetch(`/api/imojis`);
       const res = await response.json();
@@ -122,6 +111,18 @@ export const Post = memo(function Post({ post }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (post.type === "feedback") {
+      arrayFeedbacksEbooks();
+    }
+  }, [post.type]);
+
+  // if(post.type === "feedback"){
+  //   console.log("deu bidode")
+  // arrayFeedbacksEbooks()
+  // }
+
+  console.log("post", post);
   return (
     <>
       <Div className="w-max-[50vw]">

@@ -7,6 +7,8 @@ import { SubHeader } from "./ComponentesFeed/subHeader";
 import { Dialog } from "./ComponentesFeed/dialog";
 import { DialogComments } from "./ComponentesFeed/dialogComments";
 import { Buttons } from "./ComponentesFeed/buttons";
+import { TrendingSideBar } from "./ComponentesFeed/trendingSidebar";
+import { SearchUsersSidebar } from "./ComponentesFeed/searchUsersSidebar";
 export function Feed() {
   return (
     <>
@@ -28,7 +30,12 @@ export function Feed() {
 
           <aside className="hidden xl:block w-80 shrink-0">
             <div className="sticky top-20">
-              <SideBar />
+              <div>
+                <TrendingSideBar></TrendingSideBar>
+                <SearchUsersSidebar></SearchUsersSidebar>
+              </div>
+
+              {/* <SideBar /> */}
             </div>
           </aside>
         </div>

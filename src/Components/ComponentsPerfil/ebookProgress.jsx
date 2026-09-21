@@ -46,7 +46,7 @@ export function EbookProgress({ book }) {
         locationPatch
           ? styleCardActive?.ebook.volumeInfo.title ==
             book?.ebook.volumeInfo.title
-            ? setStyleCardActive(null)
+            ? setStyleCardActive()
             : setStyleCardActive(book)
           : null
       }
