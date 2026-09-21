@@ -120,6 +120,8 @@ export function Context({ children }) {
 
 const [contentEmoji, setContentEmoji]=useState()
 
+const [feedbacksArray, setFeedbacksArray]=useState()
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -251,7 +253,7 @@ const [contentEmoji, setContentEmoji]=useState()
         setContentHtml,
         dialogImoji,
         setDialogImoji,
- contentEmoji, setContentEmoji
+ contentEmoji, setContentEmoji, feedbacksArray, setFeedbacksArray
       }}
     >
       {children}

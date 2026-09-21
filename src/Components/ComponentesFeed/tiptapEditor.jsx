@@ -171,7 +171,7 @@ export function TipTapEditor() {
     editor.commands.setContent(contentEmoji);
   }, [contentEmoji]);
 
-  console.log("LA PROVA REAL", gifData);
+  console.log("LA PROVA REAL", styleCardActive);
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
@@ -296,7 +296,7 @@ export function TipTapEditor() {
       ) : (
         containerModified &&
         postModified === "resenha" && (
-          <EbookProgress book={typeResenha()}></EbookProgress>
+          <EbookProgress book={() => typeResenha()}></EbookProgress>
         )
       )}
     </div>

@@ -1,0 +1,91 @@
+import { useContext, useEffect } from "react";
+import { Trending } from "../svgCode";
+import { Div } from "./div";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import AppContext from "../context";
+import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
+import { Star } from "../svgCode";
+
+export function TrendingSideBar() {
+  const { arrayFeedbacksEbooks } = useRequisicoes({});
+  const { feedbacksArray } = useContext(AppContext);
+
+  useEffect(() => {
+    arrayFeedbacksEbooks();
+  }, []);
+
+  const ebooksFeedbacksObj = (feedbacksArray || []).reduce((acc, item) => {
+    const key = item.ebook?.ebook?.id || item.ebook?.ebook?.volumeInfo?.title;
+
+    if (!key) return acc;
+
+    if (!acc[key]) {
+      acc[key] = {
+        data: item,
+        number: 0,
+        totalStars: 0,
+        average: 0,
+      };
+    }
+
+    acc[key].number += 1;
+    acc[key].totalStars += item.stars || 0;
+    acc[key].average = acc[key].totalStars / acc[key].number;
+
+    return acc;
+  }, {});
+
+  const ebooksFeedbacks = Object.values(ebooksFeedbacksObj || {});
+  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average);
+
+  return (
+    <Div>
+      <div className="flex gap-2 items-center">
+        <Trending></Trending>
+        <p className="text-wine font-fraunce text-xl">Em alta esta semana</p>
+      </div>
+      <ul>
+        {(order || []).map((ebook, index) => {
+          return (
+            <li className="flex gap-2 items-center mt-2 w-full">
+              <div className="flex gap-2 items-center">
+                <span className="text-2xl font-extralight text-gray/70 w-4">
+                  {index + 1}
+                </span>
+                <div className="w-fit rounded-lg aspect-[3/4]">
+                  <img
+                    src={
+                      ebook.data.ebook.ebook.volumeInfo.imageLinks?.thumbnail
+                    }
+                    alt={ebook.data.ebook.ebook.volumeInfo.title}
+                    className="rounded-lg h-20 w-20"
+                  ></img>
+                </div>
+              </div>
+
+              <div className={`flex flex-col gap-5  w-[100%]`}>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm">
+                    {ebook.data.ebook.ebook.volumeInfo.title}
+                  </span>
+                  {ebook.data.ebook.ebook.volumeInfo.subtitle && (
+                    <span className="text-xs text-black/70">
+                      {ebook.data.ebook.ebook.volumeInfo.subtitle}
+                    </span>
+                  )}
+
+                  <div className="flex gap-1 items-center">
+                    <Star fill={true} size={13}></Star>
+                    <span className="text-xs text-gray">
+                      {ebook.average.toFixed(1)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </Div>
+  );
+}
