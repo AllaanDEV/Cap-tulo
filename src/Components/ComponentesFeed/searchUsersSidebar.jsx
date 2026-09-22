@@ -1,24 +1,64 @@
 import { Div } from "./div";
 import { Group, Search } from "../svgCode";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Lines } from "../ComponentsForm/lines";
+import { useParams } from "react-router";
+import { UsersInfo } from "./usersInfo";
+import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
+import AppContext from "../context";
 
 export function SearchUsersSidebar() {
-  const [usersList, setUsersList] = useState([]);
-  const { nameIcon, photoValueFeed, user } = useRequisicoes({});
+  const { usersList, setUsersList, filterUsers, setFilterUsers } =
+    useContext(AppContext);
+  const { nameIcon, photoValueFeed, user, fetchProfile, userUP } =
+    useRequisicoes({});
+
+  const { id: paramsId } = useParams();
 
   useEffect(() => {
-    const userUP = async () => {
-      const response = await fetch(`http://localhost:3000/updateUser`);
-      const data = await response.json();
-      setUsersList(data);
-    };
-
+    fetchProfile();
     userUP();
   }, []);
+
+  const alphabeticalOrder = [...usersList].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+
+  const handleFilterUsers = (e) => {
+    const searchValue = String(e.target.value ?? "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+
+    if (!searchValue) {
+      setFilterUsers(alphabeticalOrder);
+      return;
+    }
+
+    const filteredUsers = alphabeticalOrder.filter((filteredUser) => {
+      const padrao = (text) =>
+        String(text ?? "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+
+      return (
+        padrao(filteredUser.name).includes(searchValue) ||
+        padrao(filteredUser.userName).includes(searchValue)
+      );
+    });
+
+    setFilterUsers(filteredUsers);
+  };
+
+  const usersVisible = filterUsers.filter(
+    (users) => users.id !== user.id && users.id !== paramsId,
+  );
 
   return (
     <Div>
@@ -31,41 +71,33 @@ export function SearchUsersSidebar() {
           <div className="relative top-2.5 left-2">
             <Search></Search>
           </div>
-          <input className=" w-full h-full py-2 px-3 outline-none"></input>
+          <input
+            className="w-full h-full py-2 px-3 outline-none"
+            onInput={handleFilterUsers}
+          />
         </label>
-
-        <ul className="mt-2">
-          {(usersList || []).map((users) => {
-            const photo = (photoValueFeed ? photoValueFeed : []).find(
-              (photo) => photo.userId == user.id || photo.userId == users.id,
-            );
-
-            return (
-              <li className="flex justify-between items-center ">
-                <div className="flex gap-2 items-center w-full">
-                  <PerfilIcon to={`/perfil/${users.id}`}>
-                    {photo?.midiaIcon ? (
-                      <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-                    ) : (
-                      <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                        {nameIcon(users.name)}
-                      </p>
-                    )}
-                  </PerfilIcon>
-
-                  <div className="flex flex-col">
-                    <span>{users.name}</span>
-                    <span className="text-xs text-gray">@{users.userName}</span>
-                  </div>
-                </div>
-
-                <button className="px-2 py-1 border border-wine rounded-2xl text-wine text-sm hover:bg-wine hover:text-white hover:cursor-pointer">
-                  Seguir
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        {usersVisible.length > 0 ? (
+          <ul className="mt-2 flex flex-col gap-2">
+            {usersVisible.map((users) => {
+              return (
+                <li
+                  className="flex justify-between items-center"
+                  key={users.id}
+                >
+                  <UsersInfo users={users}></UsersInfo>
+                  <ButtonFlow
+                    users={users.id}
+                    className="text-sm border border-gray  py-1 px-2 rounded-full"
+                  ></ButtonFlow>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <span className="text-black/80 flex justify-center items-center">
+            Cri cri cri... 🦗🦗
+          </span>
+        )}
       </section>
     </Div>
   );

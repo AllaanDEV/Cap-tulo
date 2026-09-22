@@ -14,6 +14,7 @@ import { ArrayBookSaved } from "./arrayBookSaved";
 import { ArrayPosts } from "./arrayPosts";
 import { useLocation, useParams } from "react-router";
 import { ImgPerfil } from "./imgPerfil";
+import { ButtonFlow } from "./buttonFlow";
 
 const Pencil = pencil;
 
@@ -36,16 +37,18 @@ const buttons = [
   { name: "Sobre" },
 ];
 
-export function Icon() {
+export function Icon({ state }) {
   const theme = useRef(null);
 
   const location = useLocation();
-  const post = location.state;
+
+  const profile = location.state?.profile;
+
   const { id: profileId } = useParams();
 
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
-  // const [following, setFollowing] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   const {
     nameIcon,
@@ -218,27 +221,27 @@ export function Icon() {
       ? "coloque uma descrição sobre você!"
       : null;
 
-  const followersPost = async () => {
-    const response = await fetch(
-      `http://localhost:3000/user/followers/${profileId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user: user.name,
-          userId: user.id,
-        }),
-      },
-    );
+  // const followersPost = async () => {
+  //   const response = await fetch(
+  //     `http://localhost:3000/user/followers/${profileId}`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         user: user.name,
+  //         userId: user.id,
+  //       }),
+  //     },
+  //   );
 
-    if (response.ok) {
-      // userUP();
-      allFollowers();
-    }
-  };
+  //   if (response.ok) {
+  //     // userUP();
+  //     allFollowers();
+  //   }
+  // };
 
   // const userUP = async () => {
   //   const response = await fetch(`http://localhost:3000/updateUser`);
@@ -257,7 +260,7 @@ export function Icon() {
   const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
   const seguindo = followers.filter(
-    (f) => f.userId === (post?.authorId ?? user.id),
+    (f) => f.userId === (profile?.authorId || profile?.id || user.id),
   );
 
   return (
@@ -299,7 +302,10 @@ export function Icon() {
           ) : (
             <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
               {nameIcon(
-                editValue.dataPerfil?.name || post?.author || user.name,
+                editValue.dataPerfil?.name ||
+                  profile?.author ||
+                  profile?.name ||
+                  user.name,
               )}
             </span>
           )}
@@ -319,19 +325,24 @@ export function Icon() {
           )}
           {profileId === user.id ? null : (
             <ContainerTags className="bg-wine text-white">
-              <button onClick={followersPost}>
-                {validationFollowers ? "Deixar de seguir" : "Seguir"}
-              </button>
+              <ButtonFlow profileId ={profileId }></ButtonFlow>
             </ContainerTags>
           )}
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl">
-              {editValue.dataPerfil?.name || post?.author || user.name}
+              {editValue.dataPerfil?.name ||
+                profile?.author ||
+                profile?.name ||
+                user.name}
             </h1>
             <span className="text-xs">
-              @{editValue.dataPerfil?.username || post?.author || user.userName}
+              @
+              {editValue.dataPerfil?.username ||
+                profile?.author ||
+                profile?.name ||
+                user.userName}
             </span>
           </div>
           <p>{editValue?.dataPerfil?.bios || bioNull}</p>
@@ -372,7 +383,7 @@ export function Icon() {
         </div>
 
         <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
-          <ArrayTable post={post}></ArrayTable>
+          <ArrayTable profile={profile}></ArrayTable>
         </div>
 
         <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
@@ -400,7 +411,7 @@ export function Icon() {
 
         {feedfilter === null || feedfilter !== false ? (
           <Div>
-            <ArrayBookSaved post={post}></ArrayBookSaved>
+            <ArrayBookSaved profile={profile}></ArrayBookSaved>
           </Div>
         ) : null}
 

@@ -5,7 +5,7 @@ import { ebook, compass, Active } from "../svgCode";
 import { Link, useLocation } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-export function ArrayBookSaved({ post }) {
+export function ArrayBookSaved({ profile }) {
   const location = useLocation();
   const { ebookSaved, setStyleCardActive } = useContext(AppContext);
   const { stylePatchFeed, stylePatchProfile,  getBookSave } = useRequisicoes({});
@@ -48,7 +48,7 @@ export function ArrayBookSaved({ post }) {
               </Link>
             </>
           ) : (
-            <span>{`${post?.author} não tem livro salvo 😭`}</span>
+            <span>{`${profile?.author || profile?.name} não tem livro salvo 😭`}</span>
           )}
         </div>
       ) : (

@@ -30,6 +30,8 @@ export function useRequisicoes({ post, like, setLike }) {
     contentHtml,
     setContentHtml,
     setFeedbacksArray,
+    setUsersList,
+    setFilterUsers,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -204,12 +206,18 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const allFollowers = async () => {
+  const allFollowers = async (feed) => {
     console.log("VASCO");
-    const response = await fetch("http://localhost:3000/allFollowers");
+    const response = await fetch(`http://localhost:3000/allFollowers`);
     const data = await response.json();
-    setFollowers(data);
     console.log("ALLflow", data);
+
+    if (feed) {
+      const userIdLogin = data.find((u) => u.following === user.id);
+      return followersPost(userIdLogin?.userId);
+    }
+
+    return setFollowers(data);
   };
 
   //   const seguindo = followers.filter(
@@ -246,14 +254,6 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const newPost = async () => {
-    // const formData = new FormData(e.target);
-
-    // if (hasText ) {
-    //   return;
-    // }
-
-console.log("prova REALMENTE", styleCardActive )
-
     fetch("http://localhost:3000/api/posts", {
       method: "POST",
       headers: {
@@ -304,6 +304,35 @@ console.log("prova REALMENTE", styleCardActive )
     return setFeedbacksArray(data);
   };
 
+  const followersPost = async (profileId) => {
+    const response = await fetch(
+      `http://localhost:3000/user/followers/${profileId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: user.name,
+          userId: user.id,
+        }),
+      },
+    );
+
+    if (response.ok) {
+      // userUP();
+      allFollowers();
+    }
+  };
+
+  const userUP = async () => {
+    const response = await fetch(`http://localhost:3000/updateUser`);
+    const data = await response.json();
+    setUsersList(data);
+    setFilterUsers(data);
+  };
+
   return {
     token,
     postDelete,
@@ -324,6 +353,9 @@ console.log("prova REALMENTE", styleCardActive )
     newPost,
     getBookSave,
     stylePatchFeed,
-    stylePatchProfile, arrayFeedbacksEbooks
+    stylePatchProfile,
+    arrayFeedbacksEbooks,
+    followersPost,
+    userUP,
   };
 }
