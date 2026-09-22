@@ -21,6 +21,7 @@ import { useParams } from "react-router";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
+import { UsersInfo } from "./usersInfo";
 
 const Save = save;
 const Icon = configuration;
@@ -28,7 +29,7 @@ const Icon = configuration;
 export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
 
-  const { setPostId, editValue, styleCardActive, ebookSaved } =
+  const { setPostId, editValue, styleCardActive, ebookSaved, followers } =
     useContext(AppContext);
 
   const [like, setLike] = useState([]);
@@ -87,9 +88,9 @@ export const Post = memo(function Post({ post }) {
     }
   };
 
-  const photo = (photoValueFeed ? photoValueFeed : []).find(
-    (photo) => photo.userId == post.authorId,
-  );
+  // const photo = (photoValueFeed ? photoValueFeed : []).find(
+  //   (photo) => photo.userId == post.authorId,
+  // );
 
   useEffect(() => {
     const likes = like?.find(
@@ -100,56 +101,17 @@ export const Post = memo(function Post({ post }) {
   }, [like, post.id, user.id]);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(`/api/imojis`);
-      const res = await response.json();
-
-      // setEbooks((prev) => [...prev, ...(res ?? [])]);
-      console.log("MOJI", res);
-      // return setImojis(res);
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     if (post.type === "feedback") {
       arrayFeedbacksEbooks();
     }
   }, [post.type]);
 
-  // if(post.type === "feedback"){
-  //   console.log("deu bidode")
-  // arrayFeedbacksEbooks()
-  // }
-
-  console.log("post", post);
   return (
     <>
       <Div className="w-max-[50vw]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
-            <div className="flex gap-3 items-center justify-center">
-              <PerfilIcon to={`/perfil/${post.authorId}`} state={post}>
-                {photo?.midiaIcon ? (
-                  <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-                ) : (
-                  <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                    {nameIcon(post.author)}
-                  </p>
-                )}
-              </PerfilIcon>
-              <div>
-                <span>{post.author}</span>
-                {post?.midia && (
-                  <div className="flex gap-3 items-center">
-                    {/* <span className="text-gray">resenhou</span> */}
-                    {/* <span className="text-wine">{post.midia}</span> */}
-                  </div>
-                )}
-                <p className="text-gray text-xs">@{post.userName}</p>
-              </div>
-            </div>
-
+            <UsersInfo post={post}></UsersInfo>
             <details className="flex flex-col items-end relative">
               <summary className="list-none marker:hidden">
                 <Icon></Icon>

@@ -30,7 +30,7 @@ export function Feed() {
 
           <aside className="hidden xl:block w-80 shrink-0">
             <div className="sticky top-20">
-              <div>
+              <div className="h-screen mt-13 ">
                 <TrendingSideBar></TrendingSideBar>
                 <SearchUsersSidebar></SearchUsersSidebar>
               </div>

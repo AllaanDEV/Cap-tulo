@@ -31,12 +31,14 @@ const options = [
 ];
 
 export function SideBar() {
-  const { nameIcon, user, fetchProfile, photoValueFeed, allFollowers } = useRequisicoes({});
-  const { setEbookSaved, setEditValue, read, followers} = useContext(AppContext);
+  const { nameIcon, user, fetchProfile, photoValueFeed, allFollowers } =
+    useRequisicoes({});
+  const { setEbookSaved, setEditValue, read, followers } =
+    useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
-    allFollowers()
+    allFollowers();
   }, []);
 
   const [option, setOption] = useState("Feed");
@@ -57,16 +59,14 @@ export function SideBar() {
       navigate("/ebooks");
     }
   };
+
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
 
+  const seguindoProfileId = followers.filter((f) => f.following === user.id);
 
-    const seguindoProfileId = followers.filter((f) => f.following === user.id);
-
-  const seguindo = followers.filter(
-    (f) => f.userId === user.id
-  );
+  const seguindo = followers.filter((f) => f.userId === user.id);
 
   const stats = [
     { status: "Lidos", number: formatarParaK(read) },
@@ -74,7 +74,6 @@ export function SideBar() {
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
 
-  console.log("AIAIIA", user)
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">

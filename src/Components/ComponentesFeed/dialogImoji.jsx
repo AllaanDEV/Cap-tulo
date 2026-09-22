@@ -5,8 +5,7 @@ import { Lines } from "../ComponentsForm/lines";
 import { ContainerTags } from "../ComponentsPerfil/containerTags";
 
 export function DialogImoji({ emojiContainerRef }) {
-  const { contentEmoji, setContentEmoji } =
-    useContext(AppContext);
+  const { contentEmoji, setContentEmoji } = useContext(AppContext);
 
   const contextValues = useContext(AppContext);
   console.log("Valores vindos do Contexto:", contextValues);
@@ -17,7 +16,7 @@ export function DialogImoji({ emojiContainerRef }) {
 
   const [emojis, setEmojis] = useState([]);
   const [searchList, setSearchList] = useState();
-    const [search, setSearch] = useState();
+  const [search, setSearch] = useState();
   const { dialogImoji, setDialogImoji } = useContext(AppContext);
   const imojiRef = useRef(null);
 
@@ -97,7 +96,7 @@ export function DialogImoji({ emojiContainerRef }) {
     <>
       {dialogImoji && (
         <div
-          className="w-[20vw] h-[10vw] m-auto  rounded-2xl px-1 "
+          className="w-[20vw] h-[10vw] m-auto  rounded-2xl px-1"
           ref={imojiRef}
           onCancel={() => setDialogImoji((prev) => !prev)}
         >
@@ -142,7 +141,7 @@ export function DialogImoji({ emojiContainerRef }) {
               return (
                 <li key={index} className="shrink-0">
                   <ContainerTags
-                    className={"hover:bg-gray/20"}
+                    className={"hover:bg-gray/20 text-xl"}
                     onClick={() => {
                       const container = emojiContainerRef.current;
                       if (!container) return;
@@ -182,7 +181,7 @@ export function DialogImoji({ emojiContainerRef }) {
             [...new Set(emojis.map((emoji) => emoji.group))].map((group) => (
               <div
                 key={group}
-                className="flex flex-col gap-2 px-2"
+                className="flex flex-col gap-2"
                 ref={(element) => {
                   groupRefs.current[group] = element;
                 }}
@@ -191,16 +190,16 @@ export function DialogImoji({ emojiContainerRef }) {
                 <span className="text-lg font-bold">
                   {group?.charAt(0).toUpperCase() + group?.slice(1)}
                 </span>
-                <ul className="flex flex-wrap">
+                <ul className="flex flex-wrap justify-center">
                   {emojis
                     .filter((emoji) => emoji.group === group)
                     .map((item) => (
                       <li
                         key={item.unicodeName}
                         onClick={() => setContentEmoji(item.character)}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-2xl"
                       >
-                        {item.character}
+                        <span> {item.character}</span>
                       </li>
                     ))}
                 </ul>
@@ -230,8 +229,6 @@ export function DialogImoji({ emojiContainerRef }) {
               ></img>
             </div>
           )}
-          
-
         </div>
       )}
     </>

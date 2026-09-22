@@ -117,10 +117,9 @@ export function Context({ children }) {
 
   const [dialogImoji, setDialogImoji] = useState(false);
 
+  const [contentEmoji, setContentEmoji] = useState();
 
-const [contentEmoji, setContentEmoji]=useState()
-
-const [feedbacksArray, setFeedbacksArray]=useState()
+  const [feedbacksArray, setFeedbacksArray] = useState();
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -169,12 +168,8 @@ const [feedbacksArray, setFeedbacksArray]=useState()
     }
   };
 
-  // const typePost =
-  //   postModified === null
-  //     ? "feedback"
-  //     : postModified === false
-  //       ? "citation"
-  //       : postModified === true && "resenha";
+  const [usersList, setUsersList] = useState([]);
+  const [filterUsers, setFilterUsers] = useState([]);
 
   return (
     <AppContext.Provider
@@ -253,7 +248,14 @@ const [feedbacksArray, setFeedbacksArray]=useState()
         setContentHtml,
         dialogImoji,
         setDialogImoji,
- contentEmoji, setContentEmoji, feedbacksArray, setFeedbacksArray
+        contentEmoji,
+        setContentEmoji,
+        feedbacksArray,
+        setFeedbacksArray,
+        usersList,
+        setUsersList,
+        filterUsers,
+        setFilterUsers,
       }}
     >
       {children}

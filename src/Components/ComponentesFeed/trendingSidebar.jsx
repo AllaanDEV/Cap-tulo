@@ -40,9 +40,9 @@ export function TrendingSideBar() {
 
   return (
     <Div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center text-wine">
         <Trending></Trending>
-        <p className="text-wine font-fraunce text-xl">Em alta esta semana</p>
+        <p className=" font-fraunce text-xl">Em alta esta semana</p>
       </div>
       <ul>
         {(order || []).map((ebook, index) => {
