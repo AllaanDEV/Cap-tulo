@@ -6,13 +6,14 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useLocation } from "react-router";
 import { ContainerEbooks } from "./containerEbooks";
 
-export function EbookProgress({ book }) {
+export function EbookProgress({ book, className }) {
   const {
     setProgressEbook,
     styleCardActive,
     setStyleCardActive,
     disabledCardActive,
     publications,
+    PostModified,
   } = useContext(AppContext);
 
   const { user } = useRequisicoes({});
@@ -37,23 +38,26 @@ export function EbookProgress({ book }) {
   return (
     <ContainerEbooks
       styleActive={
-        styleCardActive?.ebook.volumeInfo.title ==
-          book?.ebook.volumeInfo.title && locationPatch 
+        styleCardActive?.ebook?.volumeInfo?.title ==
+          book?.ebook?.volumeInfo?.title && locationPatch
           ? "bg-wine/20 border-wine"
           : null
       }
       onClick={() =>
         locationPatch
-          ? styleCardActive?.ebook.volumeInfo.title ==
-            book?.ebook.volumeInfo.title
-            ? setStyleCardActive()
-            : setStyleCardActive(book)
+          ? PostModified === "resenha"
+            ? null
+            : styleCardActive?.ebook?.volumeInfo?.title ==
+                book?.ebook?.volumeInfo?.title
+              ? setStyleCardActive()
+              : setStyleCardActive(book)
           : null
       }
       book={book}
+      className={className}
     >
-      {styleCardActive?.ebook.volumeInfo.title ===
-        book?.ebook.volumeInfo.title && locationPatch ? (
+      {styleCardActive?.ebook?.volumeInfo?.title ===
+        book?.ebook?.volumeInfo?.title && locationPatch ? (
         <span className="rounded-full bg-wine absolute w-fit p-1 text-white left-1 top-1">
           <Active></Active>
         </span>

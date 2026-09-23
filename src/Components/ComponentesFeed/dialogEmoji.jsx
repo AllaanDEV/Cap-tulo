@@ -196,7 +196,9 @@ export function DialogImoji({ emojiContainerRef }) {
                     .map((item) => (
                       <li
                         key={item.unicodeName}
-                        onClick={() => setContentEmoji(item.character)}
+                        onClick={() =>
+                          setContentEmoji((prev) => [...prev, emojis.character])
+                        }
                         className="cursor-pointer text-2xl"
                       >
                         <span> {item.character}</span>
@@ -211,7 +213,9 @@ export function DialogImoji({ emojiContainerRef }) {
                 return (
                   <li
                     key={emojis.unicodeName}
-                    onClick={() => setContentEmoji(emojis.character)}
+                    onClick={() =>
+                      setContentEmoji((prev) => [...prev, emojis.character])
+                    }
                     className="cursor-pointer"
                   >
                     {emojis.character}

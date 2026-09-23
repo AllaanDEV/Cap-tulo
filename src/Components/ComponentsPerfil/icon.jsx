@@ -324,9 +324,9 @@ export function Icon({ state }) {
             </ContainerTags>
           )}
           {profileId === user.id ? null : (
-            <ContainerTags className="bg-wine text-white">
+            // <ContainerTags>
               <ButtonFlow profileId ={profileId }></ButtonFlow>
-            </ContainerTags>
+            // </ContainerTags>
           )}
         </div>
         <div className="flex flex-col gap-2">

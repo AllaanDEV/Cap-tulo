@@ -36,7 +36,7 @@ export function TrendingSideBar() {
   }, {});
 
   const ebooksFeedbacks = Object.values(ebooksFeedbacksObj || {});
-  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average);
+  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average).slice(0, 3);
 
   return (
     <Div>

@@ -296,7 +296,7 @@ export function TipTapEditor() {
       ) : (
         containerModified &&
         postModified === "resenha" && (
-          <EbookProgress book={() => typeResenha()}></EbookProgress>
+          <EbookProgress book={typeResenha()} className={"mt-1"}></EbookProgress>
         )
       )}
     </div>

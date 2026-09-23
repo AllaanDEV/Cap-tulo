@@ -17,20 +17,28 @@ import { CommentsList } from "./commentsList";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
-import { useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { UsersInfo } from "./usersInfo";
+import { DialogPostFocus } from "./dialogPostFocus";
 
 const Save = save;
 const Icon = configuration;
 
 export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
+  const navigate = useNavigate();
 
-  const { setPostId, editValue, styleCardActive, ebookSaved, followers } =
-    useContext(AppContext);
+  const {
+    setPostId,
+    editValue,
+    styleCardActive,
+    ebookSaved,
+    followers,
+    setPostFocus,
+  } = useContext(AppContext);
 
   const [like, setLike] = useState([]);
   const [liked, setLiked] = useState(false);
@@ -106,9 +114,16 @@ export const Post = memo(function Post({ post }) {
     }
   }, [post.type]);
 
+  console.log("VAP", post);
   return (
     <>
-      <Div className="w-max-[50vw]">
+      <Div
+        className="w-max-[50vw]"
+        onClick={() => {
+          setPostFocus((prev) => !prev);
+          // navigate(`/feed/${post.authorId}/${post.id}`));
+        }}
+      >
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post}></UsersInfo>
@@ -177,7 +192,7 @@ export const Post = memo(function Post({ post }) {
           {/* <img src={daenerys}></img> */}
         </section>
 
-        <Lines></Lines>
+        <Lines className="mt-2"></Lines>
 
         <div className="flex justify-between px-5 ">
           <div className="flex justify-between w-55  items-center">
@@ -218,6 +233,7 @@ export const Post = memo(function Post({ post }) {
 
         {postComment && <CommentsList post={post}></CommentsList>}
       </Div>
+      <DialogPostFocus post={post}></DialogPostFocus>
     </>
   );
 });

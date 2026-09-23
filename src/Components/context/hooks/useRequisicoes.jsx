@@ -206,26 +206,13 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const allFollowers = async (feed) => {
-    console.log("VASCO");
+  const allFollowers = async () => {
     const response = await fetch(`http://localhost:3000/allFollowers`);
     const data = await response.json();
-    console.log("ALLflow", data);
-
-    if (feed) {
-      const userIdLogin = data.find((u) => u.following === user.id);
-      return followersPost(userIdLogin?.userId);
-    }
 
     return setFollowers(data);
   };
 
-  //   const seguindo = followers.filter(
-  //   (f) => f.userId === (post?.authorId ?? user.id),
-  // );
-  // console.log("seguindo", seguindo);
-
-  // const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
   const getBookSave = async (profileId) => {
     try {
@@ -326,11 +313,15 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const userUP = async () => {
+  const userUP = async (users) => {
     const response = await fetch(`http://localhost:3000/updateUser`);
     const data = await response.json();
     setUsersList(data);
     setFilterUsers(data);
+
+    if (users && response.ok) {
+      return followersPost(users);
+    }
   };
 
   return {
