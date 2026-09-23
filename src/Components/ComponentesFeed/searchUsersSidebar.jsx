@@ -58,7 +58,7 @@ export function SearchUsersSidebar() {
 
   const usersVisible = filterUsers.filter(
     (users) => users.id !== user.id && users.id !== paramsId,
-  );
+  ).slice(0, 5);
 
   return (
     <Div>
@@ -87,7 +87,7 @@ export function SearchUsersSidebar() {
                   <UsersInfo users={users}></UsersInfo>
                   <ButtonFlow
                     users={users.id}
-                    className="text-sm border border-gray  py-1 px-2 rounded-full"
+                    className="text-sm "
                   ></ButtonFlow>
                 </li>
               );

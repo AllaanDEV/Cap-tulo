@@ -15,6 +15,8 @@ import { HeaderLayout } from "./Components/headerLayout.jsx";
 import { Icon } from "./Components/ComponentsPerfil/icon.jsx";
 
 import { EbooksPage } from "./Components/ebooksPage.jsx";
+import { SidebarLayout } from "./Components/sidebarLayout.jsx";
+import { PostFocus } from "./Components/postFocus.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -30,10 +32,18 @@ createRoot(document.getElementById("root")).render(
           </Route>
 
           <Route element={<HeaderLayout></HeaderLayout>}>
-            <Route path="save" element={<Saves></Saves>}></Route>
-            <Route path="feed/:id" element={<Feed></Feed>}></Route>
             <Route path="perfil/:id" element={<Icon></Icon>}></Route>
             <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route>
+          </Route>
+
+          {/* Rotas que possuem Header + Sidebars */}
+          <Route element={<SidebarLayout />}>
+            <Route path="feed/:id" element={<Feed />} />
+            <Route path="feed/:id/:postId" element={<PostFocus />} />
+
+            <Route path="save" element={<Saves />} />
+
+            <Route path="ebooks" element={<EbooksPage />} />
           </Route>
 
           <Route path="*" element={<FormLogin></FormLogin>}></Route>

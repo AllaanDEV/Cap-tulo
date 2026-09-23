@@ -20,15 +20,19 @@ export function ButtonFlow({ profileId, users, className, ...props }) {
 
   const validation = () => {
     location.pathname.startsWith("/feed")
-      ? allFollowers(true)
+      ? userUP(users)
       : followersPost(profileId);
   };
+
+  const style = validationFollowers
+    ? "bg-transparent  text-gray disabled:hover:bg-wine"
+    : "bg-wine text-white";
 
   return (
     <button
       onClick={() => validation()}
       {...props}
-      className={`${className} ${validationFollowers ? "bg-transparent  text-gray disabled:hover:bg-wine" : "bg-wine text-white"}   cursor-pointer transition duration-300`}
+      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray  py-1 px-2 rounded-full`}
     >
       {validationFollowers ? "Deixar de seguir" : "Seguir"}
     </button>

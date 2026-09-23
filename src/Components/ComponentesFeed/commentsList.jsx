@@ -18,6 +18,7 @@ export function CommentsList({ post }) {
     editValue,
     postComment,
     setPublication,
+    postFocus,
   } = useContext(AppContext);
 
   const {
@@ -42,22 +43,21 @@ export function CommentsList({ post }) {
     fetchProfile();
   }, [postComment, editValue]);
 
-
   return (
-    <>
-      <Lines />
+    <div className="flex flex-col w-full">
+      {!postFocus && <Lines />}
 
-      <form onSubmit={dataCommentForm}>
+      <form onSubmit={dataCommentForm} className="w-full">
         <textarea
           name="comment"
-          className="w-full bg-amber-200 flex placeholder:items-center"
+          className="w-full bg-background rounded-2xl flex placeholder:items-center border border-border px-5 "
           placeholder="Dê a sua opinião!"
         />
 
         <button type="submit">Comentar</button>
       </form>
 
-      <ul className="fit-content py-3 flex flex-col gap-6">
+      <ul className="fit-content py-3 flex flex-col gap-6 w-full">
         {post.comments.length === 0 ? (
           <div>Ainda não há comentários</div>
         ) : (
@@ -124,6 +124,6 @@ export function CommentsList({ post }) {
           })
         )}
       </ul>
-    </>
+    </div>
   );
 }

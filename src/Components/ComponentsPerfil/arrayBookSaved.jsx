@@ -8,11 +8,10 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
   const { ebookSaved, setStyleCardActive } = useContext(AppContext);
-  const { stylePatchFeed, stylePatchProfile,  getBookSave } = useRequisicoes({});
+  const { stylePatchFeed, stylePatchProfile, getBookSave } = useRequisicoes({});
 
   const Ebook = ebook;
   const Compass = compass;
-
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
@@ -25,12 +24,14 @@ export function ArrayBookSaved({ profile }) {
   return (
     <>
       <h4 className="flex gap-1 items-center text-lg">
-        {stylePatchFeed ? null : stylePatchProfile ? (
-          <>
-            <Ebook />
-            Lendo Agora
-          </>
-        ) : null}
+        {stylePatchFeed
+          ? null
+          : location.pathname.startsWith("/perfil") && (
+              <>
+                <Ebook />
+                Lendo Agora
+              </>
+            )}
       </h4>
 
       {ebookSaved?.length === 0 ? (
@@ -48,7 +49,7 @@ export function ArrayBookSaved({ profile }) {
               </Link>
             </>
           ) : (
-            <span>{`${profile?.author || profile?.name} não tem livro salvo 😭`}</span>
+            <span>{`${profile?.name} não tem livro salvo 😭`}</span>
           )}
         </div>
       ) : (
@@ -57,7 +58,7 @@ export function ArrayBookSaved({ profile }) {
         >
           {Array.isArray(ebookSaved) &&
             ebookSaved.map((bookSave) => {
-              console.log("id", ebookSaved)
+              console.log("id", ebookSaved);
               return (
                 <li key={bookSave.ebook.etag}>
                   <EbookProgress book={bookSave} />

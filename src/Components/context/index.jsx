@@ -121,6 +121,8 @@ export function Context({ children }) {
 
   const [feedbacksArray, setFeedbacksArray] = useState();
 
+  const [postFocus, setPostFocus] = useState(false);
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -256,6 +258,7 @@ export function Context({ children }) {
         setUsersList,
         filterUsers,
         setFilterUsers,
+postFocus, setPostFocus
       }}
     >
       {children}
