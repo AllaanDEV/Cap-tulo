@@ -122,6 +122,7 @@ export function Context({ children }) {
   const [feedbacksArray, setFeedbacksArray] = useState();
 
   const [postFocus, setPostFocus] = useState(false);
+const [dataPostFocus, setDataPostFocus]=useState()
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -172,7 +173,7 @@ export function Context({ children }) {
 
   const [usersList, setUsersList] = useState([]);
   const [filterUsers, setFilterUsers] = useState([]);
-
+  const [like, setLike] = useState([]);
   return (
     <AppContext.Provider
       value={{
@@ -258,7 +259,7 @@ export function Context({ children }) {
         setUsersList,
         filterUsers,
         setFilterUsers,
-postFocus, setPostFocus
+postFocus, setPostFocus, dataPostFocus, setDataPostFocus, like, setLike
       }}
     >
       {children}

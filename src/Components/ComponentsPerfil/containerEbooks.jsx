@@ -54,7 +54,6 @@ export function  ContainerEbooks({
       ? ""
       : "hover:-translate-y-1 hover:shadow-lg";
 
-  console.log("conatiner", containerModified);
 
   const postsFeedbacks = publication.find((p) => p.type === "feedback");
   

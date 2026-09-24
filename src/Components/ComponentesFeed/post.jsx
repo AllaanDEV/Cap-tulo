@@ -23,6 +23,7 @@ import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { UsersInfo } from "./usersInfo";
 import { DialogPostFocus } from "./dialogPostFocus";
+import { ContainerButtonsPost } from "./containerButtonsPost";
 
 const Save = save;
 const Icon = configuration;
@@ -38,12 +39,15 @@ export const Post = memo(function Post({ post }) {
     ebookSaved,
     followers,
     setPostFocus,
+    dataPostFocus,
+    setDataPostFocus,
   } = useContext(AppContext);
 
-  const [like, setLike] = useState([]);
-  const [liked, setLiked] = useState(false);
-  const [liking, setLiking] = useState(false);
-  const likeLock = useRef(false);
+  // const [like, setLike] = useState([]);
+  // const [liked, setLiked] = useState(false);
+  // const [liking, setLiking] = useState(false);
+  // const likeLock = useRef(false);
+
   const [postComment, setPostComment] = useState(!post);
   setPostId(post);
 
@@ -52,22 +56,14 @@ export const Post = memo(function Post({ post }) {
     LikeButton,
     nameIcon,
     user,
-    photoValueFeed,
+
     fetchProfile,
     likesGet,
-    valuePostsCitation,
+
     arrayFeedbacksEbooks,
   } = useRequisicoes({
     post,
-    like,
-    setLike,
   });
-
-  const Saves = () => {
-    fetch(`/api/posts/${post.id}/save`, {
-      method: "POST",
-    }).then((response) => response.json());
-  };
 
   const openComments = () => {
     setPostComment(!postComment);
@@ -78,35 +74,35 @@ export const Post = memo(function Post({ post }) {
     likesGet();
   }, [paramsId]);
 
-  const handleLike = async () => {
-    if (likeLock.current) return;
+  // const handleLike = async () => {
+  //   if (likeLock.current) return;
 
-    likeLock.current = true;
-    setLiking(true);
+  //   likeLock.current = true;
+  //   setLiking(true);
 
-    try {
-      await LikeButton();
+  //   try {
+  //     await LikeButton();
 
-      setLiked((prev) => !prev);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      likeLock.current = false;
-      setLiking(false);
-    }
-  };
+  //     setLiked((prev) => !prev);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     likeLock.current = false;
+  //     setLiking(false);
+  //   }
+  // };
 
   // const photo = (photoValueFeed ? photoValueFeed : []).find(
   //   (photo) => photo.userId == post.authorId,
   // );
 
-  useEffect(() => {
-    const likes = like?.find(
-      (p) => p.postId === post.id && p.userId === user.id,
-    );
+  // useEffect(() => {
+  //   const likes = like?.find(
+  //     (p) => p.postId === post.id && p.userId === user.id,
+  //   );
 
-    setLiked(likes?.validation ?? false);
-  }, [like, post.id, user.id]);
+  //   setLiked(likes?.validation ?? false);
+  // }, [like, post.id, user.id]);
 
   useEffect(() => {
     if (post.type === "feedback") {
@@ -114,17 +110,19 @@ export const Post = memo(function Post({ post }) {
     }
   }, [post.type]);
 
-  console.log("VAP", post);
+  console.log("VAP", dataPostFocus);
+
   return (
     <>
-      <Div
-        className="w-max-[50vw]"
-        onClick={() => {
-          setPostFocus((prev) => !prev);
-          // navigate(`/feed/${post.authorId}/${post.id}`));
-        }}
-      >
-        <section className="flex flex-col gap-2">
+      <Div className="w-max-[50vw]">
+        <section
+          className="flex flex-col gap-2"
+          onClick={() => {
+            setPostFocus((prev) => !prev);
+            setDataPostFocus(post);
+            // navigate(`/feed/${post.authorId}/${post.id}`));
+          }}
+        >
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post}></UsersInfo>
             <details className="flex flex-col items-end relative">
@@ -185,55 +183,25 @@ export const Post = memo(function Post({ post }) {
               }
               starsNumber={post.postModified?.starsEbook}
             ></ContainerEbooks>
-          ) : post.type === "resenha" ? (
-            <EbookProgress book={post.postModified.ebook}></EbookProgress>
-          ) : null}
+          ) : (
+            post.type === "resenha" && (
+              <EbookProgress book={post.postModified.ebook}></EbookProgress>
+            )
+          )}
 
           {/* <img src={daenerys}></img> */}
         </section>
 
         <Lines className="mt-2"></Lines>
 
-        <div className="flex justify-between px-5 ">
-          <div className="flex justify-between w-55  items-center">
-            <div>
-              <ButtonPost onClick={handleLike} disabled={liking}>
-                <Like
-                  filled={liked}
-                  fill={liked ? "currentColor" : "none"}
-                  className={liked ? "text-red-500" : ""}
-                />
-
-                <p className="text-sm">{post?.likes}</p>
-              </ButtonPost>
-            </div>
-            <div>
-              <ButtonPost onClick={openComments}>
-                <Comment></Comment>
-                {post.comments.length}
-              </ButtonPost>
-              {/* <p className="text-sm"></p> */}
-            </div>
-            <div>
-              <ButtonPost>
-                <Share></Share>
-                Compartilhar
-              </ButtonPost>
-              <p className="text-sm">{""}</p>
-            </div>
-          </div>
-          <button
-            className="hover:text-yellow-600"
-            onClick={Saves}
-            to={"saves"}
-          >
-            <Save></Save>
-          </button>
-        </div>
+        <ContainerButtonsPost
+          post={post}
+          openComments={openComments}
+        ></ContainerButtonsPost>
 
         {postComment && <CommentsList post={post}></CommentsList>}
       </Div>
-      <DialogPostFocus post={post}></DialogPostFocus>
+      <DialogPostFocus></DialogPostFocus>
     </>
   );
 });
