@@ -43,26 +43,40 @@ export function CommentsList({ post }) {
     fetchProfile();
   }, [postComment, editValue]);
 
+  const photoUser = (photoValueFeed ?? []).find(
+    (midia) => midia.userId === user.id,
+  );
+
   return (
     <div className="flex flex-col w-full">
       {!postFocus && <Lines />}
 
-      <form onSubmit={dataCommentForm} className="w-full">
-        <textarea
-          name="comment"
-          className="w-full bg-background rounded-2xl flex placeholder:items-center border border-border px-5 "
-          placeholder="Dê a sua opinião!"
-        />
+      <div className="flex gap-1 pt-4">
+        <PerfilIcon to={`/perfil/${user.id}`}>
+          {photoUser?.midiaIcon ? (
+            <ImgPerfil src={photoUser.midiaIcon} />
+          ) : (
+            <p className="m-auto text-[1rem] font-medium font-serif text-white">
+              {nameIcon(user.name)}
+            </p>
+          )}
+        </PerfilIcon>
 
-        <button type="submit">Comentar</button>
-      </form>
+        <form onSubmit={dataCommentForm} className="w-full">
+          <textarea
+            name="comment"
+            className="w-full bg-background rounded-2xl flex placeholder:items-center border border-border px-5"
+            placeholder="Dê a sua opinião!"
+          />
+          <button type="submit">Comentar</button>
+        </form>
+      </div>
 
       <ul className="fit-content py-3 flex flex-col gap-6 w-full">
-        {post.comments.length === 0 ? (
+        {(post?.comments ?? []).length === 0 ? (
           <div>Ainda não há comentários</div>
         ) : (
-          [...post.comments].reverse().map((c) => {
-            console.log("id", c.id);
+          [...(post?.comments ?? [])].reverse().map((c) => {
             const photo = (photoValueFeed ?? []).find(
               (midia) => midia.userId === c.authorId,
             );

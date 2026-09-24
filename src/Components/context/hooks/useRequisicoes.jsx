@@ -32,6 +32,8 @@ export function useRequisicoes({ post, like, setLike }) {
     setFeedbacksArray,
     setUsersList,
     setFilterUsers,
+    dataPostFocus,
+    setDataPostFocus,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -101,6 +103,10 @@ export function useRequisicoes({ post, like, setLike }) {
       );
 
       // setEditComments(false);
+      if (dataPostFocus && resJson.id === dataPostFocus.id) {
+        setDataPostFocus(resJson);
+      }
+
       toggleComments();
     } catch (error) {
       console.log(error);
@@ -123,6 +129,10 @@ export function useRequisicoes({ post, like, setLike }) {
           prev?.map((p) => (p.id === data.id ? data : p)),
         );
 
+          if (dataPostFocus && data.id === dataPostFocus.id) {
+        setDataPostFocus(data);
+      }
+      
         setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       });
   };
@@ -153,6 +163,10 @@ export function useRequisicoes({ post, like, setLike }) {
 
       setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       setPublication((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
+
+      if (dataPostFocus && data.id === dataPostFocus.id) {
+        setDataPostFocus(data);
+      }
 
       e.target.reset();
     } catch (error) {
@@ -212,7 +226,6 @@ export function useRequisicoes({ post, like, setLike }) {
 
     return setFollowers(data);
   };
-
 
   const getBookSave = async (profileId) => {
     try {

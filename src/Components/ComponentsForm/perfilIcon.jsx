@@ -3,26 +3,13 @@ import { Link } from "react-router";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-export function PerfilIcon({ children, ...props }) {
-  const { user } = useRequisicoes({});
-  const { photoValueFeed } = useContext(AppContext);
-
-
-  const photo = (photoValueFeed ? photoValueFeed : []).find(
-    (photo) => photo.userId == user.id,
-  );
-
+export function PerfilIcon({ children, className = "", ...props }) {
   return (
-    <Link {...props}>
-      {photo ? (
-        <div className="flex justify-center rounded-4xl h-10 w-10 overflow-hidden">
-          {children}
-        </div>
-      ) : (
-        <div className="flex justify-center rounded-4xl h-10 w-10 overflow-hidden bg-amber-700">
-          {children}
-        </div>
-      )}
+    <Link 
+      {...props} 
+      className={`flex justify-center items-center rounded-full h-10 w-10 overflow-hidden bg-amber-700 shrink-0 ${className}`}
+    >
+      {children}
     </Link>
   );
 }

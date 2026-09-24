@@ -68,11 +68,11 @@ export function TrendingSideBar() {
                   <span className="text-sm">
                     {ebook.data.ebook.ebook.volumeInfo.title}
                   </span>
-                  {ebook.data.ebook.ebook.volumeInfo.subtitle && (
+                  {/* {ebook.data.ebook.ebook.volumeInfo.subtitle && (
                     <span className="text-xs text-black/70">
                       {ebook.data.ebook.ebook.volumeInfo.subtitle}
                     </span>
-                  )}
+                  )} */}
 
                   <div className="flex gap-1 items-center">
                     <Star fill={true} size={13}></Star>
