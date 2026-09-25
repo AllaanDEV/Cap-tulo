@@ -15,6 +15,8 @@ import { ArrayPosts } from "./arrayPosts";
 import { useLocation, useParams } from "react-router";
 import { ImgPerfil } from "./imgPerfil";
 import { ButtonFlow } from "./buttonFlow";
+import { ReadingPace } from "./readingPace";
+import { Evaluated } from "./evaluated";
 
 const Pencil = pencil;
 
@@ -410,9 +412,11 @@ export function Icon({ state }) {
         <Lines></Lines>
 
         {feedfilter === null || feedfilter !== false ? (
-          <Div>
+          <>
+            <ReadingPace></ReadingPace>
             <ArrayBookSaved profile={profile}></ArrayBookSaved>
-          </Div>
+            <Evaluated></Evaluated>
+          </>
         ) : null}
 
         {feedfilter === null || feedfilter === false ? (

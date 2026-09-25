@@ -24,11 +24,6 @@ export function UsersInfo({ post, users }) {
     fetchProfile();
   }, []);
 
-console.log("--> RENDERIZOU! photoValueFeed:", photoValueFeed);
-  console.log("--> PHOTO ENCONTRADA:", photo);
-  console.log("--> TEM midiaIcon?", !!photo?.midiaIcon);
-
-
   return (
     <div className="flex gap-2 items-center justify-center">
       <PerfilIcon to={`/perfil/${profile.id}`} state={{ profile }}>

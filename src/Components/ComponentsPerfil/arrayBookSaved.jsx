@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { EbookProgress } from "./ebookProgress";
 import AppContext from "../context";
-import { ebook, compass, Active } from "../svgCode";
+import { ebook, compass, Active, RightArrow } from "../svgCode";
 import { Link, useLocation } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { Div } from "../ComponentesFeed/div";
 
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
@@ -21,18 +22,39 @@ export function ArrayBookSaved({ profile }) {
     setStyleCardActive(ebookSaved[0] ?? null);
   }, []);
 
+  const [itemsVisible, setItemsVisible] = useState(4);
+
   return (
-    <>
-      <h4 className="flex gap-1 items-center text-lg">
-        {stylePatchFeed
-          ? null
-          : location.pathname.startsWith("/perfil") && (
-              <>
-                <Ebook />
-                Lendo Agora
-              </>
-            )}
-      </h4>
+    <Div>
+      <div className="flex items-center justify-between">
+        <h4 className="flex gap-1 items-center text-lg">
+          {stylePatchFeed
+            ? null
+            : location.pathname.startsWith("/perfil") && (
+                <>
+                  <Ebook />
+                  Lendo Agora
+                </>
+              )}
+        </h4>
+
+        <div className="flex gap-1 text-wine">
+          {itemsVisible > ebookSaved.length && (
+            <button onClick={() => setItemsVisible((prev) => prev - 5)}>
+              Ver menos
+            </button>
+          )}
+
+          {itemsVisible < ebookSaved.length && (
+            <div className="flex items-center cursor-pointer">
+              <button onClick={() => setItemsVisible((prev) => prev + 5)}>
+                Ver mais
+              </button>
+              <RightArrow></RightArrow>
+            </div>
+          )}
+        </div>
+      </div>
 
       {ebookSaved?.length === 0 ? (
         <div className="flex items-center gap-1">
@@ -57,7 +79,7 @@ export function ArrayBookSaved({ profile }) {
           className={`grid grid-rows-1 md:grid-cols-2  gap-3 w-full ${styleFeed}`}
         >
           {Array.isArray(ebookSaved) &&
-            ebookSaved.map((bookSave) => {
+            ebookSaved.slice(0, itemsVisible).map((bookSave) => {
               console.log("id", ebookSaved);
               return (
                 <li key={bookSave.ebook.etag}>
@@ -67,6 +89,6 @@ export function ArrayBookSaved({ profile }) {
             })}
         </ul>
       )}
-    </>
+    </Div>
   );
 }

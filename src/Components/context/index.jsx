@@ -115,7 +115,7 @@ export function Context({ children }) {
   const [disabledCardActive, setDisabledCardActive] = useState(false);
   const [contentHtml, setContentHtml] = useState();
 
-  const [dialogImoji, setDialogImoji] = useState(false);
+  const [dialogEmoji, setDialogEmoji] = useState(false);
 
   const [contentEmoji, setContentEmoji] = useState();
 
@@ -249,8 +249,7 @@ const [dataPostFocus, setDataPostFocus]=useState()
         setDisabledCardActive,
         contentHtml,
         setContentHtml,
-        dialogImoji,
-        setDialogImoji,
+dialogEmoji, setDialogEmoji,
         contentEmoji,
         setContentEmoji,
         feedbacksArray,
