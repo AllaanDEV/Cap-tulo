@@ -77,10 +77,6 @@ export function TipTapEditor() {
   );
 
   const typeResenha = () => {
-    console.log("postModified:", postModified);
-    console.log("styleCardActive:", styleCardActive);
-    console.log("ebookSaved:", ebookSaved);
-
     if (postModified !== "resenha") return null;
 
     const cardResenha = ebookSaved.find(
@@ -168,10 +164,16 @@ export function TipTapEditor() {
   });
 
   useEffect(() => {
-    editor.commands.setContent(contentEmoji);
-  }, [contentEmoji]);
+    if (contentEmoji && editor) {
+      // Em vez de setContent, usamos insertContent para adicionar na posição do cursor
+      editor.chain().focus().insertContent(contentEmoji).run();
 
-  console.log("LA PROVA REAL", styleCardActive);
+      // Dica: Se quiser limpar o estado logo após inserir para poder
+      // clicar no mesmo emoji de novo consecutivamente, limpe-o aqui se necessário:
+      // setContentEmoji(null);
+    }
+  }, [contentEmoji, editor]);
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
@@ -296,7 +298,10 @@ export function TipTapEditor() {
       ) : (
         containerModified &&
         postModified === "resenha" && (
-          <EbookProgress book={typeResenha()} className={"mt-1"}></EbookProgress>
+          <EbookProgress
+            book={typeResenha()}
+            className={"mt-1"}
+          ></EbookProgress>
         )
       )}
     </div>

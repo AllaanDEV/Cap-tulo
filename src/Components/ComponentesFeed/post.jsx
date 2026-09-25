@@ -110,7 +110,7 @@ export const Post = memo(function Post({ post }) {
     }
   }, [post.type]);
 
-  console.log("VAP", dataPostFocus);
+  console.log("VAP", post);
 
   return (
     <>

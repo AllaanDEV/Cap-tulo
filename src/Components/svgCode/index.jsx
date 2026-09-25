@@ -20,7 +20,7 @@ export function quotation({ color = "var(--color-wine)" }) {
   );
 }
 
-export const Star = ({ size, fill, onClick, color = "var(--color-star)"}) => {
+export const Star = ({ size, fill, onClick, color = "var(--color-star)" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ export const Star = ({ size, fill, onClick, color = "var(--color-star)"}) => {
   );
 };
 
-export const ebook = ({color = "var(--color-ebook)"}) => {
+export const ebook = ({ color = "var(--color-ebook)" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -606,10 +606,94 @@ export const Search = () => {
   );
 };
 
+export const Trending = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-trending-up"
+      aria-hidden="true"
+      data-id="element-340"
+      data-mp="1t1pg961cpi7x"
+    >
+      <path d="M16 7h6v6"></path>
+      <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+    </svg>
+  );
+};
 
-export const Trending= () =>{
-  return(
-    
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up" aria-hidden="true" data-id="element-340" data-mp="1t1pg961cpi7x"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
-  )
-}
+export const Send = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-send"
+      aria-hidden="true"
+      data-id="element-35"
+      data-mp="1ivf3lbpxwt1s"
+    >
+      <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
+      <path d="m21.854 2.147-10.94 10.939"></path>
+    </svg>
+  );
+};
+
+export const Circle = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-target"
+      aria-hidden="true"
+      data-id="element-342"
+      data-mp="3cy7w1bklrjvh"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="6"></circle>
+      <circle cx="12" cy="12" r="2"></circle>
+    </svg>
+  );
+};
+
+export const RightArrow = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-chevron-right"
+      aria-hidden="true"
+      data-id="element-362"
+      data-mp="99q8d0czaa4t"
+    >
+      <path d="m9 18 6-6-6-6"></path>
+    </svg>
+  );
+};

@@ -4,11 +4,13 @@ import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { ContainerTags } from "../ComponentsPerfil/containerTags";
 
-export function DialogImoji({ emojiContainerRef }) {
-  const { contentEmoji, setContentEmoji } = useContext(AppContext);
+export function DialogImoji({
+  emojiContainerRef,
+  toggleDialogEmojisComment,
+  setToggleDialogEmojisComment,
+}) {
+    const { contentEmoji, setContentEmoji } = useContext(AppContext);
 
-  const contextValues = useContext(AppContext);
-  console.log("Valores vindos do Contexto:", contextValues);
 
   const inputRef = useRef();
   const menuRef = useRef(null);
@@ -17,7 +19,7 @@ export function DialogImoji({ emojiContainerRef }) {
   const [emojis, setEmojis] = useState([]);
   const [searchList, setSearchList] = useState();
   const [search, setSearch] = useState();
-  const { dialogImoji, setDialogImoji } = useContext(AppContext);
+  const { dialogEmoji, setDialogEmoji } = useContext(AppContext);
   const imojiRef = useRef(null);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export function DialogImoji({ emojiContainerRef }) {
 
   useEffect(() => {
     fetchData();
-  }, [dialogImoji]);
+  }, [dialogEmoji]);
 
   const searchEmoji = async () => {
     const response = await fetch(`/api/imojis/search/${search}`);
@@ -92,149 +94,158 @@ export function DialogImoji({ emojiContainerRef }) {
     }
   }, [search]);
 
+  const isOpen = toggleDialogEmojisComment || dialogEmoji;
+  if (!isOpen) return null;
+
+
+
   return (
     <>
-      {dialogImoji && (
-        <div
-          className="w-[20vw] h-[10vw] m-auto  rounded-2xl px-1"
-          ref={imojiRef}
-          onCancel={() => setDialogImoji((prev) => !prev)}
-        >
-          <div className="flex w-full justify-between items-start p-1">
-            <span className="text-2xl font-extrabold ">EMOJIS</span>
-            <button
-              onClick={() => {
-                setDialogImoji((prev) => !prev);
-              }}
-              className="cursor-pointer"
-            >
-              <XSavedEbook></XSavedEbook>
-            </button>
-          </div>
-          <Lines></Lines>
-          <label className="flex w-full border border-border rounded-full my-1">
-            <div className="relative top-2.5 left-2">
-              <Search></Search>
-            </div>
-            <input
-              ref={inputRef}
-              className=" w-full h-full py-2 px-3 outline-none"
-              onInput={(e) => {
-                setSearch(e.target.value.trim());
-                validation();
-              }}
-            ></input>
-
-            <button
-              onClick={searchEmoji}
-              className="bg-amber-600/90 rounded-full hover:bg-amber-600 transition duration-500 text-sm px-2"
-            >
-              Buscar
-            </button>
-          </label>
-
-          <ul
-            ref={menuRef}
-            className="flex max-w-full gap-1 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      {toggleDialogEmojisComment ||
+        (dialogEmoji && (
+          <div
+            className="w-80 h-96 m-auto  rounded-2xl px-1"
+            ref={imojiRef}
+            onCancel={() => {
+              (setDialogEmoji(false), setToggleDialogEmojisComment(false));
+            }}
           >
-            {tagsEmojis.map((tag, index) => {
-              return (
-                <li key={index} className="shrink-0">
-                  <ContainerTags
-                    className={"hover:bg-gray/20 text-xl"}
-                    onClick={() => {
-                      const container = emojiContainerRef.current;
-                      if (!container) return;
-
-                      // 1. BUSCA INTELIGENTE: Procura a chave exata ou parecida dentro do groupRefs
-                      const targetKey = Object.keys(groupRefs.current).find(
-                        (key) =>
-                          key
-                            .trim()
-                            .toLowerCase()
-                            .includes(tag.categorie.trim().toLowerCase()),
-                      );
-
-                      const target = groupRefs.current[targetKey];
-
-                      if (!target) {
-                        console.warn(
-                          `Seção não encontrada para a categoria: ${tag.categorie}`,
-                        );
-                        return;
-                      }
-
-                      container.scrollTo({
-                        top: target.offsetTop,
-                        behavior: "smooth",
-                      });
-                    }}
-                  >
-                    {tag.tag}
-                  </ContainerTags>
-                </li>
-              );
-            })}
-          </ul>
-
-          {emojis?.length > 0 ? (
-            [...new Set(emojis.map((emoji) => emoji.group))].map((group) => (
-              <div
-                key={group}
-                className="flex flex-col gap-2"
-                ref={(element) => {
-                  groupRefs.current[group] = element;
+            <div className="flex w-full justify-between items-start p-1">
+              <span className="text-2xl font-extrabold ">EMOJIS</span>
+              <button
+                onClick={() => {
+                  setDialogEmoji(false);
+                  setToggleDialogEmojisComment(false);
                 }}
+                className="cursor-pointer"
               >
-                <Lines className="border-[2px] mt-1"></Lines>
-                <span className="text-lg font-bold">
-                  {group?.charAt(0).toUpperCase() + group?.slice(1)}
-                </span>
-                <ul className="flex flex-wrap justify-center">
-                  {emojis
-                    .filter((emoji) => emoji.group === group)
-                    .map((item) => (
-                      <li
-                        key={item.unicodeName}
-                        onClick={() =>
-                          setContentEmoji((prev) => [...prev, emojis.character])
-                        }
-                        className="cursor-pointer text-2xl"
-                      >
-                        <span> {item.character}</span>
-                      </li>
-                    ))}
-                </ul>
+                <XSavedEbook></XSavedEbook>
+              </button>
+            </div>
+            <Lines></Lines>
+            <label className="flex w-full border border-border rounded-full my-1">
+              <div className="relative top-2.5 left-2">
+                <Search></Search>
               </div>
-            ))
-          ) : searchList?.length > 0 ? (
-            <ul className="flex flex-wrap">
-              {searchList?.map((emojis) => {
+              <input
+                ref={inputRef}
+                className=" w-full h-full py-2 px-3 outline-none"
+                onInput={(e) => {
+                  setSearch(e.target.value.trim());
+                  validation();
+                }}
+              ></input>
+
+              <button
+                onClick={searchEmoji}
+                className="bg-amber-600/90 rounded-full hover:bg-amber-600 transition duration-500 text-sm px-2"
+              >
+                Buscar
+              </button>
+            </label>
+
+            <ul
+              ref={menuRef}
+              className="flex max-w-full gap-1 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {tagsEmojis.map((tag, index) => {
                 return (
-                  <li
-                    key={emojis.unicodeName}
-                    onClick={() =>
-                      setContentEmoji((prev) => [...prev, emojis.character])
-                    }
-                    className="cursor-pointer"
-                  >
-                    {emojis.character}
+                  <li key={index} className="shrink-0">
+                    <ContainerTags
+                      className={"hover:bg-gray/20 text-xl"}
+                      onClick={() => {
+                        const container = emojiContainerRef.current;
+                        if (!container) return;
+
+                        // 1. BUSCA INTELIGENTE: Procura a chave exata ou parecida dentro do groupRefs
+                        const targetKey = Object.keys(groupRefs.current).find(
+                          (key) =>
+                            key
+                              .trim()
+                              .toLowerCase()
+                              .includes(tag.categorie.trim().toLowerCase()),
+                        );
+
+                        const target = groupRefs.current[targetKey];
+
+                        if (!target) {
+                          console.warn(
+                            `Seção não encontrada para a categoria: ${tag.categorie}`,
+                          );
+                          return;
+                        }
+
+                        container.scrollTo({
+                          top: target.offsetTop,
+                          behavior: "smooth",
+                        });
+                      }}
+                    >
+                      {tag.tag}
+                    </ContainerTags>
                   </li>
                 );
               })}
             </ul>
-          ) : (
-            <div>
-              <img
-                src={
-                  "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzRldTk4ejllNXR2bDJ5NHlsNmRtc21xanNlMjMzYWxlZmVzaDhwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mtrWumAn1N9Hg27BrI/giphy.gif"
-                }
-                className="w-full h-auto"
-              ></img>
-            </div>
-          )}
-        </div>
-      )}
+
+            {emojis?.length > 0 ? (
+              [...new Set(emojis.map((emoji) => emoji.group))].map((group) => (
+                <div
+                  key={group}
+                  className="flex flex-col gap-2"
+                  ref={(element) => {
+                    groupRefs.current[group] = element;
+                  }}
+                >
+                  <Lines className="border-[2px] mt-1"></Lines>
+                  <span className="text-lg font-bold">
+                    {group?.charAt(0).toUpperCase() + group?.slice(1)}
+                  </span>
+                  <ul className="flex flex-wrap justify-center">
+                    {emojis
+                      .filter((emoji) => emoji.group === group)
+                      .map((item) => (
+                        <li
+                          key={item.unicodeName}
+                          onClick={() => {
+                            setContentEmoji(item.character);
+                            setToggleDialogEmojisComment(false);
+                            setDialogEmoji(false);
+                          }}
+                          className="cursor-pointer text-2xl"
+                        >
+                          <span> {item.character}</span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              ))
+            ) : searchList?.length > 0 ? (
+              <ul className="flex flex-wrap">
+                {searchList?.map((emojis) => {
+                  return (
+                    <li
+                      key={emojis.unicodeName}
+                      onClick={() => setContentEmoji(emojis.character)}
+                      className="cursor-pointer"
+                    >
+                      {emojis.character}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <div>
+                <img
+                  src={
+                    "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzRldTk4ejllNXR2bDJ5NHlsNmRtc21xanNlMjMzYWxlZmVzaDhwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mtrWumAn1N9Hg27BrI/giphy.gif"
+                  }
+                  className="w-full h-auto"
+                ></img>
+              </div>
+            )}
+          </div>
+        ))}
     </>
   );
 }
