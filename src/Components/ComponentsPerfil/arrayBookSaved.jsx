@@ -8,6 +8,7 @@ import { Div } from "../ComponentesFeed/div";
 
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
+  const localiton = useLocation();
   const { ebookSaved, setStyleCardActive } = useContext(AppContext);
   const { stylePatchFeed, stylePatchProfile, getBookSave } = useRequisicoes({});
 
@@ -24,6 +25,8 @@ export function ArrayBookSaved({ profile }) {
 
   const [itemsVisible, setItemsVisible] = useState(4);
 
+  const hasMore = itemsVisible < ebookSaved.length;
+  const canShowLess = itemsVisible > 4;
   return (
     <Div>
       <div className="flex items-center justify-between">
@@ -38,22 +41,23 @@ export function ArrayBookSaved({ profile }) {
               )}
         </h4>
 
-        <div className="flex gap-1 text-wine">
-          {itemsVisible > ebookSaved.length && (
-            <button onClick={() => setItemsVisible((prev) => prev - 5)}>
-              Ver menos
-            </button>
-          )}
+        {ebookSaved.length > 0 && location.pathname.startsWith("/perfil") && (
+          <div className="flex gap-1 text-wine">
+            {canShowLess && (
+              <button onClick={() => setItemsVisible(4)}>Ver menos</button>
+            )}
 
-          {itemsVisible < ebookSaved.length && (
-            <div className="flex items-center cursor-pointer">
-              <button onClick={() => setItemsVisible((prev) => prev + 5)}>
-                Ver mais
-              </button>
-              <RightArrow></RightArrow>
-            </div>
-          )}
-        </div>
+            {hasMore && (
+              <div className="flex items-center cursor-pointer">
+                <button onClick={() => setItemsVisible((prev) => prev + 5)}>
+                  Ver mais
+                </button>
+
+                <RightArrow />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {ebookSaved?.length === 0 ? (

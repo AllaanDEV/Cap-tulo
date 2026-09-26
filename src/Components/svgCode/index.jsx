@@ -697,3 +697,92 @@ export const RightArrow = () => {
     </svg>
   );
 };
+
+export const More = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-plus"
+      aria-hidden="true"
+      data-id="element-355"
+      data-mp="1y09ls7m3e7ag"
+    >
+      <path d="M5 12h14"></path>
+      <path d="M12 5v14"></path>
+    </svg>
+  );
+};
+export const Less = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-minus"
+      aria-hidden="true"
+      data-id="element-352"
+      data-mp="1abok1y782tts"
+    >
+      <path d="M5 12h14"></path>
+    </svg>
+  );
+};
+
+export const Check = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-check"
+      aria-hidden="true"
+      data-id="element-360"
+      data-mp="6duy1mz4ikwz"
+    >
+      <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+  );
+};
+
+export const Pencil = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-pencil"
+      aria-hidden="true"
+      data-id="element-369"
+      data-mp="3m0n0udmk4zfj"
+    >
+      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+      <path d="m15 5 4 4"></path>
+    </svg>
+  );
+};
