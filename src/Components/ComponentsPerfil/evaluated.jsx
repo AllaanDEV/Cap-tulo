@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Div } from "../ComponentesFeed/div";
 import AppContext from "../context";
 import { useParams } from "react-router";
@@ -14,73 +14,77 @@ export function Evaluated() {
     .filter((avaliation) => avaliation.type === "feedback")
     .sort((a, b) => b.postModified.starsEbook - a.postModified.starsEbook);
 
-  console.log("AVALIADOS", postFeedback);
-
   const [itemsVisible, setItemsVisible] = useState(5);
-  
+
+  const hasMore = itemsVisible < postFeedback.length;
+  const canShowLess = itemsVisible > 5;
+
   return (
     <Div className="p-2">
+      {/* Cabeçalho */}
       <div className="flex justify-between">
         <p className="text-xl font-fraunce flex items-center">
           Avaliados ·
-          <span className="text-gray text-md flex items-center">
+          <span className="text-gray text-md flex items-center pl-1">
             {postFeedback?.length}
           </span>
         </p>
 
-        <div className="flex gap-1 text-wine">
-          {itemsVisible > postFeedback.length && (
-            <button onClick={() => setItemsVisible((prev) => prev - 5)}>
-              Ver menos
-            </button>
-          )}
+        {postFeedback.length > 0 && (
+          <div className="flex gap-1 text-wine">
+            {canShowLess && (
+              <button onClick={() => setItemsVisible(5)}>Ver menos</button>
+            )}
 
-          {itemsVisible < postFeedback.length && (
-            <div className="flex items-center cursor-pointer">
-              <button onClick={() => setItemsVisible((prev) => prev + 5)}>
-                Ver mais
-              </button>{" "}
-              <RightArrow></RightArrow>
-            </div>
-          )}
-        </div>
+            {hasMore && (
+              <div className="flex items-center cursor-pointer">
+                <button onClick={() => setItemsVisible((prev) => prev + 5)}>
+                  Ver mais
+                </button>
+
+                <RightArrow />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <ul className="flex flex-wrap gap-5">
+      {/* Livros */}
+      <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-8 mt-4">
         {postFeedback.slice(0, itemsVisible).map((ebook) => {
           return (
-            <li className="max-w-[10vw] h-[20vw] flex flex-col">
+            <li key={ebook.id} className="flex flex-col min-w-0">
               {/* Imagem */}
-              <div className="rounded-lg aspect-[3/4] overflow-hidden group">
+              <div className="rounded-lg aspect-[3/4] overflow-hidden group w-full">
                 <img
                   src={
-                    ebook.postModified?.ebook?.ebook?.volumeInfo.imageLinks
+                    ebook.postModified?.ebook?.ebook?.volumeInfo?.imageLinks
                       ?.thumbnail
                   }
-                  alt={ebook.data?.ebook?.ebook?.volumeInfo.title}
+                  alt={ebook.postModified?.ebook?.ebook?.volumeInfo?.title}
                   className="
-        rounded-lg
-        h-auto
-        max-h-[14vw]
-        w-[10vw]
-        transition-transform
-        duration-300
-        group-hover:scale-110
-      "
+                    w-full
+                    h-full
+                    object-cover
+                    rounded-lg
+                    transition-transform
+                    duration-300
+                    group-hover:scale-110
+                  "
                 />
               </div>
 
               {/* Informações */}
               <div className="p-1 flex flex-col flex-1 min-h-0">
                 <span>
-                  {ebook.postModified?.ebook?.ebook?.volumeInfo.title}
+                  {ebook.postModified?.ebook?.ebook?.volumeInfo?.title}
                 </span>
 
                 <span className="text-gray text-md">
                   {ebook?.postModified?.ebook?.ebook?.volumeInfo?.authors}
                 </span>
 
-                {/* Sempre no final */}
+                {/* Estrelas sempre no final */}
                 <div className="mt-auto">
                   <ArrayStars
                     starsNumber={ebook?.postModified?.starsEbook}
