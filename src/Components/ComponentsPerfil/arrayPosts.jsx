@@ -16,7 +16,7 @@ export function ArrayPosts({post}) {
   // }, [publication, editValue, paramsId]);
 
   return (
-    <ul>
+    <ul className="flex flex-col gap-5">
       {(!search ? publication : search)
         .filter((p) => p.authorId === paramsId)
         .map((p) => (

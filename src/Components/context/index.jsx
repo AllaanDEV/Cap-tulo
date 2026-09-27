@@ -123,7 +123,7 @@ export function Context({ children }) {
 
   const [postFocus, setPostFocus] = useState(false);
 const [dataPostFocus, setDataPostFocus]=useState()
-
+  const [goal, setGoal] = useState({ number: 0 })
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -258,7 +258,7 @@ dialogEmoji, setDialogEmoji,
         setUsersList,
         filterUsers,
         setFilterUsers,
-postFocus, setPostFocus, dataPostFocus, setDataPostFocus, like, setLike
+postFocus, setPostFocus, dataPostFocus, setDataPostFocus, like, setLike, goal, setGoal
       }}
     >
       {children}

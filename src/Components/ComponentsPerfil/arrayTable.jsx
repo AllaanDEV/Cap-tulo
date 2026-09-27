@@ -6,8 +6,7 @@ import { useParams } from "react-router";
 
 export function ArrayTable() {
   const { id: paramsId } = useParams();
-  const { publication, ebookSaved, progressEbook, read, setRead } =
-    useContext(AppContext);
+  const { publication, ebookSaved, progressEbook } = useContext(AppContext);
 
   useEffect(() => {
     publication;
@@ -15,19 +14,20 @@ export function ArrayTable() {
 
   const { user } = useRequisicoes({});
 
-  useEffect(() => {
-    const finished = progressEbook.filter(
-      (progress) => progress === 100,
-    ).length;
+  // useEffect(() => {
+  //   const finished = progressEbook.filter(
+  //     (progress) => progress === 100,
+  //   ).length;
 
-    setRead(finished);
-  }, [progressEbook]);
-
+  //   setRead(finished);
+  // }, [progressEbook]);
 
   const userPublications = publication.filter((p) => p.authorId === paramsId);
+  const read = ebookSaved.filter((ebook) => ebook.progress === 100);
 
+  console.log("ebboksaved", ebookSaved)
   const tableObj = [
-    { name: "Lidos", number: read },
+    { name: "Lidos", number: read.length },
     { name: "Lendo", number: ebookSaved.length },
     { name: "Resenhas", number: userPublications.length },
     // { name: "Seguindo", number: 318 },

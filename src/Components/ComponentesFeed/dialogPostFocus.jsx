@@ -14,9 +14,11 @@ import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { Info } from "./info";
+import { PostModifiedContainer } from "./postModifiedContainer";
+import { Progress } from "../ComponentsPerfil/progress";
 
 export function DialogPostFocus() {
-  const { postFocus, setPostFocus, dataPostFocus, setDataPostFocus, setLike } =
+  const { postFocus, setPostFocus, dataPostFocus, setDataPostFocus, setLike, ebookSaved } =
     useContext(AppContext);
 
   const { user, nameIcon, photoValueFeed, likesGet } = useRequisicoes({
@@ -58,6 +60,9 @@ export function DialogPostFocus() {
     likesGet();
   }, []);
 
+const ebookProgressFocus= ebookSaved.filter((ebook) => ebook.userId === user.id).find((progress) => progress.ebook.ebook?.id === dataPostFocus?.postModified.ebook.ebook?.id)
+  
+console.log("TYOE", dataPostFocus?.type)
   return (
     <dialog
       ref={dialogFocus}
@@ -175,7 +180,7 @@ export function DialogPostFocus() {
                   }
                 ></EbookCitation>
               ) : dataPostFocus?.type === "feedback" ? (
-                <ContainerEbooks
+                <PostModifiedContainer
                   title={
                     dataPostFocus.postModified?.ebook?.ebook?.volumeInfo?.title
                   }
@@ -188,12 +193,15 @@ export function DialogPostFocus() {
                       ?.imageLinks?.thumbnail
                   }
                   starsNumber={dataPostFocus.postModified?.starsEbook}
-                ></ContainerEbooks>
+                  type={dataPostFocus?.type}
+                ></PostModifiedContainer>
               ) : (
                 dataPostFocus?.type === "resenha" && (
-                  <EbookProgress
+                  <PostModifiedContainer
                     book={dataPostFocus.postModified.ebook}
-                  ></EbookProgress>
+                    progress={ebookProgressFocus}
+                    type={dataPostFocus?.type}
+                  ></PostModifiedContainer>
                 )
               )}
             </div>

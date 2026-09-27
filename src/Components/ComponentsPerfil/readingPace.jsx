@@ -7,14 +7,14 @@ import { useParams } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ReadingPace() {
-  const { ebookSaved } = useContext(AppContext);
+  const { ebookSaved, goal, setGoal } = useContext(AppContext);
   const { user } = useRequisicoes({});
   const { id: paramsId } = useParams();
 
   const [goalNumber, setGoalNumber] = useState(0);
 
   // 1. CORRIGIDO: Inicializado como objeto para casar com `prev.number`
-  const [goal, setGoal] = useState({ number: 0 });
+;
 
   const limitNumber = (signal) => {
     setGoal((prev) => {
