@@ -5,8 +5,9 @@ import { Active } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useLocation } from "react-router";
 import { ContainerEbooks } from "./containerEbooks";
+import { Progress } from "./progress";
 
-export function EbookProgress({ book, className }) {
+export function EbookProgress({ book, className, ...props }) {
   const {
     setProgressEbook,
     styleCardActive,
@@ -55,6 +56,7 @@ export function EbookProgress({ book, className }) {
       }
       book={book}
       className={className}
+      {...props}
     >
       {styleCardActive?.ebook?.volumeInfo?.title ===
         book?.ebook?.volumeInfo?.title && locationPatch ? (
@@ -63,21 +65,7 @@ export function EbookProgress({ book, className }) {
         </span>
       ) : null}
 
-      <div className="flex flex-col gap-1 mt-auto">
-        <div className="flex justify-between">
-          <span className="text-xs text-black/70">Progresso</span>
-          <span className="text-xs text-wine">{book?.progress}%</span>
-        </div>
-        <div className="w-full rounded-2xl bg-gray/30">
-          <div
-            className="w-full py-1 bg-wine rounded-2xl"
-            style={{
-              width: `${book?.progress === 100 ? "100" : book?.progress}%`,
-              backgroundColor: `${book?.progress === 100 ? "green" : progress < 100 ? "var(--color-wine: #722F37)" : null}`,
-            }}
-          ></div>
-        </div>
-      </div>
+      <Progress book={book}></Progress>
     </ContainerEbooks>
   );
 }

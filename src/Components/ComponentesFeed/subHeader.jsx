@@ -13,7 +13,7 @@ import { gallery } from "../svgCode";
 import { Div } from "./div";
 
 // import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useContext,useRef} from "react";
+import { useContext, useEffect, useRef } from "react";
 import { TipTapEditor } from "./tiptapEditor";
 import AppContext from "../context";
 
@@ -21,6 +21,7 @@ import { DialogGif } from "./dialogGif";
 
 import { DialogImoji } from "./dialogEmoji";
 import { ComplexPost } from "./complexPost";
+import { useLocation } from "react-router";
 // const Ebook = ebook;
 
 // const navigation = [
@@ -45,7 +46,7 @@ const buttons = [
 
 export function SubHeader() {
   const emojiContainerRef = useRef(null);
-  // const location = useLocation();
+  const location = useLocation();
 
   const {
     midia,
@@ -57,7 +58,10 @@ export function SubHeader() {
     postCitation,
     setPostCitation,
     setDialogEmoji,
-dialogEmoji
+    dialogEmoji,
+    setStyleCardActive,
+    postModified,
+    ebookSaved,
   } = useContext(AppContext);
 
   // const { getBookSave, user, newPost, stylePatchFeed, stylePatchProfile } =
@@ -67,6 +71,7 @@ dialogEmoji
     if (index === 0) {
       setPostCitation((prev) => !prev);
       setPostModified("citation");
+      setStyleCardActive(ebookSaved[0] || null);
     } else if (index === 1) {
       setDialogGif((prev) => !prev);
     } else if (index === 2) {
@@ -93,14 +98,22 @@ dialogEmoji
   //   }
   // };
 
-
   // const citationPublication = (e) => {
   //   setValuePostCitation(e.target.value);
   // };
 
   // const [styleButton, setStyleButton] = useState("quotation");
 
+  useEffect(() => {
+    // setPostModified();
+    setPostCitation(false);
+    setStyleCardActive();
+  }, [location]);
 
+  console.log("ytyoe", postModified);
+  // useEffect(() => {
+  //   setStyleCardActive(ebookSaved[0] || null);
+  // }, [postModified]);
 
   return (
     <>

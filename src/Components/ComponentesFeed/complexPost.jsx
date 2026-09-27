@@ -12,6 +12,7 @@ import { ebook } from "../svgCode";
 
 import { Star, quotation } from "../svgCode";
 import { useParams } from "react-router";
+import { PostModifiedContainer } from "./postModifiedContainer";
 
 const Ebook = ebook;
 
@@ -35,7 +36,7 @@ export function ComplexPost() {
 
     setDisabledCardActive,
     ebookSaved,
-
+    setStyleCardActive,
     setDialogImoji,
   } = useContext(AppContext);
 
@@ -79,6 +80,7 @@ export function ComplexPost() {
     { icon: ebook, name: "ebook" },
   ];
 
+  // const avaliationTypePost = !styleCardActive && setPostModified();
   return (
     <section className="w-full">
       <div className="flex justify-between ">
@@ -114,7 +116,10 @@ export function ComplexPost() {
         </div>
         <button
           onClick={() => {
-            (setPostCitation((prev) => !prev), setStyleButton("quotation"));
+            ((setPostCitation((prev) => !prev),
+            setStyleButton("quotation"),
+            setStyleCardActive()),
+              setPostModified());
           }}
         >
           <XSavedEbook></XSavedEbook>
@@ -167,11 +172,13 @@ export function ComplexPost() {
             )}
 
           {styleCardActive && postModified === "feedback" && (
-            <ContainerEbooks
+            <PostModifiedContainer
               title={styleCardActive.ebook.volumeInfo.title}
               subtitle={styleCardActive.ebook.volumeInfo.subtitle}
               thumbnail={styleCardActive.ebook.volumeInfo.imageLinks?.thumbnail}
-            ></ContainerEbooks>
+              starsEbook={starFilled}
+              postModified={postModified}
+            ></PostModifiedContainer>
           )}
         </div>
       </div>
@@ -212,6 +219,9 @@ export function ComplexPost() {
               setContainerModified(true);
               setDisabledCardActive(true);
               setStyleButton("quotation");
+              // if (!styleCardActive) {
+              //   setPostModified();
+              // }
               // setStyleCardActive(ebookSaved[0]);
             }}
           >

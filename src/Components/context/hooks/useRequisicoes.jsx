@@ -48,7 +48,7 @@ export function useRequisicoes({ post, like, setLike }) {
   const [comments, setComments] = useState(false);
   const [photoValueFeed, setPhotoValueFeed] = useState([]);
 
-  const postDelete = () => {
+  const postDelete = (data) => {
     fetch(`http://localhost:3000/api/posts/${post.id}`, {
       method: "DELETE",
       headers: {
@@ -58,6 +58,10 @@ export function useRequisicoes({ post, like, setLike }) {
     }).then((res) => {
       if (res.status == 200) {
         const newFeed = publication.filter((p) => p.id != post.id);
+        
+        if (data.type === "feedback") {
+          arrayFeedbacksEbooks();
+        }
 
         setSearch(newFeed);
         return setPublication(newFeed);
@@ -129,10 +133,10 @@ export function useRequisicoes({ post, like, setLike }) {
           prev?.map((p) => (p.id === data.id ? data : p)),
         );
 
-          if (dataPostFocus && data.id === dataPostFocus.id) {
-        setDataPostFocus(data);
-      }
-      
+        if (dataPostFocus && data.id === dataPostFocus.id) {
+          setDataPostFocus(data);
+        }
+
         setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       });
   };
@@ -297,7 +301,7 @@ export function useRequisicoes({ post, like, setLike }) {
   const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
 
   const arrayFeedbacksEbooks = async () => {
-    const response = await fetch("http://localhost:5173/api/books/feedbacks");
+    const response = await fetch("http://localhost:3000/api/books/feedbacks");
 
     const data = await response.json();
 

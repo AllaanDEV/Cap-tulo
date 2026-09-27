@@ -11,6 +11,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useNavigate } from "react-router";
 import AppContext from "../context";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+import { Progress } from "../ComponentsPerfil/progress";
 
 const Spiral = spiral;
 
@@ -31,14 +32,27 @@ const options = [
 ];
 
 export function SideBar() {
-  const { nameIcon, user, fetchProfile, photoValueFeed, allFollowers } =
-    useRequisicoes({});
-  const { setEbookSaved, setEditValue, read, followers } =
-    useContext(AppContext);
+  const {
+    nameIcon,
+    user,
+    fetchProfile,
+    photoValueFeed,
+    allFollowers,
+    getBookSave,
+  } = useRequisicoes({});
+  const {
+    setEbookSaved,
+    setEditValue,
+    followers,
+    publication,
+    ebookSaved,
+    goal,
+  } = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
     allFollowers();
+    getBookSave(user.id);
   }, []);
 
   const [option, setOption] = useState("Feed");
@@ -65,11 +79,12 @@ export function SideBar() {
   );
 
   const seguindoProfileId = followers.filter((f) => f.following === user.id);
-
   const seguindo = followers.filter((f) => f.userId === user.id);
 
+  const read = ebookSaved.filter((ebook) => ebook.progress === 100);
+
   const stats = [
-    { status: "Lidos", number: formatarParaK(read) },
+    { status: "Lidos", number: formatarParaK(read.length) },
     { status: "Seguindo", number: formatarParaK(seguindo?.length) },
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
@@ -132,16 +147,10 @@ export function SideBar() {
             <Spiral></Spiral>
             <p>Meta de leitrua 2026</p>
           </div>
-          <p>30 de 50 livros</p>
-          <div className="h-2 w-full rounded-3xl bg-border">
-            <div
-              style={{
-                width: "40%",
-                backgroundColor: "var(--color-wine)",
-              }}
-              className="h-full rounded-3xl"
-            ></div>
-          </div>
+          <p>
+            {ebookSaved.length} de {goal.number} livros
+          </p>
+          <Progress goal={goal?.number}></Progress>
         </Info>
       </div>
     </aside>
