@@ -3,15 +3,16 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Div } from "./div";
 import { Info } from "./info";
 
-import { house } from "../svgCode";
+import { house, Circle } from "../svgCode";
 import { compass } from "../svgCode";
 import { book, logout, Group, save, spiral } from "../svgCode";
 import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import AppContext from "../context";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { Progress } from "../ComponentsPerfil/progress";
+import { UsersInfo } from "./usersInfo";
 
 const Spiral = spiral;
 
@@ -26,12 +27,13 @@ const options = [
   { icon: house, name: "Feed" },
   { icon: compass, name: "Explorar" },
   { icon: book, name: "Minha estante" },
-  { icon: Group, name: "Seguindo" },
+  // { icon: Group, name: "Seguindo" },
   { icon: save, name: "Quero ler" },
   { icon: logout, name: "sair" },
 ];
 
 export function SideBar() {
+  const { id: paramsId } = useParams();
   const {
     nameIcon,
     user,
@@ -39,6 +41,7 @@ export function SideBar() {
     photoValueFeed,
     allFollowers,
     getBookSave,
+    postNumberGet,
   } = useRequisicoes({});
   const {
     setEbookSaved,
@@ -47,6 +50,7 @@ export function SideBar() {
     publication,
     ebookSaved,
     goal,
+    progressAllEbooks,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -89,25 +93,25 @@ export function SideBar() {
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
 
+  useEffect(() => {
+    postNumberGet(paramsId);
+  }, []);
+
+  const difference = goal?.number - ebookSaved?.length;
+  const textDiference =
+    difference <= 5
+      ? "só mais"
+      : difference <= 10
+        ? "apenas"
+        : difference <= 20 && "cerca";
+
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
-        <Div>
-          <div className="flex gap-2">
-            <PerfilIcon to={`/perfil/${user.id}`}>
-              {photo?.midiaIcon ? (
-                <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-              ) : (
-                <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                  {nameIcon(user.name)}
-                </p>
-              )}
-            </PerfilIcon>
-            <div className="text-start">
-              <p>{user.name || "anonimo"}</p>
-              <p className="flex items-center">@{user.userName}</p>
-            </div>
-          </div>
+        <Div className="flex flex-col items-start">
+          <UsersInfo >
+      
+          </UsersInfo>
           <Info className="grid grid-cols-3 divide-x divide-gray bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
@@ -142,15 +146,32 @@ export function SideBar() {
           })}
         </div>
 
-        <Info className="flex flex-col gap-3 bg-primary rounded-lg p-3">
-          <div className="flex gap-3 items-center">
-            <Spiral></Spiral>
-            <p>Meta de leitrua 2026</p>
+        <Info className="flex flex-col gap-1 bg-primary rounded-lg p-3 items-start">
+          <div className="flex gap-1 items-center text-wine">
+            <Circle></Circle>
+            <p>Meta de leitura {new Date().getFullYear()}</p>
           </div>
-          <p>
-            {ebookSaved.length} de {goal.number} livros
-          </p>
-          <Progress goal={goal?.number}></Progress>
+          {goal?.number > 0 ? (
+            <>
+              <p className="text-gray text-sm">
+                {ebookSaved.length} de {goal.number} livros
+              </p>
+              <Progress
+                goal={progressAllEbooks.toFixed()}
+                className="w-full"
+              ></Progress>
+              <span className="text-gray text-xs">
+                Faltam {textDiference} {difference} livros para a conclusão {difference <= 5 && "🎉"}
+              </span>
+            </>
+          ) : (
+            <Link
+              className="text-gray hover:bg-gray/30 py-1 px-3 rounded-2xl flex items-center  transition duration-400"
+              to={`/perfil/${user.id}`}
+            >
+              Faça uma meta!
+            </Link>
+          )}
         </Info>
       </div>
     </aside>

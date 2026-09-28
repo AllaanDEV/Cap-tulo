@@ -142,6 +142,7 @@ export function ComplexPost() {
             ) : (
               postModified === "feedback" && (
                 <div className="flex items-center gap-2">
+                  <span className="text-gray text-sm">FAÇA SUA AVALIAÇÃO:</span>
                   <ArrayStars onClick={setStarFilled}></ArrayStars>
                   <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
                 </div>

@@ -28,9 +28,11 @@ export function Header() {
     setSearchValue,
     postId,
     editRequisicao,
+    followerPost,
   } = useContext(AppContext);
 
-  const { nameIcon, user, fetchProfile, photoValueFeed } = useRequisicoes({});
+  const { nameIcon, user, fetchProfile, photoValueFeed, postFollowers } =
+    useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
@@ -53,7 +55,10 @@ export function Header() {
       location.pathname === `/feed/${user.id}` ||
       location.pathname === `/perfil/${postId.authorId || user.id}`
     ) {
-      const filterPublications = publication.filter((p) => {
+      setSearchValue(e.target.value)
+      const validationPost = !followerPost ? publication : postFollowers;
+
+      const filterPublications = validationPost.filter((p) => {
         return (
           padrao(p.content).includes(padrao(e.target.value)) ||
           padrao(p.author).includes(padrao(e.target.value))

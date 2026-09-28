@@ -30,7 +30,6 @@ export function CommentsList({ post }) {
   const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
     useState(false);
 
-  // 1. Criar referência para o textarea
   const textareaRef = useRef(null);
 
   const {
@@ -49,6 +48,7 @@ export function CommentsList({ post }) {
     const content = formData.get("comment");
 
     addComment(e, content);
+
   };
 
   useEffect(() => {
@@ -79,7 +79,8 @@ export function CommentsList({ post }) {
   );
 
   const [comment, setComment] = useState("");
-const [itemsVisible, setItemsVisible] = useState(5);
+// const [itemsVisible, setItemsVisible] = useState(5);
+
   return (
     <div className="flex flex-col w-full">
       {!postFocus && <Lines />}
@@ -98,7 +99,7 @@ const [itemsVisible, setItemsVisible] = useState(5);
         <div className="flex w-full bg-background rounded-2xl items-center gap-1 pr-2 border border-border">
           <form onSubmit={dataCommentForm} className="w-full flex items-center">
             <textarea
-              ref={textareaRef} // <-- 3. Atribuir a ref ao textarea
+              ref={textareaRef}
               name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}

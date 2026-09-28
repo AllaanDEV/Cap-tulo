@@ -3,15 +3,15 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 import { useLocation, useParams } from "react-router";
 
-export function ButtonFlow({ profileId, users, className, ...props }) {
+export function ButtonFlow({ profileId, users, className, style,validationFollowers, ...props }) {
   const { followersPost, user, fetchProfile, userUP, allFollowers } =
     useRequisicoes({});
   const { followers } = useContext(AppContext);
   const location = useLocation();
 
-  const validationFollowers = followers.find(
-    (follower) => follower.userId === user.id,
-  );
+  // const validationFollowers = followers.find(
+  //   (follower) => follower.userId === user.id,
+  // );
 
   useEffect(() => {
     fetchProfile();
@@ -24,9 +24,9 @@ export function ButtonFlow({ profileId, users, className, ...props }) {
       : followersPost(profileId);
   };
 
-  const style = validationFollowers
-    ? "bg-transparent  text-gray disabled:hover:bg-wine"
-    : "bg-wine text-white";
+  // const style = validationFollowers
+  //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
+  //   : "bg-wine text-white";
 
   return (
     <button

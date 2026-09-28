@@ -1,21 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useEffectEvent, useState } from "react";
 import { Div } from "../ComponentesFeed/div";
 import { Info } from "../ComponentesFeed/info";
 import { Check, Circle, Less, More, Pencil } from "../svgCode";
 import AppContext from "../context";
 import { useParams } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { SideBar } from "../ComponentesFeed/sideBar";
 
 export function ReadingPace() {
-  const { ebookSaved, goal, setGoal } = useContext(AppContext);
-  const { user } = useRequisicoes({});
+  const { ebookSaved, goal, setGoal, progressAllEbooks, usersList } =
+    useContext(AppContext);
+  const { user, postNumberGet, userUP } = useRequisicoes({});
   const { id: paramsId } = useParams();
 
   const [goalNumber, setGoalNumber] = useState(0);
 
   // 1. CORRIGIDO: Inicializado como objeto para casar com `prev.number`
-;
-
   const limitNumber = (signal) => {
     setGoal((prev) => {
       // Garante segurança caso `prev` venha nulo/undefined
@@ -68,39 +68,46 @@ export function ReadingPace() {
     }
   };
 
-  useEffect(() => {
-    const postNumberGet = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/goalNumber/${paramsId}`,
-        );
+  // useEffect(() => {
+  //   const postNumberGet = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:3000/goalNumber/${paramsId}`,
+  //       );
 
-        const data = await response.json();
-        // Garante que o dado recebido seja um objeto com a propriedade number
-        if (data) {
-          setGoal(data);
-        }
-        return data;
-      } catch (error) {
-        console.error(error);
-        alert(
-          "Não foi possível realizar a busca da meta, tente novamente mais tarde",
-        );
-      }
-    };
-    postNumberGet();
+  //       const data = await response.json();
+
+  //       if (data) {
+  //         setGoal(data);
+  //       }
+  //       return data;
+  //     } catch (error) {
+  //       console.error(error);
+  //       alert(
+  //         "Não foi possível realizar a busca da meta, tente novamente mais tarde",
+  //       );
+  //     }
+  //   };
+  //   postNumberGet();
+  // }, [paramsId]);
+
+  useEffect(() => {
+    postNumberGet(paramsId);
+    userUP();
   }, [paramsId]);
+
+  const userProfile = usersList.find((u) => u.id === paramsId);
 
   const validation = goal?.number > 0;
 
-  const progressAllEbooks = validation
-    ? Math.min(
-        (ebookSaved.reduce((acc, ebook) => acc + ebook.progress / 100, 0) /
-          goal.number) *
-          100,
-        100,
-      )
-    : 0;
+  // const progressAllEbooks = validation
+  //   ? Math.min(
+  //       (ebookSaved.reduce((acc, ebook) => acc + ebook.progress / 100, 0) /
+  //         goal.number) *
+  //         100,
+  //       100,
+  //     )
+  //   : 0;
 
   return (
     <Div className="flex items-start">
@@ -117,7 +124,6 @@ export function ReadingPace() {
             <div className="w-full flex flex-col gap-4">
               <div className="flex flex-col items-start w-full">
                 <span>Meta de leitura para {new Date().getFullYear()}</span>
-
                 {read.length === 0 ? (
                   <span className="text-gray text-sm">
                     Quantos livros você quer ler este ano?
@@ -181,11 +187,14 @@ export function ReadingPace() {
               <div className="flex items-start">
                 {progressAllEbooks === 100 ? (
                   <span className="text-lg">
-                    Meta concluida com sucesso, parabêns!!!🥳🎉🎉
+                    {paramsId !== user.id
+                      ? `${userProfile.name} bateu sua meta!🎉`
+                      : "concluida com sucesso, parabêns!!!🥳🎉🎉"}{" "}
+                    Meta
                   </span>
                 ) : goal?.number > 0 ? (
-                  <p className="text-gray text-lg">
-                    Concluindo
+                  <p className="text-gray text-lg">{userProfile.name} está
+                    concluindo
                     <span className=" pl-1">{ebookSaved?.length}</span>
                     <span className="text-gray pl-1">
                       de {validation ? goal?.number : 0} livros em{" "}
@@ -197,7 +206,7 @@ export function ReadingPace() {
                     className="
                   text-lg"
                   >
-                    Que tal fazer uma meta?
+                   {user.id === paramsId ? " Que tal fazer uma meta?" : `${userProfile.name} ainda não possui uma meta`}
                   </p>
                 )}
               </div>

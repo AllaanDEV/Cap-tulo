@@ -265,6 +265,11 @@ export function Icon({ state }) {
     (f) => f.userId === (profile?.authorId || profile?.id || user.id),
   );
 
+
+  const style = validationFollowers
+    ? "bg-transparent  text-gray disabled:hover:bg-wine"
+    : "bg-wine text-white";
+
   return (
     <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
       <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
@@ -327,7 +332,7 @@ export function Icon({ state }) {
           )}
           {profileId === user.id ? null : (
             // <ContainerTags>
-              <ButtonFlow profileId ={profileId }></ButtonFlow>
+              <ButtonFlow profileId ={profileId } validationFollowers={validationFollowers} style={style}></ButtonFlow>
             // </ContainerTags>
           )}
         </div>

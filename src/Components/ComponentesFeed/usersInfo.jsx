@@ -5,13 +5,14 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function UsersInfo({ post, users }) {
-  const { user, nameIcon, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { followers} = useContext(AppContext);
+  const { user, nameIcon, fetchProfile, photoValueFeed} =
+    useRequisicoes({});
+  const { followers } = useContext(AppContext);
 
   const profile = {
-    id: post?.authorId || users?.id,
-    name: post?.author || users?.name,
-    userName: post?.userName || users?.userName,
+    id: post?.authorId || users?.id || user.id,
+    name: post?.author || users?.name || user.name,
+    userName: post?.userName || users?.userName || user.userName,
   };
 
   const seguindoProfileId = followers.find((f) => f.following === profile.id);
@@ -23,6 +24,12 @@ export function UsersInfo({ post, users }) {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  // const myS = followers.filter((u) => u.userId === user.id);
+
+  // const seguindo = publication.filter((f) => {
+  //   return myS.some((u) => u.following === f.authorId);
+  // });
 
   return (
     <div className="flex gap-2 items-center justify-center">

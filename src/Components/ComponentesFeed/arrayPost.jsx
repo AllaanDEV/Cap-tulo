@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Post } from "./post";
 import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 // const post = [
 //   {
@@ -43,17 +44,24 @@ import AppContext from "../context";
 // ];
 
 export function ArrayPost() {
-  const { publication, search } = useContext(AppContext);
+  const { publication, search, followerPost, searchValue} =
+    useContext(AppContext);
+
+const {postFollowers}=useRequisicoes({})
+
+  const postsToRender = searchValue
+    ? search
+    : followerPost
+      ? postFollowers
+      : publication;
 
   return (
     <ul className="flex flex-col gap-5">
-      {(!search ? publication : search).map((p) => {
-        return (
-          <li key={p.id}>
-            <Post post={p}></Post>
-          </li>
-        );
-      })}
+      {postsToRender.map((p) => (
+        <li key={p.id}>
+          <Post post={p} />
+        </li>
+      ))}
     </ul>
   );
 }
