@@ -14,6 +14,7 @@ export function PostModifiedContainer({
   postModified,
   ...props
 }) {
+
   return (
     <div
       className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${className}`}
@@ -35,7 +36,7 @@ export function PostModifiedContainer({
             <p className="text-xs text-black/70">
               {book?.ebook?.volumeInfo?.subtitle || subtitle}
             </p>
-            {type === "feedback" || postModified === "feedback" && (
+            {(postModified || type ) === "feedback" && (
               <ArrayStars
                 starsEbook={starsEbook}
                 starsNumber={starsNumber}

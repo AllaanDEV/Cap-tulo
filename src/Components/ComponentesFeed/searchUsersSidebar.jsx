@@ -11,7 +11,7 @@ import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
 import AppContext from "../context";
 
 export function SearchUsersSidebar() {
-  const { usersList, setUsersList, filterUsers, setFilterUsers } =
+  const { usersList, setUsersList, filterUsers, setFilterUsers, followers} =
     useContext(AppContext);
   const { nameIcon, photoValueFeed, user, fetchProfile, userUP } =
     useRequisicoes({});
@@ -60,6 +60,15 @@ export function SearchUsersSidebar() {
     (users) => users.id !== user.id && users.id !== paramsId,
   ).slice(0, 5);
 
+    const validationFollowers = followers.find(
+    (follower) => follower.userId === user.id,
+  );
+
+  const style = validationFollowers
+    ? "bg-transparent  text-gray disabled:hover:bg-wine"
+    : "bg-wine text-white";
+
+
   return (
     <Div>
       <section>
@@ -88,6 +97,8 @@ export function SearchUsersSidebar() {
                   <ButtonFlow
                     users={users.id}
                     className="text-sm "
+                    style={style }
+                    validationFollowers={validationFollowers}
                   ></ButtonFlow>
                 </li>
               );

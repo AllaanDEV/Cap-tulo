@@ -60,7 +60,7 @@ export function DialogPostFocus() {
     likesGet();
   }, []);
 
-const ebookProgressFocus= ebookSaved.filter((ebook) => ebook.userId === user.id).find((progress) => progress.ebook.ebook?.id === dataPostFocus?.postModified.ebook.ebook?.id)
+const ebookProgressFocus= ebookSaved.filter((ebook) => ebook.userId === user.id).find((progress) => progress.ebook.ebook?.id === dataPostFocus?.postModified?.ebook?.ebook?.id)
   
 console.log("TYOE", dataPostFocus?.type)
   return (

@@ -84,7 +84,7 @@ export function Context({ children }) {
     { Star: Star, size: "20" },
   ];
 
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState([]);
   const [post, setPost] = useState([]);
   const [edit, setEdit] = useState({});
   const [atualizar, setAtualizar] = useState(false);
@@ -122,8 +122,9 @@ export function Context({ children }) {
   const [feedbacksArray, setFeedbacksArray] = useState();
 
   const [postFocus, setPostFocus] = useState(false);
-const [dataPostFocus, setDataPostFocus]=useState()
-  const [goal, setGoal] = useState({ number: 0 })
+  const [dataPostFocus, setDataPostFocus] = useState();
+  const [goal, setGoal] = useState({ number: 0 });
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -174,6 +175,19 @@ const [dataPostFocus, setDataPostFocus]=useState()
   const [usersList, setUsersList] = useState([]);
   const [filterUsers, setFilterUsers] = useState([]);
   const [like, setLike] = useState([]);
+
+  const progressAllEbooks =
+    goal?.number > 0
+      ? Math.min(
+          (ebookSaved.reduce((acc, ebook) => acc + ebook.progress / 100, 0) /
+            goal.number) *
+            100,
+          100,
+        )
+      : 0;
+
+  const [followerPost, setFollowerPost] = useState(false);
+  const textareaRef= document.getElementById("textearea")
   return (
     <AppContext.Provider
       value={{
@@ -249,7 +263,8 @@ const [dataPostFocus, setDataPostFocus]=useState()
         setDisabledCardActive,
         contentHtml,
         setContentHtml,
-dialogEmoji, setDialogEmoji,
+        dialogEmoji,
+        setDialogEmoji,
         contentEmoji,
         setContentEmoji,
         feedbacksArray,
@@ -258,7 +273,15 @@ dialogEmoji, setDialogEmoji,
         setUsersList,
         filterUsers,
         setFilterUsers,
-postFocus, setPostFocus, dataPostFocus, setDataPostFocus, like, setLike, goal, setGoal
+        postFocus,
+        setPostFocus,
+        dataPostFocus,
+        setDataPostFocus,
+        like,
+        setLike,
+        goal,
+        setGoal,
+        progressAllEbooks, followerPost, setFollowerPost,
       }}
     >
       {children}

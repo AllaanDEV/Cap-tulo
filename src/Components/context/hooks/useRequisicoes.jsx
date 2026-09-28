@@ -34,6 +34,7 @@ export function useRequisicoes({ post, like, setLike }) {
     setFilterUsers,
     dataPostFocus,
     setDataPostFocus,
+    setGoal
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -58,7 +59,7 @@ export function useRequisicoes({ post, like, setLike }) {
     }).then((res) => {
       if (res.status == 200) {
         const newFeed = publication.filter((p) => p.id != post.id);
-        
+
         if (data.type === "feedback") {
           arrayFeedbacksEbooks();
         }
@@ -341,6 +342,32 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
+  const postNumberGet = async (paramsId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/goalNumber/${paramsId}`,
+      );
+
+      const data = await response.json();
+
+      if (data) {
+        setGoal(data);
+      }
+      return data;
+    } catch (error) {
+      console.error(error);
+      alert(
+        "Não foi possível realizar a busca da meta, tente novamente mais tarde",
+      );
+    }
+  };
+
+  const myFollowers = followers.filter((u) => u.userId === user.id);
+
+  const postFollowers = publication.filter((f) => {
+    return myFollowers.some((u) => u.following === f.authorId);
+  });
+
   return {
     token,
     postDelete,
@@ -365,5 +392,7 @@ export function useRequisicoes({ post, like, setLike }) {
     arrayFeedbacksEbooks,
     followersPost,
     userUP,
+    postNumberGet,
+    postFollowers,
   };
 }
