@@ -106,10 +106,10 @@ export const Post = memo(function Post({ post }) {
   // }, [like, post.id, user.id]);
 
   useEffect(() => {
-    if (post.type === "feedback") {
+    if (post?.type === "feedback") {
       arrayFeedbacksEbooks();
     }
-  }, [post.type]);
+  }, [post?.type]);
 
   console.log("VAP", post);
 
@@ -124,7 +124,7 @@ export const Post = memo(function Post({ post }) {
                 <Icon></Icon>
               </summary>
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                {post.authorId === user.id ? (
+                {post?.authorId === user.id ? (
                   <button className="hover:text-wine" onClick={() => postDelete(post, paramsId)}>
                     Deletar
                   </button>
@@ -134,7 +134,7 @@ export const Post = memo(function Post({ post }) {
           </div>
 
           <p
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: post?.content }}
             className="text"
             onClick={() => {
               setPostFocus((prev) => !prev);
@@ -142,7 +142,7 @@ export const Post = memo(function Post({ post }) {
             }}
           />
 
-          {post.midia !== "listNull" && (
+          {post?.midia !== "listNull" && (
             <Info
               className="rounded-xs cursor-pointer"
               onClick={() => {
@@ -152,11 +152,11 @@ export const Post = memo(function Post({ post }) {
             >
               {post?.midia?.type === "gif" ? (
                 <img
-                  src={post.midia.images?.original?.url}
-                  alt={post.midia.title}
+                  src={post?.midia?.images?.original?.url}
+                  alt={post?.midia?.title}
                   className="w-full object-contain sm:max-h-[35vw] "
                 />
-              ) : Array.isArray(post.midia) ? (
+              ) : Array.isArray(post?.midia) ? (
                 <div>
                   {post.midia.map((url, index) => (
                     <img
@@ -171,18 +171,18 @@ export const Post = memo(function Post({ post }) {
             </Info>
           )}
 
-          {post.type === "citation" ? (
+          {post?.type === "citation" ? (
             <EbookCitation
-              text={post.postModified?.content}
-              title={post.postModified?.ebook?.ebook?.volumeInfo?.title}
-              authors={post.postModified?.ebook?.ebook?.volumeInfo?.authors}
+              text={post?.postModified?.content}
+              title={post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+              authors={post?.postModified?.ebook?.ebook?.volumeInfo?.authors}
               onClick={() => {
                 setPostFocus((prev) => !prev);
                 setDataPostFocus(post);
               }}
               className="cursor-pointer"
             ></EbookCitation>
-          ) : post.type === "feedback" ? (
+          ) : post?.type === "feedback" ? (
             <PostModifiedContainer
               title={post.postModified?.ebook?.ebook?.volumeInfo?.title}
               subtitle={post.postModified?.ebook?.ebook?.volumeInfo?.subtitle}
@@ -199,9 +199,9 @@ export const Post = memo(function Post({ post }) {
               className="cursor-pointer"
             ></PostModifiedContainer>
           ) : (
-            post.type === "resenha" && (
+            post?.type === "resenha" && (
               <PostModifiedContainer
-                book={post.postModified.ebook}
+                book={post?.postModified?.ebook}
                 onClick={() => {
                   setPostFocus((prev) => !prev);
                   setDataPostFocus(post);

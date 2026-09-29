@@ -188,6 +188,9 @@ export function Context({ children }) {
 
   const [followerPost, setFollowerPost] = useState(false);
   const textareaRef= document.getElementById("textearea")
+
+
+const [postSaved, setPostSaved]= useState([])
   return (
     <AppContext.Provider
       value={{
@@ -281,7 +284,7 @@ export function Context({ children }) {
         setLike,
         goal,
         setGoal,
-        progressAllEbooks, followerPost, setFollowerPost,
+        progressAllEbooks, followerPost, setFollowerPost, postSaved, setPostSaved
       }}
     >
       {children}
