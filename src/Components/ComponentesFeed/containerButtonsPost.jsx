@@ -8,47 +8,56 @@ import AppContext from "../context";
 
 const Save = save;
 export function ContainerButtonsPost({ post, openComments, className }) {
-    const {like, setLike}=useContext(AppContext)
-//   const [like, setLike] = useState([]);
-//   const [liked, setLiked] = useState(false);
+  const { like, setLike,  getPostsSaved} = useContext(AppContext);
+  //   const [like, setLike] = useState([]);
+  //   const [liked, setLiked] = useState(false);
   const [liking, setLiking] = useState(false);
   const likeLock = useRef(false);
 
-  const Saves = () => {
-    fetch(`/api/posts/${post.id}/save`, {
+  const Saves = async () => {
+    const response = await fetch(`http://localhost:3000/api/posts/saved`, {
       method: "POST",
-    }).then((response) => response.json());
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        post: post,
+      }),
+    });
+
+    // if (response.ok) {
+    //   const data= await response.json()
+    //   console.log("respose", data)
+    // return  getPostsSaved()
+    // }
+    return response
   };
 
- const handleLike = async () => {
-  if (likeLock.current) return;
+  const handleLike = async () => {
+    if (likeLock.current) return;
 
-  likeLock.current = true;
-  setLiking(true);
+    likeLock.current = true;
+    setLiking(true);
 
-  try {
-    await LikeButton();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    likeLock.current = false;
-    setLiking(false);
-  }
-};
+    try {
+      await LikeButton();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      likeLock.current = false;
+      setLiking(false);
+    }
+  };
 
-  const { LikeButton, user} = useRequisicoes({
+  const { LikeButton, user } = useRequisicoes({
     post,
     like,
     setLike,
   });
 
-const liked =
-  like?.some(
-    (p) =>
-      p.postId === post?.id &&
-      p.userId === user?.id &&
-      p.validation === true
-  ) ?? false;
+  const liked =
+    like?.some(
+      (p) =>
+        p.postId === post?.id && p.userId === user?.id && p.validation === true,
+    ) ?? false;
 
   return (
     <div className={`flex justify-between px-5  ${className}`}>
@@ -67,7 +76,7 @@ const liked =
         <div>
           <ButtonPost onClick={openComments}>
             <Comment></Comment>
-            {post?.comments.length}
+            {post?.comments?.length}
           </ButtonPost>
           {/* <p className="text-sm"></p> */}
         </div>

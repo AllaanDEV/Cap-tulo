@@ -193,7 +193,7 @@ export function ReadingPace() {
                     Meta
                   </span>
                 ) : goal?.number > 0 ? (
-                  <p className="text-gray text-lg">{userProfile.name} está
+                  <p className="text-gray text-lg">{userProfile?.name} está
                     concluindo
                     <span className=" pl-1">{ebookSaved?.length}</span>
                     <span className="text-gray pl-1">
@@ -206,7 +206,7 @@ export function ReadingPace() {
                     className="
                   text-lg"
                   >
-                   {user.id === paramsId ? " Que tal fazer uma meta?" : `${userProfile.name} ainda não possui uma meta`}
+                   {user.id === paramsId ? " Que tal fazer uma meta?" : `${userProfile?.name} ainda não possui uma meta`}
                   </p>
                 )}
               </div>

@@ -11,10 +11,16 @@ import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
 import AppContext from "../context";
 
 export function SearchUsersSidebar() {
-  const { usersList, setUsersList, filterUsers, setFilterUsers, followers} =
+  const { usersList, setUsersList, filterUsers, setFilterUsers, followers } =
     useContext(AppContext);
-  const { nameIcon, photoValueFeed, user, fetchProfile, userUP } =
-    useRequisicoes({});
+  const {
+    nameIcon,
+    photoValueFeed,
+    user,
+    fetchProfile,
+    userUP,
+    validationFollowers,
+  } = useRequisicoes({});
 
   const { id: paramsId } = useParams();
 
@@ -56,35 +62,29 @@ export function SearchUsersSidebar() {
     setFilterUsers(filteredUsers);
   };
 
-  const usersVisible = filterUsers.filter(
-    (users) => users.id !== user.id && users.id !== paramsId,
-  ).slice(0, 5);
-
-    const validationFollowers = followers.find(
-    (follower) => follower.userId === user.id,
-  );
-
-  const style = validationFollowers
-    ? "bg-transparent  text-gray disabled:hover:bg-wine"
-    : "bg-wine text-white";
-
+  const usersVisible = filterUsers
+    .filter((users) => users.id !== user.id && users.id !== paramsId)
+    .slice(0, 5);
 
   return (
     <Div>
       <section>
         <div className="flex items-center gap-2 text-wine">
-          <Group></Group>
+          <Group />
           <p className="text-xl font-fraunce">Leitores para seguir</p>
         </div>
+
         <label className="flex w-full border border-wine/50 outline-wine hover:outline rounded-full my-1">
           <div className="relative top-2.5 left-2">
-            <Search></Search>
+            <Search />
           </div>
+
           <input
             className="w-full h-full py-2 px-3 outline-none"
             onInput={handleFilterUsers}
           />
         </label>
+
         {usersVisible.length > 0 ? (
           <ul className="mt-2 flex flex-col gap-2">
             {usersVisible.map((users) => {
@@ -93,13 +93,9 @@ export function SearchUsersSidebar() {
                   className="flex justify-between items-center"
                   key={users.id}
                 >
-                  <UsersInfo users={users}></UsersInfo>
-                  <ButtonFlow
-                    users={users.id}
-                    className="text-sm "
-                    style={style }
-                    validationFollowers={validationFollowers}
-                  ></ButtonFlow>
+                  <UsersInfo users={users} />
+
+                  <ButtonFlow userId={users.id} className="text-sm" />
                 </li>
               );
             })}

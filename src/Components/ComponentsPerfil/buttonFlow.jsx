@@ -3,15 +3,20 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 import { useLocation, useParams } from "react-router";
 
-export function ButtonFlow({ profileId, users, className, style,validationFollowers, ...props }) {
-  const { followersPost, user, fetchProfile, userUP, allFollowers } =
-    useRequisicoes({});
-  const { followers } = useContext(AppContext);
-  const location = useLocation();
+export function ButtonFlow({
+  profileId,
+  userId,
+  className,
+  ...props
+}) {
+  const {
+    followersPost,
+    fetchProfile,
+    userUP,
+    validationFollowers,
+  } = useRequisicoes({});
 
-  // const validationFollowers = followers.find(
-  //   (follower) => follower.userId === user.id,
-  // );
+  const location = useLocation();
 
   useEffect(() => {
     fetchProfile();
@@ -19,22 +24,26 @@ export function ButtonFlow({ profileId, users, className, style,validationFollow
   }, []);
 
   const validation = () => {
-    location.pathname.startsWith("/feed")
-      ? userUP(users)
-      : followersPost(profileId);
+    if (location.pathname.startsWith("/feed")) {
+      userUP(userId);
+    } else {
+      followersPost(profileId);
+    }
   };
 
-  // const style = validationFollowers
-  //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
-  //   : "bg-wine text-white";
+  const isFollowing = validationFollowers(userId || profileId);
+
+  const style = isFollowing
+    ? "bg-transparent text-gray disabled:hover:bg-wine"
+    : "bg-wine text-white";
 
   return (
     <button
-      onClick={() => validation()}
+      onClick={validation}
       {...props}
-      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray  py-1 px-2 rounded-full`}
+      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full`}
     >
-      {validationFollowers ? "Deixar de seguir" : "Seguir"}
+      {isFollowing ? "Deixar de seguir" : "Seguir"}
     </button>
   );
 }

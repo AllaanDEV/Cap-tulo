@@ -44,22 +44,24 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 // ];
 
 export function ArrayPost() {
-  const { publication, search, followerPost, searchValue} =
+  const { publication, search, followerPost, searchValue, postSaved } =
     useContext(AppContext);
 
-const {postFollowers}=useRequisicoes({})
+  const { postFollowers } = useRequisicoes({});
 
   const postsToRender = searchValue
     ? search
-    : followerPost
+    : followerPost === "followers"
       ? postFollowers
-      : publication;
+      : followerPost === "saved"
+        ? postSaved
+        : publication;
 
   return (
     <ul className="flex flex-col gap-5">
       {postsToRender.map((p) => (
         <li key={p.id}>
-          <Post post={p} />
+          <Post post={p.post || p} />
         </li>
       ))}
     </ul>

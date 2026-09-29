@@ -255,9 +255,9 @@ export function Icon({ state }) {
     allFollowers();
   }, [profileId]);
 
-  const validationFollowers = followers.find(
-    (follower) => follower.userId === user.id,
-  );
+  // const validationFollowers = followers.find(
+  //   (follower) => follower.userId === user.id,
+  // );
 
   const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
@@ -265,10 +265,9 @@ export function Icon({ state }) {
     (f) => f.userId === (profile?.authorId || profile?.id || user.id),
   );
 
-
-  const style = validationFollowers
-    ? "bg-transparent  text-gray disabled:hover:bg-wine"
-    : "bg-wine text-white";
+  // const style = validationFollowers
+  //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
+  //   : "bg-wine text-white";
 
   return (
     <section className="flex flex-col gap-3 rounded-xs bg-primary sm:w-[70vw] mx-auto">
@@ -332,7 +331,7 @@ export function Icon({ state }) {
           )}
           {profileId === user.id ? null : (
             // <ContainerTags>
-              <ButtonFlow profileId ={profileId } validationFollowers={validationFollowers} style={style}></ButtonFlow>
+            <ButtonFlow profileId={profileId} />
             // </ContainerTags>
           )}
         </div>

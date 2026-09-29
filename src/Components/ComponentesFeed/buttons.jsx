@@ -13,15 +13,20 @@ const navigation = [
 export function Buttons() {
   const { setFollowerPost } = useContext(AppContext);
   const [button, setButton] = useState("Para você");
-  const { allFollowers } = useRequisicoes({});
+  const { allFollowers, getPostsSaved } = useRequisicoes({});
 
   const validation = (index) => {
     if (index === 1) {
       allFollowers();
-      setFollowerPost(true);
+      setFollowerPost("followers");
+      return;
     } else if (index === 0) {
       setFollowerPost(false);
+      return;
     }
+
+    getPostsSaved();
+    return setFollowerPost("saved");
   };
 
   return (

@@ -34,7 +34,8 @@ export function useRequisicoes({ post, like, setLike }) {
     setFilterUsers,
     dataPostFocus,
     setDataPostFocus,
-    setGoal
+    setGoal,
+    setPostSaved,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -169,6 +170,7 @@ export function useRequisicoes({ post, like, setLike }) {
       setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
       setPublication((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
 
+      getPostsSaved();
       if (dataPostFocus && data.id === dataPostFocus.id) {
         setDataPostFocus(data);
       }
@@ -196,6 +198,7 @@ export function useRequisicoes({ post, like, setLike }) {
 
     if (likesPost.ok) {
       likesGet();
+      getPostsSaved();
     }
 
     return likesPost;
@@ -228,7 +231,6 @@ export function useRequisicoes({ post, like, setLike }) {
   const allFollowers = async () => {
     const response = await fetch(`http://localhost:3000/allFollowers`);
     const data = await response.json();
-
     return setFollowers(data);
   };
 
@@ -338,6 +340,7 @@ export function useRequisicoes({ post, like, setLike }) {
     setFilterUsers(data);
 
     if (users && response.ok) {
+      allFollowers();
       return followersPost(users);
     }
   };
@@ -368,6 +371,37 @@ export function useRequisicoes({ post, like, setLike }) {
     return myFollowers.some((u) => u.following === f.authorId);
   });
 
+  // const validationFollowers = followers.find(
+  //   (follower) => follower.userId === user.id,
+  // );
+
+  // const buttonFollowers = (users) => {
+  //   validationFollowers?.following === users.id
+  //     ? "bg-transparent  text-gray disabled:hover:bg-wine"
+  //     : "bg-wine text-white";
+  // };
+
+  // const validationFollowers = () => {
+  //   const followersUser = followers.filter(
+  //     (follower) => follower.userId === user.id,
+  //   );
+  //   return followersUser;
+  // };
+
+  const validationFollowers = (id) => {
+    return followers.some(
+      (follower) => follower.userId === user.id && follower.following === id,
+    );
+  };
+
+  const getPostsSaved = async () => {
+    console.log("ZAUS");
+    const response = await fetch("/api/posts/saved");
+
+    const data = await response.json();
+    console.log("DATE", data);
+    return setPostSaved(data);
+  };
   return {
     token,
     postDelete,
@@ -394,5 +428,7 @@ export function useRequisicoes({ post, like, setLike }) {
     userUP,
     postNumberGet,
     postFollowers,
+    validationFollowers,
+    getPostsSaved,
   };
 }
