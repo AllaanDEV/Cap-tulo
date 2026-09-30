@@ -195,7 +195,7 @@ export function ComplexPost() {
         <div className="flex gap-2 justify-end">
           <button
             className="border-[2px] border-border py-1 px-2 hover:bg-black/10 rounded-2xl"
-            onClick={() => setPostCitation((prev) => !prev)}
+            onClick={() => {setPostCitation((prev) => !prev), setPostModified(), setStyleCardActive()}}
           >
             Cancelar
           </button>

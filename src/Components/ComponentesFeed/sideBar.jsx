@@ -5,7 +5,7 @@ import { Info } from "./info";
 
 import { house, Circle } from "../svgCode";
 import { compass } from "../svgCode";
-import { book, logout, Group, save, spiral } from "../svgCode";
+import { book, logout, Group, save, spiral, Person } from "../svgCode";
 import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Link, useNavigate, useParams } from "react-router";
@@ -27,7 +27,7 @@ const options = [
   { icon: house, name: "Feed" },
   { icon: compass, name: "Explorar" },
   { icon: book, name: "Minha estante" },
-  // { icon: Group, name: "Seguindo" },
+  { icon: Person, name: "Perfil" },
   { icon: save, name: "Quero ler" },
   { icon: logout, name: "sair" },
 ];
@@ -51,6 +51,8 @@ export function SideBar() {
     ebookSaved,
     goal,
     progressAllEbooks,
+    option,
+    setOption,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -58,8 +60,6 @@ export function SideBar() {
     allFollowers();
     getBookSave(user.id);
   }, []);
-
-  const [option, setOption] = useState("Feed");
 
   const navigate = useNavigate();
 
@@ -75,7 +75,9 @@ export function SideBar() {
       navigate("auth/login");
     } else if (index === 1) {
       navigate("/ebooks");
-    }
+    } else if (index === 3) {
+      navigate(`/perfil/${user.id}`);
+    } else if (index === 0) [navigate(`/feed/${user.id}`)];
   };
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
@@ -97,7 +99,9 @@ export function SideBar() {
     postNumberGet(paramsId);
   }, []);
 
-  const difference = goal?.number - ebookSaved?.length;
+  const difference =
+    goal?.number <= ebookSaved?.length ? 0 : goal?.number - ebookSaved?.length;
+
   const textDiference =
     difference <= 5
       ? "só mais"
@@ -109,9 +113,7 @@ export function SideBar() {
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div className="flex flex-col items-start">
-          <UsersInfo >
-      
-          </UsersInfo>
+          <UsersInfo></UsersInfo>
           <Info className="grid grid-cols-3 divide-x divide-gray bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
@@ -161,7 +163,11 @@ export function SideBar() {
                 className="w-full"
               ></Progress>
               <span className="text-gray text-xs">
-                Faltam {textDiference} {difference} livros para a conclusão {difference <= 5 && "🎉"}
+                {difference === 0 && "Parabêns!🎉"}
+
+                {difference !== 0 &&
+                  ` Faltam ${textDiference} ${difference} livros para a conclusão
+                ${difference <= 5 && "🎉"}`}
               </span>
             </>
           ) : (

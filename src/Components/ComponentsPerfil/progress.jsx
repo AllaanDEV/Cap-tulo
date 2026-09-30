@@ -12,7 +12,7 @@ export function Progress({ book, progress, goal,className}) {
 
       <div className="w-full rounded-2xl bg-gray/30 transition-all duration-500">
         <div
-          className={`${currentProgress >= 100 ? "bg-green" : "bg-wine"} py-1 rounded-2xl `}
+          className={`${currentProgress >= 100 ? "bg-green-700" : "bg-wine"} py-1 rounded-2xl `}
           style={{
             width: `${Math.min(currentProgress, 100)}%`,
           }}

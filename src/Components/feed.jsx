@@ -15,8 +15,6 @@ import AppContext from "./context";
 
 
 export function Feed() {
-
-
   return (
     <Container className="mt-12.5 w-full">
       <Buttons />
