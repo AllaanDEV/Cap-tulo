@@ -25,6 +25,7 @@ export function CommentsList({ post }) {
     dialogEmoji,
     contentEmoji,
     setContentEmoji,
+    postSaved,
   } = useContext(AppContext);
 
   const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
@@ -39,16 +40,22 @@ export function CommentsList({ post }) {
     fetchProfile,
     nameIcon,
     user,
+    Saves,
   } = useRequisicoes({ post });
 
-  const dataCommentForm = (e) => {
+  const dataCommentForm = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const content = formData.get("comment");
 
-    addComment(e, content);
+    const updatedPost = await addComment(e, content, post);
 
+    const validationPostSaved = postSaved.find((u) => u.post.id === post.id);
+
+    if (validationPostSaved) {
+      await Saves("update", updatedPost);
+    }
   };
 
   useEffect(() => {
@@ -79,7 +86,7 @@ export function CommentsList({ post }) {
   );
 
   const [comment, setComment] = useState("");
-// const [itemsVisible, setItemsVisible] = useState(5);
+  // const [itemsVisible, setItemsVisible] = useState(5);
 
   return (
     <div className="flex flex-col w-full">

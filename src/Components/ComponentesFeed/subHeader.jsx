@@ -132,7 +132,7 @@ export function SubHeader() {
                     return (
                       <label
                         key={index}
-                        className={`py-2  px-3 sm:px-6  rounded-xl group transition-colors flex gap-2 items-center ${
+                        className={`py-2  px-3 sm:px-6  rounded-xl group flex gap-2 items-center  ${
                           imgIdUrl?.length === 4
                             ? "text-gray pointer-events-none"
                             : "hover:bg-border focus:bg-border"

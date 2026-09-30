@@ -36,6 +36,7 @@ export function useRequisicoes({ post, like, setLike }) {
     setDataPostFocus,
     setGoal,
     setPostSaved,
+    followerPost,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -50,27 +51,29 @@ export function useRequisicoes({ post, like, setLike }) {
   const [comments, setComments] = useState(false);
   const [photoValueFeed, setPhotoValueFeed] = useState([]);
 
-  const postDelete = (data) => {
-    fetch(`http://localhost:3000/api/posts/${post.id}`, {
+  const postDelete = async (data) => {
+    const res = await fetch(`http://localhost:3000/api/posts/${post.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }).then((res) => {
-      if (res.status == 200) {
-        const newFeed = publication.filter((p) => p.id != post.id);
-
-        if (data.type === "feedback") {
-          arrayFeedbacksEbooks();
-        }
-
-        setSearch(newFeed);
-        return setPublication(newFeed);
-      } else {
-        return;
-      }
     });
+
+    if (res.ok) {
+      const newFeed = publication.filter((p) => p.id !== post.id);
+
+      if (data.type === "feedback") {
+        arrayFeedbacksEbooks();
+      }
+
+      await Saves("delete", post);
+
+      setSearch(newFeed);
+      setPublication(newFeed);
+
+      await getPostsSaved();
+    }
   };
 
   const commentEdit = async (e, EDIT) => {
@@ -98,22 +101,23 @@ export function useRequisicoes({ post, like, setLike }) {
         },
       );
 
-      const resJson = await response.json();
+      const data = await response.json();
 
       setPublication((prev) =>
-        prev?.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+        prev?.map((p) => (p.id === data.id ? { ...data} : p)),
       );
 
       setSearch((prev) =>
-        prev?.map((p) => (p.id === resJson.id ? { ...resJson } : p)),
+        prev?.map((p) => (p.id === data.id ? { ...data } : p)),
       );
 
       // setEditComments(false);
-      if (dataPostFocus && resJson.id === dataPostFocus.id) {
-        setDataPostFocus(resJson);
+      if (dataPostFocus && data.id === dataPostFocus.id) {
+        setDataPostFocus(data);
       }
 
       toggleComments();
+      Saves("update", data)
     } catch (error) {
       console.log(error);
     }
@@ -135,15 +139,17 @@ export function useRequisicoes({ post, like, setLike }) {
           prev?.map((p) => (p.id === data.id ? data : p)),
         );
 
+        setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
+
         if (dataPostFocus && data.id === dataPostFocus.id) {
           setDataPostFocus(data);
         }
 
-        setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
+        Saves("update", data)
       });
   };
 
-  const addComment = async (e, content) => {
+  const addComment = async (e, content, post) => {
     e.preventDefault();
 
     if (content === "") {
@@ -168,14 +174,26 @@ export function useRequisicoes({ post, like, setLike }) {
       const data = await response.json();
 
       setSearch((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
+
       setPublication((prev) => prev?.map((p) => (p.id === data.id ? data : p)));
 
-      getPostsSaved();
       if (dataPostFocus && data.id === dataPostFocus.id) {
         setDataPostFocus(data);
       }
 
+      const postsSaved = await getPostsSaved();
+
+      const validationPostSaved = postsSaved.find(
+        (p) => p?.post?.id === post?.id,
+      );
+
+      if (validationPostSaved) {
+        await Saves("update", data);
+      }
+
       e.target.reset();
+
+      return data;
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -197,18 +215,40 @@ export function useRequisicoes({ post, like, setLike }) {
     );
 
     if (likesPost.ok) {
-      likesGet();
-      getPostsSaved();
+      await likesGet(post);
     }
 
     return likesPost;
   };
 
-  const likesGet = async () => {
+  const likesGet = async (post) => {
     const response = await fetch("http://localhost:3000/api/posts/likes");
+
     const data = await response.json();
+
     setLike(data);
     setEditRequisicao((previousValue) => !previousValue);
+
+    if (response.ok) {
+      const likesDoPost = data.filter(
+        (like) => like.postId === post.id && like.validation === true,
+      );
+
+      const updatedPost = {
+        ...post,
+        likes: likesDoPost.length,
+      };
+
+      const postsSaved = await getPostsSaved();
+
+      const validationPostSaved = postsSaved.find(
+        (p) => p?.post?.id === post?.id,
+      );
+
+      if (validationPostSaved) {
+        await Saves("update", updatedPost);
+      }
+    }
   };
 
   const fetchProfile = async () => {
@@ -396,12 +436,53 @@ export function useRequisicoes({ post, like, setLike }) {
 
   const getPostsSaved = async () => {
     console.log("ZAUS");
-    const response = await fetch("/api/posts/saved");
+    const response = await fetch(
+      `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
+    );
 
     const data = await response.json();
     console.log("DATE", data);
-    return setPostSaved(data);
+    setPostSaved(data);
+    return data;
   };
+
+  const Saves = async (type, post) => {
+    console.log("ESTA CHAMANDO");
+
+    const response = await fetch(
+      `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post,
+          savedType: type,
+          postId: post.id,
+        }),
+      },
+    );
+
+    if (response.ok) {
+      if (type === "update") {
+        setPostSaved((prev) =>
+          prev.map((item) =>
+            item?.post?.id === post?.id ? { ...item, post } : item,
+          ),
+        );
+      }
+
+      if (type === "delete") {
+        setPostSaved((prev) =>
+          prev.filter((item) => item?.post?.id !== post?.id),
+        );
+      }
+    }
+
+    return response;
+  };
+
   return {
     token,
     postDelete,
@@ -430,5 +511,6 @@ export function useRequisicoes({ post, like, setLike }) {
     postFollowers,
     validationFollowers,
     getPostsSaved,
+    Saves,
   };
 }

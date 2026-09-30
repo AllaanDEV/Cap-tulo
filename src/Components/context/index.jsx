@@ -191,6 +191,33 @@ export function Context({ children }) {
 
 
 const [postSaved, setPostSaved]= useState([])
+  const [option, setOption] = useState("Feed");
+
+
+    const ebooksFeedbacksObj = (feedbacksArray || []).reduce((acc, item) => {
+    const key = item.ebook?.ebook?.id || item.ebook?.ebook?.volumeInfo?.title;
+
+    if (!key) return acc;
+
+    if (!acc[key]) {
+      acc[key] = {
+        data: item,
+        number: 0,
+        totalStars: 0,
+        average: 0,
+      };
+    }
+
+    acc[key].number += 1;
+    acc[key].totalStars += item.stars || 0;
+    acc[key].average = acc[key].totalStars / acc[key].number;
+
+    return acc;
+  }, {});
+
+  const ebooksFeedbacks = Object.values(ebooksFeedbacksObj || {});
+  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average).slice(0, 3);
+
   return (
     <AppContext.Provider
       value={{
@@ -284,7 +311,7 @@ const [postSaved, setPostSaved]= useState([])
         setLike,
         goal,
         setGoal,
-        progressAllEbooks, followerPost, setFollowerPost, postSaved, setPostSaved
+        progressAllEbooks, followerPost, setFollowerPost, postSaved, setPostSaved, option, setOption, order
       }}
     >
       {children}

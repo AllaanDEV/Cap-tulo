@@ -49,21 +49,40 @@ export function ArrayPost() {
 
   const { postFollowers } = useRequisicoes({});
 
+  const arraySaved = followerPost === "saved" && [...postSaved].reverse();
+
   const postsToRender = searchValue
     ? search
     : followerPost === "followers"
       ? postFollowers
       : followerPost === "saved"
-        ? postSaved
+        ? arraySaved
         : publication;
 
   return (
     <ul className="flex flex-col gap-5">
-      {postsToRender.map((p) => (
-        <li key={p.id}>
-          <Post post={p.post || p} />
-        </li>
-      ))}
+      {postsToRender.length > 0 ? (
+        postsToRender.map((p) => (
+          <li key={p.id}>
+            <Post post={p.post || p} />
+          </li>
+        ))
+      ) : !followerPost ? (
+        <span className="text-xs mx-auto text-wine">
+          Não há mais leitura por aqui
+        </span>
+      ) : (
+        <div className="mx-auto flex flex-col text-center gap-1 text-2xl">
+          <img
+            src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzBxeWJrY2dkaDVwNTM2NG91a2lja2gzOWl4eWVrc3Uwd240NGowOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qF5kNHJdptVXJJKe6h/giphy.gif"
+            className="w-[20vw] h-auto"
+          ></img>
+
+          <span className="text-wine font-fraunce font-extrabold">
+            Procurando... 😼😼
+          </span>
+        </div>
+      )}
     </ul>
   );
 }

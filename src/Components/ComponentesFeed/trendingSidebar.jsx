@@ -8,35 +8,12 @@ import { Star } from "../svgCode";
 
 export function TrendingSideBar() {
   const { arrayFeedbacksEbooks } = useRequisicoes({});
-  const { feedbacksArray } = useContext(AppContext);
+  const { feedbacksArray, order} = useContext(AppContext);
 
   useEffect(() => {
     arrayFeedbacksEbooks();
   }, []);
 
-  const ebooksFeedbacksObj = (feedbacksArray || []).reduce((acc, item) => {
-    const key = item.ebook?.ebook?.id || item.ebook?.ebook?.volumeInfo?.title;
-
-    if (!key) return acc;
-
-    if (!acc[key]) {
-      acc[key] = {
-        data: item,
-        number: 0,
-        totalStars: 0,
-        average: 0,
-      };
-    }
-
-    acc[key].number += 1;
-    acc[key].totalStars += item.stars || 0;
-    acc[key].average = acc[key].totalStars / acc[key].number;
-
-    return acc;
-  }, {});
-
-  const ebooksFeedbacks = Object.values(ebooksFeedbacksObj || {});
-  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average).slice(0, 3);
 
   return (
     <Div>

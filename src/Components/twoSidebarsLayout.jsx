@@ -4,7 +4,7 @@ import { TrendingSideBar } from "./ComponentesFeed/trendingSidebar";
 import { SearchUsersSidebar } from "./ComponentesFeed/searchUsersSidebar";
 import { Header } from "./ComponentesFeed/header";
 
-export function SidebarLayout() {
+export function TwoSidebarsLayout() {
   return (
     <>
       <Header></Header>

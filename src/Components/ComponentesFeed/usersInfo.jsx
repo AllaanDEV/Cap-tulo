@@ -5,7 +5,7 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function UsersInfo({ post, users }) {
-  const { user, nameIcon, fetchProfile, photoValueFeed} =
+  const { user, nameIcon, fetchProfile, photoValueFeed, setOption} =
     useRequisicoes({});
   const { followers } = useContext(AppContext);
 
@@ -33,7 +33,7 @@ export function UsersInfo({ post, users }) {
 
   return (
     <div className="flex gap-2 items-center justify-center">
-      <PerfilIcon to={`/perfil/${profile.id}`} state={{ profile }}>
+      <PerfilIcon to={`/perfil/${profile.id}`} state={{ profile }} onClick={() => setOption("Perfil")}>
         {photo?.midiaIcon ? (
           <ImgPerfil src={photo.midiaIcon} />
         ) : (
