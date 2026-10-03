@@ -1,11 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
 import { Star } from "../svgCode";
+import { House, Circle } from "../svgCode";
+import { Compass } from "../svgCode";
+import { book, logout, Group, save, spiral, Person } from "../svgCode";
+import { useRequisicoes } from "./hooks/useRequisicoes";
+import { useNavigate } from "react-router";
 
 export function Context({ children }) {
   const comments = useComments();
+const navigate=useNavigate()
 
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
@@ -125,6 +131,8 @@ export function Context({ children }) {
   const [dataPostFocus, setDataPostFocus] = useState();
   const [goal, setGoal] = useState({ number: 0 });
 
+const [likesCommentList, setLikesCommentList]=useState([])
+
   useEffect(() => {
     setAtualizar(atualizar);
   }, [atualizar]);
@@ -187,14 +195,12 @@ export function Context({ children }) {
       : 0;
 
   const [followerPost, setFollowerPost] = useState(false);
-  const textareaRef= document.getElementById("textearea")
+  const textareaRef = document.getElementById("textearea");
 
-
-const [postSaved, setPostSaved]= useState([])
+  const [postSaved, setPostSaved] = useState([]);
   const [option, setOption] = useState("Feed");
 
-
-    const ebooksFeedbacksObj = (feedbacksArray || []).reduce((acc, item) => {
+  const ebooksFeedbacksObj = (feedbacksArray || []).reduce((acc, item) => {
     const key = item.ebook?.ebook?.id || item.ebook?.ebook?.volumeInfo?.title;
 
     if (!key) return acc;
@@ -216,7 +222,71 @@ const [postSaved, setPostSaved]= useState([])
   }, {});
 
   const ebooksFeedbacks = Object.values(ebooksFeedbacksObj || {});
-  const order = ebooksFeedbacks.sort((a, b) => b.average - a.average).slice(0, 3);
+  const order = ebooksFeedbacks
+    .sort((a, b) => b.average - a.average)
+    .slice(0, 3);
+
+  const [listFollowersPerfil, setListFollowersPerfil] = useState(false);
+  const [styleButtonFollowersList, setStyleButtonFollowersList] = useState();
+
+  const filterFollowers = (paramsId) => {
+    return followers.filter((follower) => follower.userId === paramsId);
+  };
+
+const isLiked = (postId, userId) => {
+  return (
+    like?.some(
+      (p) =>
+        p.postId === postId &&
+        p.userId === userId &&
+        p.validation === true,
+    ) ?? false
+  );
+};
+
+const likeLock = useRef({});
+const [liking, setLiking] = useState([]);
+
+const handleLike = async (postId, LikeButton) => {
+  if (likeLock.current[postId]) return;
+
+  likeLock.current[postId] = true;
+  setLiking((prev) => [...prev, postId]);
+
+  try {
+    await LikeButton();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    likeLock.current[postId] = false;
+    setLiking((prev) => prev.filter((id) => id !== postId));
+  }
+};
+
+const options = [
+  { icon: House, name: "Feed" },
+  { icon: Compass, name: "Explorar" },
+  { icon: book, name: "Minha estante" },
+  { icon: Person, name: "Perfil" },
+  { icon: save, name: "Quero ler" },
+  { icon: logout, name: "sair" },
+];
+
+
+  const canPost = Boolean(
+    hasText ||
+    imgIdUrl?.length > 0 ||
+    gifData ||
+    valuePostsCitation ||
+    containerModified,
+  );
+
+const [optionsDialog, setOptionsDialog]=useState(false)
+const [dialogSubHeader, setDialogSubHeader]=useState(false)
+
+const [focusEditorTrigger, setFocusEditorTrigger] = useState(false);
+
+const focusEditor = () => setFocusEditorTrigger(prev => !prev);
 
   return (
     <AppContext.Provider
@@ -311,7 +381,18 @@ const [postSaved, setPostSaved]= useState([])
         setLike,
         goal,
         setGoal,
-        progressAllEbooks, followerPost, setFollowerPost, postSaved, setPostSaved, option, setOption, order
+        progressAllEbooks,
+        followerPost,
+        setFollowerPost,
+        postSaved,
+        setPostSaved,
+        option,
+        setOption,
+        order,
+        listFollowersPerfil,
+        setListFollowersPerfil,
+        styleButtonFollowersList,
+        setStyleButtonFollowersList, filterFollowers, isLiked, handleLike, liking, likesCommentList, setLikesCommentList, options, logout, canPost, optionsDialog, setOptionsDialog, focusEditor, focusEditorTrigger, dialogSubHeader, setDialogSubHeader
       }}
     >
       {children}

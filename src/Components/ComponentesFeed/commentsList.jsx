@@ -2,12 +2,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import { Lines } from "../ComponentsForm/lines";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { configuration, faceHappy, Send } from "../svgCode";
+import { configuration, faceHappy, Send, Like } from "../svgCode";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { DialogImoji } from "./dialogEmoji";
+import { ButtonPost } from "./buttonPost";
+import { TimeAgo } from "./timeAgo";
 
 const FaceHappy = faceHappy;
 const Icon = configuration;
@@ -26,6 +28,11 @@ export function CommentsList({ post }) {
     contentEmoji,
     setContentEmoji,
     postSaved,
+    isLiked,
+    handleLike,
+    liking,
+    like,
+    setLike,
   } = useContext(AppContext);
 
   const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
@@ -41,7 +48,12 @@ export function CommentsList({ post }) {
     nameIcon,
     user,
     Saves,
-  } = useRequisicoes({ post });
+    LikeButton,
+    LikesComment,
+    isCommentLiked,
+    getCommentLikesCount,
+    getLikesComments,
+  } = useRequisicoes({ post, like, setLike });
 
   const dataCommentForm = async (e) => {
     e.preventDefault();
@@ -72,11 +84,9 @@ export function CommentsList({ post }) {
       textarea.value =
         text.substring(0, start) + contentEmoji + text.substring(end);
 
-      // Reposiciona o cursor logo após o emoji inserido
       textarea.selectionStart = textarea.selectionEnd =
         start + contentEmoji.length;
 
-      // Limpa o emoji do contexto para evitar duplicações indesejadas
       setContentEmoji("");
     }
   }, [contentEmoji, setContentEmoji]);
@@ -88,8 +98,11 @@ export function CommentsList({ post }) {
   const [comment, setComment] = useState("");
   // const [itemsVisible, setItemsVisible] = useState(5);
 
+  useEffect(() => {
+    getLikesComments();
+  }, []);
   return (
-    <div className="flex flex-col w-full">
+    <section className="flex flex-col w-full">
       {!postFocus && <Lines />}
 
       <div className="flex gap-1 pt-4">
@@ -154,63 +167,94 @@ export function CommentsList({ post }) {
               (midia) => midia.userId === c.authorId,
             );
 
-            return (
-              <li className="flex gap-2" key={c.id}>
-                <div className="flex flex-col items-start">
-                  <PerfilIcon to={`/perfil/${c.authorId}`} state={post}>
-                    {photo?.midiaIcon ? (
-                      <ImgPerfil src={photo?.midiaIcon} />
-                    ) : (
-                      <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                        {nameIcon(editValue.dataPerfil?.name || c.author)}
-                      </p>
-                    )}
-                  </PerfilIcon>
-                </div>
+            const liked = isCommentLiked(c.id, user?.id);
+            const likesCount = getCommentLikesCount(c.id);
 
-                <div className="p-2 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
-                  <div className="flex gap-2">
-                    <h3>{c.author}</h3>
-                    <span>@{c.userName}</span>
+            return (
+              <li className="flex gap-2 flex-col w-full" key={c.id}>
+                <div className="flex gap-2 relative w-full">
+                  <div>
+                    <div className="flex flex-col items-start">
+                      <PerfilIcon to={`/perfil/${c.authorId}`} state={post}>
+                        {photo?.midiaIcon ? (
+                          <ImgPerfil src={photo?.midiaIcon} />
+                        ) : (
+                          <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                            {nameIcon(editValue.dataPerfil?.name || c.author)}
+                          </p>
+                        )}
+                      </PerfilIcon>
+                    </div>
                   </div>
 
-                  <p>{c.text}</p>
+                  <div className="pl-4 pr-2 pb-5 pt-1 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-2 items-center">
+                        <h3>{c.author}</h3>
+                        <span className="text-gray text-xs">@{c.userName}</span>
+                      </div>
 
-                  <details className="flex flex-col items-end relative">
-                    <summary className="list-none marker:hidden">
-                      <Icon />
-                    </summary>
+                      <details className="flex flex-col">
+                        <summary className="list-none marker:hidden">
+                          <Icon />
+                        </summary>
 
-                    <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
-                      <button
-                        type="button"
-                        className="hover:text-wine"
-                        onClick={() => {
-                          SETEDIT(c.id);
-                          setPostEdit(post);
-                          toggleComments();
-                        }}
-                      >
-                        Editar
-                      </button>
+                        <div className="bg-bermuda absolute px-2 rounded-sm flex flex-col">
+                          <button
+                            type="button"
+                            className="hover:text-wine"
+                            onClick={() => {
+                              SETEDIT(c.id);
+                              setPostEdit(post);
+                              toggleComments();
+                            }}
+                          >
+                            Editar
+                          </button>
 
-                      <button
-                        type="button"
-                        className="hover:text-wine"
-                        onClick={() => {
-                          commentDelete(c);
-                        }}
-                      >
-                        Excluir
-                      </button>
+                          <button
+                            type="button"
+                            className="hover:text-wine"
+                            onClick={() => {
+                              commentDelete(c);
+                            }}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </details>
                     </div>
-                  </details>
+
+                    <p className="pr-20">{c.text}</p>
+                  </div>
+                  <span className="absolute bottom-[-20px] left-15 text-gray text-xs flex">
+                    <ButtonPost
+                      onClick={() =>
+                        handleLike(`comment-${c.id}`, () =>
+                          LikesComment(c.id, post.id),
+                        )
+                      }
+                      disabled={liking.includes(`comment-${c.id}`)}
+                    >
+                      <span className="mr-1">
+                        <TimeAgo date={c.createdAt} />
+                      </span>
+
+                      <Like
+                        filled={liked}
+                        fill={liked ? "currentColor" : "none"}
+                        className={liked ? "text-red-500" : ""}
+                      />
+
+                      <p className="text-sm">{likesCount}</p>
+                    </ButtonPost>
+                  </span>
                 </div>
               </li>
             );
           })
         )}
       </ul>
-    </div>
+    </section>
   );
 }

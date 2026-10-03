@@ -66,9 +66,9 @@ export const UserSuggestions = forwardRef((props, ref) => {
           </button>
         ))
       ) : (
-        <div className="px-3 py-2 text-black/40">
+        <span className="px-3 py-2 text-black/40">
           Nenhum usuário encontrado
-        </div>
+        </span>
       )}
     </div>
   );

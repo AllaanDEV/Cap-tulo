@@ -25,6 +25,7 @@ import { UsersInfo } from "./usersInfo";
 import { DialogPostFocus } from "./dialogPostFocus";
 import { ContainerButtonsPost } from "./containerButtonsPost";
 import { PostModifiedContainer } from "./postModifiedContainer";
+import { TimeAgo } from "./timeAgo";
 
 const Save = save;
 const Icon = configuration;
@@ -118,14 +119,18 @@ export const Post = memo(function Post({ post }) {
       <Div className="w-max-[50vw]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
-            <UsersInfo post={post}></UsersInfo>
+            <UsersInfo post={post} />
+
             <details className="flex flex-col items-end relative">
               <summary className="list-none marker:hidden">
                 <Icon></Icon>
               </summary>
               <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
                 {post?.authorId === user.id ? (
-                  <button className="hover:text-wine" onClick={() => postDelete(post, paramsId)}>
+                  <button
+                    className="hover:text-wine"
+                    onClick={() => postDelete(post, paramsId)}
+                  >
                     Deletar
                   </button>
                 ) : null}

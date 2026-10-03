@@ -32,10 +32,13 @@ export function Buttons() {
   return (
     <ContainerButtons>
       {navigation.map((b, index) => {
+        const style =
+          b.name === button ? "bg-wine text-white pointer-events-none" : "";
+
         return (
           <button
             key={index}
-            className={`px-4 rounded-4xl flex justify-around items-center text-gray hover:text-black w-full transition-all duration-200 hover:bg-gray/20 ${b.name === button ? "bg-wine text-white pointer-events-none" : ""}`}
+            className={`px-4 rounded-4xl flex justify-around items-center text-gray hover:text-black w-full transition-all duration-200 hover:bg-gray/20 text-sm sm:text-md ${style}`}
             onClick={() => {
               (setButton(b.name), validation(index));
             }}

@@ -6,7 +6,9 @@ import { useLocation, useParams } from "react-router";
 export function ButtonFlow({
   profileId,
   userId,
+followBack, 
   className,
+  listFollowersPerfil,
   ...props
 }) {
   const {
@@ -14,6 +16,8 @@ export function ButtonFlow({
     fetchProfile,
     userUP,
     validationFollowers,
+    validationFollowing,
+    user,
   } = useRequisicoes({});
 
   const location = useLocation();
@@ -27,7 +31,7 @@ export function ButtonFlow({
     if (location.pathname.startsWith("/feed")) {
       userUP(userId);
     } else {
-      followersPost(profileId);
+      followersPost(profileId || userId);
     }
   };
 
@@ -37,13 +41,20 @@ export function ButtonFlow({
     ? "bg-transparent text-gray disabled:hover:bg-wine"
     : "bg-wine text-white";
 
+  // const isfollower = validationFollowing(profileId || userId);
+
   return (
     <button
       onClick={validation}
       {...props}
       className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full`}
     >
-      {isFollowing ? "Deixar de seguir" : "Seguir"}
+      {isFollowing
+        ? "Deixar de seguir"
+        : 
+followBack
+          ? "Seguir de volta"
+          : "Seguir"}
     </button>
   );
 }

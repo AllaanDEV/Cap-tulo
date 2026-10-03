@@ -212,12 +212,12 @@ export const Share = () => {
   );
 };
 
-export const save = () => {
+export const save = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -234,54 +234,58 @@ export const save = () => {
   );
 };
 
-export const house = () => {
+export const House = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 16 16"
-    >
-      <title xmlns="">house</title>
-      <path
-        fill="currentColor"
-        fill-rule="evenodd"
-        d="M12.5 12.618c.307-.275.5-.674.5-1.118V6.977a1.5 1.5 0 0 0-.585-1.189l-3.5-2.692a1.5 1.5 0 0 0-1.83 0l-3.5 2.692A1.5 1.5 0 0 0 3 6.978V11.5A1.496 1.496 0 0 0 4.493 13H5V9.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2V13h.507c.381-.002.73-.146.993-.382m2-1.118a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V6.977A3 3 0 0 1 2.67 4.6l3.5-2.692a3 3 0 0 1 3.66 0l3.5 2.692a3 3 0 0 1 1.17 2.378zm-5-2A.5.5 0 0 0 9 9H7a.5.5 0 0 0-.5.5V13h3z"
-        clip-rule="evenodd"
-      />
-    </svg>
-  );
-};
-
-export const compass = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-house"
+      aria-hidden="true"
+      data-id="element-197"
+      data-mp="yxsb2jjkv6zk"
     >
-      <title xmlns="">compass</title>
-      <g
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.5"
-      >
-        <path d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0" />
-        <path d="m9 15l1.5-4.5L15 9l-1.5 4.5z" />
-      </g>
+      <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+      <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
     </svg>
   );
 };
 
-export const book = () => {
+export const Compass = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-compass"
+      aria-hidden="true"
+      data-id="element-199"
+      data-mp="18w862xlq70ec"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
+    </svg>
+  );
+};
+
+export const book = ({ size }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
     >
       <title xmlns="">book-library</title>
@@ -449,12 +453,12 @@ export const camera = () => {
   );
 };
 
-export const logout = () => {
+export const logout = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
     >
       <title xmlns="">logout-rounded</title>
@@ -487,12 +491,12 @@ export const XIconProfile = () => {
   );
 };
 
-export const XSavedEbook = () => {
+export const XSavedEbook = ({size}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width=".8em"
-      height=".8em"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
     >
       <title>x</title>
@@ -787,27 +791,70 @@ export const Pencil = () => {
   );
 };
 
+export const Person = ({ size }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-user"
+      aria-hidden="true"
+      data-id="element-204"
+      data-mp="2tznfqwwaqdo6"
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+  );
+};
 
-export const Person = () => {
+export const LeftArrow = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
       height="1em"
       viewBox="0 0 24 24"
+    >
+      <title>arrow-left-broken</title>
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M10 18L4 12L10 6M4 12H14.5M20 12H17.5"
+      />
+    </svg>
+  );
+};
+
+export const Menu = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-menu"
+      aria-hidden="true"
+      data-id="element-206"
+      data-mp="2b8cryolvah0i"
     >
-      <title>pessoa</title>
-      <g fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="7" r="5" />
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M17 14h.352a3 3 0 0 1 2.976 2.628l.391 3.124A2 2 0 0 1 18.734 22H5.266a2 2 0 0 1-1.985-2.248l.39-3.124A3 3 0 0 1 6.649 14H7"
-        />
-      </g>
+      <path d="M4 5h16"></path>
+      <path d="M4 12h16"></path>
+      <path d="M4 19h16"></path>
     </svg>
   );
 };

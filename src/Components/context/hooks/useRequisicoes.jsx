@@ -1,7 +1,9 @@
 import { useContext, useState } from "react";
 import AppContext from "..";
+import { useNavigate } from "react-router";
 
 export function useRequisicoes({ post, like, setLike }) {
+  const navigate = useNavigate();
   const {
     publication,
     setPublication,
@@ -37,6 +39,9 @@ export function useRequisicoes({ post, like, setLike }) {
     setGoal,
     setPostSaved,
     followerPost,
+    setEditValue,
+    setLikesCommentList,
+    likesCommentList,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -104,7 +109,7 @@ export function useRequisicoes({ post, like, setLike }) {
       const data = await response.json();
 
       setPublication((prev) =>
-        prev?.map((p) => (p.id === data.id ? { ...data} : p)),
+        prev?.map((p) => (p.id === data.id ? { ...data } : p)),
       );
 
       setSearch((prev) =>
@@ -117,7 +122,7 @@ export function useRequisicoes({ post, like, setLike }) {
       }
 
       toggleComments();
-      Saves("update", data)
+      Saves("update", data);
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +150,7 @@ export function useRequisicoes({ post, like, setLike }) {
           setDataPostFocus(data);
         }
 
-        Saves("update", data)
+        Saves("update", data);
       });
   };
 
@@ -411,23 +416,6 @@ export function useRequisicoes({ post, like, setLike }) {
     return myFollowers.some((u) => u.following === f.authorId);
   });
 
-  // const validationFollowers = followers.find(
-  //   (follower) => follower.userId === user.id,
-  // );
-
-  // const buttonFollowers = (users) => {
-  //   validationFollowers?.following === users.id
-  //     ? "bg-transparent  text-gray disabled:hover:bg-wine"
-  //     : "bg-wine text-white";
-  // };
-
-  // const validationFollowers = () => {
-  //   const followersUser = followers.filter(
-  //     (follower) => follower.userId === user.id,
-  //   );
-  //   return followersUser;
-  // };
-
   const validationFollowers = (id) => {
     return followers.some(
       (follower) => follower.userId === user.id && follower.following === id,
@@ -441,14 +429,12 @@ export function useRequisicoes({ post, like, setLike }) {
     );
 
     const data = await response.json();
-    console.log("DATE", data);
+
     setPostSaved(data);
     return data;
   };
 
   const Saves = async (type, post) => {
-    console.log("ESTA CHAMANDO");
-
     const response = await fetch(
       `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
       {
@@ -483,6 +469,80 @@ export function useRequisicoes({ post, like, setLike }) {
     return response;
   };
 
+  const getFollowBack = (userId) => {
+    return followers.some(
+      (follower) =>
+        follower.userId === userId && follower.following === user.id,
+    );
+  };
+
+  const LikesComment = async (commentId, postId) => {
+    const response = await fetch("http://localhost:3000/api/comments/like", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        commentId,
+        postId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao curtir comentário");
+    }
+
+    const data = await response.json();
+    setLikesCommentList(data);
+    return data;
+  };
+
+  const isCommentLiked = (commentId, userId) => {
+    return (
+      likesCommentList?.some(
+        (item) => item.commentId === commentId && item.userId === userId,
+      ) ?? false
+    );
+  };
+
+  const getCommentLikesCount = (commentId) => {
+    return (
+      likesCommentList?.filter((item) => item.commentId === commentId).length ??
+      0
+    );
+  };
+
+  const getLikesComments = async () => {
+    const response = await fetch("http://localhost:3000/api/comments/like");
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar curtidas dos comentários");
+    }
+
+    const data = await response.json();
+    setLikesCommentList(data);
+
+    return data;
+  };
+
+  const logout = (index) => {
+    if (index === 5) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
+      setEbookSaved([]);
+      setEditValue({});
+      setEditValue({});
+
+      navigate("auth/login");
+    } else if (index === 1) {
+      navigate("/ebooks");
+    } else if (index === 3) {
+      navigate(`/perfil/${user.id}`);
+    } else if (index === 0) [navigate(`/feed/${user.id}`)];
+  };
+
   return {
     token,
     postDelete,
@@ -512,5 +572,11 @@ export function useRequisicoes({ post, like, setLike }) {
     validationFollowers,
     getPostsSaved,
     Saves,
+    getFollowBack,
+    LikesComment,
+    isCommentLiked,
+    getCommentLikesCount,
+    getLikesComments,
+    logout,
   };
 }

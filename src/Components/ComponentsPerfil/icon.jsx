@@ -18,6 +18,7 @@ import { ButtonFlow } from "./buttonFlow";
 import { ReadingPace } from "./readingPace";
 import { Evaluated } from "./evaluated";
 import { Container } from "../ComponentesFeed/container";
+import { FollowersList } from "./followersList";
 
 const Pencil = pencil;
 
@@ -72,6 +73,9 @@ export function Icon({ state }) {
     setEditValue,
     followers,
     publication,
+    setListFollowersPerfil,
+    listFollowersPerfil,
+    setStyleButtonFollowersList,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -272,166 +276,184 @@ export function Icon({ state }) {
 
   return (
     <Container className="border border-border">
-      <section className="rounded-xs bg-primary">
-        <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
-          {user.id === profileId ? (
-            <label className="absolute cursor-pointer w-full h-full">
-              {!editValue?.data?.midiaTheme && (
-                <span className="w-full my-25 flex justify-center">
-                  <img src={Camera} className="h-20 w-20"></img>
-                </span>
-              )}
+      {!listFollowersPerfil ? (
+        <section className="rounded-xs bg-primary">
+          <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
+            {user.id === profileId ? (
+              <label className="absolute cursor-pointer w-full h-full">
+                {!editValue?.data?.midiaTheme && (
+                  <span className="w-full my-25 flex justify-center">
+                    <img src={Camera} className="h-20 w-20"></img>
+                  </span>
+                )}
+                <ImgPerfil
+                  ref={theme}
+                  className={editValue?.data?.midiaTheme ? "" : "hidden"}
+                  src={editValue?.data?.midiaTheme}
+                />
+
+                <input
+                  className="absolute inset-0 opacity-0 cursor-pointer bg-transparent"
+                  type="file"
+                  onChange={photoTheme}
+                ></input>
+              </label>
+            ) : (
               <ImgPerfil
                 ref={theme}
                 className={editValue?.data?.midiaTheme ? "" : "hidden"}
                 src={editValue?.data?.midiaTheme}
               />
+            )}
 
-              <input
-                className="absolute inset-0 opacity-0 cursor-pointer bg-transparent"
-                type="file"
-                onChange={photoTheme}
-              ></input>
-            </label>
-          ) : (
-            <ImgPerfil
-              ref={theme}
-              className={editValue?.data?.midiaTheme ? "" : "hidden"}
-              src={editValue?.data?.midiaTheme}
-            />
-          )}
+            <div className="absolute w-[30vw] h-[30vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-15vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
+              {editValue.dataPerfil?.midiaIcon ? (
+                <ImgPerfil
+                  src={editValue.dataPerfil.midiaIcon}
+                  alt="Foto de perfil"
+                />
+              ) : (
+                <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
+                  {nameIcon(
+                    editValue.dataPerfil?.name ||
+                      profile?.author ||
+                      profile?.name ||
+                      user.name,
+                  )}
+                </span>
+              )}
+            </div>
+          </div>
 
-          <div className="absolute w-[30vw] h-[30vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-15vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
-            {editValue.dataPerfil?.midiaIcon ? (
-              <ImgPerfil
-                src={editValue.dataPerfil.midiaIcon}
-                alt="Foto de perfil"
-              />
-            ) : (
-              <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
-                {nameIcon(
-                  editValue.dataPerfil?.name ||
+          <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
+            <div className="flex justify-end gap-2 text-black mt-5">
+              <ContainerTags>
+                <img src={notificationIcon} className="w-auto h-5"></img>
+              </ContainerTags>
+              {profileId !== user.id ? null : (
+                <ContainerTags onClick={openOrCloseDialog}>
+                  <Pencil></Pencil>
+                  editar perfil
+                </ContainerTags>
+              )}
+              {profileId === user.id ? null : (
+                // <ContainerTags>
+                <ButtonFlow profileId={profileId} />
+                // </ContainerTags>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
+                <h1 className="text-3xl">
+                  {editValue.dataPerfil?.name ||
                     profile?.author ||
                     profile?.name ||
-                    user.name,
-                )}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
-          <div className="flex justify-end gap-2 text-black mt-5">
-            <ContainerTags>
-              <img src={notificationIcon} className="w-auto h-5"></img>
-            </ContainerTags>
-            {profileId !== user.id ? null : (
-              <ContainerTags onClick={openOrCloseDialog}>
-                <Pencil></Pencil>
-                editar perfil
-              </ContainerTags>
-            )}
-            {profileId === user.id ? null : (
-              // <ContainerTags>
-              <ButtonFlow profileId={profileId} />
-              // </ContainerTags>
-            )}
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-col gap-1">
-              <h1 className="text-3xl">
-                {editValue.dataPerfil?.name ||
-                  profile?.author ||
-                  profile?.name ||
-                  user.name}
-              </h1>
-              <span className="text-xs">
-                @
-                {editValue.dataPerfil?.username ||
-                  profile?.author ||
-                  profile?.name ||
-                  user.userName}
-              </span>
+                    user.name}
+                </h1>
+                <span className="text-xs">
+                  @
+                  {editValue.dataPerfil?.username ||
+                    profile?.author ||
+                    profile?.name ||
+                    user.userName}
+                </span>
+              </div>
+              <p>{editValue?.dataPerfil?.bios || bioNull}</p>
             </div>
-            <p>{editValue?.dataPerfil?.bios || bioNull}</p>
-          </div>
 
-          <div className="md:flex gap-5">
-            {bios
-              .filter((b) => b.description)
-              .map((b) => {
-                const BioIcon = b.bio;
+            <div className="md:flex gap-5">
+              {bios
+                .filter((b) => b.description)
+                .map((b) => {
+                  const BioIcon = b.bio;
+                  return (
+                    <p
+                      key={b.id}
+                      className="grid grid-flow-col gap-1 items-center text-gray"
+                    >
+                      {BioIcon && <BioIcon></BioIcon>}
+                      {b.description}
+                    </p>
+                  );
+                })}
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  (setListFollowersPerfil(true),
+                    setStyleButtonFollowersList("following"));
+                }}
+              >
+                seguindo: {seguindo?.length}
+              </button>
+              <button
+                onClick={() => {
+                  (setListFollowersPerfil(true),
+                    setStyleButtonFollowersList("followers"));
+                }}
+              >
+                seguidores: {seguindoProfileId?.length}
+              </button>
+            </div>
+
+            <div className="flex gap-2 flex-wrap text-black/50">
+              {tags.map((t, index) => {
                 return (
                   <p
-                    key={b.id}
-                    className="grid grid-flow-col gap-1 items-center text-gray"
+                    key={index}
+                    className="rounded-full border border-border  px-3 text-center bg-background flex items-center"
                   >
-                    {BioIcon && <BioIcon></BioIcon>}
-                    {b.description}
+                    {t.description}
                   </p>
                 );
               })}
+            </div>
+
+            <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
+              <ArrayTable profile={profile}></ArrayTable>
+            </div>
+
+            <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
+              {buttons.map((b, index) => {
+                return (
+                  <button
+                    key={index}
+                    className="text-gray"
+                    onClick={() => {
+                      filterFeed(index);
+                      setButtonFocus(b.name);
+                    }}
+                  >
+                    {b.name}
+
+                    {buttonFocus === b.name && (
+                      <span className="mt-1 block border-t-[2px] border-wine" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <Lines></Lines>
+
+            {feedfilter === null || feedfilter !== false ? (
+              <>
+                <ReadingPace></ReadingPace>
+                <ArrayBookSaved profile={profile}></ArrayBookSaved>
+                <Evaluated></Evaluated>
+              </>
+            ) : null}
+
+            {feedfilter === null || feedfilter === false ? (
+              <ArrayPosts></ArrayPosts>
+            ) : null}
           </div>
-          <div className="flex gap-4">
-            <span>seguindo: {seguindo?.length}</span>
-            <span>seguidores: {seguindoProfileId?.length}</span>
-          </div>
 
-          <div className="flex gap-2 flex-wrap text-black/50">
-            {tags.map((t, index) => {
-              return (
-                <p
-                  key={index}
-                  className="rounded-full border border-border  px-3 text-center bg-background flex items-center"
-                >
-                  {t.description}
-                </p>
-              );
-            })}
-          </div>
-
-          <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
-            <ArrayTable profile={profile}></ArrayTable>
-          </div>
-
-          <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
-            {buttons.map((b, index) => {
-              return (
-                <button
-                  key={index}
-                  className="text-gray"
-                  onClick={() => {
-                    filterFeed(index);
-                    setButtonFocus(b.name);
-                  }}
-                >
-                  {b.name}
-
-                  {buttonFocus === b.name && (
-                    <span className="mt-1 block border-t-[2px] border-wine" />
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-
-          <Lines></Lines>
-
-          {feedfilter === null || feedfilter !== false ? (
-            <>
-              <ReadingPace></ReadingPace>
-              <ArrayBookSaved profile={profile}></ArrayBookSaved>
-              <Evaluated></Evaluated>
-            </>
-          ) : null}
-
-          {feedfilter === null || feedfilter === false ? (
-            <ArrayPosts></ArrayPosts>
-          ) : null}
-        </div>
-
-        <EditProfile></EditProfile>
-      </section>
+          <EditProfile></EditProfile>
+        </section>
+      ) : (
+        <FollowersList></FollowersList>
+      )}
     </Container>
   );
 }
