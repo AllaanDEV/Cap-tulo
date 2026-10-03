@@ -22,8 +22,8 @@ import { TwoSidebarsLayout } from "./Components/twoSidebarsLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Context>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Context>
         <Routes>
           <Route path="auth">
             <Route path="login" element={<FormLogin></FormLogin>}></Route>
@@ -35,8 +35,8 @@ createRoot(document.getElementById("root")).render(
 
           {/* <Route element={<OneSidebarsLayout></OneSidebarsLayout>}>
             {/* <Route path="perfil/:id" element={<Icon></Icon>}></Route> */}
-            {/* <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route> */}
-          {/* </Route> */} 
+          {/* <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route> */}
+          {/* </Route> */}
 
           {/* Rotas que possuem Header + Sidebars */}
           <Route element={<TwoSidebarsLayout />}>
@@ -50,8 +50,9 @@ createRoot(document.getElementById("root")).render(
 
           <Route path="*" element={<FormLogin></FormLogin>}></Route>
         </Routes>
-      </BrowserRouter>
-      {/* <App /> */}
-    </Context>
+      </Context>
+    </BrowserRouter>
+    {/* <App /> */}
+    {/* </Context> */}
   </StrictMode>,
 );

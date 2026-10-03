@@ -81,8 +81,8 @@ export function Header() {
   };
 
   return (
-    <header className="border border-border p-2 fixed w-full bg-border z-10">
-      <nav className="flex items-center gap-3 justify-between p-1">
+    <header className="border border-border p-2 fixed w-full bg-border/80 z-10 opacity-95">
+      <nav className="flex items-center gap-3 justify-between py-1 sm:px-10">
         <div className="flex gap-2">
           <img src={logo} className="w-auto h-10"></img>
           <div className="relative">
@@ -96,7 +96,7 @@ export function Header() {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Buscar livros, autores, leitores..."
+              placeholder="Buscar livros, a  utores, leitores..."
               className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
               w-[clamp(2rem,40vw,30rem)]"
               onInput={(e) => Search(e)}

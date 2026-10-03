@@ -6,18 +6,10 @@ import { Star } from "../svgCode";
 
 export function EbookEmphasis() {
   const { order } = useContext(AppContext);
-  console.log("ORDERRRRRRRR", order);
-  return (
-    <section className="grid gap-5 border-b border-[#e7d8c3] py-14 md:grid-cols-[300px_1fr] md:py-16">
-      <div className="rounded-md bg-[#f3eadc] p-4">
-        <img
-          src={order[0]?.data.ebook.ebook.volumeInfo.imageLinks?.thumbnail}
-          alt="O Jardim das Horas Lentas"
-          className="aspect-[3/4] h-full w-full rounded-sm object-cover"
-        />
-      </div>
 
-      <div className="flex flex-col justify-center">
+  return (
+    <section className="flex flex-col gap-5 border-b border-[#e7d8c3] py-14 md:grid-cols-[300px_1fr] md:py-16">
+      <div className="flex flex-col justify-center text-center">
         <span className="text-xs font-semibold tracking-[0.18em] text-[#c45738]">
           LEITURA DA SEMANA
         </span>
@@ -53,7 +45,7 @@ export function EbookEmphasis() {
           <DetailsBook label="FORMATO" value="E-book" />
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center gap-3">
+        <div className="mt-9 flex flex-wrap items-center gap-3 justify-center">
           <button className="rounded-md bg-[#ba5236] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#a9472e]">
             Ler agora — grátis
           </button>
@@ -65,7 +57,7 @@ export function EbookEmphasis() {
           </button>
 
           <span className="text-sm">
-            <span className="text-[#c17b20] flex gap-1 items-center">
+            <span className="text-[#c17b20] flex gap-1 items-center text-center">
               <Star fill={true} size={13} />
               <strong className="text-xs text-gray">
                 {order[0]?.average?.toFixed(1)}
@@ -78,6 +70,14 @@ export function EbookEmphasis() {
         <p className="mt-6 text-xs text-[#aa7d65]">
           Disponibilizado por Editora Solar para toda a comunidade Capítulo.
         </p>
+      </div>
+
+      <div className="rounded-md bg-[#f3eadc] p-4">
+        <img
+          src={order[0]?.data.ebook.ebook.volumeInfo.imageLinks?.thumbnail}
+          alt="O Jardim das Horas Lentas"
+          className="aspect-[3/4] h-[40vw] w-full rounded-sm object-cover"
+        />
       </div>
     </section>
   );

@@ -5,21 +5,30 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Lines } from "../ComponentsForm/lines";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { UsersInfo } from "./usersInfo";
 import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
 import AppContext from "../context";
 
 export function SearchUsersSidebar() {
-  const { usersList, setUsersList, filterUsers, setFilterUsers, followers } =
-    useContext(AppContext);
+  const {
+    usersList,
+    setUsersList,
+    filterUsers,
+    setFilterUsers,
+    followers,
+    filterFollowers,
+  } = useContext(AppContext);
+
+  const location = useLocation();
+
   const {
     nameIcon,
     photoValueFeed,
     user,
     fetchProfile,
     userUP,
-    validationFollowers,
+    validationFollowers, getFollowBack
   } = useRequisicoes({});
 
   const { id: paramsId } = useParams();
@@ -27,7 +36,11 @@ export function SearchUsersSidebar() {
   useEffect(() => {
     fetchProfile();
     userUP();
-  }, []);
+
+    if (location.pathname === "/feed/" || location.pathname === "/perfil/") {
+      userUP();
+    }
+  }, [location]);
 
   const alphabeticalOrder = [...usersList].sort((a, b) =>
     a.name.localeCompare(b.name),
@@ -63,9 +76,10 @@ export function SearchUsersSidebar() {
   };
 
   const usersVisible = filterUsers
-    .filter((users) => users.id !== user.id && users.id !== paramsId)
+    .filter((users) => users.id !== user.id)
     .slice(0, 5);
 
+  console.log("usersVisible", usersVisible);
   return (
     <Div>
       <section>
@@ -88,14 +102,25 @@ export function SearchUsersSidebar() {
         {usersVisible.length > 0 ? (
           <ul className="mt-2 flex flex-col gap-2">
             {usersVisible.map((users) => {
+      const followBack = getFollowBack(users.id);
+              const dataFilterFollowers = filterFollowers(paramsId);
+
+              const data = dataFilterFollowers.find(
+                (c) => c.userId === user.id,
+              );
+
               return (
                 <li
                   className="flex justify-between items-center"
                   key={users.id}
                 >
-                  <UsersInfo users={users} />
+                  <UsersInfo users={users} followerUserId={data?.userId} />
 
-                  <ButtonFlow userId={users.id} className="text-sm" />
+                  <ButtonFlow
+                    userId={users.id}
+                    className="text-sm px-4"
+                    followBack={followBack}
+                  />
                 </li>
               );
             })}

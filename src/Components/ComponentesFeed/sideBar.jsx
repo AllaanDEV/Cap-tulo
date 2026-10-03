@@ -3,12 +3,12 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Div } from "./div";
 import { Info } from "./info";
 
-import { house, Circle } from "../svgCode";
-import { compass } from "../svgCode";
+import { Circle } from "../svgCode";
+
 import { book, logout, Group, save, spiral, Person } from "../svgCode";
 import { useContext, useEffect, useState } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import AppContext from "../context";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { Progress } from "../ComponentsPerfil/progress";
@@ -23,17 +23,10 @@ const formatarParaK = (numero) => {
   }).format(numero);
 };
 
-const options = [
-  { icon: house, name: "Feed" },
-  { icon: compass, name: "Explorar" },
-  { icon: book, name: "Minha estante" },
-  { icon: Person, name: "Perfil" },
-  { icon: save, name: "Quero ler" },
-  { icon: logout, name: "sair" },
-];
-
 export function SideBar() {
   const { id: paramsId } = useParams();
+  const location = useLocation();
+
   const {
     nameIcon,
     user,
@@ -52,8 +45,10 @@ export function SideBar() {
     goal,
     progressAllEbooks,
     option,
-    setOption,
+    setOption, options, 
   } = useContext(AppContext);
+
+const {logout}=useRequisicoes({})
 
   useEffect(() => {
     fetchProfile();
@@ -63,22 +58,22 @@ export function SideBar() {
 
   const navigate = useNavigate();
 
-  const logout = (index) => {
-    if (index === 5) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+  // const logout = (index) => {
+  //   if (index === 5) {
+  //     localStorage.removeItem("user");
+  //     localStorage.removeItem("token");
 
-      setEbookSaved([]);
-      setEditValue({});
-      setEditValue({});
+  //     setEbookSaved([]);
+  //     setEditValue({});
+  //     setEditValue({});
 
-      navigate("auth/login");
-    } else if (index === 1) {
-      navigate("/ebooks");
-    } else if (index === 3) {
-      navigate(`/perfil/${user.id}`);
-    } else if (index === 0) [navigate(`/feed/${user.id}`)];
-  };
+  //     navigate("auth/login");
+  //   } else if (index === 1) {
+  //     navigate("/ebooks");
+  //   } else if (index === 3) {
+  //     navigate(`/perfil/${user.id}`);
+  //   } else if (index === 0) [navigate(`/feed/${user.id}`)];
+  // };
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
@@ -94,8 +89,7 @@ export function SideBar() {
     { status: "Seguindo", number: formatarParaK(seguindo?.length) },
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
-
-  useEffect(() => {
+  +useEffect(() => {
     postNumberGet(paramsId);
   }, []);
 
@@ -109,6 +103,17 @@ export function SideBar() {
         ? "apenas"
         : difference <= 20 && "cerca";
 
+  useEffect(() => {
+    if (location.pathname == `/perfil/${user.id}`) {
+      setOption("Perfil");
+    } else if (location.pathname == `/feed/${user.id}`) {
+      setOption("Feed");
+    } else if (location.pathname == `/ebooks`) {
+      setOption("Minha estante");
+    }
+  }, [location]);
+
+  console.log("PATCH NAME", option);
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
@@ -141,7 +146,7 @@ export function SideBar() {
                   logout(index);
                 }}
               >
-                <Icon></Icon>
+                <Icon size="1em"></Icon>
                 <p>{o.name}</p>
               </button>
             );

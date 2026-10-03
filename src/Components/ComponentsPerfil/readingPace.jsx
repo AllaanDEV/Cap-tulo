@@ -192,22 +192,32 @@ export function ReadingPace() {
                       : "concluida com sucesso, parabêns!!!🥳🎉🎉"}{" "}
                     Meta
                   </span>
-                ) : goal?.number > 0 ? (
-                  <p className="text-gray text-lg">{userProfile?.name} está
-                    concluindo
+                ) : user.id !== paramsId ? (
+                  <p className="text-gray text-lg">
+                    {userProfile?.name} está concluindo
                     <span className=" pl-1">{ebookSaved?.length}</span>
                     <span className="text-gray pl-1">
-                      de {validation ? goal?.number : 0} livros em{" "}
+                      de {validation ? goal?.number : 0} livros em
                       {new Date().getFullYear()}
                     </span>
                   </p>
+                ) : goal?.number > 0 ? (
+                  <span className="text-gray text-lg">
+                    <strong className="font-fraunce text-2xl mr-1">
+                      {ebookSaved?.length}
+                    </strong>
+                    de {goal?.number} em
+                    <span className="ml-1">{new Date().getFullYear()}</span>
+                  </span>
                 ) : (
-                  <p
+                  <span
                     className="
                   text-lg"
                   >
-                   {user.id === paramsId ? " Que tal fazer uma meta?" : `${userProfile?.name} ainda não possui uma meta`}
-                  </p>
+                    {user.id === paramsId
+                      ? " Que tal fazer uma meta?"
+                      : `${userProfile?.name} ainda não possui uma meta`}
+                  </span>
                 )}
               </div>
               {user.id === paramsId && (

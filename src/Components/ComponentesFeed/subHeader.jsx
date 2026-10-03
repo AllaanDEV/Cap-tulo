@@ -44,7 +44,7 @@ const buttons = [
   // { icon: faceHappy, name: "imojis" },
 ];
 
-export function SubHeader() {
+export function SubHeader({className, isMobile = false,}) {
   const emojiContainerRef = useRef(null);
   const location = useLocation();
 
@@ -117,7 +117,7 @@ export function SubHeader() {
 
   return (
     <>
-      <section className="pb-5 flex flex-col gap-5 w-full">
+      <section className={`pb-5 flex flex-col gap-5 w-full ${!isMobile ? "hidden sm:block" : "block"} ${className}`}>
         <Div className="w-full">
           {!postCitation ? (
             <>
@@ -153,7 +153,7 @@ export function SubHeader() {
                     );
                   } else if (index === 2) {
                     return (
-                      <div key={index} className="relative">
+                      <div key={index} className="relative hidden sm:block">
                         <button
                           onClick={() => citationOpen(index)}
                           className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"

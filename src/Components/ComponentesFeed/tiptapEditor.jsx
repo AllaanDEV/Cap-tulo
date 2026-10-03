@@ -39,7 +39,7 @@ export function TipTapEditor() {
     typePost,
     ebookSaved,
     contentEmoji,
-    setContentHtml,
+    setContentHtml, canPost, focusEditorTrigger
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -52,6 +52,8 @@ export function TipTapEditor() {
 
   // const [hasText, setHasText] = useState(false);
   const [getMidiaUrl, setGetMidiaUrl] = useState();
+
+
 
   useEffect(() => {
     fetchProfile();
@@ -68,13 +70,6 @@ export function TipTapEditor() {
         ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
 
-  const canPost = Boolean(
-    hasText ||
-    imgIdUrl?.length > 0 ||
-    gifData ||
-    valuePostCitation ||
-    containerModified,
-  );
 
   const typeResenha = () => {
     if (postModified !== "resenha") return null;
@@ -83,8 +78,6 @@ export function TipTapEditor() {
       (e) =>
         e.ebook.volumeInfo.title === styleCardActive?.ebook?.volumeInfo?.title,
     );
-
-    console.log("LIVRO ENCONTRADO:", cardResenha);
 
     return cardResenha;
   };
@@ -163,6 +156,14 @@ export function TipTapEditor() {
     },
   });
 
+useEffect(() => {
+  if (editor) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    editor.chain().focus().run();
+  }
+}, [focusEditorTrigger]);
+
+
   useEffect(() => {
     if (contentEmoji && editor) {
       // Em vez de setContent, usamos insertContent para adicionar na posição do cursor
@@ -179,7 +180,7 @@ export function TipTapEditor() {
       <div className="flex items-center">
         <PerfilIcon
           to={`/perfil/${user.id}`}
-          className="hidden sm:block mb-auto"
+          className=" mb-auto"
         >
           {photo?.midiaIcon ? (
             <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
@@ -189,7 +190,9 @@ export function TipTapEditor() {
             </p>
           )}
         </PerfilIcon>
+
         <div>
+
           <EditorContent
             editor={editor}
             className="            
@@ -228,7 +231,7 @@ export function TipTapEditor() {
           ></EditorContent>
         </div>
         <button
-          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"}`}
+          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto hidden sm:block ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"}`}
           disabled={!canPost}
           onClick={() => {
             (newPost(),
