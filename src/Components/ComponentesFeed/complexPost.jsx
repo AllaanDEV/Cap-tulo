@@ -138,11 +138,11 @@ export function ComplexPost() {
         <div className="flex flex-col gap-2">
           {ebookSaved.length > 0 ? (
             postModified === "citation" ? (
-              <span className="text-sm text-gray">A CITAÇÃO:</span>
+              <span className="text-xs sm:text-sm text-gray">A CITAÇÃO:</span>
             ) : (
               postModified === "feedback" && (
-                <div className="flex items-center gap-2">
-                  <span className="text-gray text-sm">FAÇA SUA AVALIAÇÃO:</span>
+                <div className="flex flex-col sm:flex-row text-start sm:items-center gap-2 sm:gap-2">
+                  <span className="text-gray text-xs sm:text-sm">FAÇA SUA AVALIAÇÃO:</span>
                   <ArrayStars onClick={setStarFilled}></ArrayStars>
                   <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
                 </div>

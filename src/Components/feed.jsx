@@ -20,8 +20,6 @@ export function Feed() {
       <Buttons />
       <SubHeader />
       <ArrayPost />
-
-
       <Dialog />
       <DialogComments />
     </Container>

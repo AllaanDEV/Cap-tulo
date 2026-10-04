@@ -68,7 +68,7 @@ export function ArrayEbooks() {
         })}
       </ul>
 
-      <div className="flex justify-center py-5">
+      <div className="flex justify-center py-5 mb-20">
         <ButtonBook
           onClick={() => {
             (setPage(page + 1), setAllBooks(categorias[booksContador]));

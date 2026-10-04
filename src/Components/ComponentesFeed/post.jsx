@@ -17,7 +17,7 @@ import { CommentsList } from "./commentsList";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
@@ -33,6 +33,7 @@ const Icon = configuration;
 export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     setPostId,
@@ -114,6 +115,14 @@ export const Post = memo(function Post({ post }) {
 
   console.log("VAP", post);
 
+  const validationsPostFocus = () => {
+    if (window.innerWidth >= 640) {
+      setPostFocus((prev) => !prev);
+    } else if (window.innerWidth < 640) {
+      navigate(`/feed/${user.id}/${post.id}`);
+    }
+  };
+
   return (
     <>
       <Div className="w-max-[50vw]">
@@ -142,7 +151,7 @@ export const Post = memo(function Post({ post }) {
             dangerouslySetInnerHTML={{ __html: post?.content }}
             className="text"
             onClick={() => {
-              setPostFocus((prev) => !prev);
+              validationsPostFocus();
               setDataPostFocus(post);
             }}
           />
@@ -151,7 +160,7 @@ export const Post = memo(function Post({ post }) {
             <Info
               className="rounded-xs cursor-pointer"
               onClick={() => {
-                setPostFocus((prev) => !prev);
+                validationsPostFocus();
                 setDataPostFocus(post);
               }}
             >
@@ -182,7 +191,7 @@ export const Post = memo(function Post({ post }) {
               title={post?.postModified?.ebook?.ebook?.volumeInfo?.title}
               authors={post?.postModified?.ebook?.ebook?.volumeInfo?.authors}
               onClick={() => {
-                setPostFocus((prev) => !prev);
+                validationsPostFocus();
                 setDataPostFocus(post);
               }}
               className="cursor-pointer"
@@ -198,7 +207,7 @@ export const Post = memo(function Post({ post }) {
               starsNumber={post.postModified?.starsEbook}
               type={post?.type}
               onClick={() => {
-                setPostFocus((prev) => !prev);
+                validationsPostFocus();
                 setDataPostFocus(post);
               }}
               className="cursor-pointer"
@@ -208,7 +217,7 @@ export const Post = memo(function Post({ post }) {
               <PostModifiedContainer
                 book={post?.postModified?.ebook}
                 onClick={() => {
-                  setPostFocus((prev) => !prev);
+                  validationsPostFocus();
                   setDataPostFocus(post);
                 }}
                 className="cursor-pointer"
@@ -227,9 +236,12 @@ export const Post = memo(function Post({ post }) {
           openComments={openComments}
         ></ContainerButtonsPost>
 
-        {postComment && <CommentsList post={post}></CommentsList>}
+        {postComment ||
+          (location.pathname === `/feed/${user.id}/${post.id}` && (
+            <CommentsList post={post}></CommentsList>
+          ))}
       </Div>
-      <DialogPostFocus></DialogPostFocus>
+      {window.innerWidth >= 640 && <DialogPostFocus></DialogPostFocus>}
     </>
   );
 });

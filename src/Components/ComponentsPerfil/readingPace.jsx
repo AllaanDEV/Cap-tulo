@@ -120,7 +120,7 @@ export function ReadingPace() {
 
       {definitionGoal ? (
         <Info className="rounded-2xl">
-          <div className="p-4 w-full">
+          <div className="p-3 sm:p-4 w-full">
             <div className="w-full flex flex-col gap-4">
               <div className="flex flex-col items-start w-full">
                 <span>Meta de leitura para {new Date().getFullYear()}</span>
@@ -138,7 +138,7 @@ export function ReadingPace() {
 
               <div className="w-full flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="border rounded-full border-wine w-30 bg-primary px-5 py-1 flex items-center justify-between gap-1 text-gray ">
+                  <div className="border rounded-full border-wine w-20 sm:w-30 bg-primary  sm:px-5 py-1 flex items-center justify-evenly  sm:justify-between gap-1 text-gray ">
                     <button
                       onClick={() => limitNumber(false)}
                       className="hover:text-wine cursor-pointer"
@@ -157,9 +157,9 @@ export function ReadingPace() {
                       <More></More>
                     </button>
                   </div>
-                  <span className="text-gray">livros</span>
+                  <span className="text-gray hidden sm:block">livros</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center sm:gap-2 gap-0">
                   <button
                     className="px-4 py-1 rounded-2xl text-gray cursor-pointer hover:bg-gray/30 transition duration-400"
                     onClick={() => setDefinitionGoal(false)}
@@ -167,13 +167,14 @@ export function ReadingPace() {
                     Cancelar
                   </button>
                   <button
-                    className="px-4 py-1 rounded-2xl bg-wine/90 text-white cursor-pointer hover:bg-wine flex gap-2 items-center transition duration-400"
+                    className="px-4 py-4 sm:py-1  rounded-2xl bg-wine/90 text-white cursor-pointer hover:bg-wine flex gap-2 items-center transition duration-400"
                     onClick={() => {
                       setDefinitionGoal(false);
                       postNumber();
                     }}
                   >
-                    <Check></Check> Salvar
+                    <Check></Check> 
+                    <span className="hidden sm:block">Salvar</span>
                   </button>
                 </div>
               </div>
@@ -181,7 +182,7 @@ export function ReadingPace() {
           </div>
         </Info>
       ) : (
-        <Info className="flex flex-col p-5 rounded-2xl">
+        <Info className="flex flex-col p-2 sm:p-5 rounded-2xl">
           <div className="w-full flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <div className="flex items-start">
@@ -193,7 +194,7 @@ export function ReadingPace() {
                     Meta
                   </span>
                 ) : user.id !== paramsId ? (
-                  <p className="text-gray text-lg">
+                  <p className="text-gray text-xs sm:text-lg">
                     {userProfile?.name} está concluindo
                     <span className=" pl-1">{ebookSaved?.length}</span>
                     <span className="text-gray pl-1">
@@ -211,8 +212,8 @@ export function ReadingPace() {
                   </span>
                 ) : (
                   <span
-                    className="
-                  text-lg"
+                    className=" text-md
+                  sm:text-lg"
                   >
                     {user.id === paramsId
                       ? " Que tal fazer uma meta?"
@@ -223,10 +224,10 @@ export function ReadingPace() {
               {user.id === paramsId && (
                 <button
                   onClick={() => setDefinitionGoal(true)}
-                  className="flex gap-2 py-2 px-4 bg-primary hover:bg-gray/40 rounded-full items-center transition duration-400 cursor-pointer"
+                  className="flex gap-2 py-4 sm:py-2 px-4 bg-primary hover:bg-gray/40 rounded-2xl items-center transition duration-400 cursor-pointer"
                 >
                   <Pencil></Pencil>
-                  <span>
+                  <span className="hidden sm:block">
                     {progressAllEbooks === 100
                       ? "Dobrar a meta!"
                       : progressAllEbooks < 100 && ebookSaved.length > 0

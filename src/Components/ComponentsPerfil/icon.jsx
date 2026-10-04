@@ -54,15 +54,6 @@ export function Icon({ state }) {
   const [midiaTheme, setMidiaTheme] = useState(null);
   const [following, setFollowing] = useState([]);
 
-  const {
-    nameIcon,
-    user,
-    token,
-    fetchProfile,
-    likesGet,
-    allFollowers,
-    getBookSave,
-  } = useRequisicoes({});
 
   const {
     setPublication,
@@ -75,8 +66,20 @@ export function Icon({ state }) {
     publication,
     setListFollowersPerfil,
     listFollowersPerfil,
-    setStyleButtonFollowersList,
+    setStyleButtonFollowersList
   } = useContext(AppContext);
+
+
+  const {
+    nameIcon,
+    user,
+    token,
+    fetchProfile,
+    likesGet,
+    allFollowers,
+    getBookSave,
+  } = useRequisicoes({});
+
 
   useEffect(() => {
     fetch("/api/posts")
@@ -274,10 +277,11 @@ export function Icon({ state }) {
   //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
   //   : "bg-wine text-white";
 
+
   return (
     <Container className="border border-border">
       {!listFollowersPerfil ? (
-        <section className="rounded-xs bg-primary">
+        <section className="rounded-xs bg-primary w-[100vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
           <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
             {user.id === profileId ? (
               <label className="absolute cursor-pointer w-full h-full">

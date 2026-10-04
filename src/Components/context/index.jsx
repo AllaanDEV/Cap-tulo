@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 
 export function Context({ children }) {
   const comments = useComments();
-const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
@@ -131,7 +131,7 @@ const navigate=useNavigate()
   const [dataPostFocus, setDataPostFocus] = useState();
   const [goal, setGoal] = useState({ number: 0 });
 
-const [likesCommentList, setLikesCommentList]=useState([])
+  const [likesCommentList, setLikesCommentList] = useState([]);
 
   useEffect(() => {
     setAtualizar(atualizar);
@@ -233,45 +233,42 @@ const [likesCommentList, setLikesCommentList]=useState([])
     return followers.filter((follower) => follower.userId === paramsId);
   };
 
-const isLiked = (postId, userId) => {
-  return (
-    like?.some(
-      (p) =>
-        p.postId === postId &&
-        p.userId === userId &&
-        p.validation === true,
-    ) ?? false
-  );
-};
+  const isLiked = (postId, userId) => {
+    return (
+      like?.some(
+        (p) =>
+          p.postId === postId && p.userId === userId && p.validation === true,
+      ) ?? false
+    );
+  };
 
-const likeLock = useRef({});
-const [liking, setLiking] = useState([]);
+  const likeLock = useRef({});
+  const [liking, setLiking] = useState([]);
 
-const handleLike = async (postId, LikeButton) => {
-  if (likeLock.current[postId]) return;
+  const handleLike = async (postId, LikeButton) => {
+    if (likeLock.current[postId]) return;
 
-  likeLock.current[postId] = true;
-  setLiking((prev) => [...prev, postId]);
+    likeLock.current[postId] = true;
+    setLiking((prev) => [...prev, postId]);
 
-  try {
-    await LikeButton();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    likeLock.current[postId] = false;
-    setLiking((prev) => prev.filter((id) => id !== postId));
-  }
-};
+    try {
+      await LikeButton();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      likeLock.current[postId] = false;
+      setLiking((prev) => prev.filter((id) => id !== postId));
+    }
+  };
 
-const options = [
-  { icon: House, name: "Feed" },
-  { icon: Compass, name: "Explorar" },
-  { icon: book, name: "Minha estante" },
-  { icon: Person, name: "Perfil" },
-  { icon: save, name: "Quero ler" },
-  { icon: logout, name: "sair" },
-];
-
+  const options = [
+    { icon: House, name: "Feed" },
+    { icon: Compass, name: "Explorar" },
+    { icon: book, name: "Minha estante" },
+    { icon: Person, name: "Perfil" },
+    { icon: save, name: "Quero ler" },
+    { icon: logout, name: "sair" },
+  ];
 
   const canPost = Boolean(
     hasText ||
@@ -281,12 +278,12 @@ const options = [
     containerModified,
   );
 
-const [optionsDialog, setOptionsDialog]=useState(false)
-const [dialogSubHeader, setDialogSubHeader]=useState(false)
+  const [optionsDialog, setOptionsDialog] = useState(false);
+  const [dialogSubHeader, setDialogSubHeader] = useState(false);
 
-const [focusEditorTrigger, setFocusEditorTrigger] = useState(false);
+  const [focusEditorTrigger, setFocusEditorTrigger] = useState(false);
 
-const focusEditor = () => setFocusEditorTrigger(prev => !prev);
+  const focusEditor = () => setFocusEditorTrigger((prev) => !prev);
 
   return (
     <AppContext.Provider
@@ -392,7 +389,22 @@ const focusEditor = () => setFocusEditorTrigger(prev => !prev);
         listFollowersPerfil,
         setListFollowersPerfil,
         styleButtonFollowersList,
-        setStyleButtonFollowersList, filterFollowers, isLiked, handleLike, liking, likesCommentList, setLikesCommentList, options, logout, canPost, optionsDialog, setOptionsDialog, focusEditor, focusEditorTrigger, dialogSubHeader, setDialogSubHeader
+        setStyleButtonFollowersList,
+        filterFollowers,
+        isLiked,
+        handleLike,
+        liking,
+        likesCommentList,
+        setLikesCommentList,
+        options,
+        logout,
+        canPost,
+        optionsDialog,
+        setOptionsDialog,
+        focusEditor,
+        focusEditorTrigger,
+        dialogSubHeader,
+        setDialogSubHeader,
       }}
     >
       {children}

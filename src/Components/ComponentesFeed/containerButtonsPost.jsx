@@ -104,7 +104,7 @@ export function ContainerButtonsPost({ post, openComments, className }) {
         onClick={() => Saves("saved", post)}
         to={"saves"}
       >
-        <Save></Save>
+        <Save size={"1em"}></Save>
       </button>
     </div>
   );

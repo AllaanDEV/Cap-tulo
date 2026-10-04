@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { House, Person, Menu, Compass, More } from "../svgCode";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { SideBarMobileButtons } from "./sideBarMobileButtons";
 import { DialogOptionsMobile } from "./dialogOptionsMobile";
 import { DialogSubHeaderMobile } from "./DialogSubHeaderMobile";
@@ -11,7 +11,13 @@ export function SideBarMobile() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { options, setOption, setOptionsDialog, focusEditor,   setDialogSubHeader } = useContext(AppContext);
+  const {
+    options,
+    setOption,
+    setOptionsDialog,
+    focusEditor,
+    setDialogSubHeader,
+  } = useContext(AppContext);
   const { user } = useRequisicoes({});
 
   useEffect(() => {
@@ -32,12 +38,11 @@ export function SideBarMobile() {
             option="Feed"
             options={options}
             setOption={setOption}
-            navigate={navigate}
             to={`/feed/${user.id}`}
           >
             <House size="2em" />
           </SideBarMobileButtons>
-          
+
           <SideBarMobileButtons
             option="Explorar"
             options={options}
@@ -49,16 +54,17 @@ export function SideBarMobile() {
           </SideBarMobileButtons>
         </div>
 
-        <button 
+        <Link
           onClick={() => {
-            setOptionsDialog(false); 
+            setOptionsDialog(false);
             setDialogSubHeader(true);
-            focusEditor();         
+            focusEditor();
           }}
           className="rounded-full p-7 bg-amber-700 absolute left-1/2 -translate-x-1/2 outline-none top-[-15px] text-white cursor-pointer"
+          to={location.pathname !== "/feed/" ? `/feed/${user.id}` : "/feed/"}
         >
           <More />
-        </button>
+        </Link>
 
         <div className="flex gap-10">
           <SideBarMobileButtons
@@ -76,7 +82,6 @@ export function SideBarMobile() {
             options={options}
             setOption={setOption}
             navigate={navigate}
-     
             setOptionsDialog={setOptionsDialog}
           >
             <Menu />
