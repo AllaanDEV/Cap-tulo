@@ -52,8 +52,8 @@ export function Header() {
     };
 
     if (
-      location.pathname === `/feed/${user.id}` ||
-      location.pathname === `/perfil/${postId.authorId || user.id}`
+      location.pathname === `/feed/${user?.id}` ||
+      location.pathname === `/perfil/${postId?.authorId || user?.id}`
     ) {
       setSearchValue(e.target.value)
       const validationPost = !followerPost ? publication : postFollowers;
@@ -66,7 +66,7 @@ export function Header() {
       });
 
       return setSearch(filterPublications);
-    } else if (location.pathname === "/ebooks/") {
+    } else if (location.pathname === "/ebooks") {
       setSearchValue(e.target.value);
       const booksFilter = ebooks.filter((ebook) => {
         return (

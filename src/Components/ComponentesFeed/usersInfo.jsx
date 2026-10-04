@@ -57,13 +57,31 @@ export function UsersInfo({ post, users, following, followerUserId }) {
       </PerfilIcon>
 
       <div className="flex flex-col">
-        <div className="flex items-center gap-1 text-sm">
+        <div className="flex items-start gap-1 text-sm">
           <span>{profile.name}</span>
 
           {post?.type === "resenha" && (
-            <p className="text-wine">
-              Resenhou
-              <span className="text-gray mx-1">
+            <p className="text-gray">
+              resenhou
+              <span className="text-wine mx-1">
+                {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+              </span>
+            </p>
+          )}
+
+          {post?.type === "feedback" && (
+            <p className="text-gray">
+              avaliou
+              <span className="text-wine mx-1">
+                {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+              </span>
+            </p>
+          )}
+
+          {post?.type === "citation" && (
+            <p className="text-gray">
+              fez uma citação
+              <span className="text-wine mx-1">
                 {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
               </span>
             </p>

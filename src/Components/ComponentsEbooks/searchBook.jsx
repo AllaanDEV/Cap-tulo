@@ -20,7 +20,7 @@ export function SearchBook() {
   return (
     <section className="py-5 flex flex-col justify-center border-b border-[#e7d8c3] mb-5">
         <div className="mx-auto text-center">
-          <h3 className="font-serif text-6xl font-semibold">Toda a estante</h3>
+          <h3 className="font-serif text-4xl sm:text-6xl font-semibold">Toda a estante</h3>
           <p className="mt-1 text-sm text-[#866653]">
             9 títulos novos este mês
           </p>

@@ -8,8 +8,8 @@ import { SearchBook } from "./ComponentsEbooks/searchBook";
 export function EbooksPage() {
   return (
     <Container>
-      <main className=" bg-[#fbf6ed] text-[#342219]">
-        <section className="">
+      <main className=" bg-[#fbf6ed] text-[#342219] ">
+        <section className="mt-12.5 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
           <Hero></Hero>
           <EbookEmphasis></EbookEmphasis>
           <SearchBook></SearchBook>

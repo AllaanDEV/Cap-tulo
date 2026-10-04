@@ -28,7 +28,7 @@ export function EbookEmphasis() {
           {order[0]?.data?.ebook?.ebook?.volumeInfo?.description}
         </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-5">
+        <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-5 text-xs">
           <DetailsBook
             label="PÁGINAS"
             value={order[0]?.data?.ebook?.ebook?.volumeInfo?.pageCount}
@@ -37,7 +37,7 @@ export function EbookEmphasis() {
             label="IDIOMA"
             value={order[0]?.data?.ebook?.ebook?.volumeInfo?.language}
           />
-          <DetailsBook label="GÊNERO" value="Ficção literária" />
+          <DetailsBook label="GÊNERO" value={order[0]?.data?.ebook?.volumeInfo?.categories} />
           <DetailsBook
             label="PUBLICADO"
             value={order[0]?.data?.ebook?.ebook?.volumeInfo?.publishedDate}

@@ -1,24 +1,25 @@
+import { Link } from "react-router";
+
 export function SideBarMobileButtons({
   option,
   options,
   setOption,
-  navigate,
-  to,
   setOptionsDialog,
   children,
+  ...props
 }) {
 
   return (
-    <button
+    <Link
       className={`${options === option ? "text-wine" : "text-gray"} flex flex-col text-center items-center outline-none`}
       onClick={() => {
         setOption(option);
-        navigate(to);
         setOptionsDialog(true);
       }}
+      {...props}
     >
   
       {children}
-    </button>
+    </Link>
   );
 }

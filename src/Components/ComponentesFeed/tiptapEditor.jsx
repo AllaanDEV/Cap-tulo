@@ -14,6 +14,7 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
+import { ButtonPostar } from "./buttonPostar";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor() {
@@ -39,7 +40,10 @@ export function TipTapEditor() {
     typePost,
     ebookSaved,
     contentEmoji,
-    setContentHtml, canPost, focusEditorTrigger
+    setContentHtml,
+    canPost,
+    focusEditorTrigger,
+    setDialogSubHeader,
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -53,8 +57,6 @@ export function TipTapEditor() {
   // const [hasText, setHasText] = useState(false);
   const [getMidiaUrl, setGetMidiaUrl] = useState();
 
-
-
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -65,11 +67,10 @@ export function TipTapEditor() {
 
   const stylesGrid =
     imgIdUrl?.length === 1
-      ? "grid-cols-1 w-[50vw] max-h-[60vw] sm:max-w-[25vw] sm:max-h-[20vw] "
+      ? "grid-cols-1 w-auto max-h-auto sm:max-w-[25vw] sm:max-h-[20vw] "
       : imgIdUrl?.length === 2
-        ? "grid-cols-2 gap-1 w-full max-h-[60vw] sm:h-[25vw] mx-auto"
+        ? "grid-cols-2 gap-1 w-full h-[50vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
-
 
   const typeResenha = () => {
     if (postModified !== "resenha") return null;
@@ -156,13 +157,12 @@ export function TipTapEditor() {
     },
   });
 
-useEffect(() => {
-  if (editor) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    editor.chain().focus().run();
-  }
-}, [focusEditorTrigger]);
-
+  useEffect(() => {
+    if (editor) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      editor.chain().focus().run();
+    }
+  }, [focusEditorTrigger]);
 
   useEffect(() => {
     if (contentEmoji && editor) {
@@ -177,11 +177,8 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center">
-        <PerfilIcon
-          to={`/perfil/${user.id}`}
-          className=" mb-auto"
-        >
+      <div className="flex items-center gap-2 ">
+        <PerfilIcon to={`/perfil/${user.id}`} className=" mb-auto">
           {photo?.midiaIcon ? (
             <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
           ) : (
@@ -192,7 +189,6 @@ useEffect(() => {
         </PerfilIcon>
 
         <div>
-
           <EditorContent
             editor={editor}
             className="            
@@ -220,7 +216,7 @@ useEffect(() => {
 
 
                     w-full
-    max-w-[52vw]
+    max-w-[70vw]
     sm:max-w-[47vw]
 
     lg:max-w-[35vw]
@@ -230,18 +226,12 @@ useEffect(() => {
                                        "
           ></EditorContent>
         </div>
-        <button
-          className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto hidden sm:block ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"}`}
-          disabled={!canPost}
-          onClick={() => {
-            (newPost(),
-              editor.commands.clearContent(),
-              setValuePostCitation(),
-              setContainerModified(false));
-          }}
+        <ButtonPostar
+          editorValue={editor.commands.clearContent}
+          className="hidden sm:block"
         >
           Postar
-        </button>
+        </ButtonPostar>
       </div>
 
       {!gifData ? (
@@ -279,7 +269,7 @@ useEffect(() => {
         <img
           src={gifData?.images.original.url}
           alt={gifData?.title}
-          className="max-w-full max-h-[25vw] object-contain rounded-lg mt-5 hover:brightness-75"
+          className="max-w-full max-h-auto sm:max-h-[25vw] object-contain rounded-lg mt-5 hover:brightness-75"
           onClick={() => setGifData()}
         />
       )}

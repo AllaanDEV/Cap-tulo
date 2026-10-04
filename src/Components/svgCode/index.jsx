@@ -814,12 +814,12 @@ export const Person = ({ size }) => {
   );
 };
 
-export const LeftArrow = () => {
+export const LeftArrow = ({size}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width={size || "1em"}
+      height={size || "1em"}
       viewBox="0 0 24 24"
     >
       <title>arrow-left-broken</title>

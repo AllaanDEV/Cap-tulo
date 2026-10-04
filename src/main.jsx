@@ -18,6 +18,7 @@ import { EbooksPage } from "./Components/ebooksPage.jsx";
 // import { twoSidebarsLayout } from "./Components/twoSidebarsLayout.jsx";
 import { PostFocus } from "./Components/postFocus.jsx";
 import { TwoSidebarsLayout } from "./Components/twoSidebarsLayout.jsx";
+import { PostFocusMobile } from "./Components/ComponentesFeed/postFocusMobile.jsx";
 // import { OneSidebarsLayout } from "./Components/oneSidebarsLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -41,9 +42,9 @@ createRoot(document.getElementById("root")).render(
           {/* Rotas que possuem Header + Sidebars */}
           <Route element={<TwoSidebarsLayout />}>
             <Route path="feed/:id" element={<Feed />} />
-            <Route path="feed/:id/:postId" element={<PostFocus />} />
+            <Route path="feed/:id/:postId" element={<PostFocusMobile />} />
             <Route path="save" element={<Saves />} />
-            <Route path="ebooks" element={<EbooksPage />} />
+            {/* <Route path="ebooks" element={<EbooksPage />} /> */}
             <Route path="perfil/:id" element={<Icon></Icon>}></Route>
             <Route path="ebooks" element={<EbooksPage></EbooksPage>}></Route>
           </Route>

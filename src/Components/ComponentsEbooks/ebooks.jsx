@@ -68,7 +68,7 @@ export function Ebook(ebook) {
             className="text-[#995d43] transition-colors hover:text-yellow-600"
             onClick={saveBook}
           >
-            <SaveIcon />
+            <SaveIcon size={"1.5em"} />
           </button>
         </div>
 

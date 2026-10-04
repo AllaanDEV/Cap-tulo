@@ -60,7 +60,7 @@ export function ArrayPost() {
         : publication;
 
   return (
-    <ul className="flex flex-col gap-5">
+    <ul className="flex flex-col gap-5 mb-25 sm:mb-0">
       {postsToRender.length > 0 ? (
         postsToRender.map((p) => (
           <li key={p.id}>

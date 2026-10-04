@@ -41,7 +41,7 @@ export function useRequisicoes({ post, like, setLike }) {
     followerPost,
     setEditValue,
     setLikesCommentList,
-    likesCommentList,
+    likesCommentList
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -225,6 +225,9 @@ export function useRequisicoes({ post, like, setLike }) {
 
     return likesPost;
   };
+
+  console.log("setLike:", setLike);
+console.log("tipo:", typeof setLike);
 
   const likesGet = async (post) => {
     const response = await fetch("http://localhost:3000/api/posts/likes");

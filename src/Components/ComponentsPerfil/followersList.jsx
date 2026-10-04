@@ -35,7 +35,7 @@ export function FollowersList() {
 
   return (
     <Container className="border border-border">
-      <section className="bg-primary h-screen  pt-12 flex flex-col gap-3">
+      <section className="bg-primary h-screen  pt-12 flex flex-col gap-3 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
         <div className=" flex gap-5 items-center px-2">
           <button
             className="text-2xl transition hover:translate-x-[10px] duration-200 cursor-pointer "
