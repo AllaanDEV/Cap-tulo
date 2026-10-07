@@ -19,6 +19,7 @@ import { ReadingPace } from "./readingPace";
 import { Evaluated } from "./evaluated";
 import { Container } from "../ComponentesFeed/container";
 import { FollowersList } from "./followersList";
+import { Interactions } from "./interactions";
 
 const Pencil = pencil;
 
@@ -38,7 +39,7 @@ const buttons = [
   { name: "Todos" },
   { name: "Publicações" },
   { name: "Estantes" },
-  { name: "Sobre" },
+  { name: "Interações" },
 ];
 
 export function Icon({ state }) {
@@ -54,7 +55,6 @@ export function Icon({ state }) {
   const [midiaTheme, setMidiaTheme] = useState(null);
   const [following, setFollowing] = useState([]);
 
-
   const {
     setPublication,
     openOrCloseDialog,
@@ -66,9 +66,8 @@ export function Icon({ state }) {
     publication,
     setListFollowersPerfil,
     listFollowersPerfil,
-    setStyleButtonFollowersList
+    setStyleButtonFollowersList, setLike
   } = useContext(AppContext);
-
 
   const {
     nameIcon,
@@ -78,8 +77,7 @@ export function Icon({ state }) {
     likesGet,
     allFollowers,
     getBookSave,
-  } = useRequisicoes({});
-
+  } = useRequisicoes({setLike});
 
   useEffect(() => {
     fetch("/api/posts")
@@ -91,7 +89,7 @@ export function Icon({ state }) {
 
   useEffect(() => {
     fetchProfile();
-    likesGet();
+    // likesGet();
   }, [publication, editValue]);
 
   const bios = [
@@ -116,18 +114,20 @@ export function Icon({ state }) {
     getBookSave(profileId);
   }, [profileId, token]);
 
-  const [feedfilter, setFeedFilter] = useState(null);
+  const [feedFilter, setFeedFilter] = useState("todos");
 
   const filterFeed = (index) => {
-    if (index === 1) {
-      setFeedFilter(false);
-    } else if (index === 0) {
-      setFeedFilter(null);
+    if (index === 0) {
+      setFeedFilter("todos");
+    } else if (index === 1) {
+      setFeedFilter("posts");
     } else if (index === 2) {
-      setFeedFilter(true);
+      setFeedFilter("livros");
+    } else if (index === 3) {
+      setFeedFilter("interacoes");
     }
   };
-
+  
   const [buttonFocus, setButtonFocus] = useState("Todos");
 
   useEffect(() => {
@@ -277,7 +277,6 @@ export function Icon({ state }) {
   //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
   //   : "bg-wine text-white";
 
-
   return (
     <Container className="border border-border">
       {!listFollowersPerfil ? (
@@ -310,14 +309,14 @@ export function Icon({ state }) {
               />
             )}
 
-            <div className="absolute w-[30vw] h-[30vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-15vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full text-center  place-items-center overflow-hidden">
+            <div className="absolute w-[45vw] h-[45vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-20vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full flex items-center justify-center overflow-hidden">
               {editValue.dataPerfil?.midiaIcon ? (
                 <ImgPerfil
                   src={editValue.dataPerfil.midiaIcon}
                   alt="Foto de perfil"
                 />
               ) : (
-                <span className="text-5xl absolute bottom-[9vw] sm:bottom-13 flex items-center justify-center m-auto font-serif text-white">
+                <span className="text-5xl font-serif text-white">
                   {nameIcon(
                     editValue.dataPerfil?.name ||
                       profile?.author ||
@@ -440,17 +439,19 @@ export function Icon({ state }) {
 
             <Lines></Lines>
 
-            {feedfilter === null || feedfilter !== false ? (
+            {feedFilter === "todos" || feedFilter === "livros" ? (
               <>
-                <ReadingPace></ReadingPace>
-                <ArrayBookSaved profile={profile}></ArrayBookSaved>
-                <Evaluated></Evaluated>
+                <ReadingPace />
+                <ArrayBookSaved profile={profile} />
+                <Evaluated />
               </>
             ) : null}
 
-            {feedfilter === null || feedfilter === false ? (
-              <ArrayPosts></ArrayPosts>
+            {feedFilter === "todos" || feedFilter === "posts" ? (
+              <ArrayPosts />
             ) : null}
+
+            {feedFilter === "interacoes" ? <Interactions /> : null}
           </div>
 
           <EditProfile></EditProfile>

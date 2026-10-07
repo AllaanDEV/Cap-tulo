@@ -6,7 +6,7 @@ import { useLocation, useParams } from "react-router";
 export function ButtonFlow({
   profileId,
   userId,
-followBack, 
+  followBack,
   className,
   listFollowersPerfil,
   ...props
@@ -47,12 +47,11 @@ followBack,
     <button
       onClick={validation}
       {...props}
-      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full`}
+      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full `}
     >
       {isFollowing
         ? "Deixar de seguir"
-        : 
-followBack
+        : followBack
           ? "Seguir de volta"
           : "Seguir"}
     </button>

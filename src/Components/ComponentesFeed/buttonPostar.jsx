@@ -15,11 +15,12 @@ export function ButtonPostar({ className, editorValue, ...props }) {
     <button
       className={`w-20 h-10 p-1 ml-auto bg-wine text-white rounded-2xl  sticky mt-auto ${!canPost ? "bg-wine/40 text-white/40" : "cursor-pointer"} ${className}`}
       disabled={!canPost}
-      onClick={() => {
-        (newPost(),
+      onClick={async () => {
+        await newPost(),
+        
           editorValue(),
           setValuePostCitation(),
-          setContainerModified(false));
+          setContainerModified(false);
         setDialogSubHeader(false);
       }}
       {...props}

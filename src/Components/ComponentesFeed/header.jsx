@@ -112,7 +112,7 @@ export function Header() {
                 openOrCloseDialog(
                   location.pathname === "/feed"
                     ? null
-                    : navigate(`/feed/${user.id}`),
+                    : navigate(`/feed/${user?.id}`),
                 )
               }
             >
@@ -127,16 +127,16 @@ export function Header() {
 
           <PerfilIcon
             to={
-              location.pathname === `/perfil/${user.id}`
+              location.pathname === `/perfil/${user?.id}`
                 ? null
-                : `/perfil/${user.id}`
+                : `/perfil/${user?.id}`
             }
           >
             {photo?.midiaIcon ? (
               <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
             ) : (
               <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                {nameIcon(user.name)}
+                {nameIcon(user?.name)}
               </p>
             )}
           </PerfilIcon>

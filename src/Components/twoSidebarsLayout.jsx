@@ -10,7 +10,7 @@ export function TwoSidebarsLayout() {
     <>
       <Header></Header>
 
-      <main className="pt-7 min-h-screen">
+      <main className="pt-7 min-h-screen mb-25 sm:mb-0">
         <div className="flex justify-center max-w-full lg:gap-10">
           {/* Sidebar esquerdo */}
           <aside className="hidden lg:block w-80 shrink-0">
@@ -20,7 +20,7 @@ export function TwoSidebarsLayout() {
           </aside>
 
           {/* Conteúdo da página */}
-          <section className="shrink-0">
+          <section className="w-full sm:w-auto shrink-0 mt-10 sm:mt-12.5">
             <Outlet />
           </section>
 
@@ -34,8 +34,8 @@ export function TwoSidebarsLayout() {
             </div>
           </aside>
         </div>
-        <SideBarMobile></SideBarMobile>
       </main>
+      <SideBarMobile></SideBarMobile>
     </>
   );
 }

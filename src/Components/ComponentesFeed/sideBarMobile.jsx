@@ -31,9 +31,9 @@ export function SideBarMobile() {
   }, [location.pathname, user.id]);
 
   return (
-    <aside className="w-full bg-primary border-t border-border z-10 fixed bottom-0 sm:hidden">
-      <div className="flex items-center justify-between py-5 px-4">
-        <div className="flex gap-10">
+    <aside className="w-full bg-primary border-t border-border z-10 fixed bottom-0 sm:hidden flex justify-center ">
+      <div className="flex items-center justify-between py-5 px-4 gap-30">
+        <div className="flex gap-8">
           <SideBarMobileButtons
             option="Feed"
             options={options}
@@ -66,7 +66,7 @@ export function SideBarMobile() {
           <More />
         </Link>
 
-        <div className="flex gap-10">
+        <div className="flex gap-8">
           <SideBarMobileButtons
             option="Perfil"
             options={options}

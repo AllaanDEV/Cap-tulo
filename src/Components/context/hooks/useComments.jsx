@@ -1,51 +1,96 @@
-import { useState } from "react";
 
-export function useComments() {
-    const [comments, setComments] = useState(false);
-    const [editComments, setEditComments] = useState(false);
+// import { useEffect, useState } from "react";
+
+import { ReactRenderer, useEditor } from "@tiptap/react";
+import { useRequisicoes } from "./useRequisicoes";
+import { useContext, useState } from "react";
+import AppContext from "..";
+import StarterKit from "@tiptap/starter-kit";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import Mention from "@tiptap/extension-mention";
+import { UserSuggestions } from "../../ComponentesFeed/userSuggestions";
+
+//   const [users, setUsers] = useState([]);
+
+export function useComments({ setHasText, setContentHtml }) {
+  const [comments, setComments] = useState(false);
+  const [editComments, setEditComments] = useState(false);
+const user = JSON.parse(localStorage.getItem("user"));
+ 
+
   
-  
-//   const toggleComments = (c) => {
-//     if (c == 1) {
-//       return;
-//     } else if (c == 2) {
-//       setEditComments(!editComments);
-//       console.log(editComments);
-//     }
-//   };
+  // const editor = useEditor({
+  //   extensions: [
+  //     StarterKit,
+  //     Placeholder.configure({
+  //       placeholder: `O que você está lendo, ${user.name}? `,
+  //     }),
 
-//     const [EDIT, SETEDIT] = useState();
+  //     Mention.configure({
+  //       suggestion: {
+  //         items: async ({ query }) => {
+  //           const response = await fetch(
+  //             `http://localhost:3000/users?search=${encodeURIComponent(query)}`,
+  //           );
 
-//   const commentEdit = async (e, EDIT) => {
-//     e.preventDefault();
-//     setEditComments(!editComments);
+  //           return await response.json();
+  //         },
 
-//     const formData = new FormData(e.target);
+  //         render: () => {
+  //           let component;
 
-//     if (formData.get("content") == "") {
-//       return;
-//     }
+  //           return {
+  //             onStart: (props) => {
+  //               component = new ReactRenderer(UserSuggestions, {
+  //                 props,
+  //                 editor: props.editor,
+  //               });
 
-//     const response = await fetch(
-//       `
-// http://localhost:3000/api/posts/${post.id}/${EDIT}`,
-//       {
-//         method: "PATCH",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           ...EDIT,
-//           text: formData.get("content"),
-//         }),
-//       },
-//     );
+  //               document.body.appendChild(component.element);
 
-//     const resJson = await response.json();
+  //               if (props.clientRect) {
+  //                 const rect = props.clientRect();
 
-//     return setPublication(
-//       publication.map((p) => (p.id === resJson.id ? resJson : p)),
-//     );
-//   };
+  //                 component.element.style.position = "absolute";
+  //                 component.element.style.left = `${rect.left}px`;
+  //                 component.element.style.top = `${rect.bottom + 5}px`;
+  //               }
+  //             },
 
-  return {comments, setComments, editComments, setEditComments,};
+  //             onUpdate: (props) => {
+  //               component.updateProps(props);
+
+  //               if (props.clientRect) {
+  //                 const rect = props.clientRect();
+
+  //                 component.element.style.left = `${rect.left}px`;
+  //                 component.element.style.top = `${rect.bottom + 5}px`;
+  //               }
+  //             },
+
+  //             onKeyDown: (props) => {
+  //               if (props.event.key === "Escape") {
+  //                 component.destroy();
+
+  //                 return true;
+  //               }
+
+  //               return component.ref?.onKeyDown(props) ?? false;
+  //             },
+
+  //             onExit: () => {
+  //               component.destroy();
+  //             },
+  //           };
+  //         },
+  //       },
+  //     }),
+  //   ],
+  //   content: "",
+  //   onUpdate: ({ editor }) => {
+  //     setHasText(editor.getText().trim());
+  //     setContentHtml(editor.getHTML());
+  //   },
+  // });
+  return { comments, setComments, editComments};
 }
-

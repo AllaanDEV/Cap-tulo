@@ -13,6 +13,7 @@ import AppContext from "../context";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { Progress } from "../ComponentsPerfil/progress";
 import { UsersInfo } from "./usersInfo";
+import { ContainerGoal } from "./containerGoal";
 
 const Spiral = spiral;
 
@@ -45,10 +46,11 @@ export function SideBar() {
     goal,
     progressAllEbooks,
     option,
-    setOption, options, 
+    setOption,
+    options,
   } = useContext(AppContext);
 
-const {logout}=useRequisicoes({})
+  const { logout } = useRequisicoes({});
 
   useEffect(() => {
     fetchProfile();
@@ -89,19 +91,11 @@ const {logout}=useRequisicoes({})
     { status: "Seguindo", number: formatarParaK(seguindo?.length) },
     { status: "Seguidores", number: formatarParaK(seguindoProfileId?.length) },
   ];
-  +useEffect(() => {
+
+  useEffect(() => {
     postNumberGet(paramsId);
   }, []);
 
-  const difference =
-    goal?.number <= ebookSaved?.length ? 0 : goal?.number - ebookSaved?.length;
-
-  const textDiference =
-    difference <= 5
-      ? "só mais"
-      : difference <= 10
-        ? "apenas"
-        : difference <= 20 && "cerca";
 
   useEffect(() => {
     if (location.pathname == `/perfil/${user.id}`) {
@@ -113,7 +107,7 @@ const {logout}=useRequisicoes({})
     }
   }, [location]);
 
-  console.log("PATCH NAME", option);
+
   return (
     <aside className="fixed top-20">
       <div className=" flex flex-col gap-3 fixed w-80">
@@ -153,37 +147,7 @@ const {logout}=useRequisicoes({})
           })}
         </div>
 
-        <Info className="flex flex-col gap-1 bg-primary rounded-lg p-3 items-start">
-          <div className="flex gap-1 items-center text-wine">
-            <Circle></Circle>
-            <p>Meta de leitura {new Date().getFullYear()}</p>
-          </div>
-          {goal?.number > 0 ? (
-            <>
-              <p className="text-gray text-sm">
-                {ebookSaved.length} de {goal.number} livros
-              </p>
-              <Progress
-                goal={progressAllEbooks.toFixed()}
-                className="w-full"
-              ></Progress>
-              <span className="text-gray text-xs">
-                {difference === 0 && "Parabêns!🎉"}
-
-                {difference !== 0 &&
-                  ` Faltam ${textDiference} ${difference} livros para a conclusão
-                ${difference <= 5 && "🎉"}`}
-              </span>
-            </>
-          ) : (
-            <Link
-              className="text-gray hover:bg-gray/30 py-1 px-3 rounded-2xl flex items-center  transition duration-400"
-              to={`/perfil/${user.id}`}
-            >
-              Faça uma meta!
-            </Link>
-          )}
-        </Info>
+        <ContainerGoal></ContainerGoal>
       </div>
     </aside>
   );

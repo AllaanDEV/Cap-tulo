@@ -44,7 +44,7 @@ const buttons = [
   // { icon: faceHappy, name: "imojis" },
 ];
 
-export function SubHeader({className, isMobile = false,}) {
+export function SubHeader({className,   onEditorReady, isMobile = false,}) {
   const emojiContainerRef = useRef(null);
   const location = useLocation();
 
@@ -110,7 +110,7 @@ export function SubHeader({className, isMobile = false,}) {
     setStyleCardActive();
   }, [location]);
 
-  console.log("ytyoe", postModified);
+
   // useEffect(() => {
   //   setStyleCardActive(ebookSaved[0] || null);
   // }, [postModified]);
@@ -121,7 +121,7 @@ export function SubHeader({className, isMobile = false,}) {
         <Div className="w-full">
           {!postCitation ? (
             <>
-              <TipTapEditor></TipTapEditor>
+              <TipTapEditor onEditorReady={onEditorReady}></TipTapEditor>
               <Lines></Lines>
 
               <nav className="flex justify-around">

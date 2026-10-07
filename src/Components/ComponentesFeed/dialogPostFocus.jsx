@@ -18,11 +18,12 @@ import { PostModifiedContainer } from "./postModifiedContainer";
 import { Progress } from "../ComponentsPerfil/progress";
 
 export function DialogPostFocus() {
-  const { postFocus, setPostFocus, dataPostFocus, setDataPostFocus, setLike, ebookSaved } =
+  const { postFocus, setPostFocus, dataPostFocus, setDataPostFocus, setLike, ebookSaved, like} =
     useContext(AppContext);
 
   const { user, nameIcon, photoValueFeed, likesGet } = useRequisicoes({
     setLike,
+    like,
   });
 
   const [isVisible, setIsVisible] = useState(false);
