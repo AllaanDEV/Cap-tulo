@@ -15,12 +15,6 @@ export function ArrayPosts({ post }) {
     //   likesGet();
   }, [paramsId]);
 
-  console.log(
-    "PUBLICATION",
-    publication.filter((p) => p.authorId === paramsId),
-  );
-
-  console.log("search:", search);
 
   const postsToRender = searchValue ? search : publication;
 

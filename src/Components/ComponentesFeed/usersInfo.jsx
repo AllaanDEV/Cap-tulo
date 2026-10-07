@@ -19,13 +19,13 @@ export function UsersInfo({ post, users, following, followerUserId }) {
   );
 
   const profile = {
-    id: post?.authorId || users?.id || followingDataUser?.id || user.id,
-    name: post?.author || users?.name || followingDataUser?.name || user.name,
+    id: post?.authorId || users?.id || followingDataUser?.id || user?.id,
+    name: post?.author || users?.name || followingDataUser?.name || user?.name,
     userName:
       post?.userName ||
       users?.userName ||
       followingDataUser?.userName ||
-      user.userName,
+      user?.userName,
   };
 
   const seguindoProfileId = [...followers]
@@ -42,11 +42,9 @@ export function UsersInfo({ post, users, following, followerUserId }) {
   //   return myS.some((u) => u.following === f.authorId);
   // });
 
-  console.log("seguindoProfileId", seguindoProfileId);
-  console.log("followers", followers);
   return (
     <div className="flex gap-2 items-start justify-center">
-      <PerfilIcon to={`/perfil/${profile.id}`} state={{ profile }}>
+      <PerfilIcon to={`/perfil/${profile?.id}`} state={{ profile }}>
         {photo?.midiaIcon ? (
           <ImgPerfil src={photo.midiaIcon} />
         ) : (

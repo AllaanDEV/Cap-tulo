@@ -25,7 +25,7 @@ export function ArrayTable() {
   const userPublications = publication.filter((p) => p.authorId === paramsId);
   const read = ebookSaved.filter((ebook) => ebook.progress === 100);
 
-  console.log("ebboksaved", ebookSaved)
+
   const tableObj = [
     { name: "Lidos", number: read.length },
     { name: "Lendo", number: ebookSaved.length },

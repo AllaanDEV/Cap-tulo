@@ -7,8 +7,8 @@ import { Link, useParams } from "react-router";
 import { LeftArrow } from "../svgCode";
 
 export function PostFocusMobile() {
-  const { dataPostFocus, publication } = useContext(AppContext);
-  const { fetchProfile, likesGet, user } = useRequisicoes({});
+  const { dataPostFocus, publication, setLike} = useContext(AppContext);
+  const { fetchProfile, likesGet, user } = useRequisicoes({ setLike});
 
   const { postId: paramsPostId } = useParams();
 
@@ -20,9 +20,9 @@ export function PostFocusMobile() {
   const postFocus = publication.find((post) => post.id === paramsPostId);
 
   return (
-    <Container className="w-[100vw] mt-10 mb-25">
+    <Container className="w-[100vw] mb-25">
       <div className="flex flex-col gap-2 mt-2">
-        <Link to={`/feed/${user.id}`} className="mx-2 flex items-center">
+        <Link to={`/feed/${user.id}`} className="mx-2 flex items-center text-gray">
           <LeftArrow size={"2em"}></LeftArrow>
         </Link>
 

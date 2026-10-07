@@ -16,7 +16,7 @@ import AppContext from "./context";
 
 export function Feed() {
   return (
-    <Container className="mt-12.5 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
+    <Container className="w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw] mx-auto">
       <Buttons />
       <SubHeader />
       <ArrayPost />

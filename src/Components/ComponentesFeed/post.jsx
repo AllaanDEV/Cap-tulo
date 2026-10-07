@@ -42,8 +42,8 @@ export const Post = memo(function Post({ post }) {
     ebookSaved,
     followers,
     setPostFocus,
-    dataPostFocus,
-    setDataPostFocus,
+    dataPostFocus, setLike,
+    setDataPostFocus, like
   } = useContext(AppContext);
 
   // const [like, setLike] = useState([]);
@@ -66,6 +66,7 @@ export const Post = memo(function Post({ post }) {
     arrayFeedbacksEbooks,
   } = useRequisicoes({
     post,
+    setLike
   });
 
   const openComments = () => {
@@ -77,43 +78,15 @@ export const Post = memo(function Post({ post }) {
     likesGet();
   }, [paramsId]);
 
-  // const handleLike = async () => {
-  //   if (likeLock.current) return;
 
-  //   likeLock.current = true;
-  //   setLiking(true);
-
-  //   try {
-  //     await LikeButton();
-
-  //     setLiked((prev) => !prev);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     likeLock.current = false;
-  //     setLiking(false);
-  //   }
-  // };
-
-  // const photo = (photoValueFeed ? photoValueFeed : []).find(
-  //   (photo) => photo.userId == post.authorId,
-  // );
-
-  // useEffect(() => {
-  //   const likes = like?.find(
-  //     (p) => p.postId === post.id && p.userId === user.id,
-  //   );
-
-  //   setLiked(likes?.validation ?? false);
-  // }, [like, post.id, user.id]);
-
+  console.log("SETLIKE", like)
   useEffect(() => {
     if (post?.type === "feedback") {
       arrayFeedbacksEbooks();
     }
   }, [post?.type]);
 
-  console.log("VAP", post);
+
 
   const validationsPostFocus = () => {
     if (window.innerWidth >= 640) {
@@ -122,6 +95,8 @@ export const Post = memo(function Post({ post }) {
       navigate(`/feed/${user.id}/${post.id}`);
     }
   };
+
+
 
   return (
     <>
@@ -236,10 +211,10 @@ export const Post = memo(function Post({ post }) {
           openComments={openComments}
         ></ContainerButtonsPost>
 
-        {postComment ||
-          (location.pathname === `/feed/${user.id}/${post.id}` && (
-            <CommentsList post={post}></CommentsList>
-          ))}
+        {(postComment ||
+          location.pathname === `/feed/${user.id}/${post.id}`) && (
+          <CommentsList post={post} />
+        )}
       </Div>
       {window.innerWidth >= 640 && <DialogPostFocus></DialogPostFocus>}
     </>

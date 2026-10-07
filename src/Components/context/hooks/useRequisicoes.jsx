@@ -1,9 +1,12 @@
 import { useContext, useState } from "react";
 import AppContext from "..";
 import { useNavigate } from "react-router";
+import { useComments } from "./useComments";
 
 export function useRequisicoes({ post, like, setLike }) {
   const navigate = useNavigate();
+
+
   const {
     publication,
     setPublication,
@@ -41,7 +44,7 @@ export function useRequisicoes({ post, like, setLike }) {
     followerPost,
     setEditValue,
     setLikesCommentList,
-    likesCommentList
+    likesCommentList,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -226,16 +229,19 @@ export function useRequisicoes({ post, like, setLike }) {
     return likesPost;
   };
 
-  console.log("setLike:", setLike);
-console.log("tipo:", typeof setLike);
+ 
 
   const likesGet = async (post) => {
     const response = await fetch("http://localhost:3000/api/posts/likes");
-
     const data = await response.json();
 
     setLike(data);
+
     setEditRequisicao((previousValue) => !previousValue);
+
+    if (!post) {
+      return;
+    }
 
     if (response.ok) {
       const likesDoPost = data.filter(
@@ -257,8 +263,10 @@ console.log("tipo:", typeof setLike);
         await Saves("update", updatedPost);
       }
     }
+    return data;
   };
 
+   
   const fetchProfile = async () => {
     try {
       const response = await fetch(
@@ -348,8 +356,8 @@ console.log("tipo:", typeof setLike);
     );
   };
 
-  const stylePatchFeed = location.pathname === `/feed/${user.id}`;
-  const stylePatchProfile = location.pathname === `/perfil/${user.id}`;
+  const stylePatchFeed = location.pathname === `/feed/${user?.id}`;
+  const stylePatchProfile = location.pathname === `/perfil/${user?.id}`;
 
   const arrayFeedbacksEbooks = async () => {
     const response = await fetch("http://localhost:3000/api/books/feedbacks");

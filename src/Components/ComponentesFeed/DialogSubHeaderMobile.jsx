@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { SubHeader } from "./subHeader";
 import AppContext from "../context";
 import { LeftArrow } from "../svgCode";
@@ -6,8 +6,13 @@ import { ButtonPostar } from "./buttonPostar";
 
 export function DialogSubHeaderMobile() {
   const dialogSub = useRef(null);
-
-  const { dialogSubHeader, setDialogSubHeader} = useContext(AppContext);
+  const [editorActions, setEditorActions] = useState(null);
+  const {
+    dialogSubHeader,
+    setDialogSubHeader,
+    setStyleCardActive,
+    setPostModified,
+  } = useContext(AppContext);
 
   useEffect(() => {
     if (dialogSubHeader) {
@@ -16,7 +21,7 @@ export function DialogSubHeaderMobile() {
       dialogSub?.current.close();
     }
   }, [dialogSubHeader]);
- 
+
   return (
     <dialog
       ref={dialogSub}
@@ -24,14 +29,28 @@ export function DialogSubHeaderMobile() {
       className="bg-primary w-full h-full max-w-full max-h-full m-0 p-0 outline-none top-15 left-0 right-0 bottom-0 py-5 px-2 pb-15 flex flex-col gap-2"
     >
       <div className="flex items-center justify-between text-gray">
-        <button onClick={() => setDialogSubHeader(false)}>
+        <button
+          onClick={() => {
+            (setDialogSubHeader(false),
+              setStyleCardActive(),
+              setPostModified());
+          }}
+        >
           <LeftArrow size={"2em"}></LeftArrow>
         </button>
 
-        <ButtonPostar></ButtonPostar>
+        <ButtonPostar editorValue={editorActions}></ButtonPostar>
       </div>
 
-      <SubHeader isMobile={true} className="block"></SubHeader>
+      <SubHeader
+        isMobile={true}
+        className="block"
+        onEditorReady={(editor) => {
+          setEditorActions(() => () => {
+            editor.commands.clearContent();
+          });
+        }}
+      ></SubHeader>
     </dialog>
   );
 }

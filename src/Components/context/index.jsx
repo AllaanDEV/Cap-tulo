@@ -7,10 +7,9 @@ import { House, Circle } from "../svgCode";
 import { Compass } from "../svgCode";
 import { book, logout, Group, save, spiral, Person } from "../svgCode";
 import { useRequisicoes } from "./hooks/useRequisicoes";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export function Context({ children }) {
-  const comments = useComments();
   const navigate = useNavigate();
 
   const [dialog, setDialog] = useState(false);
@@ -285,16 +284,72 @@ export function Context({ children }) {
 
   const focusEditor = () => setFocusEditorTrigger((prev) => !prev);
 
+  const clickOutside = (ref, callback) => {
+    function handleClick(event) {
+      const element = ref.current;
+
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+
+      const clickedBackdrop =
+        element instanceof HTMLDialogElement &&
+        event.target === element &&
+        (event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom);
+
+      if (!element.contains(event.target) || clickedBackdrop) {
+        callback();
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  };
+
+  const toggleDialog = (e) => {
+    if (e.target !== e.currentTarget) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    const outside =
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom;
+
+    if (outside) {
+      setOptionsDialog(false);
+    }
+  };
+
+  function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  }
+
+  const comments = useComments({ setHasText, setContentHtml });
+const [clearEditor, setClearEditor] = useState(() => () => {});
   return (
     <AppContext.Provider
       value={{
+        ...comments,
         openOrCloseDialog,
         dialog,
         Register,
         Login,
         publication,
         setPublication,
-        ...comments,
         toggleComments,
         dialogRef,
         EDIT,
@@ -405,6 +460,10 @@ export function Context({ children }) {
         focusEditorTrigger,
         dialogSubHeader,
         setDialogSubHeader,
+        clickOutside,
+        toggleDialog,
+        ScrollToTop, clearEditor, setClearEditor
+ 
       }}
     >
       {children}

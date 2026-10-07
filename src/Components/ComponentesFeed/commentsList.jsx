@@ -53,7 +53,7 @@ export function CommentsList({ post }) {
     isCommentLiked,
     getCommentLikesCount,
     getLikesComments,
-  } = useRequisicoes({ post, like, setLike });
+  } = useRequisicoes({ post, like, setLike});
 
   const dataCommentForm = async (e) => {
     e.preventDefault();
@@ -123,7 +123,7 @@ export function CommentsList({ post }) {
               name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full flex placeholder:items-center px-5 outline-none bg-transparent resize-none"
+              className="w-full flex placeholder:items-center px-5 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md"
               placeholder="Dê a sua opinião!"
             />
 

@@ -17,7 +17,7 @@ import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { ButtonPostar } from "./buttonPostar";
 // import { useEffect, useState } from "react";
 
-export function TipTapEditor() {
+export function TipTapEditor({onEditorReady}) {
   const {
     imgIdUrl,
     urls,
@@ -43,7 +43,7 @@ export function TipTapEditor() {
     setContentHtml,
     canPost,
     focusEditorTrigger,
-    setDialogSubHeader,
+    setDialogSubHeader, setClearEditor
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -158,20 +158,40 @@ export function TipTapEditor() {
   });
 
   useEffect(() => {
-    if (editor) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  if (editor && onEditorReady) {
+    onEditorReady(editor);
+  }
+}, [editor]);
+
+
+useEffect(() => {
+  if (!editor) return;
+
+  setClearEditor(() => () => {
+    editor.commands.clearContent();
+  });
+}, [editor, setClearEditor]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const timer = setTimeout(() => {
       editor.chain().focus().run();
-    }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [editor, focusEditorTrigger]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [focusEditorTrigger]);
 
   useEffect(() => {
     if (contentEmoji && editor) {
-      // Em vez de setContent, usamos insertContent para adicionar na posição do cursor
       editor.chain().focus().insertContent(contentEmoji).run();
-
-      // Dica: Se quiser limpar o estado logo após inserir para poder
-      // clicar no mesmo emoji de novo consecutivamente, limpe-o aqui se necessário:
-      // setContentEmoji(null);
     }
   }, [contentEmoji, editor]);
 
@@ -227,7 +247,7 @@ export function TipTapEditor() {
           ></EditorContent>
         </div>
         <ButtonPostar
-          editorValue={editor.commands.clearContent}
+          editorValue={() => editor?.commands?.clearContent()}
           className="hidden sm:block"
         >
           Postar

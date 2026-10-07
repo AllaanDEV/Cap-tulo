@@ -10,61 +10,11 @@ const Save = save;
 export function ContainerButtonsPost({ post, openComments, className }) {
   const { like, setLike, getPostsSaved, isLiked, handleLike, liking } =
     useContext(AppContext);
+    
   const { Saves, user,  LikeButton} = useRequisicoes({  post,
   like,
   setLike,});
   
-  //   const [like, setLike] = useState([]);
-  //   const [liked, setLiked] = useState(false);
-  // const [liking, setLiking] = useState(false);
-  // const likeLock = useRef(false);
-
-  // const Saves = async (type, post) => {
-  //   const response = await fetch(`http://localhost:3000/api/posts/saved`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       post: post,
-  //       saveType: type
-  //     }),
-  //   });
-
-  // if (response.ok) {
-  //   const data= await response.json()
-  //   console.log("respose", data)
-  // return  getPostsSaved()
-  // }
-  //   return response
-  // };
-
-  // const handleLike = async () => {
-  //   if (likeLock.current) return;
-
-  //   likeLock.current = true;
-  //   setLiking(true);
-
-  //   try {
-  //     await LikeButton();
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     likeLock.current = false;
-  //     setLiking(false);
-  //   }
-  // };
-
-  // const { LikeButton, user } = useRequisicoes({
-  //   post,
-  //   like,
-  //   setLike,
-  // });
-
-  // const liked =
-  //   like?.some(
-  //     (p) =>
-  //       p.postId === post?.id && p.userId === user?.id && p.validation === true,
-  //   ) ?? false;
-
   const liked = isLiked(post?.id, user?.id);
 
   return (

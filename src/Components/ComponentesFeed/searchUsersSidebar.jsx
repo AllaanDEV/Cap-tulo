@@ -79,7 +79,7 @@ export function SearchUsersSidebar() {
     .filter((users) => users.id !== user.id)
     .slice(0, 5);
 
-  console.log("usersVisible", usersVisible);
+
   return (
     <Div>
       <section>

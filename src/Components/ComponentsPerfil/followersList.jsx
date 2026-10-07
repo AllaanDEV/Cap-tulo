@@ -21,7 +21,7 @@ export function FollowersList() {
     filterFollowers,
   } = useContext(AppContext);
 
-  const { userUP, user, allFollowers, getFollowBack} = useRequisicoes({});
+  const { userUP, user, allFollowers, getFollowBack } = useRequisicoes({});
 
   useEffect(() => {
     userUP();
@@ -35,7 +35,7 @@ export function FollowersList() {
 
   return (
     <Container className="border border-border">
-      <section className="bg-primary h-screen  pt-12 flex flex-col gap-3 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
+      <section className="bg-primary h-screen flex flex-col gap-3 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
         <div className=" flex gap-5 items-center px-2">
           <button
             className="text-2xl transition hover:translate-x-[10px] duration-200 cursor-pointer "
@@ -74,14 +74,13 @@ export function FollowersList() {
 
         {profile?.followersArray?.length > 0 &&
         styleButtonFollowersList === "followers" ? (
-          <ul className="w-full flex items-start flex-col gap-5">
+          <ul className="w-full flex items-start flex-col gap-5 px-2">
             {profile.followersArray.map((follower) => {
               const usersData = usersList.find(
                 (perfil) => perfil.id === follower.userId,
               );
 
-   
-  const followBack = getFollowBack(follower.userId);
+              const followBack = getFollowBack(follower.userId);
               if (
                 usersData?.id === user.id &&
                 location.pathName === `/perfil/${user.id}`
@@ -92,7 +91,7 @@ export function FollowersList() {
               return (
                 <li
                   key={follower.id}
-                  className="flex justify-between w-full px-10"
+                  className="flex justify-between w-full sm:px-10 gap-2"
                 >
                   <UsersInfo
                     users={usersData}
@@ -103,7 +102,7 @@ export function FollowersList() {
                     <ButtonFlow
                       userId={usersData.id}
                       followBack={followBack}
-                      className="px-10"
+                className="sm:px-10 px-4"
                     ></ButtonFlow>
                   )}
                 </li>
@@ -112,11 +111,10 @@ export function FollowersList() {
           </ul>
         ) : (
           styleButtonFollowersList === "following" && (
-            <ul className="w-full flex items-start flex-col gap-5">
+            <ul className="w-full flex items-start flex-col gap-5 px-2">
               {filterFollowers(paramsId).map((following, index) => {
-
                 return (
-                  <li key={index} className="flex justify-between w-full px-10">
+                  <li key={index} className="flex text-xs justify-between w-full sm:px-10 gap-2">
                     <UsersInfo
                       following={following}
                       followerUserId={following.userId}
@@ -124,7 +122,7 @@ export function FollowersList() {
                     {following.userId === user.id && (
                       <ButtonFlow
                         userId={following.following}
-                        className="px-10"
+                        className="sm:px-10 px-4"
                       ></ButtonFlow>
                     )}
                   </li>
