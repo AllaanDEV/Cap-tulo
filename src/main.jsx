@@ -23,14 +23,13 @@ import { EmAltaPageMobile } from "./Components/EmAltaPageMobile.jsx";
 
 import { SearchUsersPageMobile } from "./Components/searchUsersPageMobile.jsx";
 import { ScrollToTop } from "./Components/scrollToTop.jsx";
+import { LogoutPage } from "./Components/logoutPage.jsx";
 // import { OneSidebarsLayout } from "./Components/oneSidebarsLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
-
-
   <StrictMode>
     <BrowserRouter>
-    <ScrollToTop></ScrollToTop>
+      <ScrollToTop></ScrollToTop>
       <Context>
         <Routes>
           <Route path="auth">
@@ -39,16 +38,17 @@ createRoot(document.getElementById("root")).render(
               path="register"
               element={<FormRegister></FormRegister>}
             ></Route>
+            <Route path="logout" element={<LogoutPage></LogoutPage>}></Route>
           </Route>
 
           {/* <Route element={<HeaderLayout></HeaderLayout>}>
             {/* <Route path="perfil/:id" element={<Icon></Icon>}></Route> */}
-            {/* <Route
+          {/* <Route
               path="EmAlta"
               element={<EmAltaPageMobile></EmAltaPageMobile>}
             ></Route>
             <Route path="feed/:id/:postId" element={<PostFocusMobile />} /> */}
-          {/* </Route> */} 
+          {/* </Route> */}
 
           {/* Rotas que possuem Header + Sidebars */}
           <Route element={<TwoSidebarsLayout />}>
@@ -62,12 +62,14 @@ createRoot(document.getElementById("root")).render(
               path="EmAlta"
               element={<EmAltaPageMobile></EmAltaPageMobile>}
             ></Route>
-            <Route path="SearchUsers" element={<SearchUsersPageMobile></SearchUsersPageMobile>}></Route>
+            <Route
+              path="SearchUsers"
+              element={<SearchUsersPageMobile></SearchUsersPageMobile>}
+            ></Route>
             <Route path="feed/:id/:postId" element={<PostFocusMobile />} />
           </Route>
 
           <Route path="*" element={<FormLogin></FormLogin>}></Route>
-          
         </Routes>
       </Context>
     </BrowserRouter>

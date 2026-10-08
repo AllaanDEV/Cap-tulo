@@ -5,9 +5,9 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { TimeAgo } from "./timeAgo";
 
-export function UsersInfo({ post, users, following, followerUserId }) {
+export function UsersInfo({ post, users, following, followerUserId, className }) {
   const { user, nameIcon, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { followers, usersList } = useContext(AppContext);
+  const { followers, usersList} = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
@@ -43,7 +43,7 @@ export function UsersInfo({ post, users, following, followerUserId }) {
   // });
 
   return (
-    <div className="flex gap-2 items-start justify-center">
+    <div className={`flex gap-2 items-start justify-center ${className}`}>
       <PerfilIcon to={`/perfil/${profile?.id}`} state={{ profile }}>
         {photo?.midiaIcon ? (
           <ImgPerfil src={photo.midiaIcon} />
