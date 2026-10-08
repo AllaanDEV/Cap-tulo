@@ -33,6 +33,7 @@ export function Context({ children }) {
 
       return { success: true };
     } catch (error) {
+      alert("Email ou senha já cadastrados")
       return { success: false, error: error.message };
     }
   };

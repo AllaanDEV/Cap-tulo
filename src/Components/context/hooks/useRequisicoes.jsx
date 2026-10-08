@@ -6,7 +6,6 @@ import { useComments } from "./useComments";
 export function useRequisicoes({ post, like, setLike }) {
   const navigate = useNavigate();
 
-
   const {
     publication,
     setPublication,
@@ -229,8 +228,6 @@ export function useRequisicoes({ post, like, setLike }) {
     return likesPost;
   };
 
- 
-
   const likesGet = async (post) => {
     const response = await fetch("http://localhost:3000/api/posts/likes");
     const data = await response.json();
@@ -266,7 +263,6 @@ export function useRequisicoes({ post, like, setLike }) {
     return data;
   };
 
-   
   const fetchProfile = async () => {
     try {
       const response = await fetch(
@@ -538,15 +534,20 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const logout = (index) => {
+    setEbookSaved([]);
+    setEditValue({});
+    setEditValue({});
+
     if (index === 5) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      if (location.pathname === "auth/logout") {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
 
-      setEbookSaved([]);
-      setEditValue({});
-      setEditValue({});
+        navigate("/auth/login");
+        return;
+      }
 
-      navigate("auth/login");
+      navigate("auth/logout");
     } else if (index === 1) {
       navigate("/ebooks");
     } else if (index === 3) {

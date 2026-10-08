@@ -87,7 +87,7 @@ export function TipTapEditor({onEditorReady}) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: `O que você está lendo, ${user.name}? `,
+        placeholder: `O que você está lendo, ${user?.name}? `,
       }),
 
       Mention.configure({

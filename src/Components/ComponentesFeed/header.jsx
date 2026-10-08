@@ -35,7 +35,7 @@ export function Header() {
     useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
-    (photo) => photo.userId == user.id,
+    (photo) => photo.userId == user?.id,
   );
 
   useEffect(() => {

@@ -106,32 +106,41 @@ http://localhost:3000/profileEdit/${profileId}`,
   };
 
   return (
-    <>
-      <dialog
-        ref={dialogRef}
-        onCancel={openOrCloseDialog}
-        className="
-          backdrop:bg-black/40
-          backdrop:backdrop-blur-[2px]
+    <dialog
+      ref={dialogRef}
+      onCancel={openOrCloseDialog}
+      className="
+    fixed inset-0
+    m-0
+    w-screen
+    h-screen
+    max-w-none
+    max-h-none
 
-          m-auto
-          w-[calc(100%-2rem)]
-          max-w-2xl
+    border
+    border-[#e5d9c8]
+    bg-[#fffdf8]
+    text-[#2c2119]
+    shadow-2xl
 
-          rounded-2xl
-          border border-[#e5d9c8]
-          bg-[#fffdf8]
-          text-[#2c2119]
-          shadow-2xl
-        "
-      >
-        <FormEditProfile
-          active={(e) => {
-            editProfile(e);
-            editUser(e);
-          }}
-        ></FormEditProfile>
-      </dialog>
-    </>
+    backdrop:bg-black/40
+    backdrop:backdrop-blur-[2px]
+
+scrollbar-none
+    sm:m-auto
+    sm:w-[calc(100%-2rem)]
+    sm:max-w-2xl
+    sm:h-auto
+    sm:max-h-[90vh]
+    sm:rounded-2xl
+  "
+    >
+      <FormEditProfile
+        active={(e) => {
+          editProfile(e);
+          editUser(e);
+        }}
+      />
+    </dialog>
   );
 }

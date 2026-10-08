@@ -106,7 +106,7 @@ export function FormEditProfile({ active, ...props }) {
 
   return (
     <Form active={active} method="dialog" {...props}>
-      <div className="flex items-center justify-between border-b border-[#e8dece] px-6 py-4">
+      <div className="flex items-start sm:items-center justify-between border-b border-[#e8dece] px-6 sm:py-4 py-2">
         <div>
           <h2 className="font-serif text-2xl">Editar perfil</h2>
           <p className="mt-1 text-sm text-[#8c7b69]">
@@ -133,8 +133,8 @@ export function FormEditProfile({ active, ...props }) {
       {/* Conteúdo */}
       <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 py-6">
         {/* Foto */}
-        <div className="flex items-center gap-4">
-          <div className="group flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center relative">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="group flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center relative">
             <img
               ref={inputFile}
               src={photo?.midiaIcon}
@@ -147,7 +147,7 @@ export function FormEditProfile({ active, ...props }) {
                 "bg-black/40 text-white inset-0 flex items-center justify-center"
               }
             >
-              <XIconProfile ></XIconProfile >
+              <XIconProfile></XIconProfile >
             </EventButton>
 
             <label>
@@ -159,11 +159,12 @@ export function FormEditProfile({ active, ...props }) {
             </label>
           </div>
 
-          <div>
+          <div className="flex flex-col">
             <label
               type="file"
               className="
                             rounded-full
+                           
                             border border-[#d9cbb8]
                             px-4 py-2
                             text-sm font-medium
@@ -171,9 +172,10 @@ export function FormEditProfile({ active, ...props }) {
                             transition
                           "
             >
-              <input type="file" onChange={photoIcon}></input>
-              Alterar foto
+              <input type="file" onChange={photoIcon} className="hidden sm:block"></input>
+              {/* Alterar foto */}
             </label>
+
             <p className="mt-2 text-xs text-[#998875]">JPG, PNG ou WEBP.</p>
           </div>
         </div>
@@ -287,14 +289,15 @@ export function FormEditProfile({ active, ...props }) {
       </div>
 
       {/* Footer */}
-      <div className="flex justify-end gap-3 border-t border-[#e8dece] bg-[#fcf8f1] px-6 py-4">
+      <div className="flex sm:justify-end gap-3 border-t border-[#e8dece] bg-[#fcf8f1] px-6 py-4 justify-between w-full">
         <button
           type="button"
           onClick={openOrCloseDialog}
           className="
                         rounded-full
                         border border-[#ded2c1]
-                        px-5 py-2.5
+                        px-4
+                        sm:px-5 py-2.5
                         text-sm font-medium
                         hover:bg-[#f1e9dd]
                         transition
@@ -308,7 +311,8 @@ export function FormEditProfile({ active, ...props }) {
           className="
                         rounded-full
                         bg-[#bb603e]
-                        px-6 py-2.5
+                        px-4
+                        sm:px-6 py-2.5
                         text-sm font-semibold
                         text-white
                         hover:bg-[#a95134]

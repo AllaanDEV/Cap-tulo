@@ -93,7 +93,7 @@ export function DialogOptionsMobile() {
             <Lines></Lines>
             <button
               className="flex gap-1 items-center text-wine "
-              onClick={() => logout(5)}
+              onClick={() => {logout(5), setOptionsDialog(false)}}
             >
               <Logout size={"1em"}></Logout>
               Sair
