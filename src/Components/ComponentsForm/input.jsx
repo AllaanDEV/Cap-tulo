@@ -5,7 +5,7 @@ export function Input({ type, ...props }) {
       <input
       name={type}
         type={type}
-        className="bg-white w-full rounded-lg p-1 outline-white"
+        className="bg-white w-full rounded-lg px-2 py-4 outline-white"
         required
         {...props}
       ></input>

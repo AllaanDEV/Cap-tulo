@@ -34,6 +34,10 @@ html {
   @apply bg-background;
 }
 
+
+
+
+/* like */
 @keyframes like {
   0% {
     transform: scale(1);
@@ -73,3 +77,118 @@ html {
   }
 }
 
+
+/* dialog */
+@keyframes dialogLift {
+  from {
+    opacity: 0;
+    transform: translateY(100vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialogDrop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes backdropFade {
+  from {
+    background-color: rgb(0 0 0 / 0%);
+  }
+  to {
+    background-color: rgb(0 0 0 / 50%);
+  }
+}
+
+@keyframes backdropFadeOut {
+  from {
+    background-color: rgb(0 0 0 / 50%);
+  }
+  to {
+    background-color: rgb(0 0 0 / 0%);
+  }
+}
+
+/* comentários */
+@keyframes commentCascade {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* container pai do post */
+@keyframes expandPost {
+  from {
+    grid-template-rows: 0fr;
+  }
+
+  to {
+    grid-template-rows: 1fr;
+  }
+}
+
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+@keyframes dialogAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+@keyframes screenEnter {
+  from {
+    transform: translateY(100vh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes slideFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

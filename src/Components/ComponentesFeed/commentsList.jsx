@@ -53,7 +53,7 @@ export function CommentsList({ post }) {
     isCommentLiked,
     getCommentLikesCount,
     getLikesComments,
-  } = useRequisicoes({ post, like, setLike});
+  } = useRequisicoes({ post, like, setLike });
 
   const dataCommentForm = async (e) => {
     e.preventDefault();
@@ -162,7 +162,7 @@ export function CommentsList({ post }) {
         {(post?.comments ?? []).length === 0 ? (
           <div>Ainda não há comentários</div>
         ) : (
-          [...(post?.comments ?? [])].reverse().map((c) => {
+          [...(post?.comments ?? [])].reverse().map((c, index) => {
             const photo = (photoValueFeed ?? []).find(
               (midia) => midia.userId === c.authorId,
             );
@@ -171,7 +171,14 @@ export function CommentsList({ post }) {
             const likesCount = getCommentLikesCount(c.id);
 
             return (
-              <li className="flex gap-2 flex-col w-full" key={c.id}>
+              <li
+                className="flex gap-2 flex-col w-full animate-[commentCascade_300ms_ease-out_both]"
+                key={c.id}
+                style={{
+                  animationDelay: `${150 + index * 60}ms`,
+                }}
+              >
+
                 <div className="flex gap-2 relative w-full">
                   <div>
                     <div className="flex flex-col items-start">

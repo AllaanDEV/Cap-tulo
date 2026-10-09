@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { UsersInfo } from "./usersInfo";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
@@ -23,13 +23,32 @@ export function DialogOptionsMobile() {
     progressAllEbooks,
   } = useContext(AppContext);
   const { user, logout } = useRequisicoes({});
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => {
+    const dialog = optionsRef.current;
+    if (!dialog) return;
+
     if (optionsDialog) {
-      optionsRef?.current.showModal();
-    } else {
-      optionsRef?.current.close();
+      setClosing(false);
+
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+
+      return;
     }
+
+    if (!dialog.open) return;
+
+    setClosing(true);
+
+const timer = setTimeout(() => {
+  dialog.close();
+  setClosing(false);
+}, 250);
+
+    return () => clearTimeout(timer);
   }, [optionsDialog]);
 
   const options = [
@@ -50,9 +69,23 @@ export function DialogOptionsMobile() {
   return (
     <dialog
       ref={optionsRef}
-      onClick={toggleDialog}
-      onCancel={() => setOptionsDialog(false)}
-      className="bg-primary rounded-t-3xl outline-none h-100 w-full max-w-full fixed mt-auto p-0  bottom-0 left-0 right-0 backdrop:bg-black/50 px-5 py-2"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          setOptionsDialog(false);
+        }
+      }}
+
+      onCancel={(e) => {
+        e.preventDefault();
+        setOptionsDialog(false);
+      }}
+      className={` bg-primary rounded-t-3xl outline-none h-100 w-full max-w-full fixed mt-auto p-0  bottom-0 left-0 right-0 backdrop:bg-black/50 px-5 py-2
+    ${
+     closing
+  ? "animate-[dialogDrop_250ms_ease-in_both] backdrop:animate-[backdropFadeOut_250ms_ease-in_both]"
+  : "open:animate-[dialogLift_250ms_cubic-bezier(0.22,1,0.36,1)_both] backdrop:animate-[backdropFade_250ms_ease-out_both]"
+    }
+  `}
     >
       <section>
         <div className="flex flex-col gap-5">
@@ -93,7 +126,9 @@ export function DialogOptionsMobile() {
             <Lines></Lines>
             <button
               className="flex gap-1 items-center text-wine "
-              onClick={() => {logout(5), setOptionsDialog(false)}}
+              onClick={() => {
+                (logout(5), setOptionsDialog(false));
+              }}
             >
               <Logout size={"1em"}></Logout>
               Sair

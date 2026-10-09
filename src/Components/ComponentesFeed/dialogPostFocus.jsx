@@ -68,7 +68,7 @@ console.log("TYOE", dataPostFocus?.type)
     <dialog
       ref={dialogFocus}
       onCancel={() => setPostFocus((prev) => !prev)}
-      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-1200 ease-out overflow-hidden ${
+      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-1200 ease-out overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both] ${
         isVisible ? "opacity-100" : "opacity-0 "
       }`}
     >
