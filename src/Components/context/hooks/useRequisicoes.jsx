@@ -442,39 +442,50 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const Saves = async (type, post) => {
-    const response = await fetch(
-      `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          post,
-          savedType: type,
-          postId: post.id,
-        }),
+  const response = await fetch(
+    `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        post,
+        savedType: type,
+        postId: post.id,
+      }),
+    }
+  );
 
-    if (response.ok) {
-      if (type === "update") {
-        setPostSaved((prev) =>
-          prev.map((item) =>
-            item?.post?.id === post?.id ? { ...item, post } : item,
-          ),
-        );
-      }
-
-      if (type === "delete") {
-        setPostSaved((prev) =>
-          prev.filter((item) => item?.post?.id !== post?.id),
-        );
-      }
+  if (response.ok) {
+    if (type === "saved") {
+      setPostSaved((prev) => [
+        ...prev,
+        { post },
+      ]);
     }
 
-    return response;
-  };
+    if (type === "update") {
+      setPostSaved((prev) =>
+        prev.map((item) =>
+          item?.post?.id === post?.id
+            ? { ...item, post }
+            : item
+        )
+      );
+    }
+
+    if (type === "delete") {
+      setPostSaved((prev) =>
+        prev.filter(
+          (item) => item?.post?.id !== post?.id
+        )
+      );
+    }
+  }
+
+  return response;
+};
 
   const getFollowBack = (userId) => {
     return followers.some(

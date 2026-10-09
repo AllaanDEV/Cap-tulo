@@ -44,7 +44,7 @@ const buttons = [
   // { icon: faceHappy, name: "imojis" },
 ];
 
-export function SubHeader({className,   onEditorReady, isMobile = false,}) {
+export function SubHeader({ className, onEditorReady, isMobile = false }) {
   const emojiContainerRef = useRef(null);
   const location = useLocation();
 
@@ -110,14 +110,15 @@ export function SubHeader({className,   onEditorReady, isMobile = false,}) {
     setStyleCardActive();
   }, [location]);
 
-
   // useEffect(() => {
   //   setStyleCardActive(ebookSaved[0] || null);
   // }, [postModified]);
 
   return (
     <>
-      <section className={`pb-5 flex flex-col gap-5 w-full ${!isMobile ? "hidden sm:block" : "block"} ${className}`}>
+      <section
+        className={`pb-5 flex flex-col gap-5 w-full ${!isMobile ? "hidden sm:block" : "block"} ${className}`}
+      >
         <Div className="w-full">
           {!postCitation ? (
             <>

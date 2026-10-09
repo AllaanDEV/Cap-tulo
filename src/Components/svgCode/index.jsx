@@ -212,24 +212,24 @@ export const Share = () => {
   );
 };
 
-export const save = ({ size }) => {
+export const save = ({ filled = false, className = "", ...props }) => {
   return (
     <svg
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="lucide lucide-bookmark"
-      aria-hidden="true"
-      data-id="element-79"
-      data-mp="1kn5u9q3ihth"
+      className={className}
     >
-      <path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path>
+      <path
+        d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"
+        fill={filled ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 };
@@ -862,8 +862,8 @@ export const Menu = () => {
 export const Vector = () => {
   return (
     <svg
-      width="4em"
-      height="4em"
+      width="2em"
+      height="2em"
       viewBox="0 0 1024 1210"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

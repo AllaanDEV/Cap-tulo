@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { Ebook } from "./ebooks";
 import { ButtonBook } from "./buttonBook";
 import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayEbooks() {
   const { ebooks, setEbooks, bookSearch, searchValue } = useContext(AppContext);
+  const { getBookSave, user} = useRequisicoes({});
 
   const [page, setPage] = useState(0);
   const [booksContador, setBooksContador] = useState(0);
@@ -55,13 +57,16 @@ export function ArrayEbooks() {
 
   const displayedBooks = searchValue ? arraySetBook : arraySetEbooks;
 
+  useEffect(() => {
+    getBookSave(user.id);
+  }, []);
 
   return (
     <>
       <ul className="grid gap-x-3 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {displayedBooks.map((e) => {
           return (
-            <li key={e.etag}>
+            <li key={e.etag} className="animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]">
               <Ebook ebook={e}></Ebook>
             </li>
           );

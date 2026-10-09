@@ -11,6 +11,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 import { useLocation, useNavigate, useParams } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+import { Vector } from "../svgCode";
 
 export function Header() {
   const { id: profileId } = useParams();
@@ -55,7 +56,7 @@ export function Header() {
       location.pathname === `/feed/${user?.id}` ||
       location.pathname === `/perfil/${postId?.authorId || user?.id}`
     ) {
-      setSearchValue(e.target.value)
+      setSearchValue(e.target.value);
       const validationPost = !followerPost ? publication : postFollowers;
 
       const filterPublications = validationPost.filter((p) => {
@@ -83,8 +84,9 @@ export function Header() {
   return (
     <header className="border border-border p-2 fixed w-full bg-border/80 z-10 opacity-95">
       <nav className="flex items-center gap-3 justify-between py-1 sm:px-10">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <img src={logo} className="w-auto h-10"></img>
+          {/* <Vector></Vector> */}
           <div className="relative">
             <div className="">
               <img

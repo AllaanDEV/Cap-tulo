@@ -42,8 +42,10 @@ export const Post = memo(function Post({ post }) {
     ebookSaved,
     followers,
     setPostFocus,
-    dataPostFocus, setLike,
-    setDataPostFocus, like
+    dataPostFocus,
+    setLike,
+    setDataPostFocus,
+    like,
   } = useContext(AppContext);
 
   // const [like, setLike] = useState([]);
@@ -66,7 +68,7 @@ export const Post = memo(function Post({ post }) {
     arrayFeedbacksEbooks,
   } = useRequisicoes({
     post,
-    setLike
+    setLike,
   });
 
   const openComments = () => {
@@ -78,15 +80,12 @@ export const Post = memo(function Post({ post }) {
     likesGet();
   }, [paramsId]);
 
-
-  console.log("SETLIKE", like)
+  console.log("SETLIKE", like);
   useEffect(() => {
     if (post?.type === "feedback") {
       arrayFeedbacksEbooks();
     }
   }, [post?.type]);
-
-
 
   const validationsPostFocus = () => {
     if (window.innerWidth >= 640) {
@@ -96,11 +95,27 @@ export const Post = memo(function Post({ post }) {
     }
   };
 
+  const showComments =
+    postComment || location.pathname === `/feed/${user.id}/${post.id}`;
 
+  const [keepComments, setKeepComments] = useState(showComments);
+
+  useEffect(() => {
+    if (showComments) {
+      setKeepComments(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setKeepComments(false);
+    }, 150); // mesma duração da animação
+
+    return () => clearTimeout(timer);
+  }, [showComments]);
 
   return (
     <>
-      <Div className="w-max-[50vw]">
+      <Div className="max-w-[50vw] animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post} />
@@ -211,10 +226,15 @@ export const Post = memo(function Post({ post }) {
           openComments={openComments}
         ></ContainerButtonsPost>
 
-        {(postComment ||
-          location.pathname === `/feed/${user.id}/${post.id}`) && (
-          <CommentsList post={post} />
-        )}
+        <div
+          className={`grid transition-[grid-template-rows] duration-150 ease-out ${
+            showComments ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+        >
+          <div className="min-h-0 overflow-hidden">
+            {keepComments && <CommentsList post={post} />}
+          </div>
+        </div>
       </Div>
       {window.innerWidth >= 640 && <DialogPostFocus></DialogPostFocus>}
     </>

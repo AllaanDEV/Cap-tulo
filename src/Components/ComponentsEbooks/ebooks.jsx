@@ -4,11 +4,14 @@ import { DetailsBook } from "./detailsBook";
 
 import { save } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import AppContext from "../context";
 
 export function Ebook(ebook) {
   const SaveIcon = save;
 
-  const { token } = useRequisicoes({});
+  const { ebookSaved, setEbookSaved } = useContext(AppContext);
+
+  const { token, getBookSave, user } = useRequisicoes({});
 
   const [details, setDetails] = useState(false);
 
@@ -25,8 +28,17 @@ export function Ebook(ebook) {
       },
       body: JSON.stringify(ebook.ebook),
     });
+
+    if (response.ok) {
+      await getBookSave(user.id);
+    }
+
     return response;
   };
+
+  const isSaved = ebookSaved?.some(
+    (savedBook) => savedBook?.ebook?.id === ebook?.ebook?.id,
+  );
 
   return (
     <article className="overflow-hidden rounded-lg border border-[#e1d1ba] bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -65,10 +77,14 @@ export function Ebook(ebook) {
           </button>
 
           <button
-            className="text-[#995d43] transition-colors hover:text-yellow-600"
+            className={`transition-colors ${
+              isSaved
+                ? "text-yellow-600"
+                : "text-[#995d43] hover:text-yellow-600"
+            }`}
             onClick={saveBook}
           >
-            <SaveIcon size={"1.5em"} />
+            <SaveIcon size="1.5em" filled={isSaved} />
           </button>
         </div>
 

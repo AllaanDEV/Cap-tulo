@@ -108,7 +108,7 @@ export function DialogGif({className}) {
       onCancel={() => setDialogGif((prev) => !prev)}
       className={`absolute w-full h-[80vh] 
 
-        sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden ${className}`}
+        sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both] ${className}`}
     >
       <div className="h-full overflow-y-auto scrollbar-none">
         <div className="flex items center justify-between p-3">

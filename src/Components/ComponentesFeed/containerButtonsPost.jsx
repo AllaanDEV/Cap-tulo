@@ -7,15 +7,23 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 
 const Save = save;
+
 export function ContainerButtonsPost({ post, openComments, className }) {
-  const { like, setLike, getPostsSaved, isLiked, handleLike, liking } =
-    useContext(AppContext);
-    
-  const { Saves, user,  LikeButton} = useRequisicoes({  post,
-  like,
-  setLike,});
-  
+  const {
+    like,
+    setLike,
+    getPostsSaved,
+    isLiked,
+    handleLike,
+    liking,
+    postSaved,
+  } = useContext(AppContext);
+
+  const { Saves, user, LikeButton } = useRequisicoes({ post, like, setLike });
+
   const liked = isLiked(post?.id, user?.id);
+
+  const saved = postSaved?.some((item) => item?.post?.id === post?.id);
 
   return (
     <div className={`flex justify-between px-5  ${className}`}>
@@ -50,11 +58,10 @@ export function ContainerButtonsPost({ post, openComments, className }) {
         </div>
       </div>
       <button
-        className="hover:text-yellow-600"
-        onClick={() => Saves("saved", post)}
-        to={"saves"}
+        className={saved ? "text-yellow-600" : "hover:text-yellow-600"}
+        onClick={() => Saves(saved ? "delete" : "saved", post)}
       >
-        <Save size={"1em"}></Save>
+        <Save filled={saved} />
       </button>
     </div>
   );
