@@ -43,10 +43,10 @@ export function DialogOptionsMobile() {
 
     setClosing(true);
 
-const timer = setTimeout(() => {
-  dialog.close();
-  setClosing(false);
-}, 250);
+    const timer = setTimeout(() => {
+      dialog.close();
+      setClosing(false);
+    }, 250);
 
     return () => clearTimeout(timer);
   }, [optionsDialog]);
@@ -74,16 +74,15 @@ const timer = setTimeout(() => {
           setOptionsDialog(false);
         }
       }}
-
       onCancel={(e) => {
         e.preventDefault();
         setOptionsDialog(false);
       }}
       className={` bg-primary rounded-t-3xl outline-none h-100 w-full max-w-full fixed mt-auto p-0  bottom-0 left-0 right-0 backdrop:bg-black/50 px-5 py-2
     ${
-     closing
-  ? "animate-[dialogDrop_250ms_ease-in_both] backdrop:animate-[backdropFadeOut_250ms_ease-in_both]"
-  : "open:animate-[dialogLift_250ms_cubic-bezier(0.22,1,0.36,1)_both] backdrop:animate-[backdropFade_250ms_ease-out_both]"
+      closing
+        ? "animate-[dialogDrop_250ms_ease-in_both] backdrop:animate-[backdropFadeOut_250ms_ease-in_both]"
+        : "open:animate-[dialogLift_250ms_cubic-bezier(0.22,1,0.36,1)_both] backdrop:animate-[backdropFade_250ms_ease-out_both]"
     }
   `}
     >

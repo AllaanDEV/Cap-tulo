@@ -7,9 +7,10 @@ import { Remenber } from "./ComponentsForm/remenber";
 import { use, useContext } from "react";
 import AppContext from "./context";
 import { useNavigate } from "react-router";
+import { QuestionButton } from "./ComponentsForm/questionButton";
 
-export function FormRegister() {
-  const { Register } = useContext(AppContext);
+export function FormRegister({ onSwitch }) {
+  const { Register, setFormsOn} = useContext(AppContext);
   const navigate = useNavigate();
 
   const registerData = async (e) => {
@@ -32,40 +33,35 @@ export function FormRegister() {
   };
 
   return (
-    <ContainerForm className="flex flex-col text-center min-h-screen bg-red-50 bg-[url(https://i.pinimg.com/736x/ec/c0/e6/ecc0e6909a0c630f3a4221e0117403df.jpg)] bg-cover bg-center px-5 py-4">
-      <img src={logo} className="w-auto h-40 mb-5"></img>
-      {/* <h1>Seja muito bem vindo(a)!</h1> */}
-      <div
-        className="text-start px-5 flex flex-col gap-2  rounded-3xl
-    bg-white/15
-    backdrop-blur-2xl
-    border border-white/30
-    shadow-[0_8px_32px_rgba(0,0,0,0.15)] "
-      >
-        <Form active={registerData}>
-          <Input
-            type="name"
-            placeholder="Como as pessoas vão te chamar?"
-          ></Input>
-          <Input type="userName" placeholder="Digite seu usuario"></Input>
-          <Input type="email" placeholder="Example@email.com"></Input>
-          <Input type="password" placeholder="Digite sua senha"></Input>
+    <>
+      <Form active={registerData} className="open:animate-[dialogLift_250ms_cubic-bezier(0.22,1,0.36,1)_both] backdrop:animate-[backdropFade_250ms_ease-out_both]">
+        <Input type="name" placeholder="Como as pessoas vão te chamar?"></Input>
+        <Input type="userName" placeholder="Digite seu usuario"></Input>
+        <Input type="email" placeholder="Example@email.com"></Input>
+        <Input type="password" placeholder="Digite sua senha"></Input>
 
-          {/* <Remenber>
+        {/* <Remenber>
             <div className="flex gap-1">
               <input type="checkbox" required></input>
               <p>lembrar</p>
             </div>
           </Remenber> */}
 
-          <ButtonLogin
-            className="bg-wine py-1 rounded-sm text-white text-center font-normal mt-3"
-            // to="/auth/login"
-          >
-            Faça seu login
-          </ButtonLogin>
-        </Form>
+        <ButtonLogin
+          className="bg-wine py-1 rounded-sm text-white text-center font-normal mt-3"
+          // to="/auth/login"
+          onClick={() => onSwitch(false)}
+        >
+       Login
+        </ButtonLogin>
+      </Form>
+
+      <div className="flex text-xs gap-1 justify-center mt-5">
+        <span>Já tem conta?</span>
+        <QuestionButton onClick={() => onSwitch(false)}>
+          Faça seu login
+        </QuestionButton>
       </div>
-    </ContainerForm>
+    </>
   );
 }

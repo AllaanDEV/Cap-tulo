@@ -24,6 +24,7 @@ import { EmAltaPageMobile } from "./Components/EmAltaPageMobile.jsx";
 import { SearchUsersPageMobile } from "./Components/searchUsersPageMobile.jsx";
 import { ScrollToTop } from "./Components/scrollToTop.jsx";
 import { LogoutPage } from "./Components/logoutPage.jsx";
+import { Forms } from "./Components/forms.jsx";
 // import { OneSidebarsLayout } from "./Components/oneSidebarsLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -33,12 +34,13 @@ createRoot(document.getElementById("root")).render(
       <Context>
         <Routes>
           <Route path="auth">
-            <Route path="login" element={<FormLogin></FormLogin>}></Route>
-            <Route
+            {/* <Route path="login" element={<FormLogin></FormLogin>}></Route> */}
+            {/* <Route
               path="register"
               element={<FormRegister></FormRegister>}
-            ></Route>
+            ></Route> */}
             <Route path="logout" element={<LogoutPage></LogoutPage>}></Route>
+            <Route path="register" element={<Forms></Forms>}></Route>
           </Route>
 
           {/* <Route element={<HeaderLayout></HeaderLayout>}>
@@ -69,7 +71,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="feed/:id/:postId" element={<PostFocusMobile />} />
           </Route>
 
-          <Route path="*" element={<FormLogin></FormLogin>}></Route>
+          <Route path="*" element={<Forms></Forms>}></Route>
         </Routes>
       </Context>
     </BrowserRouter>

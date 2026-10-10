@@ -115,7 +115,7 @@ export const Post = memo(function Post({ post }) {
 
   return (
     <>
-      <Div className="max-w-[50vw] animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
+      <Div className="sm:max-w-[50vw] animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post} />

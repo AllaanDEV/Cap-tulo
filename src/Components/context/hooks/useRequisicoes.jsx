@@ -554,7 +554,7 @@ export function useRequisicoes({ post, like, setLike }) {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
 
-        navigate("/auth/login");
+        navigate("/auth/register");
         return;
       }
 
@@ -565,6 +565,7 @@ export function useRequisicoes({ post, like, setLike }) {
       navigate(`/perfil/${user.id}`);
     } else if (index === 0) [navigate(`/feed/${user.id}`)];
   };
+
 
   return {
     token,

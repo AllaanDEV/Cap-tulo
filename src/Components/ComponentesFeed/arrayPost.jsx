@@ -82,9 +82,12 @@ export function ArrayPost() {
           )}
         </div>
       )}
-      <span className="text-xs text-wine mx-auto sm:mb-20">
-        {user.name}, acho que você leu demais 🫣
-      </span>
+
+      {followerPost !== "saved" && followerPost !== "followers" && (
+        <span className="text-xs text-wine mx-auto sm:mb-20">
+          {user.name}, acho que você leu demais 🫣
+        </span>
+      )}
     </ul>
   );
 }
