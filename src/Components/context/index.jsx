@@ -2,15 +2,25 @@ import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
-import { Star } from "../svgCode";
+import { AnimationTransiton, Star } from "../svgCode";
 import { House, Circle } from "../svgCode";
 import { Compass } from "../svgCode";
 import { book, logout, Group, save, spiral, Person } from "../svgCode";
 import { useRequisicoes } from "./hooks/useRequisicoes";
 import { useLocation, useNavigate } from "react-router";
 
+
+import { gsap } from "gsap";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+
+gsap.registerPlugin(DrawSVGPlugin);
+
 export function Context({ children }) {
   const navigate = useNavigate();
+
+const transitionRef = useRef(null);
+const [loadingLogin, setLoadingLogin] = useState(false);
+
 
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
@@ -33,7 +43,7 @@ export function Context({ children }) {
 
       return { success: true };
     } catch (error) {
-      alert("Email ou senha já cadastrados")
+      alert("Email ou senha já cadastrados");
       return { success: false, error: error.message };
     }
   };
@@ -340,7 +350,64 @@ export function Context({ children }) {
   }
 
   const comments = useComments({ setHasText, setContentHtml });
-const [clearEditor, setClearEditor] = useState(() => () => {});
+  const [clearEditor, setClearEditor] = useState(() => () => {});
+
+  const [formsOn, setFormsOn]=useState(false)
+
+
+  const iniciarTransicao = (userId) => {
+  if (loadingLogin) return;
+
+  setLoadingLogin(true);
+
+  const paths = transitionRef.current?.querySelectorAll("path");
+
+  if (!paths?.length) {
+    navigate(`/feed/${userId}`);
+    setLoadingLogin(false);
+    return;
+  }
+
+  gsap.killTweensOf(paths);
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      setLoadingLogin(false);
+    },
+  });
+
+  tl.set(paths, { visibility: "visible" });
+
+tl.to(paths, {
+  drawSVG: "100%",
+  // strokeWidth: 2500,
+  duration: 1.5,
+  stagger: 0.08,
+  ease: "power1.inOut",
+});
+
+tl.call(() => {
+  navigate(`/feed/${userId}`);
+});
+
+tl.to(paths, {
+  drawSVG: "100% 100%",
+  duration: 1,
+  stagger: 0.08,
+  ease: "power1.inOut",
+});
+
+tl.set(paths, {
+  clearProps: "strokeWidth,visibility",
+});
+
+tl.set(paths, {
+  drawSVG: "0%",
+});
+
+  tl.set(paths, { visibility: "hidden" });
+};
+
   return (
     <AppContext.Provider
       value={{
@@ -463,10 +530,19 @@ const [clearEditor, setClearEditor] = useState(() => () => {});
         setDialogSubHeader,
         clickOutside,
         toggleDialog,
-        ScrollToTop, clearEditor, setClearEditor
- 
+        ScrollToTop,
+        clearEditor,
+        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin
       }}
     >
+         <div
+        ref={transitionRef}
+        className={`fixed inset-0 z-[300] pointer-events-none w-[100dvh] sm:w-[100vw] scale-240 scale-170 ${
+          loadingLogin ? "visible" : "invisible"
+        }`}
+      >
+        <AnimationTransiton />
+      </div>
       {children}
     </AppContext.Provider>
   );

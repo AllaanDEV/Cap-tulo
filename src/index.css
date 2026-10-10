@@ -35,8 +35,6 @@ html {
 }
 
 
-
-
 /* like */
 @keyframes like {
   0% {
@@ -190,5 +188,50 @@ html {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+
+@keyframes formExitUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-70px);
+  }
+}
+
+@keyframes formEnterDown {
+  from {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes formExitDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+}
+
+@keyframes formEnterUp {
+  from {
+    opacity: 0;
+    transform: translateY(-70px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
