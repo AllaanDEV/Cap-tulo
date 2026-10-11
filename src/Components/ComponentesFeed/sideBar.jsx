@@ -48,12 +48,13 @@ export function SideBar() {
     option,
     setOption,
     options,
+
   } = useContext(AppContext);
 
   const { logout } = useRequisicoes({});
 
   useEffect(() => {
-    fetchProfile();
+    // fetchProfile();
     allFollowers();
     getBookSave(user.id);
   }, []);
@@ -95,7 +96,6 @@ export function SideBar() {
   useEffect(() => {
     postNumberGet(paramsId);
   }, []);
-
 
   useEffect(() => {
     if (location.pathname == `/perfil/${user.id}`) {

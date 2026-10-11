@@ -408,6 +408,7 @@ tl.set(paths, {
   tl.set(paths, { visibility: "hidden" });
 };
 
+const [deletePhoto, setDeletePhoto] = useState(false);
   return (
     <AppContext.Provider
       value={{
@@ -532,7 +533,7 @@ tl.set(paths, {
         toggleDialog,
         ScrollToTop,
         clearEditor,
-        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin
+        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto
       }}
     >
          <div

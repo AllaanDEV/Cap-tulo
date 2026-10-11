@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "..";
 import { useNavigate } from "react-router";
 import { useComments } from "./useComments";
@@ -275,6 +275,7 @@ export function useRequisicoes({ post, like, setLike }) {
       const data = await response.json();
 
       setPhotoValueFeed(data);
+      return data
     } catch (error) {
       console.error("Erro ao buscar perfil:", error);
     }
@@ -565,7 +566,6 @@ export function useRequisicoes({ post, like, setLike }) {
       navigate(`/perfil/${user.id}`);
     } else if (index === 0) [navigate(`/feed/${user.id}`)];
   };
-
 
   return {
     token,

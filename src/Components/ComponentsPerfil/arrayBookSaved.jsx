@@ -17,7 +17,7 @@ export function ArrayBookSaved({ profile }) {
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
-    : "2xl:grid-cols-4";
+    : " grid-cols-1 sm:grid-cols-2";
 
   useEffect(() => {
     setStyleCardActive(ebookSaved[0] ?? null);
@@ -80,7 +80,7 @@ export function ArrayBookSaved({ profile }) {
         </div>
       ) : (
         <ul
-          className={`grid grid-rows-1 md:grid-cols-2  gap-3 w-full ${styleFeed}`}
+          className={`grid grid-rows-1  gap-3 w-full ${styleFeed}`}
         >
           {Array.isArray(ebookSaved) &&
             ebookSaved.slice(0, itemsVisible).map((bookSave) => {
