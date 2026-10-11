@@ -7,12 +7,14 @@ import { useParams } from "react-router";
 export function ArrayTable() {
   const { id: paramsId } = useParams();
   const { publication, ebookSaved, progressEbook } = useContext(AppContext);
+  const { fetchProfile } = useRequisicoes({});
 
   useEffect(() => {
     publication;
+    fetchProfile();
   }, []);
 
-  const { user } = useRequisicoes({});
+
 
   // useEffect(() => {
   //   const finished = progressEbook.filter(
@@ -24,7 +26,6 @@ export function ArrayTable() {
 
   const userPublications = publication.filter((p) => p.authorId === paramsId);
   const read = ebookSaved.filter((ebook) => ebook.progress === 100);
-
 
   const tableObj = [
     { name: "Lidos", number: read.length },

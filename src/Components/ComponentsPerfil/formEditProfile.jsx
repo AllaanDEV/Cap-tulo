@@ -4,25 +4,36 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 // import { ImgPerfil } from "./imgPerfil";
 import { Form } from "../ComponentsForm/form";
-import { XIconProfile  } from "../svgCode";
+import { XIconProfile, XSavedEbook } from "../svgCode";
 import { EventButton } from "./eventButton";
 import { useParams } from "react-router";
 
 export function FormEditProfile({ active, ...props }) {
   const { id: paramsId } = useParams();
   const inputFile = useRef(null);
+  const fileInputRef = useRef(null);
 
-
-  const { openOrCloseDialog, editValue, setMidiaIcon } = useContext(AppContext);
+  const {
+    openOrCloseDialog,
+    editValue,
+    setMidiaIcon,
+    editRequisicao,
+    setEditRequisicao,
+    setDeletePhoto,
+    deletePhoto,
+    midiaIcon,
+  } = useContext(AppContext);
   const { user, fetchProfile, photoValueFeed, token } = useRequisicoes({});
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [editRequisicao, paramsId]);
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
+
+  console.log("PHOTO,", photoValueFeed);
 
   const [form, setForm] = useState({
     name: "",
@@ -51,21 +62,30 @@ export function FormEditProfile({ active, ...props }) {
     }));
   };
 
-  const photoIcon = (evento) => {
-    const file = evento.target.files[0];
+const photoIcon = (evento) => {
+  const file = evento.target.files[0];
 
-    if (file) {
-      const content = new FileReader();
-      content.onload = (e) => {
-        inputFile.current.src = e.target.result;
-        inputFile.current.style.display = "block";
+  console.log("Arquivo selecionado:", file);
 
-        setMidiaIcon(content.result);
-      };
+  if (!file) return;
 
-      content.readAsDataURL(file);
-    }
+  const formatosPermitidos = ["image/jpeg", "image/png", "image/webp"];
+
+  if (!formatosPermitidos.includes(file.type)) {
+    evento.target.value = "";
+    alert("Escolha uma imagem JPG, PNG ou WEBP.");
+    return;
+  }
+
+  const content = new FileReader();
+
+  content.onload = () => {
+    console.log("Imagem carregada!");
+    setMidiaIcon(content.result);
   };
+
+  content.readAsDataURL(file);
+};
 
   const fields = [
     {
@@ -82,26 +102,22 @@ export function FormEditProfile({ active, ...props }) {
     },
   ];
 
-  const deleteIcon = async (e) => {
+  const deleteIcon = (e) => {
     e.preventDefault();
-    openOrCloseDialog();
 
-    try {
-      const response = await fetch(
-        `http://localhost:3000/profilePerfilIcon/${paramsId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+    setDeletePhoto(true);
+    setMidiaIcon(null);
+  };
 
-      return response;
-    } catch (error) {
-      throw new Error("Falha ao deletar a imagem de perfil!", { cause: error });
+  const cancelarEdicao = () => {
+    setDeletePhoto(false);
+    setMidiaIcon(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
+
+    openOrCloseDialog();
   };
 
   return (
@@ -116,17 +132,19 @@ export function FormEditProfile({ active, ...props }) {
 
         <button
           type="button"
-          onClick={openOrCloseDialog}
+          onClick={() => {
+            (openOrCloseDialog(), cancelarEdicao());
+          }}
           className="
-                        flex h-9 w-9 items-center justify-center
+                        flex h-5 w-5 items-center justify-center
                         rounded-full
-                        text-xl
+                       
                         text-[#786858]
                         hover:bg-[#f3ecdf]
                         transition
                       "
         >
-          ×
+          <XSavedEbook></XSavedEbook>
         </button>
       </div>
 
@@ -137,7 +155,7 @@ export function FormEditProfile({ active, ...props }) {
           <div className="group flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center relative">
             <img
               ref={inputFile}
-              src={photo?.midiaIcon}
+              src={deletePhoto ? undefined : midiaIcon || photo?.midiaIcon}
               className={` w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105`}
             ></img>
 
@@ -147,7 +165,7 @@ export function FormEditProfile({ active, ...props }) {
                 "bg-black/40 text-white inset-0 flex items-center justify-center"
               }
             >
-              <XIconProfile></XIconProfile >
+              <XIconProfile></XIconProfile>
             </EventButton>
 
             <label>
@@ -159,24 +177,18 @@ export function FormEditProfile({ active, ...props }) {
             </label>
           </div>
 
-          <div className="flex flex-col">
-            <label
-              type="file"
-              className="
-                            rounded-full
-                           
-                            border border-[#d9cbb8]
-                            px-4 py-2
-                            text-sm font-medium
-                            hover:bg-[#f5eee3]
-                            transition
-                          "
-            >
-              <input type="file" onChange={photoIcon} className="hidden sm:block"></input>
-              {/* Alterar foto */}
+          <div className="flex flex-col items-start gap-2">
+            <label className="cursor-pointer rounded-full border border-[#d9cbb8] px-4 py-2 text-sm text-[#786858] transition hover:bg-[#f3ecdf]">
+              Editar foto
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={photoIcon}
+              />
             </label>
 
-            <p className="mt-2 text-xs text-[#998875]">JPG, PNG ou WEBP.</p>
+            <span className="text-xs text-[#8c7b69]">JPG, PNG ou WEBP.</span>
           </div>
         </div>
 

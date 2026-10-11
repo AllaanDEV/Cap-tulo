@@ -150,7 +150,7 @@ export function Icon({ state }) {
     };
 
     fetchProfile();
-  }, [profileId, token, editRequisicao]);
+  }, [profileId, token, editRequisicao, profile ]);
 
   const responseSrc = async () => {
     const responsePost = await fetch(
@@ -226,8 +226,9 @@ export function Icon({ state }) {
     }
   };
 
+  console.log("bioNUL", editValue)
   const bioNull =
-    editValue?.dataPerfil?.userId == user.id
+    editValue && profileId == user.id
       ? "coloque uma descrição sobre você!"
       : null;
 

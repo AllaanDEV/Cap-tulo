@@ -4,15 +4,16 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { TimeAgo } from "./timeAgo";
+import { EditProfile } from "../ComponentsPerfil/editProfile";
 
 export function UsersInfo({ post, users, following, followerUserId, className }) {
   const { user, nameIcon, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { followers, usersList} = useContext(AppContext);
+  const { followers, usersList, editRequisicao} = useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
     // userUP();
-  }, []);
+  }, [editRequisicao]);
 
   const followingDataUser = usersList.find(
     (dataFollowing) => dataFollowing?.id === following?.following,

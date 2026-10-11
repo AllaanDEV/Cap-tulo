@@ -19,6 +19,10 @@ export function EditProfile() {
     setEditValue,
     midiaIcon,
     editValue,
+    editRequisicao,
+    deletePhoto,
+    setMidiaIcon,
+    setDeletePhoto,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -41,8 +45,7 @@ export function EditProfile() {
 
     try {
       const edit = await fetch(
-        `
-http://localhost:3000/profileEdit/${profileId}`,
+        `http://localhost:3000/profileEdit/${profileId}`,
         {
           method: "POST",
           headers: {
@@ -55,15 +58,18 @@ http://localhost:3000/profileEdit/${profileId}`,
             bios: formData.get("bios")?.trim() || null,
             location: formData.get("location")?.trim() || null,
             link: formData.get("link")?.trim() || null,
-            midiaIcon: midiaIcon || editValue.dataPerfil.midiaIcon || null,
+            midiaIcon: deletePhoto
+              ? null
+              : midiaIcon || editValue.dataPerfil.midiaIcon || null,
           }),
         },
       );
 
       if (edit.ok) {
         setEditRequisicao((previousValue) => !previousValue);
+        setDeletePhoto(false);
+        setMidiaIcon(null);
       }
-
       return edit;
     } catch (error) {
       console.error("Erro ao editar perfil:", error);
@@ -95,6 +101,7 @@ http://localhost:3000/profileEdit/${profileId}`,
       const data = await response.json();
 
       localStorage.setItem("user", JSON.stringify(data.user));
+
 
       return response;
     } catch (error) {

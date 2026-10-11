@@ -15,6 +15,7 @@ import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
 import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { ButtonPostar } from "./buttonPostar";
+import { PostModifiedContainer } from "./postModifiedContainer";
 // import { useEffect, useState } from "react";
 
 export function TipTapEditor({onEditorReady}) {
@@ -311,10 +312,12 @@ useEffect(() => {
       ) : (
         containerModified &&
         postModified === "resenha" && (
-          <EbookProgress
+          <PostModifiedContainer
             book={typeResenha()}
-            className={"mt-1"}
-          ></EbookProgress>
+            className={"mt-5"}
+            type={"resenha"}
+            delet={true}
+          ></PostModifiedContainer>
         )
       )}
     </div>
