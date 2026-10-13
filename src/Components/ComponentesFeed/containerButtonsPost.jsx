@@ -58,7 +58,7 @@ export function ContainerButtonsPost({ post, openComments, className }) {
         </div>
       </div>
       <button
-        className={saved ? "text-yellow-600" : "hover:text-yellow-600"}
+        className={saved ? "text-yellow-600" : "text-gray hover:text-yellow-600"}
         onClick={() => Saves(saved ? "delete" : "saved", post)}
       >
         <Save filled={saved} />

@@ -16,10 +16,18 @@ import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { Info } from "./info";
 import { PostModifiedContainer } from "./postModifiedContainer";
 import { Progress } from "../ComponentsPerfil/progress";
+import { CarouselImages } from "./carolselImages";
 
 export function DialogPostFocus() {
-  const { postFocus, setPostFocus, dataPostFocus, setDataPostFocus, setLike, ebookSaved, like} =
-    useContext(AppContext);
+  const {
+    postFocus,
+    setPostFocus,
+    dataPostFocus,
+    setDataPostFocus,
+    setLike,
+    ebookSaved,
+    like,
+  } = useContext(AppContext);
 
   const { user, nameIcon, photoValueFeed, likesGet } = useRequisicoes({
     setLike,
@@ -61,9 +69,15 @@ export function DialogPostFocus() {
     likesGet();
   }, []);
 
-const ebookProgressFocus= ebookSaved.filter((ebook) => ebook.userId === user.id).find((progress) => progress.ebook.ebook?.id === dataPostFocus?.postModified?.ebook?.ebook?.id)
-  
-console.log("TYOE", dataPostFocus?.type)
+  const ebookProgressFocus = ebookSaved
+    .filter((ebook) => ebook.userId === user.id)
+    .find(
+      (progress) =>
+        progress.ebook.ebook?.id ===
+        dataPostFocus?.postModified?.ebook?.ebook?.id,
+    );
+
+  console.log("TYOE", dataPostFocus?.type);
   return (
     <dialog
       ref={dialogFocus}
@@ -132,16 +146,11 @@ console.log("TYOE", dataPostFocus?.type)
                     className="w-full object-contain sm:max-h-auto"
                   />
                 ) : Array.isArray(dataPostFocus?.midia) ? (
-                  <div className="flex flex-col gap-2">
-                    {dataPostFocus.midia.map((url, index) => (
-                      <img
-                        key={index}
-                        src={url}
-                        alt="Imagem do post"
-                        className="w-full sm:max-h-auto object-cover"
-                      />
-                    ))}
-                  </div>
+                  <CarouselImages
+                    key={dataPostFocus?.id}
+                    images={dataPostFocus.midia}
+                    imageClassName="block w-full h-auto max-h-[35vw] object-contain"
+                  />
                 ) : null}
               </Info>
             )}

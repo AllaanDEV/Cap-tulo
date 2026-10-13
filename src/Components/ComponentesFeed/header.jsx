@@ -107,7 +107,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-5">
-          <div className="hidden sm:block w-50">
+          {/* <div className="hidden sm:block w-50">
             <button
               className="bg-wine flex text-white items-center p-1 rounded-4xl px-3 gap-1 w-full justify-center"
               onClick={() =>
@@ -121,7 +121,7 @@ export function Header() {
               <img src={addIcon}></img>
               Publicar
             </button>
-          </div>
+          </div> */}
 
           <button>
             <img src={notificationIcon} className="w-auto h-6"></img>

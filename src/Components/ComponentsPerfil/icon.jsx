@@ -1,4 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
 import { pencil, calendar, maps, link, XIconProfile } from "../svgCode";
@@ -20,6 +26,8 @@ import { Evaluated } from "./evaluated";
 import { Container } from "../ComponentesFeed/container";
 import { FollowersList } from "./followersList";
 import { Interactions } from "./interactions";
+
+import gsap from "gsap";
 
 const Pencil = pencil;
 
@@ -54,6 +62,7 @@ export function Icon({ state }) {
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
   const [following, setFollowing] = useState([]);
+  const [buttonFocus, setButtonFocus] = useState("Todos");
 
   const {
     setPublication,
@@ -66,7 +75,10 @@ export function Icon({ state }) {
     publication,
     setListFollowersPerfil,
     listFollowersPerfil,
-    setStyleButtonFollowersList, setLike
+    setStyleButtonFollowersList,
+    setLike,
+    feedFilter,
+    setFeedFilter,
   } = useContext(AppContext);
 
   const {
@@ -77,7 +89,28 @@ export function Icon({ state }) {
     likesGet,
     allFollowers,
     getBookSave,
-  } = useRequisicoes({setLike});
+  } = useRequisicoes({ setLike });
+
+  const navRef = useRef(null);
+  const underlineRef = useRef(null);
+  const buttonRefs = useRef([]);
+
+useLayoutEffect(() => {
+  const index = buttons.findIndex((b) => b.name === buttonFocus);
+  const button = buttonRefs.current[index];
+  const underline = underlineRef.current;
+
+  if (!button || !underline) return;
+
+  gsap.to(underline, {
+    x: button.offsetLeft,
+    width: button.offsetWidth,
+    duration: 0.45,
+    ease: "power3.out",
+    overwrite: true,
+  });
+}, [buttonFocus]);
+
 
   useEffect(() => {
     fetch("/api/posts")
@@ -89,8 +122,16 @@ export function Icon({ state }) {
 
   useEffect(() => {
     fetchProfile();
+  
     // likesGet();
   }, [publication, editValue]);
+
+useEffect(() =>{
+ window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+},[])
 
   const bios = [
     {
@@ -114,8 +155,6 @@ export function Icon({ state }) {
     getBookSave(profileId);
   }, [profileId, token]);
 
-  const [feedFilter, setFeedFilter] = useState("todos");
-
   const filterFeed = (index) => {
     if (index === 0) {
       setFeedFilter("todos");
@@ -127,8 +166,7 @@ export function Icon({ state }) {
       setFeedFilter("interacoes");
     }
   };
-  
-  const [buttonFocus, setButtonFocus] = useState("Todos");
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -150,7 +188,7 @@ export function Icon({ state }) {
     };
 
     fetchProfile();
-  }, [profileId, token, editRequisicao, profile ]);
+  }, [profileId, token, editRequisicao, profile]);
 
   const responseSrc = async () => {
     const responsePost = await fetch(
@@ -226,7 +264,7 @@ export function Icon({ state }) {
     }
   };
 
-  console.log("bioNUL", editValue)
+  console.log("bioNUL", editValue);
   const bioNull =
     editValue && profileId == user.id
       ? "coloque uma descrição sobre você!"
@@ -310,7 +348,7 @@ export function Icon({ state }) {
               />
             )}
 
-            <div className="absolute w-[45vw] h-[45vw] sm:w-40 sm:h-40 bg-amber-700 bottom-[-20vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full flex items-center justify-center overflow-hidden">
+            <div className="absolute w-[45vw] h-[45vw] max-h-60 max-w-60  sm:w-40 sm:h-40 bg-amber-700 bottom-[-20vw] sm:bottom-[-80px] 2xl:h-50 2xl:w-50 2xl:bottom-[-120px] left-5 rounded-full flex items-center justify-center overflow-hidden">
               {editValue.dataPerfil?.midiaIcon ? (
                 <ImgPerfil
                   src={editValue.dataPerfil.midiaIcon}
@@ -364,8 +402,7 @@ export function Icon({ state }) {
               </div>
               <p>{editValue?.dataPerfil?.bios || bioNull}</p>
             </div>
-
-            <div className="md:flex gap-5">
+            <div className="flex gap-5">
               {bios
                 .filter((b) => b.description)
                 .map((b) => {
@@ -399,7 +436,6 @@ export function Icon({ state }) {
                 seguidores: {seguindoProfileId?.length}
               </button>
             </div>
-
             <div className="flex gap-2 flex-wrap text-black/50">
               {tags.map((t, index) => {
                 return (
@@ -412,34 +448,36 @@ export function Icon({ state }) {
                 );
               })}
             </div>
-
             <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
               <ArrayTable profile={profile}></ArrayTable>
             </div>
+            <nav
+              ref={navRef}
+              className="relative flex gap-8 flex-nowrap overflow-auto [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5"
+            >
+              {buttons.map((b, index) => (
+                <button
+                  key={b.name}
+                  ref={(el) => {
+                    buttonRefs.current[index] = el;
+                  }}
+                  className="text-gray whitespace-nowrap pb-2"
+                  onClick={() => {
+                    filterFeed(index);
+                    setButtonFocus(b.name);
+                  }}
+                >
+                  {b.name}
+                </button>
+              ))}
 
-            <nav className="flex gap-8 flex-nowrap overflow-auto  [scrollbar-width:none] [*::-webkit-scrollbar]:hidden px-5">
-              {buttons.map((b, index) => {
-                return (
-                  <button
-                    key={index}
-                    className="text-gray"
-                    onClick={() => {
-                      filterFeed(index);
-                      setButtonFocus(b.name);
-                    }}
-                  >
-                    {b.name}
-
-                    {buttonFocus === b.name && (
-                      <span className="mt-1 block border-t-[2px] border-wine" />
-                    )}
-                  </button>
-                );
-              })}
+              <span
+                ref={underlineRef}
+                className="absolute bottom-0 left-0 block border-t-2 border-wine pointer-events-none"
+              />
             </nav>
-
+            
             <Lines></Lines>
-
             {feedFilter === "todos" || feedFilter === "livros" ? (
               <>
                 <ReadingPace />
@@ -447,11 +485,9 @@ export function Icon({ state }) {
                 <Evaluated />
               </>
             ) : null}
-
             {feedFilter === "todos" || feedFilter === "posts" ? (
               <ArrayPosts />
             ) : null}
-
             {feedFilter === "interacoes" ? <Interactions /> : null}
           </div>
 

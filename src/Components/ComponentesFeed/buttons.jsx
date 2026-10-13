@@ -38,7 +38,7 @@ export function Buttons() {
         return (
           <button
             key={index}
-            className={`px-4 rounded-4xl flex justify-around items-center text-gray hover:text-black w-full transition-all duration-200 hover:bg-gray/20 text-sm sm:text-md ${style}`}
+            className={`px-4 rounded-4xl flex justify-around items-center text-gray hover:text-black w-full transition-all duration-200  text-sm sm:text-md ${style}`}
             onClick={() => {
               (setButton(b.name), validation(index));
             }}

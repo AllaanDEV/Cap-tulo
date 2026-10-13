@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
+import { createPortal } from "react-dom";
 
 import searchIcon from "../../assets/svgIcons/search-line.svg";
 
@@ -102,13 +103,15 @@ export function DialogGif({className}) {
     },
   ];
 
-  return (
+  return createPortal(
     <dialog
       ref={gifRef}
       onCancel={() => setDialogGif((prev) => !prev)}
-      className={`absolute w-full h-[80vh] 
-
-        sm:w-[70vw] sm:h-[80vh] md:w-[60vw] lg:w-[40vw] bg-amber-950 m-auto  rounded-2xl scrollbar-none overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both] ${className}`}
+      className={`fixed z-[9999] w-full h-[80vh]
+        sm:w-[70vw] md:w-[60vw] lg:w-[40vw]
+        bg-amber-950 m-auto rounded-2xl scrollbar-none
+        overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both]
+        ${className}`}
     >
       <div className="h-full overflow-y-auto scrollbar-none">
         <div className="flex items center justify-between p-3">
@@ -203,6 +206,7 @@ export function DialogGif({className}) {
           <div className="mt-full"></div>
         </div>
       </div>
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }

@@ -7,7 +7,8 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 export function ArrayPosts({ post }) {
   const { id: paramsId } = useParams();
   // const { state } = useLocation();
-  const { search, publication, editValue, searchValue} = useContext(AppContext);
+  const { search, publication, editValue, searchValue,  feedFilter } =
+    useContext(AppContext);
   const { fetchProfile, likesGet } = useRequisicoes({ post });
 
   useEffect(() => {
@@ -15,18 +16,20 @@ export function ArrayPosts({ post }) {
     //   likesGet();
   }, [paramsId]);
 
-
   const postsToRender = searchValue ? search : publication;
 
   return (
-    <ul className="flex flex-col gap-5">
-      {postsToRender
-        .filter((p) => p.authorId === paramsId)
-        .map((p) => (
-          <li key={p.id}>
-            <Post post={p} />
-          </li>
-        ))}
-    </ul>
+    <>
+      <ul className="flex flex-col gap-5">
+        {postsToRender
+          .filter((p) => p.authorId === paramsId)
+          .map((p) => (
+            <li key={p.id}>
+              <Post post={p} />
+            </li>
+          ))}
+      </ul>
+      {postsToRender.length === 0 &&  feedFilter === "posts" && <span className="mx-auto text-sm text-wine">Publique algo!</span>}
+    </>
   );
 }

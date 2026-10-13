@@ -249,7 +249,7 @@ useEffect(() => {
         </div>
         <ButtonPostar
           editorValue={() => editor?.commands?.clearContent()}
-          className="hidden sm:block"
+          className="hidden xl:block"
         >
           Postar
         </ButtonPostar>
