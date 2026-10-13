@@ -26,6 +26,7 @@ import { DialogPostFocus } from "./dialogPostFocus";
 import { ContainerButtonsPost } from "./containerButtonsPost";
 import { PostModifiedContainer } from "./postModifiedContainer";
 import { TimeAgo } from "./timeAgo";
+import { CarouselImages } from "./carolselImages";
 
 const Save = save;
 const Icon = configuration;
@@ -34,6 +35,9 @@ export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [currentImage, setCurrentImage] = useState(0);
+  const imagesContainerRef = useRef(null);
 
   const {
     setPostId,
@@ -105,13 +109,33 @@ export const Post = memo(function Post({ post }) {
       setKeepComments(true);
       return;
     }
-
     const timer = setTimeout(() => {
       setKeepComments(false);
-    }, 150); // mesma duração da animação
+    }, 150);
 
     return () => clearTimeout(timer);
   }, [showComments]);
+
+  const changeImage = (index) => {
+    const container = imagesContainerRef.current;
+
+    if (!container) return;
+
+    container.scrollTo({
+      left: container.clientWidth * index,
+      behavior: "smooth",
+    });
+
+    setCurrentImage(index);
+  };
+
+  useEffect(() => {
+    setCurrentImage(0);
+    imagesContainerRef.current?.scrollTo({
+      left: 0,
+      behavior: "instant",
+    });
+  }, [post?.id]);
 
   return (
     <>
@@ -148,7 +172,7 @@ export const Post = memo(function Post({ post }) {
 
           {post?.midia !== "listNull" && (
             <Info
-              className="rounded-xs cursor-pointer"
+              className="rounded-xs cursor-pointer text-center"
               onClick={() => {
                 validationsPostFocus();
                 setDataPostFocus(post);
@@ -161,16 +185,10 @@ export const Post = memo(function Post({ post }) {
                   className="w-full object-contain sm:max-h-[35vw] "
                 />
               ) : Array.isArray(post?.midia) ? (
-                <div>
-                  {post.midia.map((url, index) => (
-                    <img
-                      key={index}
-                      src={url}
-                      alt="Imagem do post"
-                      className="w-full sm:max-h-[35vw] object-cover"
-                    />
-                  ))}
-                </div>
+                <CarouselImages
+                  images={post.midia}
+                  imageClassName="block w-full h-auto max-h-[35vw] object-contain"
+                />
               ) : null}
             </Info>
           )}
@@ -227,7 +245,7 @@ export const Post = memo(function Post({ post }) {
         ></ContainerButtonsPost>
 
         <div
-          className={`grid transition-[grid-template-rows] duration-150 ease-out ${
+          className={`min-h-0  grid transition-[grid-template-rows] duration-150 ease-out ${
             showComments ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
           }`}
         >

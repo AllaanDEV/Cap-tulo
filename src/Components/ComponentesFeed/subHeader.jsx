@@ -117,7 +117,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
   return (
     <>
       <section
-        className={`pb-5 flex flex-col gap-5 w-full ${!isMobile ? "hidden sm:block" : "block"} ${className}`}
+        className={`pb-5 flex flex-col gap-5 w-full  ${!isMobile ? "hidden xl:block" : "block"} ${className}`}
       >
         <Div className="w-full">
           {!postCitation ? (
@@ -156,6 +156,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
                     return (
                       <div key={index} className="relative hidden sm:block">
                         <button
+                            ref={emojiContainerRef}
                           onClick={() => citationOpen(index)}
                           className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"
                         >
@@ -166,7 +167,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
                         {dialogEmoji && (
                           <div
                             ref={emojiContainerRef}
-                            className="absolute top-full right-0 z-50 mt-2 bg-white overflow-y-scroll  h-80 border border-border rounded-lg scrollbar-thin scrollbar-thumb-wine/80 "
+                            className="absolute top-full right-0 z-50 mt-2 bg-white overflow-y-scroll  h-80 border border-border rounded-lg scrollbar-none "
                           >
                             <DialogImoji
                               emojiContainerRef={emojiContainerRef}

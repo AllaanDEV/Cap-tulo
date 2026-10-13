@@ -5,13 +5,14 @@ export function SideBarMobileButtons({
   options,
   setOption,
   setOptionsDialog,
+  className,
   children,
   ...props
 }) {
 
   return (
     <Link
-      className={`${options === option ? "text-wine" : "text-gray"} flex flex-col text-center items-center outline-none`}
+      className={`${options === option ? "text-wine" : "text-gray"} flex flex-col text-center items-center outline-none ${className}`}
       onClick={() => {
         setOption(option);
         setOptionsDialog(true);

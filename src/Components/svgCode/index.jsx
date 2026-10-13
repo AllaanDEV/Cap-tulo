@@ -214,32 +214,36 @@ export const Share = () => {
 
 export const save = ({ filled = false, className = "", ...props }) => {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
+  <svg
+{...props}
       className={className}
-    >
-      <path
-        d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"
-        fill={filled ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+   fill={filled ? "currentColor" : "none"}
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-bookmark"
+  aria-hidden="true"
+  data-id="element-490"
+  data-mp="285q27ogco1c8"
+>
+  <path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path>
+</svg>
   );
 };
+
+
 
 export const House = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -248,8 +252,8 @@ export const House = () => {
       stroke-linejoin="round"
       class="lucide lucide-house"
       aria-hidden="true"
-      data-id="element-197"
-      data-mp="yxsb2jjkv6zk"
+      data-id="element-490"
+      data-mp="285q27ogco1c8"
     >
       <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
       <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -261,8 +265,8 @@ export const Compass = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -271,8 +275,8 @@ export const Compass = () => {
       stroke-linejoin="round"
       class="lucide lucide-compass"
       aria-hidden="true"
-      data-id="element-199"
-      data-mp="18w862xlq70ec"
+      data-id="element-490"
+      data-mp="285q27ogco1c8"
     >
       <circle cx="12" cy="12" r="10"></circle>
       <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path>
@@ -284,15 +288,23 @@ export const book = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-library"
+      aria-hidden="true"
+      data-id="element-490"
+      data-mp="285q27ogco1c8"
     >
-      <title xmlns="">book-library</title>
-      <path
-        fill="currentColor"
-        d="M9 3h2v18H9zm11.71 17.23l-3.8-8.15l-3.81-8.16l-.9.42l-.91.43l3.8 8.15l3.81 8.16l.9-.42zM6 3h2v18H6zM3 3h2v18H3z"
-      />
+      <path d="m16 6 4 14"></path>
+      <path d="M12 6v14"></path>
+      <path d="M8 8v12"></path>
+      <path d="M4 4v16"></path>
     </svg>
   );
 };
@@ -795,8 +807,8 @@ export const Person = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="22"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -805,8 +817,8 @@ export const Person = ({ size }) => {
       stroke-linejoin="round"
       class="lucide lucide-user"
       aria-hidden="true"
-      data-id="element-204"
-      data-mp="2tznfqwwaqdo6"
+      data-id="element-490"
+      data-mp="285q27ogco1c8"
     >
       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
       <circle cx="12" cy="7" r="4"></circle>
@@ -878,7 +890,6 @@ export const Vector = () => {
   );
 };
 
-
 export const Facebook = () => {
   return (
     <svg
@@ -897,7 +908,7 @@ export const Facebook = () => {
   );
 };
 
-const width= window.innerWidth <= 640 ? "1800" : "2500"
+const width = window.innerWidth <= 640 ? "1800" : "2500";
 
 export const AnimationTransiton = () => {
   return (

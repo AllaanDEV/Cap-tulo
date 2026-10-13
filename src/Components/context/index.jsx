@@ -120,26 +120,20 @@ const [loadingLogin, setLoadingLogin] = useState(false);
   const [dialogGif, setDialogGif] = useState(false);
   const [gifData, setGifData] = useState();
   const [hasText, setHasText] = useState(false);
-
   const [valuePostsCitation, setValuePostCitation] = useState();
   const [postModified, setPostModified] = useState();
   const [containerModified, setContainerModified] = useState(false);
-
   const [starFilled, setStarFilled] = useState(0);
   const [postCitation, setPostCitation] = useState(false);
-
   const [disabledCardActive, setDisabledCardActive] = useState(false);
   const [contentHtml, setContentHtml] = useState();
-
   const [dialogEmoji, setDialogEmoji] = useState(false);
-
   const [contentEmoji, setContentEmoji] = useState();
-
   const [feedbacksArray, setFeedbacksArray] = useState();
-
   const [postFocus, setPostFocus] = useState(false);
   const [dataPostFocus, setDataPostFocus] = useState();
   const [goal, setGoal] = useState({ number: 0 });
+const [goalUser, setGoalUser]=useState()
 
   const [likesCommentList, setLikesCommentList] = useState([]);
 
@@ -409,6 +403,7 @@ tl.set(paths, {
 };
 
 const [deletePhoto, setDeletePhoto] = useState(false);
+const [feedFilter, setFeedFilter] = useState("todos");
   return (
     <AppContext.Provider
       value={{
@@ -533,7 +528,7 @@ const [deletePhoto, setDeletePhoto] = useState(false);
         toggleDialog,
         ScrollToTop,
         clearEditor,
-        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto
+        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto, feedFilter, setFeedFilter, goalUser, setGoalUser
       }}
     >
          <div

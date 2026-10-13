@@ -1,4 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { ContainerButtons } from "./containerButtons";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
@@ -13,11 +19,15 @@ import { ebook } from "../svgCode";
 import { Star, quotation } from "../svgCode";
 import { useParams } from "react-router";
 import { PostModifiedContainer } from "./postModifiedContainer";
+import gsap from "gsap";
 
 const Ebook = ebook;
 
 export function ComplexPost() {
   const { id: profileId } = useParams();
+  const containerButtonsRef = useRef(null);
+  const bgRef = useRef(null);
+  const citationButtonRefs = useRef([]);
 
   const {
     styleCardActive,
@@ -81,26 +91,54 @@ export function ComplexPost() {
   ];
 
   // const avaliationTypePost = !styleCardActive && setPostModified();
+
+  useLayoutEffect(() => {
+    const index = iconsCitationOpen.findIndex((b) => b.name === styleButton);
+
+    const button = citationButtonRefs.current[index];
+    const bg = bgRef.current;
+
+    if (!button || !bg) return;
+
+    gsap.to(bg, {
+      x: button.offsetLeft,
+      y: button.offsetTop,
+      width: button.offsetWidth,
+      height: button.offsetHeight,
+      duration: 0.4,
+      ease: "power3.out",
+      overwrite: true,
+    });
+  }, [styleButton]);
+
   return (
-    <section className="w-full">
+    <section className="w-full animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]">
       <div className="flex justify-between ">
         <div className="w-40">
-          <ContainerButtons className={"h-2"}>
+          <ContainerButtons className="h-2 relative">
+            <div
+              ref={bgRef}
+              className="absolute top-0 left-0 bg-wine rounded-full pointer-events-none"
+            />
+
             {iconsCitationOpen.map((b, index) => {
               const Icon = b.icon;
 
               return (
                 <button
                   key={index}
-                  className={`flex items-center rounded-full px-4 w-full hover:text-black ${
+                  ref={(el) => {
+                    citationButtonRefs.current[index] = el;
+                  }}
+                  className={`relative z-10 flex items-center rounded-full px-4 w-full transition-colors ${
                     styleButton === b.name
-                      ? "bg-wine text-white"
-                      : "bg-transparent cursor-pointer"
+                      ? "text-white"
+                      : "bg-transparent cursor-pointer hover:text-black"
                   }`}
                   onClick={() => {
-                    (modified(index),
-                      setStyleButton(b.name),
-                      setContainerModified(false));
+                    modified(index);
+                    setStyleButton(b.name);
+                    setContainerModified(false);
                   }}
                 >
                   <Icon
@@ -142,7 +180,9 @@ export function ComplexPost() {
             ) : (
               postModified === "feedback" && (
                 <div className="flex flex-col sm:flex-row text-start sm:items-center gap-2 sm:gap-2">
-                  <span className="text-gray text-xs sm:text-sm">FAÇA SUA AVALIAÇÃO:</span>
+                  <span className="text-gray text-xs sm:text-sm">
+                    FAÇA SUA AVALIAÇÃO:
+                  </span>
                   <ArrayStars onClick={setStarFilled}></ArrayStars>
                   <span className="text-xs text-gray">{`${starFilled >= 0 ? starFilled + 1 : 0} DE 5`}</span>
                 </div>
@@ -195,7 +235,11 @@ export function ComplexPost() {
         <div className="flex gap-2 justify-end">
           <button
             className="border-[2px] border-border py-1 px-2 hover:bg-black/10 rounded-2xl"
-            onClick={() => {setPostCitation((prev) => !prev), setPostModified(), setStyleCardActive()}}
+            onClick={() => {
+              (setPostCitation((prev) => !prev),
+                setPostModified(),
+                setStyleCardActive());
+            }}
           >
             Cancelar
           </button>

@@ -23,10 +23,16 @@ export function FollowersList() {
 
   const { userUP, user, allFollowers, getFollowBack } = useRequisicoes({});
 
-  useEffect(() => {
-    userUP();
-    // allFollowers()
-  }, []);
+useEffect(() => {
+  userUP();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+
+  // allFollowers()
+}, []);
 
   const profile = usersList.find((perfil) => perfil.id === paramsId);
   // const profileFilter= profile.filter((perfil))
@@ -36,9 +42,9 @@ export function FollowersList() {
   return (
     <Container className="border border-border">
       <section className="bg-primary h-screen flex flex-col gap-3 w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
-        <div className=" flex gap-5 items-center px-2">
+        <div className=" flex gap-5 items-center px-4 pt-2">
           <button
-            className="text-2xl transition hover:translate-x-[10px] duration-200 cursor-pointer "
+            className="text-2xl transition hover:translate-x-[-10px] duration-200 cursor-pointer "
             onClick={() => setListFollowersPerfil(false)}
           >
             <LeftArrow></LeftArrow>
@@ -53,7 +59,7 @@ export function FollowersList() {
         <div>
           <div className="w-full flex justify-evenly text-center transition-all duration-300">
             <button
-              className={`hover:font-medium w-full py-4 ${styleButtonFollowersList === "followers" && "bg-gray/30"}`}
+              className={`hover:font-light w-full py-4 ${styleButtonFollowersList === "followers" && "bg-gray/30"}`}
               onClick={() => {
                 setStyleButtonFollowersList("followers");
               }}
@@ -61,7 +67,7 @@ export function FollowersList() {
               Seguidores
             </button>
             <button
-              className={`hover:font-medium w-full py-4 ${styleButtonFollowersList === "following" && "bg-gray/30"}`}
+              className={`hover:font-light w-full py-4 ${styleButtonFollowersList === "following" && "bg-gray/30"}`}
               onClick={() => {
                 setStyleButtonFollowersList("following");
               }}

@@ -4,7 +4,7 @@ import { Lines } from "../ComponentsForm/lines";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { configuration, faceHappy, Send, Like } from "../svgCode";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-
+import { createPortal } from "react-dom";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { DialogImoji } from "./dialogEmoji";
@@ -101,7 +101,9 @@ export function CommentsList({ post }) {
   useEffect(() => {
     getLikesComments();
   }, []);
-  return (
+
+  
+   return (
     <section className="flex flex-col w-full">
       {!postFocus && <Lines />}
 
@@ -127,24 +129,29 @@ export function CommentsList({ post }) {
               placeholder="Dê a sua opinião!"
             />
 
-            <div className="relative">
+            {/* <div className="relative">
               <button
+                ref={emojiButtonRef}
                 type="button"
-                onClick={() => setToggleDialogEmojisComment((prev) => !prev)}
+                onClick={toggleEmojiDialog}
                 className="hover:bg-gray/50 py-2 px-3 sm:p-3 rounded-xl group transition-colors flex gap-2 items-center w-fit"
               >
                 <FaceHappy />
               </button>
 
               {toggleDialogEmojisComment && (
-                <div className="absolute top-full right-0 z-50 mt-2 h-80 bg-white overflow-y-auto  border border-border rounded-lg shadow-lg scrollbar-thin scrollbar-thumb-wine/80">
+                <div
+                  className="fixed z-[9999] bg-white border border-border rounded-lg shadow-lg"
+                >
                   <DialogImoji
                     toggleDialogEmojisComment={toggleDialogEmojisComment}
-                    setToggleDialogEmojisComment={setToggleDialogEmojisComment}
+                    setToggleDialogEmojisComment={
+                      setToggleDialogEmojisComment
+                    }
                   />
                 </div>
               )}
-            </div>
+            </div> */}
 
             <button
               type="submit"
@@ -158,7 +165,7 @@ export function CommentsList({ post }) {
         </div>
       </div>
 
-      <ul className="fit-content py-3 flex flex-col gap-6 w-full">
+      <ul className="pt-3 pb-7 flex flex-col gap-6 w-full">
         {(post?.comments ?? []).length === 0 ? (
           <div>Ainda não há comentários</div>
         ) : (
@@ -178,7 +185,6 @@ export function CommentsList({ post }) {
                   animationDelay: `${150 + index * 60}ms`,
                 }}
               >
-
                 <div className="flex gap-2 relative w-full">
                   <div>
                     <div className="flex flex-col items-start">
@@ -263,5 +269,4 @@ export function CommentsList({ post }) {
         )}
       </ul>
     </section>
-  );
-}
+  )}

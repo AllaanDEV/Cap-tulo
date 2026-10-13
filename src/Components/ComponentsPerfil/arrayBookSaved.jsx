@@ -63,8 +63,8 @@ export function ArrayBookSaved({ profile }) {
       {ebookSaved?.length === 0 ? (
         <div className="flex items-center gap-1">
           {stylePatchProfile || stylePatchFeed ? (
-            <>
-              <span>Salve um livro!</span>
+            <div className="mb-3 flex gap-2 items-center">
+              <span >Salve um livro!</span>
 
               <Link
                 to="/ebooks"
@@ -73,7 +73,7 @@ export function ArrayBookSaved({ profile }) {
                 <Compass />
                 Explorar
               </Link>
-            </>
+            </div>
           ) : (
             <span>{`${profile?.name} não tem livro salvo 😭`}</span>
           )}

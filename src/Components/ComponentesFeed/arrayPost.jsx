@@ -62,7 +62,7 @@ export function ArrayPost() {
         <div className="mx-auto items-center flex flex-col sm:flex-row text-center gap-1 text-sm">
           <span>Siga outros leitores!</span>
 
-          <Link className="flex gap-1 items-center text-start w-40  bg-wine/80 hover:bg-wine cursor-pointer rounded-md px-4 py-2 transition duration-400 ">
+          <Link className="flex gap-1 items-center text-start w-40  bg-wine/80 hover:bg-wine cursor-pointer rounded-md px-4 py-2 transition duration-400 xl:hidden">
             <Group></Group>
             Buscar
           </Link>
@@ -83,7 +83,7 @@ export function ArrayPost() {
         </div>
       )}
 
-      {followerPost !== "saved" && followerPost !== "followers" && (
+      {followerPost !== "saved" && followerPost !== "followers"  && !searchValue && (
         <span className="text-xs text-wine mx-auto sm:mb-20">
           {user.name}, acho que você leu demais 🫣
         </span>

@@ -23,7 +23,6 @@ export function Evaluated() {
     <>
       {postFeedback.length > 0 && (
         <Div className="p-2">
-          {/* Cabeçalho */}
           <div className="flex justify-between">
             <p className="text-xl font-fraunce flex items-center">
               Avaliados ·
@@ -51,13 +50,13 @@ export function Evaluated() {
             )}
           </div>
 
-          {/* Livros */}
+      
 
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-8 mt-4">
             {postFeedback.slice(0, itemsVisible).map((ebook) => {
               return (
                 <li key={ebook.id} className="flex flex-col min-w-0">
-                  {/* Imagem */}
+      
                   <div className="rounded-lg aspect-[3/4] overflow-hidden group w-full">
                     <img
                       src={
@@ -77,7 +76,7 @@ export function Evaluated() {
                     />
                   </div>
 
-                  {/* Informações */}
+
                   <div className="p-1 flex flex-col flex-1 min-h-0">
                     <span>
                       {ebook.postModified?.ebook?.ebook?.volumeInfo?.title}
@@ -87,7 +86,6 @@ export function Evaluated() {
                       {ebook?.postModified?.ebook?.ebook?.volumeInfo?.authors}
                     </span>
 
-                    {/* Estrelas sempre no final */}
                     <div className="mt-auto">
                       <ArrayStars
                         starsNumber={ebook?.postModified?.starsEbook}

@@ -14,13 +14,25 @@ export function DialogSubHeaderMobile() {
     setPostModified,
   } = useContext(AppContext);
 
-  useEffect(() => {
-    if (dialogSubHeader) {
-      dialogSub?.current.showModal();
-    } else {
-      dialogSub?.current.close();
-    }
-  }, [dialogSubHeader]);
+useEffect(() => {
+  const dialog = dialogSub.current;
+
+  if (dialogSubHeader) {
+    dialog?.showModal();
+
+    dialog?.classList.remove(
+      "animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]"
+    );
+
+    void dialog?.offsetWidth;
+
+    dialog?.classList.add(
+      "animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]"
+    );
+  } else {
+    dialog?.close();
+  }
+}, [dialogSubHeader]);
 
   return (
     <dialog

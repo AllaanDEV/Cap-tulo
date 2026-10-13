@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import AppContext from "..";
 import { useNavigate } from "react-router";
 import { useComments } from "./useComments";
@@ -44,6 +44,7 @@ export function useRequisicoes({ post, like, setLike }) {
     setEditValue,
     setLikesCommentList,
     likesCommentList,
+    setGoalUser,
   } = useContext(AppContext);
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -275,7 +276,7 @@ export function useRequisicoes({ post, like, setLike }) {
       const data = await response.json();
 
       setPhotoValueFeed(data);
-      return data
+      return data;
     } catch (error) {
       console.error("Erro ao buscar perfil:", error);
     }
@@ -398,25 +399,43 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const postNumberGet = async (paramsId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/goalNumber/${paramsId}`,
-      );
+ const postNumberGet = async (paramsId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/goalNumber/${paramsId}`
+    );
 
-      const data = await response.json();
+    if (response.status === 404) {
+      setGoal(null);
 
-      if (data) {
-        setGoal(data);
+      if (paramsId === user?.id) {
+        setGoalUser(null);
       }
-      return data;
-    } catch (error) {
-      console.error(error);
-      alert(
-        "Não foi possível realizar a busca da meta, tente novamente mais tarde",
-      );
+
+      return null;
     }
-  };
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar a meta.");
+    }
+
+    const data = await response.json();
+
+    setGoal(data);
+    
+    if (paramsId === user?.id) {
+      setGoalUser(data);
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Não foi possível realizar a busca da meta, tente novamente mais tarde."
+    );
+  }
+};
 
   const myFollowers = followers.filter((u) => u.userId === user.id);
 
@@ -431,62 +450,52 @@ export function useRequisicoes({ post, like, setLike }) {
   };
 
   const getPostsSaved = async () => {
-    console.log("ZAUS");
-    const response = await fetch(
-      `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
-    );
+    const [savedResponse, postsResponse] = await Promise.all([
+      fetch(`http://localhost:3000/api/posts/saved/?t=${Date.now()}`),
+      fetch(`http://localhost:3000/api/posts/?t=${Date.now()}`),
+    ]);
 
-    const data = await response.json();
+    if (!savedResponse.ok || !postsResponse.ok) {
+      throw new Error("Erro ao buscar posts salvos");
+    }
 
-    setPostSaved(data);
-    return data;
+    const savedIds = await savedResponse.json();
+    const posts = await postsResponse.json();
+
+    const postsSaved = savedIds
+      .map(({ postId }) => posts.find((post) => post.id === postId))
+      .filter(Boolean)
+      .map((post) => ({ post }));
+
+    setPostSaved(postsSaved);
+
+    return postsSaved;
   };
 
   const Saves = async (type, post) => {
-  const response = await fetch(
-    `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:3000/api/posts/saved/?t=${Date.now()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post,
+          savedType: type,
+          postId: post.id,
+        }),
       },
-      body: JSON.stringify({
-        post,
-        savedType: type,
-        postId: post.id,
-      }),
-    }
-  );
+    );
 
-  if (response.ok) {
-    if (type === "saved") {
-      setPostSaved((prev) => [
-        ...prev,
-        { post },
-      ]);
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar posts salvos");
     }
 
-    if (type === "update") {
-      setPostSaved((prev) =>
-        prev.map((item) =>
-          item?.post?.id === post?.id
-            ? { ...item, post }
-            : item
-        )
-      );
-    }
+    await getPostsSaved();
 
-    if (type === "delete") {
-      setPostSaved((prev) =>
-        prev.filter(
-          (item) => item?.post?.id !== post?.id
-        )
-      );
-    }
-  }
-
-  return response;
-};
+    return response;
+  };
 
   const getFollowBack = (userId) => {
     return followers.some(
@@ -567,6 +576,37 @@ export function useRequisicoes({ post, like, setLike }) {
     } else if (index === 0) [navigate(`/feed/${user.id}`)];
   };
 
+  const goalUserLogged = useCallback(
+    async (userId) => {
+      if (!userId) return null;
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/goalNumber/user/${userId}`,
+        );
+
+        if (response.status === 404) {
+          setGoalUser(null);
+          return null;
+        }
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar a meta do usuário.");
+        }
+
+        const data = await response.json();
+
+        setGoalUser(data);
+
+        return data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    },
+    [setGoalUser],
+  );
+
   return {
     token,
     postDelete,
@@ -602,5 +642,6 @@ export function useRequisicoes({ post, like, setLike }) {
     getCommentLikesCount,
     getLikesComments,
     logout,
+    goalUserLogged,
   };
 }
