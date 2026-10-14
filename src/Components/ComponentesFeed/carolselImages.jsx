@@ -1,23 +1,17 @@
+
 import { useEffect, useRef, useState } from "react";
 
-export function CarouselImages({
-  images = [],
-  imageClassName = "block w-full h-auto max-h-[35vw] object-contain",
-}) {
-
-    
+export function CarouselImages({ images = [] }) {
   const imagesContainerRef = useRef(null);
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
     setCurrentImage(0);
 
-    if (imagesContainerRef.current) {
-      imagesContainerRef.current.scrollTo({
-        left: 0,
-        behavior: "instant",
-      });
-    }
+    imagesContainerRef.current?.scrollTo({
+      left: 0,
+      behavior: "instant",
+    });
   }, [images]);
 
   if (!Array.isArray(images) || images.length === 0) {
@@ -49,26 +43,30 @@ export function CarouselImages({
 
           if (!container.clientWidth) return;
 
+          const index = Math.round(
+            container.scrollLeft / container.clientWidth
+          );
+
           setCurrentImage(
-            Math.round(container.scrollLeft / container.clientWidth),
+            Math.max(0, Math.min(index, images.length - 1))
           );
         }}
       >
         {images.map((url, index) => (
           <div
             key={`${url}-${index}`}
-            className="w-full flex-none snap-start flex items-center justify-center"
+            className="w-full flex-none snap-start my-auto"
           >
             <img
               src={url}
               alt={`Imagem ${index + 1} do post`}
-              className={imageClassName}
+              className="block w-full h-auto max-h-[75vh] xl:max-h-[35vw] object-contain"
             />
           </div>
         ))}
       </div>
 
-      {/* Seta anterior */}
+      {/* Seta para a imagem anterior */}
       {currentImage > 0 && (
         <button
           type="button"
@@ -87,7 +85,7 @@ export function CarouselImages({
         </button>
       )}
 
-      {/* Próxima imagem */}
+      {/* Seta para a próxima imagem */}
       {currentImage < images.length - 1 && (
         <button
           type="button"
@@ -106,7 +104,7 @@ export function CarouselImages({
         </button>
       )}
 
-      {/* Contador */}
+      {/* Contador de imagens */}
       {images.length > 1 && (
         <div
           className="absolute bottom-3 left-1/2 -translate-x-1/2

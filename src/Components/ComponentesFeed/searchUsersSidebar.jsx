@@ -81,7 +81,7 @@ export function SearchUsersSidebar() {
 
 
   return (
-    <Div>
+    <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <section>
         <div className="flex items-center gap-2 text-wine">
           <Group />
@@ -105,9 +105,9 @@ export function SearchUsersSidebar() {
       const followBack = getFollowBack(users.id);
               const dataFilterFollowers = filterFollowers(paramsId);
 
-              const data = dataFilterFollowers.find(
-                (c) => c.userId === user.id,
-              );
+const data = dataFilterFollowers.find(
+  (c) => c.userId === users.id,
+);
 
               return (
                 <li

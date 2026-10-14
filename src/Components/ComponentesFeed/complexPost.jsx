@@ -252,6 +252,7 @@ export function ComplexPost() {
                 : "bg-wine/70 text-white/60"
             }`}
             disabled={
+              (postModified === "citation" && !valuePostsCitation?.trim()) ||
               (!styleCardActive &&
                 valuePostsCitation &&
                 ebookSaved.length > 0) ||

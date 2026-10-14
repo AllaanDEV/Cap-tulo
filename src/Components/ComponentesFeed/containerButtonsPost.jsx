@@ -8,26 +8,32 @@ import AppContext from "../context";
 
 const Save = save;
 
-export function ContainerButtonsPost({ post, openComments, className }) {
+
+  export function ContainerButtonsPost({ post, openComments, className }) {
   const {
     like,
     setLike,
-    getPostsSaved,
     isLiked,
     handleLike,
     liking,
     postSaved,
   } = useContext(AppContext);
 
-  const { Saves, user, LikeButton } = useRequisicoes({ post, like, setLike });
+  const { Saves, user, LikeButton } = useRequisicoes({
+    post,
+    like,
+    setLike,
+  });
 
   const liked = isLiked(post?.id, user?.id);
 
-  const saved = postSaved?.some((item) => item?.post?.id === post?.id);
+  const saved = postSaved?.some(
+    (item) => item?.post?.id === post?.id
+  );
 
   return (
-    <div className={`flex justify-between px-5  ${className}`}>
-      <div className="flex justify-baseline gap-5 sm:justify-between w-55  items-center">
+    <div className={`flex justify-between px-5 ${className}`}>
+      <div className="flex justify-baseline gap-5 sm:justify-between w-55 items-center">
         <div>
           <ButtonPost
             onClick={() => handleLike(post.id, LikeButton)}
@@ -42,23 +48,26 @@ export function ContainerButtonsPost({ post, openComments, className }) {
             <p className="text-sm">{post?.likes}</p>
           </ButtonPost>
         </div>
+
         <div>
           <ButtonPost onClick={openComments}>
-            <Comment></Comment>
+            <Comment />
             {post?.comments?.length}
           </ButtonPost>
-          {/* <p className="text-sm"></p> */}
         </div>
+
         <div>
           <ButtonPost>
-            <Share></Share>
+            <Share />
             <span className="hidden sm:block">Compartilhar</span>
           </ButtonPost>
-          <p className="text-sm"></p>
         </div>
       </div>
+
       <button
-        className={saved ? "text-yellow-600" : "text-gray hover:text-yellow-600"}
+        className={
+          saved ? "text-yellow-600" : "text-gray hover:text-yellow-600"
+        }
         onClick={() => Saves(saved ? "delete" : "saved", post)}
       >
         <Save filled={saved} />
@@ -66,3 +75,4 @@ export function ContainerButtonsPost({ post, openComments, className }) {
     </div>
   );
 }
+

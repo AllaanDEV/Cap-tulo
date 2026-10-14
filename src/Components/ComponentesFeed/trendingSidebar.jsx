@@ -16,7 +16,7 @@ export function TrendingSideBar() {
 
 
   return (
-    <Div className="w-full sm:w-auto sm:mt-0">
+    <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <div className="flex gap-2 items-center text-wine w-full">
         <Trending></Trending>
         <p className=" font-fraunce text-xl">Em alta esta semana</p>

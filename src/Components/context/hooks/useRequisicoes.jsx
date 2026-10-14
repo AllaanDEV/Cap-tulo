@@ -207,62 +207,77 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
-  const LikeButton = async () => {
-    const likesPost = await fetch(
-      `http://localhost:3000/api/posts/${post.id}/like`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
+ const LikeButton = async () => {
+  const likesPost = await fetch(
+    `http://localhost:3000/api/posts/${post.id}/like`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({
+        userId: user.id,
+      }),
+    },
+  );
 
-    if (likesPost.ok) {
-      await likesGet(post);
+  if (!likesPost.ok) {
+    throw new Error("Erro ao atualizar like");
+  }
+
+  const data = await likesPost.json();
+
+  // Atualiza a lista global de likes.
+  await likesGet();
+
+  // Atualiza o contador do post aberto na dialog.
+  setDataPostFocus((prev) => {
+    if (!prev || prev.id !== data.post.id) {
+      return prev;
     }
 
-    return likesPost;
-  };
+    return {
+      ...prev,
+      likes: data.post.likes,
+    };
+  });
 
-  const likesGet = async (post) => {
-    const response = await fetch("http://localhost:3000/api/posts/likes");
-    const data = await response.json();
+  return likesPost;
+};
 
-    setLike(data);
 
-    setEditRequisicao((previousValue) => !previousValue);
+const likesGet = async (post) => {
+  const response = await fetch(
+    "http://localhost:3000/api/posts/likes"
+  );
 
-    if (!post) {
-      return;
-    }
+  const data = await response.json();
 
-    if (response.ok) {
-      const likesDoPost = data.filter(
-        (like) => like.postId === post.id && like.validation === true,
-      );
+  if (!response.ok) {
+    throw new Error("Erro ao buscar likes");
+  }
 
-      const updatedPost = {
-        ...post,
-        likes: likesDoPost.length,
-      };
+  setLike(data);
+  setEditRequisicao((previousValue) => !previousValue);
 
-      const postsSaved = await getPostsSaved();
-
-      const validationPostSaved = postsSaved.find(
-        (p) => p?.post?.id === post?.id,
-      );
-
-      if (validationPostSaved) {
-        await Saves("update", updatedPost);
-      }
-    }
+  if (!post) {
     return data;
-  };
+  }
+
+  // Mantém a atualização dos posts salvos.
+  const postsSaved = await getPostsSaved();
+
+  const validationPostSaved = postsSaved.find(
+    (item) => item?.post?.id === post.id
+  );
+
+  if (validationPostSaved) {
+    await Saves("update", post);
+  }
+
+  return data;
+};
 
   const fetchProfile = async () => {
     try {
@@ -399,43 +414,43 @@ export function useRequisicoes({ post, like, setLike }) {
     }
   };
 
- const postNumberGet = async (paramsId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/goalNumber/${paramsId}`
-    );
+  const postNumberGet = async (paramsId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/goalNumber/${paramsId}`,
+      );
 
-    if (response.status === 404) {
-      setGoal(null);
+      if (response.status === 404) {
+        setGoal(null);
 
-      if (paramsId === user?.id) {
-        setGoalUser(null);
+        if (paramsId === user?.id) {
+          setGoalUser(null);
+        }
+
+        return null;
       }
 
-      return null;
+      if (!response.ok) {
+        throw new Error("Erro ao buscar a meta.");
+      }
+
+      const data = await response.json();
+
+      setGoal(data);
+
+      if (paramsId === user?.id) {
+        setGoalUser(data);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Não foi possível realizar a busca da meta, tente novamente mais tarde.",
+      );
     }
-
-    if (!response.ok) {
-      throw new Error("Erro ao buscar a meta.");
-    }
-
-    const data = await response.json();
-
-    setGoal(data);
-    
-    if (paramsId === user?.id) {
-      setGoalUser(data);
-    }
-
-    return data;
-  } catch (error) {
-    console.error(error);
-
-    alert(
-      "Não foi possível realizar a busca da meta, tente novamente mais tarde."
-    );
-  }
-};
+  };
 
   const myFollowers = followers.filter((u) => u.userId === user.id);
 

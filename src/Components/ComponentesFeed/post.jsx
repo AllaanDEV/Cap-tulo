@@ -116,19 +116,6 @@ export const Post = memo(function Post({ post }) {
     return () => clearTimeout(timer);
   }, [showComments]);
 
-  const changeImage = (index) => {
-    const container = imagesContainerRef.current;
-
-    if (!container) return;
-
-    container.scrollTo({
-      left: container.clientWidth * index,
-      behavior: "smooth",
-    });
-
-    setCurrentImage(index);
-  };
-
   useEffect(() => {
     setCurrentImage(0);
     imagesContainerRef.current?.scrollTo({
@@ -139,7 +126,7 @@ export const Post = memo(function Post({ post }) {
 
   return (
     <>
-      <Div className="sm:max-w-[50vw] animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
+      <Div className=" animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
         <section className="flex flex-col gap-2">
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post} />
@@ -185,10 +172,7 @@ export const Post = memo(function Post({ post }) {
                   className="w-full object-contain sm:max-h-[35vw] "
                 />
               ) : Array.isArray(post?.midia) ? (
-                <CarouselImages
-                  images={post.midia}
-                  imageClassName="block w-full h-auto max-h-[35vw] object-contain"
-                />
+                 <CarouselImages images={post.midia} />
               ) : null}
             </Info>
           )}

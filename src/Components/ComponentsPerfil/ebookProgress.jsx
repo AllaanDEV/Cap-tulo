@@ -15,6 +15,7 @@ export function EbookProgress({ book, className, ...props }) {
     disabledCardActive,
     publications,
     PostModified,
+    publication,
   } = useContext(AppContext);
 
   const { user } = useRequisicoes({});
@@ -36,6 +37,16 @@ export function EbookProgress({ book, className, ...props }) {
 
   // const validationStyle= publications?.find((publication) => publication.postModified.ebook.ebook.volumeInfo.title === book.ebook.volumeInfo.title)
 
+  const styleDisable = publication
+    .filter((postUser) => postUser.authorId === user.id)
+    .filter((postFeedback) => postFeedback.type === "feedback")
+    .some(
+      (bookSaved) =>
+        bookSaved.postModified.ebook.ebook.volumeInfo.title ===
+        book.ebook.volumeInfo.title,
+    );
+  console.log("STYLEDISLABE", styleDisable);
+
   return (
     <ContainerEbooks
       styleActive={
@@ -44,6 +55,7 @@ export function EbookProgress({ book, className, ...props }) {
           ? "bg-wine/20 border-wine"
           : null
       }
+      styleDisable={styleDisable}
       onClick={() =>
         locationPatch
           ? PostModified === "resenha"
@@ -54,6 +66,7 @@ export function EbookProgress({ book, className, ...props }) {
               : setStyleCardActive(book)
           : null
       }
+
       book={book}
       className={className}
       {...props}
