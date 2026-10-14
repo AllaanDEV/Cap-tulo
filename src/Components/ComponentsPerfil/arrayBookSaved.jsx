@@ -9,24 +9,39 @@ import { Div } from "../ComponentesFeed/div";
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
   const localiton = useLocation();
-  const { ebookSaved, setStyleCardActive } = useContext(AppContext);
-  const { stylePatchFeed, stylePatchProfile, getBookSave } = useRequisicoes({});
+  const { ebookSaved, setStyleCardActive, publication, postModified } =
+    useContext(AppContext);
+  const { stylePatchFeed, stylePatchProfile, getBookSave, user } =
+    useRequisicoes({});
 
   const Ebook = ebook;
-
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
     : " grid-cols-1 sm:grid-cols-2";
 
   useEffect(() => {
-    setStyleCardActive(ebookSaved[0] ?? null);
-  }, []);
+    if (postModified === "feedback") {
+      const validationPost = ebookSaved.find(
+        (bookSaved) =>
+          !publication.some(
+            (post) =>
+              post.authorId === user.id &&
+              post.type === "feedback" &&
+              post.postModified?.ebook?.ebook?.id === bookSaved.ebook?.id,
+          ),
+      );
 
+      setStyleCardActive(validationPost ?? null);
+    } else {
+      setStyleCardActive(ebookSaved[0] ?? null);
+    }
+  }, [postModified, ebookSaved, publication, user.id]);
   const [itemsVisible, setItemsVisible] = useState(4);
 
   const hasMore = itemsVisible < ebookSaved.length;
   const canShowLess = itemsVisible > 4;
+
   return (
     <Div>
       <div className="flex items-center justify-between">
@@ -64,7 +79,7 @@ export function ArrayBookSaved({ profile }) {
         <div className="flex items-center gap-1">
           {stylePatchProfile || stylePatchFeed ? (
             <div className="mb-3 flex gap-2 items-center">
-              <span >Salve um livro!</span>
+              <span>Salve um livro!</span>
 
               <Link
                 to="/ebooks"
@@ -79,12 +94,9 @@ export function ArrayBookSaved({ profile }) {
           )}
         </div>
       ) : (
-        <ul
-          className={`grid grid-rows-1  gap-3 w-full ${styleFeed}`}
-        >
+        <ul className={`grid grid-rows-1  gap-3 w-full ${styleFeed}`}>
           {Array.isArray(ebookSaved) &&
             ebookSaved.slice(0, itemsVisible).map((bookSave) => {
-              console.log("id", ebookSaved);
               return (
                 <li key={bookSave.ebook.etag}>
                   <EbookProgress book={bookSave} />

@@ -29,7 +29,7 @@ export function DialogPostFocus() {
     like,
   } = useContext(AppContext);
 
-  const { user, nameIcon, photoValueFeed, likesGet } = useRequisicoes({
+  const { user, nameIcon, photoValueFeed, likesGet} = useRequisicoes({
     setLike,
     like,
   });
@@ -65,9 +65,9 @@ export function DialogPostFocus() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    likesGet();
-  }, []);
+  // useEffect(() => {
+  //   likesGet();
+  // }, []);
 
   const ebookProgressFocus = ebookSaved
     .filter((ebook) => ebook.userId === user.id)
@@ -149,7 +149,6 @@ export function DialogPostFocus() {
                   <CarouselImages
                     key={dataPostFocus?.id}
                     images={dataPostFocus.midia}
-                    imageClassName="block w-full h-auto max-h-[35vw] object-contain"
                   />
                 ) : null}
               </Info>

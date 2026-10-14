@@ -6,7 +6,7 @@ import { XSavedEbook, Star } from "../svgCode";
 import { useLocation, useParams } from "react-router";
 import { ArrayStars } from "../ComponentesFeed/arrayStars";
 
-export function  ContainerEbooks({
+export function ContainerEbooks({
   children,
   styleActive,
   className,
@@ -16,6 +16,8 @@ export function  ContainerEbooks({
   thumbnail,
   starsEbook,
   starsNumber,
+  styleDisable,
+  onClick,
   ...props
 }) {
   const {
@@ -54,14 +56,43 @@ export function  ContainerEbooks({
       ? ""
       : "hover:-translate-y-1 hover:shadow-lg";
 
-
   const postsFeedbacks = publication.find((p) => p.type === "feedback");
-  
+
+console.log("VAAAAAAAAAAAAPO",{
+  styleDisable,
+  postModified,
+  pathname: location.pathname,
+  userId: user.id,
+});
   return (
     <div
-      className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${(containerModified === true || location.pathname === `/perfil/`) && location.pathname === `/feed/${user.id}` ? "" : "hover:-translate-y-1 hover:shadow-lg"} group relative ${styleActive} ${className}`}
       {...props}
+      onClick={(event) => {
+        if (
+          styleDisable &&
+          postModified === "feedback" &&
+          location.pathname === `/feed/${user.id}`
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+
+        onClick?.(event);
+      }}
+      className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${
+        containerModified === true || location.pathname === `/perfil/`
+          ? ""
+          : "hover:-translate-y-1 hover:shadow-lg"
+      } ${
+        styleDisable &&
+        postModified === "feedback" &&
+        location.pathname === `/feed/${user.id}`
+          ? "bg-gray/50"
+          : ""
+      } group relative ${styleActive} ${className}`}
     >
+
       {(location.pathname === `/feed/${user.id}` ||
         location.pathname === `/perfil/${user.id}`) &&
       containerModified === false ? (

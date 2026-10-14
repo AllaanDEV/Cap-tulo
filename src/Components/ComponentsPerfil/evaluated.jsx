@@ -1,12 +1,15 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Div } from "../ComponentesFeed/div";
 import AppContext from "../context";
 import { useParams } from "react-router";
 import { ArrayStars } from "../ComponentesFeed/arrayStars";
 import { RightArrow } from "../svgCode";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function Evaluated() {
   const { publication } = useContext(AppContext);
+  const { arrayFeedbacksEbooks } = useRequisicoes({});
+
   const { id: paramsId } = useParams();
 
   const postFeedback = publication
@@ -19,6 +22,10 @@ export function Evaluated() {
   const hasMore = itemsVisible < postFeedback.length;
   const canShowLess = itemsVisible > 5;
 
+  useEffect(() => {
+    arrayFeedbacksEbooks();
+  }, []);
+  
   return (
     <>
       {postFeedback.length > 0 && (
@@ -50,13 +57,10 @@ export function Evaluated() {
             )}
           </div>
 
-      
-
           <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-8 mt-4">
             {postFeedback.slice(0, itemsVisible).map((ebook) => {
               return (
                 <li key={ebook.id} className="flex flex-col min-w-0">
-      
                   <div className="rounded-lg aspect-[3/4] overflow-hidden group w-full">
                     <img
                       src={
@@ -75,7 +79,6 @@ export function Evaluated() {
                   "
                     />
                   </div>
-
 
                   <div className="p-1 flex flex-col flex-1 min-h-0">
                     <span>

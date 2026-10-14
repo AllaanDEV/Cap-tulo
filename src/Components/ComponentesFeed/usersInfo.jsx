@@ -4,24 +4,42 @@ import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { TimeAgo } from "./timeAgo";
-import { EditProfile } from "../ComponentsPerfil/editProfile";
 
-export function UsersInfo({ post, users, following, followerUserId, className }) {
-  const { user, nameIcon, fetchProfile, photoValueFeed } = useRequisicoes({});
-  const { followers, usersList, editRequisicao} = useContext(AppContext);
+export function UsersInfo({
+  post,
+  users,
+  following,
+  followerUserId,
+  className,
+}) {
+  const { user, nameIcon, fetchProfile, photoValueFeed } =
+    useRequisicoes({});
+
+  const { followers, usersList, editRequisicao } =
+    useContext(AppContext);
 
   useEffect(() => {
     fetchProfile();
-    // userUP();
   }, [editRequisicao]);
 
   const followingDataUser = usersList.find(
-    (dataFollowing) => dataFollowing?.id === following?.following,
+    (dataFollowing) =>
+      dataFollowing?.id === following?.following,
   );
 
   const profile = {
-    id: post?.authorId || users?.id || followingDataUser?.id || user?.id,
-    name: post?.author || users?.name || followingDataUser?.name || user?.name,
+    id:
+      post?.authorId ||
+      users?.id ||
+      followingDataUser?.id ||
+      user?.id,
+
+    name:
+      post?.author ||
+      users?.name ||
+      followingDataUser?.name ||
+      user?.name,
+
     userName:
       post?.userName ||
       users?.userName ||
@@ -29,23 +47,32 @@ export function UsersInfo({ post, users, following, followerUserId, className })
       user?.userName,
   };
 
-  const seguindoProfileId = [...followers]
-    .reverse()
-    .find((f) => f.following === profile.id);
-
-  const photo = (photoValueFeed || []).find(
-    (photo) => photo.userId == profile.id,
+  // Verifica se você segue o usuário do card.
+  const isFollowing = followers.some(
+    (f) =>
+      f.userId === user?.id &&
+      f.following === profile.id,
   );
 
-  // const myS = followers.filter((u) => u.userId === user.id);
+  // Verifica se o usuário do card segue você.
+  const followsYou = followers.some(
+    (f) =>
+      f.userId === profile.id &&
+      f.following === user?.id,
+  );
 
-  // const seguindo = publication.filter((f) => {
-  //   return myS.some((u) => u.following === f.authorId);
-  // });
+  const photo = (photoValueFeed || []).find(
+    (photo) => photo.userId === profile.id,
+  );
 
   return (
-    <div className={`flex gap-2 items-start justify-center ${className}`}>
-      <PerfilIcon to={`/perfil/${profile?.id}`} state={{ profile }}>
+    <div
+      className={`flex gap-2 items-start justify-center ${className || ""}`}
+    >
+      <PerfilIcon
+        to={`/perfil/${profile.id}`}
+        state={{ profile }}
+      >
         {photo?.midiaIcon ? (
           <ImgPerfil src={photo.midiaIcon} />
         ) : (
@@ -63,7 +90,10 @@ export function UsersInfo({ post, users, following, followerUserId, className })
             <p className="text-gray">
               resenhou
               <span className="text-wine mx-1">
-                {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+                {
+                  post?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.title
+                }
               </span>
             </p>
           )}
@@ -72,7 +102,10 @@ export function UsersInfo({ post, users, following, followerUserId, className })
             <p className="text-gray">
               avaliou
               <span className="text-wine mx-1">
-                {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+                {
+                  post?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.title
+                }
               </span>
             </p>
           )}
@@ -81,23 +114,35 @@ export function UsersInfo({ post, users, following, followerUserId, className })
             <p className="text-gray">
               fez uma citação
               <span className="text-wine mx-1">
-                {post?.postModified?.ebook?.ebook?.volumeInfo?.title}
+                {
+                  post?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.title
+                }
               </span>
             </p>
           )}
 
-          {seguindoProfileId?.userId == user?.id ? (
-            <span className="text-gray"> · seguindo</span>
-          ) : (
-            followerUserId && <span className="text-gray"> · segue você</span>
+          {profile.id !== user?.id && (
+            isFollowing ? (
+              <span className="text-gray">
+                · seguindo
+              </span>
+            ) : followsYou ? (
+              <span className="text-gray">
+                · segue você
+              </span>
+            ) : null
           )}
         </div>
 
         <div className="flex items-center gap-1">
-          <p className="text-gray text-xs">@{profile.userName}</p>
+          <p className="text-gray text-xs">
+            @{profile.userName}
+          </p>
+
           {post?.createdAt && (
             <>
-              <span className="text-gray"> · </span>
+              <span className="text-gray">·</span>
               <TimeAgo
                 date={post.createdAt}
                 className="text-xs text-gray ml-1"
