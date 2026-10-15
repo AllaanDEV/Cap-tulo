@@ -404,6 +404,48 @@ tl.set(paths, {
 
 const [deletePhoto, setDeletePhoto] = useState(false);
 const [feedFilter, setFeedFilter] = useState("todos");
+
+
+const [themeOn, setThemeOn]=useState()
+
+const themes = [
+  {
+    name: "",
+    primary: "#fffbf7",
+    background: "#f5efe6",
+    text: "#000000",
+    gray: "#a28f7a",
+  },
+  {
+    name: "cocoa",
+    primary: "#342721",
+    background: "#342721",
+    text: "#ffffff",
+    gray: "#a28f7a",
+  },
+  {
+    name: "cocoaNoir",
+    primary: "#2c1e25",
+    background: "#2c1e25",
+    text: "#ffffff",
+    gray: "#a28f7a",
+  },
+  {
+    name: "noir",
+    primary: "#000000",
+    background: "#000000",
+    text: "#ffffff",
+    gray: "#a28f7a",
+  },
+  {
+    name: "imperal",
+    primary: "#000f08",
+    background: "#000f08",
+    text: "#ffffff",
+    gray: "#a28f7a",
+  },
+];
+
   return (
     <AppContext.Provider
       value={{
@@ -528,7 +570,7 @@ const [feedFilter, setFeedFilter] = useState("todos");
         toggleDialog,
         ScrollToTop,
         clearEditor,
-        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto, feedFilter, setFeedFilter, goalUser, setGoalUser
+        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto, feedFilter, setFeedFilter, goalUser, setGoalUser, themeOn, setThemeOn, themes
       }}
     >
          <div

@@ -32,7 +32,7 @@ export function CommentsList({ post }) {
     handleLike,
     liking,
     like,
-    setLike,
+    setLike, themeOn
   } = useContext(AppContext);
 
   const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
@@ -125,7 +125,7 @@ export function CommentsList({ post }) {
               name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full flex placeholder:items-center px-5 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md"
+              className={` w-full flex placeholder:items-center px-5 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md placeholder:my-auto ${ themeOn ? "text-black" : "text-white"}`}
               placeholder="Dê a sua opinião!"
             />
 
@@ -203,16 +203,16 @@ export function CommentsList({ post }) {
                   <div className="pl-4 pr-2 pb-5 pt-1 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2 items-center">
-                        <h3>{c.author}</h3>
+                        <h3 className={`${ themeOn ? "text-black" : "text-white"}`}>{c.author}</h3>
                         <span className="text-gray text-xs">@{c.userName}</span>
                       </div>
 
-                      <details className="flex flex-col">
+                      <details className= {` flex flex-col ${ themeOn ? "text-black" : "text-white"}`}>
                         <summary className="list-none marker:hidden">
                           <Icon />
                         </summary>
 
-                        <div className="bg-bermuda absolute px-2 rounded-sm flex flex-col">
+                        <div className="bg-border absolute px-2 rounded-sm flex flex-col">
                           <button
                             type="button"
                             className="hover:text-wine"
@@ -238,7 +238,7 @@ export function CommentsList({ post }) {
                       </details>
                     </div>
 
-                    <p className="pr-20">{c.text}</p>
+                    <p className= {` pr-20 ${ themeOn ? "text-black" : "text-white"}`}>{c.text}</p>
                   </div>
                   <span className="absolute bottom-[-20px] left-15 text-gray text-xs flex">
                     <ButtonPost

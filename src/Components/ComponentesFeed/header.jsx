@@ -5,13 +5,13 @@ import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
 import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 import { useLocation, useNavigate, useParams } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { Vector } from "../svgCode";
+import { Theme, Vector } from "../svgCode";
 
 export function Header() {
   const { id: profileId } = useParams();
@@ -30,6 +30,7 @@ export function Header() {
     postId,
     editRequisicao,
     followerPost,
+setThemeOn, themes
   } = useContext(AppContext);
 
   const { nameIcon, user, fetchProfile, photoValueFeed, postFollowers } =
@@ -81,12 +82,80 @@ export function Header() {
     }
   };
 
+  // const html = document.querySelector("html");
+
+ const [numberTheme, setNumberTheme] = useState(0);
+
+// Aplica as cores e a classe do tema
+const applyTheme = (index) => {
+  const html = document.documentElement;
+  const theme = themes[index];
+
+  if (!theme) return;
+
+  html.classList.remove(
+    "cocoa",
+    "cocoaNoir",
+    "noir",
+    "imperal"
+  );
+
+  if (theme.name) {
+    html.classList.add(theme.name);
+  }
+
+  html.style.removeProperty("--color-border");
+  html.style.removeProperty("--color-hover");
+
+  html.style.setProperty("--color-primary", theme.primary);
+  html.style.setProperty("--color-background", theme.background);
+  html.style.setProperty("--color-gray", theme.gray);
+
+  html.style.color = theme.text;
+
+  setNumberTheme(index);
+  setThemeOn(index === 0);
+};
+
+// Restaura o tema salvo para o usuário atual
+useEffect(() => {
+  if (!user?.id || !themes?.length) return;
+
+  const key = `theme-user-${user.id}`;
+  const savedTheme = localStorage.getItem(key);
+  const index = savedTheme === null ? 0 : Number(savedTheme);
+
+  const validIndex =
+    Number.isInteger(index) &&
+    index >= 0 &&
+    index < themes.length;
+
+  applyTheme(validIndex ? index : 0);
+}, [user?.id, themes]);
+
+// Alterna o tema e salva a preferência
+const changeTheme = () => {
+  if (!user?.id || !themes?.length) return;
+
+  const next = (numberTheme + 1) % themes.length;
+
+  applyTheme(next);
+
+  localStorage.setItem(
+    `theme-user-${user.id}`,
+    String(next)
+  );
+};
+
   return (
     <header className="border border-border p-2 fixed w-full bg-border/80 z-10 opacity-95">
       <nav className="flex items-center gap-3 justify-between py-1 sm:px-10">
         <div className="flex gap-2 items-center">
-          <img src={logo} className="w-auto h-10"></img>
-          {/* <Vector></Vector> */}
+          <img src={logo} className="w-auto h-10 hidden sm:block"></img>
+          <div className="sm:hidden">
+            <Vector></Vector>
+          </div>
+
           <div className="relative">
             <div className="">
               <img
@@ -122,6 +191,10 @@ export function Header() {
               Publicar
             </button>
           </div> */}
+
+          <button className="text-black cursor-pointer" onClick={changeTheme}>
+            <Theme></Theme>
+          </button>
 
           <button>
             <img src={notificationIcon} className="w-auto h-6"></img>

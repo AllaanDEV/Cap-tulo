@@ -9,7 +9,7 @@ import AppContext from "../context";
 export function Ebook(ebook) {
   const SaveIcon = save;
 
-  const { ebookSaved, setEbookSaved } = useContext(AppContext);
+  const { ebookSaved, setEbookSaved, themeOn } = useContext(AppContext);
 
   const { token, getBookSave, user } = useRequisicoes({});
 
@@ -40,8 +40,11 @@ export function Ebook(ebook) {
     (savedBook) => savedBook?.ebook?.id === ebook?.ebook?.id,
   );
 
+  const style= themeOn ? "text-[#995d43]" : "text-[#765242]"
   return (
-    <article className="overflow-hidden rounded-lg border border-[#e1d1ba] bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <article
+      className={`overflow-hidden rounded-lg border  bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg ${themeOn ? "bg-[#fffaf3] border-[#e1d1ba]" : " bg-border border-gray"}`}
+    >
       <div className="relative overflow-hidden rounded-md bg-[#f1eadf]">
         <img
           src={ebook.ebook.volumeInfo?.imageLinks?.thumbnail}
@@ -59,10 +62,12 @@ export function Ebook(ebook) {
       <div className="pt-4">
         <h4 className="font-serif text-xl font-semibold">{ebook.title}</h4>
 
-        <p className="mt-1 font-serif text-sm italic text-[#995d43]">
+        <p
+          className={`mt-1 font-serif text-sm italic ${style}`}
+        >
           {ebook.ebook.volumeInfo.title}
         </p>
-        <p className="mt-1 mb-5 font-serif text-[12px] italic text-[#995d43]/60">
+        <p className= {`mt-1 mb-5 font-serif text-[12px] italic ${themeOn ? "text-[#995d43]/60" : "text-[#765242]/80"}`}>
           {ebook.ebook.volumeInfo.subtitle}
         </p>
 

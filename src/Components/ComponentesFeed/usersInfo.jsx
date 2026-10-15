@@ -15,7 +15,7 @@ export function UsersInfo({
   const { user, nameIcon, fetchProfile, photoValueFeed } =
     useRequisicoes({});
 
-  const { followers, usersList, editRequisicao } =
+  const { followers, usersList, editRequisicao,  themeOn } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function UsersInfo({
 
       <div className="flex flex-col">
         <div className="flex items-start gap-1 text-sm">
-          <span>{profile.name}</span>
+          <span className={`${ themeOn ? "text-black" : "text-white"}`}>{profile.name}</span>
 
           {post?.type === "resenha" && (
             <p className="text-gray">

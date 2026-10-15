@@ -60,7 +60,7 @@ export function ArrayPost() {
         </span>
       ) : followerPost !== "saved" ? (
         <div className="mx-auto items-center flex flex-col sm:flex-row text-center gap-1 text-sm">
-          <span>Siga outros leitores!</span>
+          <span className="text-wine">Siga outros leitores!</span>
 
           <Link className="flex gap-1 items-center text-start w-40  bg-wine/80 hover:bg-wine cursor-pointer rounded-md px-4 py-2 transition duration-400 xl:hidden">
             <Group></Group>

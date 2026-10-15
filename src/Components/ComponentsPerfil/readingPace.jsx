@@ -155,7 +155,7 @@ const postNumber = async () => {
                       <Less />
                     </button>
 
-                    <span className="font-fraunce text-xl text-black">
+                    <span className="font-fraunce text-xl text-gray">
                       {goalDraft}
                     </span>
 

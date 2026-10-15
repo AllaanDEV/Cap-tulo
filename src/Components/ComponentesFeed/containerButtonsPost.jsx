@@ -16,7 +16,7 @@ const Save = save;
     isLiked,
     handleLike,
     liking,
-    postSaved,
+    postSaved, themeOn
   } = useContext(AppContext);
 
   const { Saves, user, LikeButton } = useRequisicoes({
@@ -33,7 +33,7 @@ const Save = save;
 
   return (
     <div className={`flex justify-between px-5 ${className}`}>
-      <div className="flex justify-baseline gap-5 sm:justify-between w-55 items-center">
+      <div className= {`${ themeOn ? "text-black" : "text-white"} flex justify-baseline gap-5 sm:justify-between w-55 items-center`}>
         <div>
           <ButtonPost
             onClick={() => handleLike(post.id, LikeButton)}
