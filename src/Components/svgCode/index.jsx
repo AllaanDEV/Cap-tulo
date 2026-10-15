@@ -214,29 +214,27 @@ export const Share = () => {
 
 export const save = ({ filled = false, className = "", ...props }) => {
   return (
-  <svg
-{...props}
+    <svg
+      {...props}
       className={className}
-  xmlns="http://www.w3.org/2000/svg"
-  width="20"
-  height="20"
-  viewBox="0 0 24 24"
-   fill={filled ? "currentColor" : "none"}
-  stroke="currentColor"
-  stroke-width="1.8"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  class="lucide lucide-bookmark"
-  aria-hidden="true"
-  data-id="element-490"
-  data-mp="285q27ogco1c8"
->
-  <path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path>
-</svg>
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-bookmark"
+      aria-hidden="true"
+      data-id="element-490"
+      data-mp="285q27ogco1c8"
+    >
+      <path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path>
+    </svg>
   );
 };
-
-
 
 export const House = () => {
   return (
@@ -507,8 +505,8 @@ export const XSavedEbook = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+      width={size ? size : "1em"}
+   height={size ? size : "1em"}
       viewBox="0 0 24 24"
     >
       <title>x</title>
@@ -874,8 +872,8 @@ export const Menu = () => {
 export const Vector = () => {
   return (
     <svg
-      width="2em"
-      height="2em"
+      width="1.5em"
+      height="1.5em"
       viewBox="0 0 1024 1210"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -924,6 +922,26 @@ export const AnimationTransiton = () => {
         stroke="var(--color-wine)"
         stroke-width={`${width}`}
         stroke-linecap="round"
+      />
+    </svg>
+  );
+};
+
+export const Theme = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.5em"
+      height="1.5em"
+      viewBox="0 0 48 48"
+    >
+      <title>theme-store</title>
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M41.4 26.829a3.62 3.62 0 0 0 .699-4.142c-1.356-2.795-3.577-6.44-6.936-9.858a33.5 33.5 0 0 0-9.932-7.004c-1.366-.632-2.98-.32-4.045.744L9.172 18.583a3.62 3.62 0 0 0 0 5.12l5.047 5.047l-7.545 7.544c-1.36 1.36-1.56 3.598-.273 5.027a3.55 3.55 0 0 0 5.155.139l7.686-7.687l5.048 5.047a3.62 3.62 0 0 0 5.119 0zM13.489 14.265l20.238 20.237"
       />
     </svg>
   );

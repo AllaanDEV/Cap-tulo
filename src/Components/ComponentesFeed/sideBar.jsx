@@ -113,7 +113,7 @@ export function SideBar() {
       <div className=" flex flex-col gap-3 fixed w-80">
         <Div className="flex flex-col items-start">
           <UsersInfo></UsersInfo>
-          <Info className="grid grid-cols-3 divide-x divide-gray bg-border rounded-lg p-3">
+          <Info className="grid grid-cols-3 divide-x divide-black bg-border rounded-lg p-3">
             {stats.map((s, index) => {
               return (
                 <div

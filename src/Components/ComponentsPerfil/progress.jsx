@@ -1,11 +1,15 @@
+import { useContext } from "react";
+import AppContext from "../context";
+
 export function Progress({ book, progress, goal,className}) {
-  console.log("BOOK", book);
+const {themeOn}=useContext(AppContext)
+
   const currentProgress = book?.progress ?? progress?.progress ?? goal ?? 0;
 
   return (
     <div className={`flex flex-col gap-1 mt-auto ${className}`}>
       <div className="flex justify-between">
-        <span className="text-xs text-black/70">Progresso</span>
+        <span className= { `text-xs ${themeOn ? "text-black/70" : "text-white" }`}>Progresso</span>
 
         <span className="text-xs text-wine">{currentProgress}%</span>
       </div>

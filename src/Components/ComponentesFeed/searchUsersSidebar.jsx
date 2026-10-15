@@ -17,7 +17,7 @@ export function SearchUsersSidebar() {
     filterUsers,
     setFilterUsers,
     followers,
-    filterFollowers,
+    filterFollowers, themeOn
   } = useContext(AppContext);
 
   const location = useLocation();
@@ -126,7 +126,7 @@ const data = dataFilterFollowers.find(
             })}
           </ul>
         ) : (
-          <span className="text-black/80 flex justify-center items-center">
+          <span className= {`text-black/80 flex justify-center items-center ${ themeOn ? "text-black" : "text-white"}`}>
             Cri cri cri... 🦗🦗
           </span>
         )}

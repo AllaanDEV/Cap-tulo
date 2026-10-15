@@ -5,7 +5,7 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayEbooks() {
-  const { ebooks, setEbooks, bookSearch, searchValue } = useContext(AppContext);
+  const { ebooks, setEbooks, bookSearch, searchValue, themeOn } = useContext(AppContext);
   const { getBookSave, user} = useRequisicoes({});
 
   const [page, setPage] = useState(0);
@@ -78,7 +78,7 @@ export function ArrayEbooks() {
           onClick={() => {
             (setPage(page + 1), setAllBooks(categorias[booksContador]));
           }}
-          className="w-[60vw]"
+          className= { ` w-[40vw] ${themeOn ? "text-[#995d43]" : "text-[#765242]"}`}
         >
           Carregar mais
         </ButtonBook>

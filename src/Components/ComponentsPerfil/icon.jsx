@@ -79,6 +79,7 @@ export function Icon({ state }) {
     setLike,
     feedFilter,
     setFeedFilter,
+    themeOn,
   } = useContext(AppContext);
 
   const {
@@ -95,22 +96,21 @@ export function Icon({ state }) {
   const underlineRef = useRef(null);
   const buttonRefs = useRef([]);
 
-useLayoutEffect(() => {
-  const index = buttons.findIndex((b) => b.name === buttonFocus);
-  const button = buttonRefs.current[index];
-  const underline = underlineRef.current;
+  useLayoutEffect(() => {
+    const index = buttons.findIndex((b) => b.name === buttonFocus);
+    const button = buttonRefs.current[index];
+    const underline = underlineRef.current;
 
-  if (!button || !underline) return;
+    if (!button || !underline) return;
 
-  gsap.to(underline, {
-    x: button.offsetLeft,
-    width: button.offsetWidth,
-    duration: 0.45,
-    ease: "power3.out",
-    overwrite: true,
-  });
-}, [buttonFocus]);
-
+    gsap.to(underline, {
+      x: button.offsetLeft,
+      width: button.offsetWidth,
+      duration: 0.45,
+      ease: "power3.out",
+      overwrite: true,
+    });
+  }, [buttonFocus]);
 
   useEffect(() => {
     fetch("/api/posts")
@@ -122,16 +122,16 @@ useLayoutEffect(() => {
 
   useEffect(() => {
     fetchProfile();
-  
+
     // likesGet();
   }, [publication, editValue]);
 
-useEffect(() =>{
- window.scrollTo({
+  useEffect(() => {
+    window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-},[])
+  }, []);
 
   const bios = [
     {
@@ -166,7 +166,6 @@ useEffect(() =>{
       setFeedFilter("interacoes");
     }
   };
-
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -319,7 +318,9 @@ useEffect(() =>{
   return (
     <Container className="border border-border">
       {!listFollowersPerfil ? (
-        <section className="rounded-xs bg-primary w-[100vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw]">
+        <section
+          className={`rounded-xs bg-primary w-[100vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw] ${themeOn ? "text-black" : "text-white"}`}
+        >
           <div className="bg-wine w-full h-[60vw] max-h-60 relative  sm:h-60 sm:max-h-60 2xl:h-70 2xl:max-h-70">
             {user.id === profileId ? (
               <label className="absolute cursor-pointer w-full h-full">
@@ -367,8 +368,12 @@ useEffect(() =>{
             </div>
           </div>
 
-          <div className="flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2">
-            <div className="flex justify-end gap-2 text-black mt-5">
+          <div
+            className={`flex flex-col py-10 2xl:py-20 justify-end gap-5 text-black p-2 ${themeOn ? "text-black" : "text-white"}`}
+          >
+            <div
+              className={`flex justify-end gap-2  mt-5 ${themeOn ? "text-black" : "text-white"}`}
+            >
               <ContainerTags>
                 <img src={notificationIcon} className="w-auto h-5"></img>
               </ContainerTags>
@@ -476,7 +481,7 @@ useEffect(() =>{
                 className="absolute bottom-0 left-0 block border-t-2 border-wine pointer-events-none"
               />
             </nav>
-            
+
             <Lines></Lines>
             {feedFilter === "todos" || feedFilter === "livros" ? (
               <>

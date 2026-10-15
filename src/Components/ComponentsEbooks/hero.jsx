@@ -6,7 +6,7 @@ export function Hero() {
       </h1>
 
       <p className="mt-5 max-w-3xl text-base leading-7 text-[#785444]">
-        Editoras e apoiadores da Marginália pagam a licença de leitura para que
+        Editoras e apoiadores do Capítulo pagam a licença de leitura para que
         estes títulos fiquem abertos aos leitores da rede. Escolha um, leia no
         seu ritmo e comente com quem está lendo junto — sem custo e sem prazo de
         devolução.

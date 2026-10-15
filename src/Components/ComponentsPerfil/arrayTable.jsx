@@ -46,7 +46,7 @@ export function ArrayTable() {
             <span className="text-xs uppercase tracking-wider text-stone-500 font-medium">
               {t.name.toUpperCase()}
             </span>
-            <span className="text-2xl font-serif text-stone-800 font-semibold mt-1">
+            <span className="text-2xl font-serif text-gray font-semibold mt-1">
               {t.number}
             </span>
           </div>
