@@ -22,7 +22,7 @@ export function EditProfile() {
     editRequisicao,
     deletePhoto,
     setMidiaIcon,
-    setDeletePhoto,
+    setDeletePhoto, themeOn
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -102,7 +102,6 @@ export function EditProfile() {
 
       localStorage.setItem("user", JSON.stringify(data.user));
 
-
       return response;
     } catch (error) {
       throw new Error.json({
@@ -116,8 +115,7 @@ export function EditProfile() {
     <dialog
       ref={dialogRef}
       onCancel={openOrCloseDialog}
-      className="
-    fixed inset-0
+      className={`fixed inset-0
     m-0
     w-screen
     h-screen
@@ -126,8 +124,9 @@ export function EditProfile() {
 
     border
     border-[#e5d9c8]
-    bg-[#fffdf8]
-    text-[#2c2119]
+    bg-primary
+   
+   
     shadow-2xl
 
     backdrop:bg-black/40
@@ -139,8 +138,7 @@ scrollbar-none
     sm:max-w-2xl
     sm:h-auto
     sm:max-h-[90vh]
-    sm:rounded-2xl
-  "
+    sm:rounded-2xl ${themeOn ? " text-[#2c2119]" : "text-white"}`}
     >
       <FormEditProfile
         active={(e) => {

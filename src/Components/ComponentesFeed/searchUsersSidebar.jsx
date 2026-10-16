@@ -17,7 +17,8 @@ export function SearchUsersSidebar() {
     filterUsers,
     setFilterUsers,
     followers,
-    filterFollowers, themeOn
+    filterFollowers,
+    themeOn,
   } = useContext(AppContext);
 
   const location = useLocation();
@@ -28,7 +29,8 @@ export function SearchUsersSidebar() {
     user,
     fetchProfile,
     userUP,
-    validationFollowers, getFollowBack
+    validationFollowers,
+    getFollowBack,
   } = useRequisicoes({});
 
   const { id: paramsId } = useParams();
@@ -79,7 +81,6 @@ export function SearchUsersSidebar() {
     .filter((users) => users.id !== user.id)
     .slice(0, 5);
 
-
   return (
     <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <section>
@@ -89,12 +90,13 @@ export function SearchUsersSidebar() {
         </div>
 
         <label className="flex w-full border border-wine/50 outline-wine hover:outline rounded-full my-1">
-          <div className="relative top-2.5 left-2">
+          <div className="relative top-3 left-2">
             <Search />
           </div>
 
           <input
-            className="w-full h-full py-2 px-3 outline-none"
+            className="w-full h-full py-2 px-3 outline-none placeholder:my-auto"
+            placeholder="autores..."
             onInput={handleFilterUsers}
           />
         </label>
@@ -102,12 +104,12 @@ export function SearchUsersSidebar() {
         {usersVisible.length > 0 ? (
           <ul className="mt-2 flex flex-col gap-2">
             {usersVisible.map((users) => {
-      const followBack = getFollowBack(users.id);
+              const followBack = getFollowBack(users.id);
               const dataFilterFollowers = filterFollowers(paramsId);
 
-const data = dataFilterFollowers.find(
-  (c) => c.userId === users.id,
-);
+              const data = dataFilterFollowers.find(
+                (c) => c.userId === users.id,
+              );
 
               return (
                 <li
@@ -126,7 +128,9 @@ const data = dataFilterFollowers.find(
             })}
           </ul>
         ) : (
-          <span className= {`text-black/80 flex justify-center items-center ${ themeOn ? "text-black" : "text-white"}`}>
+          <span
+            className={`text-black/80 flex justify-center items-center ${themeOn ? "text-black" : "text-white"}`}
+          >
             Cri cri cri... 🦗🦗
           </span>
         )}

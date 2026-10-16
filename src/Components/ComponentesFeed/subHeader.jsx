@@ -61,7 +61,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
     dialogEmoji,
     setStyleCardActive,
     postModified,
-    ebookSaved,
+    ebookSaved, themeOn 
   } = useContext(AppContext);
 
   // const { getBookSave, user, newPost, stylePatchFeed, stylePatchProfile } =
@@ -181,7 +181,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
                     <button
                       key={index}
                       onClick={() => citationOpen(index)}
-                      className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"
+                      className={`hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center ${themeOn ? "text-black" : "text-white"}`}
                     >
                       <Icon size={p.size} />
                       <span className=" hidden sm:block">{p.name}</span>
@@ -193,8 +193,6 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
           ) : (
             <ComplexPost></ComplexPost>
           )}
-
-          <DialogGif></DialogGif>
         </Div>
       </section>
     </>

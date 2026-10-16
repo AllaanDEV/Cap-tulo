@@ -1,4 +1,3 @@
-
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { CommentsList } from "./commentsList";
@@ -24,7 +23,7 @@ export function DialogPostFocus() {
     themeOn,
   } = useContext(AppContext);
 
-  const { user, photoValueFeed } = useRequisicoes({
+  const { user } = useRequisicoes({
     setLike,
     like,
   });
@@ -33,6 +32,7 @@ export function DialogPostFocus() {
 
   const dialogFocus = useRef(null);
 
+  // Abre e fecha a dialog.
   useEffect(() => {
     const dialog = dialogFocus.current;
 
@@ -40,21 +40,29 @@ export function DialogPostFocus() {
 
     if (postFocus && !dialog.open) {
       dialog.showModal();
+      setIsVisible(true);
     } else if (!postFocus && dialog.open) {
+      setIsVisible(false);
       dialog.close();
     }
   }, [postFocus]);
+  
 
-  const isModifiedPost = Boolean(dataPostFocus?.type);
+  // Verifica se o post possui um tipo especial.
+  const isModifiedPost = Boolean(
+    dataPostFocus?.type?.trim()
+  );
 
+  // Verifica o progresso de leitura do livro.
   const ebookProgressFocus = ebookSaved
-    .filter((ebook) => ebook.userId === user.id)
+    .filter((ebook) => ebook.userId === user?.id)
     .find(
       (progress) =>
         progress.ebook.ebook?.id ===
-        dataPostFocus?.postModified?.ebook?.ebook?.id,
+        dataPostFocus?.postModified?.ebook?.ebook?.id
     );
 
+  // Verifica se o post possui mídia.
   const media = dataPostFocus?.midia;
 
   const hasMedia =
@@ -63,52 +71,55 @@ export function DialogPostFocus() {
     (media?.type === "gif" ||
       (Array.isArray(media) && media.length > 0));
 
+  // O layout divide a dialog se houver mídia ou conteúdo de livro.
+  const hasTwoColumns = isModifiedPost || hasMedia;
+
   return (
     <dialog
       ref={dialogFocus}
       onCancel={() => setPostFocus(false)}
-      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-1200 ease-out overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both] ${
+      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-300 ease-out overflow-hidden ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
       <section
-        className={`h-full w-full min-w-0 max-h-full ${
-          isModifiedPost
+        className={`h-full w-full min-w-0 ${
+          hasTwoColumns
             ? "grid grid-cols-2"
             : "flex flex-col"
         }`}
       >
-        {/* COLUNA ESQUERDA: LIVRO OU MÍDIA */}
+
         {isModifiedPost ? (
           <div className="bg-background flex flex-col mx-auto p-4 w-full h-full min-w-0 overflow-y-auto">
             <div className="rounded-lg flex flex-col items-center">
               <img
                 src={
-                  dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                    ?.imageLinks?.thumbnail
+                  dataPostFocus?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.imageLinks?.thumbnail
                 }
                 alt={
-                  dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                    ?.title
+                  dataPostFocus?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.title
                 }
                 className="rounded-lg h-90 w-auto max-w-full object-contain"
               />
 
               <div className="flex flex-col items-center gap-2 w-full">
                 <div className="flex flex-col gap-1 mt-2 items-center text-center">
-                  <h4 className="text-2xl font-fraunce">
+                  <h4 className={`text-2xl font-fraunce ${themeOn ? "text-black" : "text-white"}`}>
                     {
-                      dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                        ?.title
+                      dataPostFocus?.postModified?.ebook?.ebook
+                        ?.volumeInfo?.title
                     }
                   </h4>
 
-                  {dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                    ?.subtitle && (
+                  {dataPostFocus?.postModified?.ebook?.ebook
+                    ?.volumeInfo?.subtitle && (
                     <span className="text-xs text-gray">
                       {
-                        dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                          ?.subtitle
+                        dataPostFocus?.postModified?.ebook?.ebook
+                          ?.volumeInfo?.subtitle
                       }
                     </span>
                   )}
@@ -116,16 +127,16 @@ export function DialogPostFocus() {
 
                 <p className="text-[#765242]">
                   {
-                    dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
-                      ?.description
+                    dataPostFocus?.postModified?.ebook?.ebook
+                      ?.volumeInfo?.description
                   }
                 </p>
               </div>
             </div>
           </div>
         ) : hasMedia ? (
-          <div className="bg-background flex flex-col justify-center p-4 w-full min-w-0 overflow-y-auto">
-            <Info className="rounded-xs">
+          <div className="bg-background flex flex-col justify-center p-4 w-full h-full min-w-0 overflow-y-auto">
+            <Info className="rounded-lg">
               {media?.type === "gif" ? (
                 <img
                   src={media?.images?.original?.url}
@@ -142,10 +153,9 @@ export function DialogPostFocus() {
           </div>
         ) : null}
 
-        {/* COLUNA DIREITA: CONTEÚDO, AÇÕES E COMENTÁRIOS */}
         <div
           className={`h-full min-h-0 min-w-0 overflow-y-auto bg-border/50 flex flex-col relative text-inherit ${
-            isModifiedPost
+            hasTwoColumns
               ? "border-l border-border"
               : "w-full flex-1"
           }`}
@@ -170,7 +180,7 @@ export function DialogPostFocus() {
                 dangerouslySetInnerHTML={{
                   __html: dataPostFocus?.content ?? "",
                 }}
-                className={`text h-autor w-full ${
+                className={`text h-auto w-full ${
                   themeOn ? "text-black" : "text-white"
                 }`}
               />
@@ -179,29 +189,31 @@ export function DialogPostFocus() {
                 <EbookCitation
                   text={dataPostFocus.postModified?.content}
                   title={
-                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
-                      ?.title
+                    dataPostFocus.postModified?.ebook?.ebook
+                      ?.volumeInfo?.title
                   }
                   authors={
-                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
-                      ?.authors
+                    dataPostFocus.postModified?.ebook?.ebook
+                      ?.volumeInfo?.authors
                   }
                 />
               ) : dataPostFocus?.type === "feedback" ? (
                 <PostModifiedContainer
                   title={
-                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
-                      ?.title
+                    dataPostFocus.postModified?.ebook?.ebook
+                      ?.volumeInfo?.title
                   }
                   subtitle={
-                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
-                      ?.subtitle
+                    dataPostFocus.postModified?.ebook?.ebook
+                      ?.volumeInfo?.subtitle
                   }
                   thumbnail={
-                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
-                      ?.imageLinks?.thumbnail
+                    dataPostFocus.postModified?.ebook?.ebook
+                      ?.volumeInfo?.imageLinks?.thumbnail
                   }
-                  starsNumber={dataPostFocus.postModified?.starsEbook}
+                  starsNumber={
+                    dataPostFocus.postModified?.starsEbook
+                  }
                   type={dataPostFocus?.type}
                 />
               ) : dataPostFocus?.type === "resenha" ? (

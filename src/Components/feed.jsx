@@ -12,7 +12,7 @@ import { SearchUsersSidebar } from "./ComponentesFeed/searchUsersSidebar";
 import { useComments } from "./context/hooks/useComments";
 import { useContext } from "react";
 import AppContext from "./context";
-
+import { DialogGif } from "./ComponentesFeed/dialogGif";
 
 export function Feed() {
   return (
@@ -22,6 +22,7 @@ export function Feed() {
       <ArrayPost />
       <Dialog />
       <DialogComments />
+      <DialogGif></DialogGif>
     </Container>
   );
 }

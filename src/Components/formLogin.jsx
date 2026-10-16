@@ -101,7 +101,7 @@ export function FormLogin({ onSwitch, iniciarTransicao }) {
         <Input type="password" placeholder="Digite sua senha"></Input>
 
         <Remenber>
-          <div className="flex gap-1">
+          <div className="flex gap-1 text-[#000]">
             <input type="checkbox" required></input>
             <p>lembrar</p>
           </div>
@@ -118,11 +118,11 @@ export function FormLogin({ onSwitch, iniciarTransicao }) {
         </ButtonLogin>
       </Form>
       <div className="flex items-center my-2">
-        <Lines></Lines>
+        <Lines efe7dd={"efe7dd"}></Lines>
         <span className="mx-4 text-gray-500 font-medium text-xs">
           ou continue com
         </span>
-        <Lines></Lines>
+        <Lines efe7dd={"efe7dd"}></Lines>
       </div>
 
       <div className="flex items-center justify-center gap-3">
@@ -142,7 +142,7 @@ export function FormLogin({ onSwitch, iniciarTransicao }) {
         </ButtonLogin>
       </div>
 
-      <div className="flex text-xs gap-1 justify-center mt-5">
+      <div className="flex text-xs gap-1 justify-center mt-5 text-[#000]">
         <span>Não tem conta?</span>
         <QuestionButton onClick={() => onSwitch(true)}>
           Faça seu cadastro

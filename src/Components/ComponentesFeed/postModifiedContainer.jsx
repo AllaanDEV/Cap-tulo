@@ -20,7 +20,7 @@ export function PostModifiedContainer({
   ...props
 }) {
 
-  const{setStyleCardActive , setPostModified}=useContext(AppContext)
+  const{setStyleCardActive , setPostModified,  themeOn}=useContext(AppContext)
   return (
     <div
       className={`bg-background border border-border w-full h-auto flex items-center rounded-lg transition duration-300 ${className}`}
@@ -37,7 +37,9 @@ export function PostModifiedContainer({
         <div className={`flex flex-col gap-5  w-full`}>
           <div className={`${title && "my-auto"}`}>
             <div className="flex justify-between w-full items-center">
-              <p className={`${title ? "text-sm sm:text-lg" : "text-sm"}`}>
+              <p className={`${title ? "text-sm sm:text-lg" : "text-sm"}  ${
+                  themeOn ? "text-black" : "text-white"
+                }`}>
                 {book?.ebook?.volumeInfo.title || title}
               </p>
               {delet && (

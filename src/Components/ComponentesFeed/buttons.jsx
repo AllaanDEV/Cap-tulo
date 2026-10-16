@@ -11,7 +11,7 @@ const navigation = [
 ];
 
 export function Buttons() {
-  const { setFollowerPost } = useContext(AppContext);
+  const { setFollowerPost, themeOn} = useContext(AppContext);
   const [button, setButton] = useState("Para você");
   const { allFollowers, getPostsSaved } = useRequisicoes({});
 
@@ -38,7 +38,7 @@ export function Buttons() {
         return (
           <button
             key={index}
-            className={`px-4 rounded-4xl flex justify-around items-center text-gray hover:text-black w-full transition-all duration-200  text-sm sm:text-md ${style}`}
+            className={`px-4 rounded-4xl flex justify-around items-center text-gray  w-full transition-all duration-200  text-sm sm:text-md ${style} ${`  ${themeOn ? "hover:text-black" : "hover:text-white"}`}`}
             onClick={() => {
               (setButton(b.name), validation(index));
             }}

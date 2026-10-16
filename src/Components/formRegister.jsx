@@ -56,7 +56,7 @@ export function FormRegister({ onSwitch }) {
         </ButtonLogin>
       </Form>
 
-      <div className="flex text-xs gap-1 justify-center mt-5">
+      <div className="flex text-xs gap-1 justify-center mt-5 text-[#000]">
         <span>Já tem conta?</span>
         <QuestionButton onClick={() => onSwitch(false)}>
           Faça seu login

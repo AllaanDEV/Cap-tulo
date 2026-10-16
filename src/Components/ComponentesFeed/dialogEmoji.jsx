@@ -9,7 +9,7 @@ export function DialogImoji({
   toggleDialogEmojisComment,
   setToggleDialogEmojisComment,
 }) {
-  const { setContentEmoji, dialogEmoji, setDialogEmoji } =
+  const { setContentEmoji, dialogEmoji, setDialogEmoji, themeOn} =
     useContext(AppContext);
 
   const inputRef = useRef(null);
@@ -160,15 +160,14 @@ export function DialogImoji({
   if (!isOpen) return null;
 
   return (
-    <>
+    <div className="bg-primary">
       {(toggleDialogEmojisComment || dialogEmoji) && (
         <div
           className="w-80 h-96 m-auto rounded-2xl px-1 animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both] flex flex-col overflow-hidden scrollbar-thin scrollbar-thumb-wine/80 "
           onCancel={closeDialog}
         >
-          {/* Cabeçalho fixo */}
           <div className="flex w-full justify-between items-start p-1 shrink-0">
-            <span className="text-2xl font-extrabold">EMOJIS</span>
+            <span className= {` text-2xl font-extrabold ${themeOn ? "text-black" : "text-white"}`}>EMOJIS</span>
 
             <button
               type="button"
@@ -292,7 +291,7 @@ export function DialogImoji({
                 >
                   <Lines className="border-[2px] mt-1" />
 
-                  <span className="text-lg font-bold">
+                  <span className={`text-lg font-bold ${themeOn ? "text-black" : "text-white"}`}>
                     {group?.charAt(0).toUpperCase() + group?.slice(1)}
                   </span>
 
@@ -323,6 +322,6 @@ export function DialogImoji({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

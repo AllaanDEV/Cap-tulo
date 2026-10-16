@@ -9,7 +9,7 @@ import searchIcon from "../../assets/svgIcons/search-line.svg";
 export function DialogGif({className}) {
   const gifRef = useRef(null);
   const inputRef = useRef(null);
-  const { dialogGif, setDialogGif, setGifData } = useContext(AppContext);
+  const { dialogGif, setDialogGif, setGifData, themeOn } = useContext(AppContext);
 
   const [busca, setBusca] = useState("options");
   const [arrayGifs, setArrayGifs] = useState([]);
@@ -107,21 +107,23 @@ export function DialogGif({className}) {
     <dialog
       ref={gifRef}
       onCancel={() => setDialogGif((prev) => !prev)}
-      className={`fixed z-[9999] w-full h-[80vh]
+      className={`fixed z-[9999] w-full h-[80vh] 
+
         sm:w-[70vw] md:w-[60vw] lg:w-[40vw]
-        bg-amber-950 m-auto rounded-2xl scrollbar-none
+         m-auto rounded-2xl scrollbar-none
         overflow-hidden animate-[dialogAppear_200ms_cubic-bezier(0.22,1,0.36,1)_both]
         ${className}`}
     >
-      <div className="h-full overflow-y-auto scrollbar-none">
+      <div className="h-full overflow-y-auto scrollbar-none  bg-border">
         <div className="flex items center justify-between p-3">
-          <span className="text-2xl font-fraunce">Escolha uma gif</span>
+          <span className={` text-2xl font-extrabold front-fraunce ${themeOn ? "text-black" : "text-white"}`}>Escolha uma gif</span>
           <button
             onClick={() => {
               (setDialogGif((prev) => !prev),
                 setBusca("options"),
                 valueDefault(true));
             }}
+            className="cursor-pointer"
           >
             <XSavedEbook></XSavedEbook>
           </button>
@@ -169,10 +171,6 @@ export function DialogGif({className}) {
             </div>
           )}
 
-          {/* {arrayGifs.length === 0 && busca !== "options" && (
-          <span className=" mx-auto">Procurando gifs...</span>
-        )} */}
-
           <div className="grid grid-cols-2 gap-1 mt-5">
             {arrayGifs.length === 0 &&
               itemsDefault.map((i) => {
@@ -197,7 +195,7 @@ export function DialogGif({className}) {
           {arrayGifs.length > 0 && (
             <button
               onClick={() => getGifs(true)}
-              className="w-full mt-2 bg-border/90 border-border py-2 rounded-xs  hover:bg-border"
+              className="w-full mt-2 bg-primary/20 border-border py-2 rounded-xs  hover:bg-primary/40"
             >
               Buscar mais
             </button>

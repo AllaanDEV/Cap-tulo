@@ -62,30 +62,30 @@ export function FormEditProfile({ active, ...props }) {
     }));
   };
 
-const photoIcon = (evento) => {
-  const file = evento.target.files[0];
+  const photoIcon = (evento) => {
+    const file = evento.target.files[0];
 
-  console.log("Arquivo selecionado:", file);
+    console.log("Arquivo selecionado:", file);
 
-  if (!file) return;
+    if (!file) return;
 
-  const formatosPermitidos = ["image/jpeg", "image/png", "image/webp"];
+    const formatosPermitidos = ["image/jpeg", "image/png", "image/webp"];
 
-  if (!formatosPermitidos.includes(file.type)) {
-    evento.target.value = "";
-    alert("Escolha uma imagem JPG, PNG ou WEBP.");
-    return;
-  }
+    if (!formatosPermitidos.includes(file.type)) {
+      evento.target.value = "";
+      alert("Escolha uma imagem JPG, PNG ou WEBP.");
+      return;
+    }
 
-  const content = new FileReader();
+    const content = new FileReader();
 
-  content.onload = () => {
-    console.log("Imagem carregada!");
-    setMidiaIcon(content.result);
+    content.onload = () => {
+      console.log("Imagem carregada!");
+      setMidiaIcon(content.result);
+    };
+
+    content.readAsDataURL(file);
   };
-
-  content.readAsDataURL(file);
-};
 
   const fields = [
     {
@@ -152,7 +152,7 @@ const photoIcon = (evento) => {
       <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 py-6">
         {/* Foto */}
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="group flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-[#f1e7d8] bg-[#e4d4bf] font-serif text-2xl text-center relative">
+          <div className="group flex  h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-border bg-[#e4d4bf] font-serif text-2xl text-center relative">
             <img
               ref={inputFile}
               src={deletePhoto ? undefined : midiaIcon || photo?.midiaIcon}
@@ -210,7 +210,7 @@ const photoIcon = (evento) => {
           <label className="flex flex-col gap-2">
             <span className="text-sm font-medium">Nome de usuário</span>
 
-            <div className="flex items-center rounded-xl border border-[#ded2c1] bg-white px-4 focus-within:border-[#ba613e]">
+            <div className="flex items-center rounded-xl border border-[#ded2c1]         bg-primary px-4 focus-within:border-wine">
               <span className="text-[#9a8a78]">@</span>
 
               <input
@@ -242,10 +242,10 @@ const photoIcon = (evento) => {
                           resize-none
                           rounded-xl
                           border border-[#ded2c1]
-                          bg-white
+                                 bg-primary
                           px-4 py-3
                           outline-none
-                          focus:border-[#ba613e]
+                          focus:border-wine
                           focus:ring-2 focus:ring-[#ba613e]/10
                         "
           />
@@ -266,7 +266,7 @@ const photoIcon = (evento) => {
           </label>
         ))}
 
-        {/* Preferências literárias */}
+        {/*       
         <div>
           <p className="mb-3 text-sm font-medium">Interesses literários</p>
 
@@ -297,11 +297,11 @@ const photoIcon = (evento) => {
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Footer */}
-      <div className="flex sm:justify-end gap-3 border-t border-[#e8dece] bg-[#fcf8f1] px-6 py-4 justify-between w-full">
+      <div className="flex sm:justify-end gap-3 border-t border-[#e8dece]     bg-primary px-6 py-4 justify-between w-full">
         <button
           type="button"
           onClick={openOrCloseDialog}
@@ -311,7 +311,7 @@ const photoIcon = (evento) => {
                         px-4
                         sm:px-5 py-2.5
                         text-sm font-medium
-                        hover:bg-[#f1e9dd]
+                        hover:bg-border/50
                         transition
                       "
         >

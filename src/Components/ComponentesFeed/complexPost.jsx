@@ -47,7 +47,7 @@ export function ComplexPost() {
     setDisabledCardActive,
     ebookSaved,
     setStyleCardActive,
-    setDialogImoji,
+    setDialogImoji,   themeOn
   } = useContext(AppContext);
 
   const { getBookSave } = useRequisicoes({});
@@ -192,7 +192,9 @@ export function ComplexPost() {
 
           {postModified === "citation" && ebookSaved.length > 0 && (
             <textarea
-              className="bg-background rounded-xl p-4 placeholder:font-medium placeholder:text-md border border-border outline-yellow-600 "
+              className= {` bg-background rounded-xl p-4 placeholder:font-medium placeholder:text-md border border-border outline-yellow-600 ${
+                  themeOn ? "text-black" : "text-white"
+                }`}
               placeholder={
                 postModified === "citation" &&
                 " Selecione um livro e copie aqui o trecho que te marcou..."

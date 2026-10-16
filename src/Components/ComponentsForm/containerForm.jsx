@@ -93,7 +93,7 @@ export function ContainerForm() {
       </div>
 
       <div className="relative z-10 ml-auto flex h-screen md:p-[5vw] lg:p-0 lg:w-[55vw]  xl:w-[35vw] flex-col animate-[slideFromRight_1500ms_cubic-bezier(0.16,1,0.3,1)_both]">
-        <div className="flex h-screen flex-col gap-2  md:rounded-3xl lg:rounded-l-3xl lg:rounded-r-none bg-primary p-5">
+        <div className="flex h-screen flex-col gap-2  md:rounded-3xl lg:rounded-l-3xl lg:rounded-r-none bg-[#fffbf7] p-5">
           <img src={logo} alt="Logo" className="w-auto h-40 mb-5" />
 
           <div className={exiting ? exitAnimation : enterAnimation}>
