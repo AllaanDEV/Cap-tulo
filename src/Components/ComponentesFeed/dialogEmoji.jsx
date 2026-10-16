@@ -4,7 +4,7 @@ import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { ContainerTags } from "../ComponentsPerfil/containerTags";
 
-export function DialogImoji({
+export function DialogEmoji({
   emojiContainerRef,
   toggleDialogEmojisComment,
   setToggleDialogEmojisComment,
@@ -57,7 +57,7 @@ export function DialogImoji({
       setLoadingEmojis(true);
 
       try {
-        const response = await fetch("/api/imojis", {
+        const response = await fetch("/api/emojis", {
           signal: controller.signal,
         });
 
@@ -105,7 +105,7 @@ export function DialogImoji({
     const timeout = setTimeout(async () => {
       try {
         const response = await fetch(
-          `/api/imojis/search/${encodeURIComponent(query)}`,
+          `/api/emojis/search/${encodeURIComponent(query)}`,
           { signal: controller.signal },
         );
 
