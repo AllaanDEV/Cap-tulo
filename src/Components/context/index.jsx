@@ -9,7 +9,6 @@ import { book, logout, Group, save, spiral, Person } from "../svgCode";
 import { useRequisicoes } from "./hooks/useRequisicoes";
 import { useLocation, useNavigate } from "react-router";
 
-
 import { gsap } from "gsap";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 
@@ -18,9 +17,8 @@ gsap.registerPlugin(DrawSVGPlugin);
 export function Context({ children }) {
   const navigate = useNavigate();
 
-const transitionRef = useRef(null);
-const [loadingLogin, setLoadingLogin] = useState(false);
-
+  const transitionRef = useRef(null);
+  const [loadingLogin, setLoadingLogin] = useState(false);
 
   const [dialog, setDialog] = useState(false);
   const [publication, setPublication] = useState([]);
@@ -133,7 +131,7 @@ const [loadingLogin, setLoadingLogin] = useState(false);
   const [postFocus, setPostFocus] = useState(false);
   const [dataPostFocus, setDataPostFocus] = useState();
   const [goal, setGoal] = useState({ number: 0 });
-const [goalUser, setGoalUser]=useState()
+  const [goalUser, setGoalUser] = useState();
 
   const [likesCommentList, setLikesCommentList] = useState([]);
 
@@ -177,7 +175,12 @@ const [goalUser, setGoalUser]=useState()
 
         // imgId.src = e.target.result;
         // imgId.style.display = "block";
-        setImgIdUrl((prev) => [...prev, urlObj]);
+        if (Array.isArray(imgIdUrl)) {
+          setImgIdUrl((prev) => [...prev, urlObj]);
+          return
+        }
+
+        setImgIdUrl([urlObj]);
       };
 
       content.readAsDataURL(file);
@@ -346,105 +349,103 @@ const [goalUser, setGoalUser]=useState()
   const comments = useComments({ setHasText, setContentHtml });
   const [clearEditor, setClearEditor] = useState(() => () => {});
 
-  const [formsOn, setFormsOn]=useState(false)
-
+  const [formsOn, setFormsOn] = useState(false);
 
   const iniciarTransicao = (userId) => {
-  if (loadingLogin) return;
+    if (loadingLogin) return;
 
-  setLoadingLogin(true);
+    setLoadingLogin(true);
 
-  const paths = transitionRef.current?.querySelectorAll("path");
+    const paths = transitionRef.current?.querySelectorAll("path");
 
-  if (!paths?.length) {
-    navigate(`/feed/${userId}`);
-    setLoadingLogin(false);
-    return;
-  }
-
-  gsap.killTweensOf(paths);
-
-  const tl = gsap.timeline({
-    onComplete: () => {
+    if (!paths?.length) {
+      navigate(`/feed/${userId}`);
       setLoadingLogin(false);
+      return;
+    }
+
+    gsap.killTweensOf(paths);
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setLoadingLogin(false);
+      },
+    });
+
+    tl.set(paths, { visibility: "visible" });
+
+    tl.to(paths, {
+      drawSVG: "100%",
+      // strokeWidth: 2500,
+      duration: 1.5,
+      stagger: 0.08,
+      ease: "power1.inOut",
+    });
+
+    tl.call(() => {
+      navigate(`/feed/${userId}`);
+    });
+
+    tl.to(paths, {
+      drawSVG: "100% 100%",
+      duration: 1,
+      stagger: 0.08,
+      ease: "power1.inOut",
+    });
+
+    tl.set(paths, {
+      clearProps: "strokeWidth,visibility",
+    });
+
+    tl.set(paths, {
+      drawSVG: "0%",
+    });
+
+    tl.set(paths, { visibility: "hidden" });
+  };
+
+  const [deletePhoto, setDeletePhoto] = useState(false);
+  const [feedFilter, setFeedFilter] = useState("todos");
+
+  const [themeOn, setThemeOn] = useState();
+
+  const themes = [
+    {
+      name: "",
+      primary: "#fffbf7",
+      background: "#f5efe6",
+      text: "#000000",
+      gray: "#a28f7a",
     },
-  });
-
-  tl.set(paths, { visibility: "visible" });
-
-tl.to(paths, {
-  drawSVG: "100%",
-  // strokeWidth: 2500,
-  duration: 1.5,
-  stagger: 0.08,
-  ease: "power1.inOut",
-});
-
-tl.call(() => {
-  navigate(`/feed/${userId}`);
-});
-
-tl.to(paths, {
-  drawSVG: "100% 100%",
-  duration: 1,
-  stagger: 0.08,
-  ease: "power1.inOut",
-});
-
-tl.set(paths, {
-  clearProps: "strokeWidth,visibility",
-});
-
-tl.set(paths, {
-  drawSVG: "0%",
-});
-
-  tl.set(paths, { visibility: "hidden" });
-};
-
-const [deletePhoto, setDeletePhoto] = useState(false);
-const [feedFilter, setFeedFilter] = useState("todos");
-
-
-const [themeOn, setThemeOn]=useState()
-
-const themes = [
-  {
-    name: "",
-    primary: "#fffbf7",
-    background: "#f5efe6",
-    text: "#000000",
-    gray: "#a28f7a",
-  },
-  {
-    name: "cocoa",
-    primary: "#342721",
-    background: "#342721",
-    text: "#ffffff",
-    gray: "#a28f7a",
-  },
-  {
-    name: "cocoaNoir",
-    primary: "#2c1e25",
-    background: "#2c1e25",
-    text: "#ffffff",
-    gray: "#a28f7a",
-  },
-  {
-    name: "noir",
-    primary: "#000000",
-    background: "#000000",
-    text: "#ffffff",
-    gray: "#a28f7a",
-  },
-  {
-    name: "imperal",
-    primary: "#000f08",
-    background: "#000f08",
-    text: "#ffffff",
-    gray: "#a28f7a",
-  },
-];
+    {
+      name: "cocoa",
+      primary: "#342721",
+      background: "#342721",
+      text: "#ffffff",
+      gray: "#a28f7a",
+    },
+    {
+      name: "cocoaNoir",
+      primary: "#2c1e25",
+      background: "#2c1e25",
+      text: "#ffffff",
+      gray: "#a28f7a",
+    },
+    {
+      name: "noir",
+      primary: "#000000",
+      background: "#000000",
+      text: "#ffffff",
+      gray: "#a28f7a",
+    },
+    {
+      name: "imperal",
+      primary: "#000f08",
+      background: "#000f08",
+      text: "#ffffff",
+      gray: "#a28f7a",
+    },
+  ];
 
   return (
     <AppContext.Provider
@@ -570,10 +571,24 @@ const themes = [
         toggleDialog,
         ScrollToTop,
         clearEditor,
-        setClearEditor, formsOn, setFormsOn, iniciarTransicao, loadingLogin, setLoadingLogin, deletePhoto, setDeletePhoto, feedFilter, setFeedFilter, goalUser, setGoalUser, themeOn, setThemeOn, themes
+        setClearEditor,
+        formsOn,
+        setFormsOn,
+        iniciarTransicao,
+        loadingLogin,
+        setLoadingLogin,
+        deletePhoto,
+        setDeletePhoto,
+        feedFilter,
+        setFeedFilter,
+        goalUser,
+        setGoalUser,
+        themeOn,
+        setThemeOn,
+        themes,
       }}
     >
-         <div
+      <div
         ref={transitionRef}
         className={`fixed inset-0 z-[300] pointer-events-none w-[100dvh] sm:w-[100vw] scale-240 scale-170 ${
           loadingLogin ? "visible" : "invisible"

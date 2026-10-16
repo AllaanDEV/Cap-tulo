@@ -11,7 +11,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 import { useLocation, useNavigate, useParams } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { Theme, Vector } from "../svgCode";
+import { Notification, Theme, Vector } from "../svgCode";
 
 export function Header() {
   const { id: profileId } = useParams();
@@ -30,7 +30,8 @@ export function Header() {
     postId,
     editRequisicao,
     followerPost,
-setThemeOn, themes
+    setThemeOn,
+    themes,
   } = useContext(AppContext);
 
   const { nameIcon, user, fetchProfile, photoValueFeed, postFollowers } =
@@ -84,68 +85,58 @@ setThemeOn, themes
 
   // const html = document.querySelector("html");
 
- const [numberTheme, setNumberTheme] = useState(0);
+  const [numberTheme, setNumberTheme] = useState(0);
 
-// Aplica as cores e a classe do tema
-const applyTheme = (index) => {
-  const html = document.documentElement;
-  const theme = themes[index];
+  // Aplica as cores e a classe do tema
+  const applyTheme = (index) => {
+    const html = document.documentElement;
+    const theme = themes[index];
 
-  if (!theme) return;
+    if (!theme) return;
 
-  html.classList.remove(
-    "cocoa",
-    "cocoaNoir",
-    "noir",
-    "imperal"
-  );
+    html.classList.remove("cocoa", "cocoaNoir", "noir", "imperal");
 
-  if (theme.name) {
-    html.classList.add(theme.name);
-  }
+    if (theme.name) {
+      html.classList.add(theme.name);
+    }
 
-  html.style.removeProperty("--color-border");
-  html.style.removeProperty("--color-hover");
+    html.style.removeProperty("--color-border");
+    html.style.removeProperty("--color-hover");
 
-  html.style.setProperty("--color-primary", theme.primary);
-  html.style.setProperty("--color-background", theme.background);
-  html.style.setProperty("--color-gray", theme.gray);
+    html.style.setProperty("--color-primary", theme.primary);
+    html.style.setProperty("--color-background", theme.background);
+    html.style.setProperty("--color-gray", theme.gray);
 
-  html.style.color = theme.text;
+    html.style.color = theme.text;
 
-  setNumberTheme(index);
-  setThemeOn(index === 0);
-};
+    setNumberTheme(index);
+    setThemeOn(index === 0);
+  };
 
-// Restaura o tema salvo para o usuário atual
-useEffect(() => {
-  if (!user?.id || !themes?.length) return;
+  // Restaura o tema salvo para o usuário atual
+  useEffect(() => {
+    if (!user?.id || !themes?.length) return;
 
-  const key = `theme-user-${user.id}`;
-  const savedTheme = localStorage.getItem(key);
-  const index = savedTheme === null ? 0 : Number(savedTheme);
+    const key = `theme-user-${user.id}`;
+    const savedTheme = localStorage.getItem(key);
+    const index = savedTheme === null ? 0 : Number(savedTheme);
 
-  const validIndex =
-    Number.isInteger(index) &&
-    index >= 0 &&
-    index < themes.length;
+    const validIndex =
+      Number.isInteger(index) && index >= 0 && index < themes.length;
 
-  applyTheme(validIndex ? index : 0);
-}, [user?.id, themes]);
+    applyTheme(validIndex ? index : 0);
+  }, [user?.id, themes]);
 
-// Alterna o tema e salva a preferência
-const changeTheme = () => {
-  if (!user?.id || !themes?.length) return;
+  // Alterna o tema e salva a preferência
+  const changeTheme = () => {
+    if (!user?.id || !themes?.length) return;
 
-  const next = (numberTheme + 1) % themes.length;
+    const next = (numberTheme + 1) % themes.length;
 
-  applyTheme(next);
+    applyTheme(next);
 
-  localStorage.setItem(
-    `theme-user-${user.id}`,
-    String(next)
-  );
-};
+    localStorage.setItem(`theme-user-${user.id}`, String(next));
+  };
 
   return (
     <header className="border border-border p-2 fixed w-full bg-border/80 z-10 opacity-95">
@@ -167,7 +158,7 @@ const changeTheme = () => {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Buscar livros, a  utores, leitores..."
+              placeholder="Buscar livros, leitores..."
               className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
               w-[clamp(2rem,40vw,30rem)]"
               onInput={(e) => Search(e)}
@@ -197,24 +188,27 @@ const changeTheme = () => {
           </button>
 
           <button>
-            <img src={notificationIcon} className="w-auto h-6"></img>
+            <Notification></Notification>
+            {/* <img src={notificationIcon} className="w-auto h-6"></img> */}
           </button>
 
-          <PerfilIcon
-            to={
-              location.pathname === `/perfil/${user?.id}`
-                ? null
-                : `/perfil/${user?.id}`
-            }
-          >
-            {photo?.midiaIcon ? (
-              <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
-            ) : (
-              <p className="m-auto text-[1rem] font-medium font-serif text-white">
-                {nameIcon(user?.name)}
-              </p>
-            )}
-          </PerfilIcon>
+          <div className="sm:hidden">
+            <PerfilIcon
+              to={
+                location.pathname === `/perfil/${user?.id}`
+                  ? null
+                  : `/perfil/${user?.id}`
+              }
+            >
+              {photo?.midiaIcon ? (
+                <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+              ) : (
+                <p className="m-auto text-[1rem] font-medium font-serif text-white">
+                  {nameIcon(user?.name)}
+                </p>
+              )}
+            </PerfilIcon>
+          </div>
         </div>
       </nav>
     </header>

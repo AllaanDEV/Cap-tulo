@@ -18,7 +18,7 @@ import { ButtonPostar } from "./buttonPostar";
 import { PostModifiedContainer } from "./postModifiedContainer";
 // import { useEffect, useState } from "react";
 
-export function TipTapEditor({onEditorReady}) {
+export function TipTapEditor({ onEditorReady }) {
   const {
     imgIdUrl,
     urls,
@@ -44,7 +44,9 @@ export function TipTapEditor({onEditorReady}) {
     setContentHtml,
     canPost,
     focusEditorTrigger,
-    setDialogSubHeader, setClearEditor
+    setDialogSubHeader,
+    setClearEditor,
+    themeOn,
   } = useContext(AppContext);
   //   const [users, setUsers] = useState([]);
 
@@ -159,19 +161,18 @@ export function TipTapEditor({onEditorReady}) {
   });
 
   useEffect(() => {
-  if (editor && onEditorReady) {
-    onEditorReady(editor);
-  }
-}, [editor]);
+    if (editor && onEditorReady) {
+      onEditorReady(editor);
+    }
+  }, [editor]);
 
+  useEffect(() => {
+    if (!editor) return;
 
-useEffect(() => {
-  if (!editor) return;
-
-  setClearEditor(() => () => {
-    editor.commands.clearContent();
-  });
-}, [editor, setClearEditor]);
+    setClearEditor(() => () => {
+      editor.commands.clearContent();
+    });
+  }, [editor, setClearEditor]);
 
   useEffect(() => {
     if (!editor) return;
@@ -212,8 +213,7 @@ useEffect(() => {
         <div>
           <EditorContent
             editor={editor}
-            className="            
-          [&_.ProseMirror]:outline-none
+            className={`[&_.ProseMirror]:outline-none
                  [&_.ProseMirror]:px-1
                  [&_.ProseMirror]:sm:px-5
         
@@ -238,13 +238,14 @@ useEffect(() => {
 
                     w-full
     max-w-[70vw]
-    sm:max-w-[47vw]
-
-    lg:max-w-[35vw]
+    sm:max-w-[87vw]
+    lg:max-w-[90vw]
+    xl:max-w-[26vw]
     [&_.ProseMirror]:outline-none
     [&_.ProseMirror]:sm:px-5
     [&_.ProseMirror]:break-words
-                                       "
+ ${themeOn ? "text-black" : "text-white"}`}
+
           ></EditorContent>
         </div>
         <ButtonPostar

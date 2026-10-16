@@ -32,7 +32,8 @@ export function CommentsList({ post }) {
     handleLike,
     liking,
     like,
-    setLike, themeOn
+    setLike,
+    themeOn,
   } = useContext(AppContext);
 
   const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
@@ -102,8 +103,7 @@ export function CommentsList({ post }) {
     getLikesComments();
   }, []);
 
-  
-   return (
+  return (
     <section className="flex flex-col w-full">
       {!postFocus && <Lines />}
 
@@ -125,33 +125,12 @@ export function CommentsList({ post }) {
               name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className={` w-full flex placeholder:items-center px-5 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md placeholder:my-auto ${ themeOn ? "text-black" : "text-white"}`}
+              rows={1}
+              className={`w-full px-5 py-3 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md ${
+                themeOn ? "text-black" : "text-white"
+              }`}
               placeholder="Dê a sua opinião!"
             />
-
-            {/* <div className="relative">
-              <button
-                ref={emojiButtonRef}
-                type="button"
-                onClick={toggleEmojiDialog}
-                className="hover:bg-gray/50 py-2 px-3 sm:p-3 rounded-xl group transition-colors flex gap-2 items-center w-fit"
-              >
-                <FaceHappy />
-              </button>
-
-              {toggleDialogEmojisComment && (
-                <div
-                  className="fixed z-[9999] bg-white border border-border rounded-lg shadow-lg"
-                >
-                  <DialogImoji
-                    toggleDialogEmojisComment={toggleDialogEmojisComment}
-                    setToggleDialogEmojisComment={
-                      setToggleDialogEmojisComment
-                    }
-                  />
-                </div>
-              )}
-            </div> */}
 
             <button
               type="submit"
@@ -167,7 +146,9 @@ export function CommentsList({ post }) {
 
       <ul className="pt-3 pb-7 flex flex-col gap-6 w-full">
         {(post?.comments ?? []).length === 0 ? (
-          <div>Ainda não há comentários</div>
+          <span className={` ${themeOn ? "text-black" : "text-white"}`}>
+            Ainda não há comentários
+          </span>
         ) : (
           [...(post?.comments ?? [])].reverse().map((c, index) => {
             const photo = (photoValueFeed ?? []).find(
@@ -203,11 +184,17 @@ export function CommentsList({ post }) {
                   <div className="pl-4 pr-2 pb-5 pt-1 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2 items-center">
-                        <h3 className={`${ themeOn ? "text-black" : "text-white"}`}>{c.author}</h3>
+                        <h3
+                          className={`${themeOn ? "text-black" : "text-white"}`}
+                        >
+                          {c.author}
+                        </h3>
                         <span className="text-gray text-xs">@{c.userName}</span>
                       </div>
 
-                      <details className= {` flex flex-col ${ themeOn ? "text-black" : "text-white"}`}>
+                      <details
+                        className={` flex flex-col ${themeOn ? "text-black" : "text-white"}`}
+                      >
                         <summary className="list-none marker:hidden">
                           <Icon />
                         </summary>
@@ -238,7 +225,11 @@ export function CommentsList({ post }) {
                       </details>
                     </div>
 
-                    <p className= {` pr-20 ${ themeOn ? "text-black" : "text-white"}`}>{c.text}</p>
+                    <p
+                      className={` pr-20 ${themeOn ? "text-black" : "text-white"}`}
+                    >
+                      {c.text}
+                    </p>
                   </div>
                   <span className="absolute bottom-[-20px] left-15 text-gray text-xs flex">
                     <ButtonPost
@@ -269,4 +260,5 @@ export function CommentsList({ post }) {
         )}
       </ul>
     </section>
-  )}
+  );
+}

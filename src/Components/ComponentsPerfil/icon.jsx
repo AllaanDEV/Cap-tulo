@@ -7,7 +7,7 @@ import {
 } from "react";
 import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 import { Div } from "../ComponentesFeed/div";
-import { pencil, calendar, maps, link, XIconProfile } from "../svgCode";
+import { pencil, calendar, maps, link, XIconProfile, Notification } from "../svgCode";
 import { ContainerTags } from "./containerTags";
 import Camera from "../../assets/camera-1-remix.png";
 
@@ -269,41 +269,10 @@ export function Icon({ state }) {
       ? "coloque uma descrição sobre você!"
       : null;
 
-  // const followersPost = async () => {
-  //   const response = await fetch(
-  //     `http://localhost:3000/user/followers/${profileId}`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       body: JSON.stringify({
-  //         user: user.name,
-  //         userId: user.id,
-  //       }),
-  //     },
-  //   );
-
-  //   if (response.ok) {
-  //     // userUP();
-  //     allFollowers();
-  //   }
-  // };
-
-  // const userUP = async () => {
-  //   const response = await fetch(`http://localhost:3000/updateUser`);
-  //   const data = await response.json();
-  //   setFollowing(data);
-  // };
-
   useEffect(() => {
     allFollowers();
   }, [profileId]);
 
-  // const validationFollowers = followers.find(
-  //   (follower) => follower.userId === user.id,
-  // );
 
   const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
@@ -311,9 +280,6 @@ export function Icon({ state }) {
     (f) => f.userId === (profile?.authorId || profile?.id || user.id),
   );
 
-  // const style = validationFollowers
-  //   ? "bg-transparent  text-gray disabled:hover:bg-wine"
-  //   : "bg-wine text-white";
 
   return (
     <Container className="border border-border">
@@ -375,7 +341,7 @@ export function Icon({ state }) {
               className={`flex justify-end gap-2  mt-5 ${themeOn ? "text-black" : "text-white"}`}
             >
               <ContainerTags>
-                <img src={notificationIcon} className="w-auto h-5"></img>
+              <Notification ></Notification>
               </ContainerTags>
               {profileId !== user.id ? null : (
                 <ContainerTags onClick={openOrCloseDialog}>
@@ -441,7 +407,7 @@ export function Icon({ state }) {
                 seguidores: {seguindoProfileId?.length}
               </button>
             </div>
-            <div className="flex gap-2 flex-wrap text-black/50">
+            {/* <div className="flex gap-2 flex-wrap text-black/50">
               {tags.map((t, index) => {
                 return (
                   <p
@@ -452,7 +418,7 @@ export function Icon({ state }) {
                   </p>
                 );
               })}
-            </div>
+            </div> */}
             <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
               <ArrayTable profile={profile}></ArrayTable>
             </div>

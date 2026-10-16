@@ -33,7 +33,6 @@ export function CarouselImages({ images = [] }) {
 
   return (
     <div className="relative group rounded-lg overflow-hidden w-full">
-      {/* Imagens */}
       <div
         ref={imagesContainerRef}
         className="flex overflow-x-auto snap-x snap-mandatory
@@ -66,7 +65,6 @@ export function CarouselImages({ images = [] }) {
         ))}
       </div>
 
-      {/* Seta para a imagem anterior */}
       {currentImage > 0 && (
         <button
           type="button"
@@ -85,7 +83,6 @@ export function CarouselImages({ images = [] }) {
         </button>
       )}
 
-      {/* Seta para a próxima imagem */}
       {currentImage < images.length - 1 && (
         <button
           type="button"
@@ -104,7 +101,6 @@ export function CarouselImages({ images = [] }) {
         </button>
       )}
 
-      {/* Contador de imagens */}
       {images.length > 1 && (
         <div
           className="absolute bottom-3 left-1/2 -translate-x-1/2
