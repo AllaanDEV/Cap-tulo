@@ -9,13 +9,13 @@ import { useContext, useEffect, useRef } from "react";
 import { TipTapEditor } from "./tiptapEditor";
 import AppContext from "../context";
 
-import { DialogImoji } from "./dialogEmoji";
+import { DialogEmoji } from "./dialogEmoji";
 import { ComplexPost } from "./complexPost";
 import { useLocation } from "react-router";
 
 const buttons = [
   { icon: Star, name: "Resenha", size: "18" },
-  { icon: GifIcon, name: "Gif" },
+  { icon: GifIcon, name: "GIFs" },
   { icon: FaceHappy, name: "Emojis" },
   { icon: Gallery, name: "Foto" },
 ];
@@ -111,7 +111,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
                             ref={emojiContainerRef}
                             className="absolute top-full right-0 z-50 mt-2 bg-white overflow-y-scroll  h-80 border border-border rounded-lg scrollbar-none "
                           >
-                            <DialogImoji
+                            <DialogEmoji
                               emojiContainerRef={emojiContainerRef}
                             />
                           </div>
