@@ -2,14 +2,14 @@ import { useContext, useState } from "react";
 import { Lines } from "../ComponentsForm/lines";
 import { DetailsBook } from "./detailsBook";
 
-import { save } from "../svgCode";
+import { Save } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 
 export function Ebook(ebook) {
-  const SaveIcon = save;
+  const SaveIcon = Save;
 
-  const { ebookSaved, setEbookSaved, themeOn } = useContext(AppContext);
+  const { ebookSaved, themeOn } = useContext(AppContext);
 
   const { token, getBookSave, user } = useRequisicoes({});
 

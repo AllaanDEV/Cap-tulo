@@ -54,7 +54,7 @@ export function CarouselImages({ images = [] }) {
         {images.map((url, index) => (
           <div
             key={`${url}-${index}`}
-            className="w-full flex-none snap-start my-auto"
+            className="w-full flex-none snap-start my-auto rounded-2xl"
           >
             <img
               src={url}

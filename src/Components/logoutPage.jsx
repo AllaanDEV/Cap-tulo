@@ -1,28 +1,17 @@
-import { Container } from "./ComponentesFeed/container";
-import { logout } from "./svgCode";
-import logo from "../assets/transparent-logo.svg";
-import { Div } from "./ComponentesFeed/div";
+import { Logout } from "./svgCode";
 import { UsersInfo } from "./ComponentesFeed/usersInfo";
 import { useRequisicoes } from "./context/hooks/useRequisicoes";
 import { Info } from "./ComponentesFeed/info";
-import { useContext } from "react";
-import AppContext from "./context";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
-const Logout = logout;
 export function LogoutPage() {
-  //   const { logout } = useContext(AppContext);
-  const navigate = useNavigate();
-
   const { user, logout } = useRequisicoes({});
 
 return (
-  <div className="bg-[url('https://i.pinimg.com/736x/24/ae/e0/24aee06bdc7687e6bb50622d3045d8f5.jpg')] 
+  <div className="bg-[url('https://i.pinimg.com/736x/24/ae/e0/24aee06bdc7687e6bb50622d3045d8f5.jpg')]
   lg:bg-[url(https://i.pinimg.com/736x/56/b4/87/56b487dd7f62959a8368db82f6b53c79.jpg)]
   bg-cover bg-center">
     <div className="min-h-screen flex flex-col pt-20 gap-4 px-2 py-10 lg:pt-0 lg:justify-center">
-      {/* <img src={logo} className="w-auto h-[30vw]"></img> */}
-
       <div
         className="
           mt-auto

@@ -1,13 +1,5 @@
-import {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useLayoutEffect,
-} from "react";
-import notificationIcon from "../../assets/svgIcons/notification-line.svg";
-import { Div } from "../ComponentesFeed/div";
-import { pencil, calendar, maps, link, XIconProfile, Notification } from "../svgCode";
+import { useContext, useEffect, useRef, useState, useLayoutEffect } from "react";
+import { PencilIcon, Calendar, Maps, LinkIcon, Notification } from "../svgCode";
 import { ContainerTags } from "./containerTags";
 import Camera from "../../assets/camera-1-remix.png";
 
@@ -29,19 +21,11 @@ import { Interactions } from "./interactions";
 
 import gsap from "gsap";
 
-const Pencil = pencil;
+const Pencil = PencilIcon;
 
-const Calendar = calendar;
-const Maps = maps;
-const Link = link;
-
-const tags = [
-  { description: "Ficção literária" },
-  { description: "ensaio" },
-  { description: "Poesia" },
-  { description: "Clássicos" },
-  { description: "Memórias" },
-];
+const CalendarIcon = Calendar;
+const MapsIcon = Maps;
+const LinkIconComp = LinkIcon;
 
 const buttons = [
   { name: "Todos" },
@@ -50,7 +34,7 @@ const buttons = [
   { name: "Interações" },
 ];
 
-export function Icon({ state }) {
+export function Icon() {
   const theme = useRef(null);
 
   const location = useLocation();
@@ -61,13 +45,11 @@ export function Icon({ state }) {
 
   const [midiaOn, setMidiaOn] = useState(false);
   const [midiaTheme, setMidiaTheme] = useState(null);
-  const [following, setFollowing] = useState([]);
   const [buttonFocus, setButtonFocus] = useState("Todos");
 
   const {
     setPublication,
     openOrCloseDialog,
-    setEbookSaved,
     editRequisicao,
     editValue,
     setEditValue,
@@ -87,7 +69,6 @@ export function Icon({ state }) {
     user,
     token,
     fetchProfile,
-    likesGet,
     allFollowers,
     getBookSave,
   } = useRequisicoes({ setLike });
@@ -135,17 +116,17 @@ export function Icon({ state }) {
 
   const bios = [
     {
-      bio: Maps,
+      bio: MapsIcon,
       description: editValue.dataPerfil?.location,
       id: "location",
     },
     {
-      bio: Link,
+      bio: LinkIconComp,
       description: editValue.dataPerfil?.link,
       id: "link",
     },
     {
-      bio: Calendar,
+      bio: CalendarIcon,
       description: `entrou em: ${new Date().toLocaleDateString("pt-br")}`,
       id: "calendar",
     },

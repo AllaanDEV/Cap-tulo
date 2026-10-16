@@ -1,8 +1,7 @@
 import { useLocation, useParams } from "react-router";
-import { Container } from "../ComponentesFeed/container";
-import { Div } from "../ComponentesFeed/div";
-import { LeftArrow } from "../svgCode";
 import { useContext, useEffect } from "react";
+import { Container } from "../ComponentesFeed/container";
+import { LeftArrow } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 import { Lines } from "../ComponentsForm/lines";
@@ -17,11 +16,10 @@ export function FollowersList() {
     setListFollowersPerfil,
     styleButtonFollowersList,
     setStyleButtonFollowersList,
-    followers,
     filterFollowers,
   } = useContext(AppContext);
 
-  const { userUP, user, allFollowers, getFollowBack } = useRequisicoes({});
+  const { userUP, user, getFollowBack } = useRequisicoes({});
 
 useEffect(() => {
   userUP();

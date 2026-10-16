@@ -1,15 +1,10 @@
-import { Like, Share } from "../svgCode";
+import { Like, Share, Save, Comment } from "../svgCode";
 import { ButtonPost } from "./buttonPost";
-import { save } from "../svgCode";
-import { Comment } from "../svgCode";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
 
-const Save = save;
-
-
-  export function ContainerButtonsPost({ post, openComments, className }) {
+export function ContainerButtonsPost({ post, openComments, className }) {
   const {
     like,
     setLike,

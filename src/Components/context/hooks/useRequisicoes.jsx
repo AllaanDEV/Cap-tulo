@@ -1,9 +1,8 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import AppContext from "..";
 import { useNavigate } from "react-router";
-import { useComments } from "./useComments";
 
-export function useRequisicoes({ post, like, setLike }) {
+export function useRequisicoes({ post, setLike }) {
   const navigate = useNavigate();
 
   const {
@@ -14,19 +13,15 @@ export function useRequisicoes({ post, like, setLike }) {
     setEditRequisicao,
     setFollowers,
     followers,
-    Login,
     imgIdUrl,
     setGifData,
     setImgIdUrl,
     gifData,
     setEbookSaved,
-    hasText,
     setHasText,
     valuePostsCitation,
-    styleCardActive,
     starFilled,
-    setStarFilled,
-    stars,
+    styleCardActive,
     postModified,
     setValuePostCitation,
     setStyleCardActive,
@@ -40,7 +35,6 @@ export function useRequisicoes({ post, like, setLike }) {
     setDataPostFocus,
     setGoal,
     setPostSaved,
-    followerPost,
     setEditValue,
     setLikesCommentList,
     likesCommentList,

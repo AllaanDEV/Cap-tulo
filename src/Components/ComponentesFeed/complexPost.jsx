@@ -1,37 +1,25 @@
 import {
   useContext,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { ContainerButtons } from "./containerButtons";
 import AppContext from "../context";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { ArrayStars } from "./arrayStars";
 import { EbookCitation } from "./ebookCitation";
-import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
+import { Ebook, Quotation, Star, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
-import { XSavedEbook } from "../svgCode";
 import { ArrayBookSaved } from "../ComponentsPerfil/arrayBookSaved";
-import { ebook } from "../svgCode";
-
-import { Star, quotation } from "../svgCode";
-import { useParams } from "react-router";
 import { PostModifiedContainer } from "./postModifiedContainer";
 import gsap from "gsap";
 
-const Ebook = ebook;
-
 export function ComplexPost() {
-  const { id: profileId } = useParams();
-  const containerButtonsRef = useRef(null);
   const bgRef = useRef(null);
   const citationButtonRefs = useRef([]);
 
   const {
     styleCardActive,
-    setDialogGif,
 
     valuePostsCitation,
     setValuePostCitation,
@@ -47,25 +35,8 @@ export function ComplexPost() {
     setDisabledCardActive,
     ebookSaved,
     setStyleCardActive,
-    setDialogImoji,   themeOn
+    themeOn
   } = useContext(AppContext);
-
-  const { getBookSave } = useRequisicoes({});
-
-  //   const citationOpen = (index) => {
-  //     if (index === 0) {
-  //       setPostCitation((prev) => !prev);
-  //       setPostModified("citation");
-  //     } else if (index === 1) {
-  //       setDialogGif((prev) => !prev);
-  //     } else if (index === 2) {
-  //       setDialogImoji((prev) => !prev);
-  //     }
-  //   };
-
-  useEffect(() => {
-    getBookSave(profileId);
-  }, []);
 
   const modified = (index) => {
     if (index === 1) {
@@ -85,12 +56,10 @@ export function ComplexPost() {
   const [styleButton, setStyleButton] = useState("quotation");
 
   const iconsCitationOpen = [
-    { icon: quotation, name: "quotation" },
+    { icon: Quotation, name: "quotation" },
     { icon: Star, name: "star", size: "18" },
-    { icon: ebook, name: "ebook" },
+    { icon: Ebook, name: "ebook" },
   ];
-
-  // const avaliationTypePost = !styleCardActive && setPostModified();
 
   useLayoutEffect(() => {
     const index = iconsCitationOpen.findIndex((b) => b.name === styleButton);
@@ -267,10 +236,6 @@ export function ComplexPost() {
               setContainerModified(true);
               setDisabledCardActive(true);
               setStyleButton("quotation");
-              // if (!styleCardActive) {
-              //   setPostModified();
-              // }
-              // setStyleCardActive(ebookSaved[0]);
             }}
           >
             Publicar

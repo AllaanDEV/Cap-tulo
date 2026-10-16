@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { EventButton } from "./eventButton";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { XSavedEbook, Star } from "../svgCode";
-import { useLocation, useParams } from "react-router";
+import { XSavedEbook } from "../svgCode";
+import { useLocation } from "react-router";
 import { ArrayStars } from "../ComponentesFeed/arrayStars";
 
 export function ContainerEbooks({
@@ -23,13 +23,10 @@ export function ContainerEbooks({
   const {
     setEbookSaved,
     postModified,
-    starFilled,
     containerModified,
-    publication,
   } = useContext(AppContext);
-  const { token, user, getBookSave } = useRequisicoes({});
+  const { token, user } = useRequisicoes({});
   const location = useLocation();
-  const { id: profileId } = useParams();
 
   const deleteSavedBook = async () => {
     const response = await fetch(
@@ -50,15 +47,7 @@ export function ContainerEbooks({
     return response;
   };
 
-  const styleHover =
-    (containerModified || location.pathname === `/perfil/`) &&
-    location.pathname === `/feed/${user.id}`
-      ? ""
-      : "hover:-translate-y-1 hover:shadow-lg";
-
-  const postsFeedbacks = publication.find((p) => p.type === "feedback");
-
-console.log("VAAAAAAAAAAAAPO",{
+  console.log("VAAAAAAAAAAAAPO",{
   styleDisable,
   postModified,
   pathname: location.pathname,

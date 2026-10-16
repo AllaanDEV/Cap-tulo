@@ -1,10 +1,7 @@
 import { Div } from "./div";
 import { Group, Search } from "../svgCode";
-import { useContext, useEffect, useState } from "react";
-import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
+import { useContext, useEffect } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { Lines } from "../ComponentsForm/lines";
 import { useLocation, useParams } from "react-router";
 import { UsersInfo } from "./usersInfo";
 import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
@@ -13,10 +10,8 @@ import AppContext from "../context";
 export function SearchUsersSidebar() {
   const {
     usersList,
-    setUsersList,
     filterUsers,
     setFilterUsers,
-    followers,
     filterFollowers,
     themeOn,
   } = useContext(AppContext);
@@ -24,12 +19,9 @@ export function SearchUsersSidebar() {
   const location = useLocation();
 
   const {
-    nameIcon,
-    photoValueFeed,
     user,
     fetchProfile,
     userUP,
-    validationFollowers,
     getFollowBack,
   } = useRequisicoes({});
 

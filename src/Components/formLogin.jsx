@@ -5,24 +5,15 @@ import githubIcon from "../assets/svgIcons/github.svg";
 import { ButtonLogin } from "./ComponentsForm/buttonLogin";
 import { QuestionButton } from "./ComponentsForm/questionButton";
 import { Form } from "./ComponentsForm/form";
-import { ContainerForm } from "./ComponentsForm/containerForm";
 import { Remenber } from "./ComponentsForm/remenber";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import AppContext from "./context";
 
-import { gsap } from "gsap";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
-import { AnimationTransiton, Facebook } from "./svgCode";
-
-gsap.registerPlugin(DrawSVGPlugin);
+import { Facebook } from "./svgCode";
 
 export function FormLogin({ onSwitch, iniciarTransicao }) {
-  const navigate = useNavigate();
-
   const { Login,loadingLogin} = useContext(AppContext);
 
-  // const { user } = useRequisicoes({});
   const loginData = async (e) => {
     e.preventDefault();
 
@@ -35,7 +26,6 @@ export function FormLogin({ onSwitch, iniciarTransicao }) {
 
     if (data.success == true) {
       iniciarTransicao(data.userId);
-      // navigate(`/feed/${data.userId}`);
     } else {
       console.log("Erro ao enviar dados");
     }

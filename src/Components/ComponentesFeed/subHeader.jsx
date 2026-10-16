@@ -1,47 +1,23 @@
 import { Lines } from "../ComponentsForm/lines";
 
-import {
-  faceHappy,
-  Star,
-  // XSavedEbook,
-  // quotation,
-  // CitationIcon,
-} from "../svgCode";
-// import { ebook } from "../svgCode"
+import { FaceHappy, Star } from "../svgCode";
 import { GifIcon } from "../svgCode";
-import { gallery } from "../svgCode";
+import { Gallery } from "../svgCode";
 import { Div } from "./div";
 
-// import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useContext, useEffect, useRef } from "react";
 import { TipTapEditor } from "./tiptapEditor";
 import AppContext from "../context";
 
-import { DialogGif } from "./dialogGif";
-
 import { DialogImoji } from "./dialogEmoji";
 import { ComplexPost } from "./complexPost";
 import { useLocation } from "react-router";
-// const Ebook = ebook;
-
-// const navigation = [
-//   { name: "Para você" },
-//   { name: "Seguindo" },
-//   { name: "Clubes" },
-// ];
-
-// const iconsCitationOpen = [
-//   { icon: quotation, name: "quotation" },
-//   { icon: Star, name: "star", size: "18" },
-//   { icon: ebook, name: "ebook" },
-// ];
 
 const buttons = [
   { icon: Star, name: "Resenha", size: "18" },
   { icon: GifIcon, name: "Gif" },
-  { icon: faceHappy, name: "Emojis" },
-  { icon: gallery, name: "Foto" },
-  // { icon: faceHappy, name: "imojis" },
+  { icon: FaceHappy, name: "Emojis" },
+  { icon: Gallery, name: "Foto" },
 ];
 
 export function SubHeader({ className, onEditorReady, isMobile = false }) {
@@ -50,7 +26,6 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
 
   const {
     midia,
-    styleCardActive,
     setDialogGif,
     imgIdUrl,
     setGifData,
@@ -60,12 +35,9 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
     setDialogEmoji,
     dialogEmoji,
     setStyleCardActive,
-    postModified,
-    ebookSaved, themeOn 
+    ebookSaved,
+    themeOn,
   } = useContext(AppContext);
-
-  // const { getBookSave, user, newPost, stylePatchFeed, stylePatchProfile } =
-  //   useRequisicoes({});
 
   const citationOpen = (index) => {
     if (index === 0) {
@@ -79,40 +51,10 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
     }
   };
 
-  // useEffect(() => {
-  //   getBookSave(profileId);
-  // }, []);
-
-  // useEffect(() => {
-  //   setStyleCardActive(ebookSaved[0]);
-  // }, [ebookSaved, postCitation]);
-
-  // const modified = (index) => {
-  //   if (index === 1) {
-  //     setPostModified("feedback");
-  //   } else if (index === 0) {
-  //     setPostModified("citation");
-  //     setDisabledCardActive(false);
-  //   } else if (index === 2) {
-  //     setPostModified("resenha");
-  //   }
-  // };
-
-  // const citationPublication = (e) => {
-  //   setValuePostCitation(e.target.value);
-  // };
-
-  // const [styleButton, setStyleButton] = useState("quotation");
-
   useEffect(() => {
-    // setPostModified();
     setPostCitation(false);
     setStyleCardActive();
   }, [location]);
-
-  // useEffect(() => {
-  //   setStyleCardActive(ebookSaved[0] || null);
-  // }, [postModified]);
 
   return (
     <>
@@ -156,7 +98,7 @@ export function SubHeader({ className, onEditorReady, isMobile = false }) {
                     return (
                       <div key={index} className="relative hidden sm:block">
                         <button
-                            ref={emojiContainerRef}
+                          ref={emojiContainerRef}
                           onClick={() => citationOpen(index)}
                           className="hover:bg-border focus:bg-border py-2 px-3 sm:px-6 rounded-xl group transition-colors flex gap-2 items-center"
                         >

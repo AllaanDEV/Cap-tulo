@@ -1,28 +1,17 @@
-import { useContext, useEffect, useEffectEvent, useState } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../context";
-import { ArrayPosts } from "./arrayPosts";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useParams } from "react-router";
 
 export function ArrayTable() {
   const { id: paramsId } = useParams();
-  const { publication, ebookSaved, progressEbook } = useContext(AppContext);
+  const { publication, ebookSaved } = useContext(AppContext);
   const { fetchProfile } = useRequisicoes({});
 
   useEffect(() => {
     publication;
     fetchProfile();
   }, []);
-
-
-
-  // useEffect(() => {
-  //   const finished = progressEbook.filter(
-  //     (progress) => progress === 100,
-  //   ).length;
-
-  //   setRead(finished);
-  // }, [progressEbook]);
 
   const userPublications = publication.filter((p) => p.authorId === paramsId);
   const read = ebookSaved.filter((ebook) => ebook.progress === 100);
@@ -31,8 +20,6 @@ export function ArrayTable() {
     { name: "Lidos", number: read.length },
     { name: "Lendo", number: ebookSaved.length },
     { name: "Resenhas", number: userPublications.length },
-    // { name: "Seguindo", number: 318 },
-    // { name: "Seguidores", number: "1,2k" },
   ];
 
   return (

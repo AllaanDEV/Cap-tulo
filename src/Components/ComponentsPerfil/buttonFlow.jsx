@@ -1,14 +1,12 @@
-import { useContext, useEffect } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import AppContext from "../context";
-import { useLocation, useParams } from "react-router";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 
 export function ButtonFlow({
   profileId,
   userId,
   followBack,
   className,
-  listFollowersPerfil,
   ...props
 }) {
   const {
@@ -16,8 +14,6 @@ export function ButtonFlow({
     fetchProfile,
     userUP,
     validationFollowers,
-    validationFollowing,
-    user,
   } = useRequisicoes({});
 
   const location = useLocation();
@@ -40,8 +36,6 @@ export function ButtonFlow({
   const style = isFollowing
     ? "bg-transparent text-gray disabled:hover:bg-wine"
     : "bg-wine text-white";
-
-  // const isfollower = validationFollowing(profileId || userId);
 
   return (
     <button

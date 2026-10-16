@@ -1,21 +1,12 @@
-// import { Lines } from "../ComponentsForm/lines";
-import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { Div } from "./div";
 import { Info } from "./info";
 
-import { Circle } from "../svgCode";
-
-import { book, logout, Group, save, spiral, Person } from "../svgCode";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { Link, useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import AppContext from "../context";
-import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { Progress } from "../ComponentsPerfil/progress";
 import { UsersInfo } from "./usersInfo";
 import { ContainerGoal } from "./containerGoal";
-
-const Spiral = spiral;
 
 const formatarParaK = (numero) => {
   return new Intl.NumberFormat("pt-BR", {
@@ -29,58 +20,25 @@ export function SideBar() {
   const location = useLocation();
 
   const {
-    nameIcon,
     user,
-    fetchProfile,
-    photoValueFeed,
     allFollowers,
     getBookSave,
     postNumberGet,
   } = useRequisicoes({});
   const {
-    setEbookSaved,
-    setEditValue,
     followers,
-    publication,
     ebookSaved,
-    goal,
-    progressAllEbooks,
     option,
     setOption,
     options,
-
   } = useContext(AppContext);
 
   const { logout } = useRequisicoes({});
 
   useEffect(() => {
-    // fetchProfile();
     allFollowers();
     getBookSave(user.id);
   }, []);
-
-  const navigate = useNavigate();
-
-  // const logout = (index) => {
-  //   if (index === 5) {
-  //     localStorage.removeItem("user");
-  //     localStorage.removeItem("token");
-
-  //     setEbookSaved([]);
-  //     setEditValue({});
-  //     setEditValue({});
-
-  //     navigate("auth/login");
-  //   } else if (index === 1) {
-  //     navigate("/ebooks");
-  //   } else if (index === 3) {
-  //     navigate(`/perfil/${user.id}`);
-  //   } else if (index === 0) [navigate(`/feed/${user.id}`)];
-  // };
-
-  const photo = (photoValueFeed ? photoValueFeed : []).find(
-    (photo) => photo.userId == user.id,
-  );
 
   const seguindoProfileId = followers.filter((f) => f.following === user.id);
   const seguindo = followers.filter((f) => f.userId === user.id);

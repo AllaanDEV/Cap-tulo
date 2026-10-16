@@ -35,8 +35,6 @@ export function ArrayPost() {
     }
   }, [followerPost]);
 
-  const shouldAnimate = !hasAnimatedInitialPosts.current;
-
   if (postsToRender.length > 0) {
     hasAnimatedInitialPosts.current = true;
   }

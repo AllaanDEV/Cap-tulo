@@ -1,20 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { EbookProgress } from "./ebookProgress";
 import AppContext from "../context";
-import { ebook, Compass, Active, RightArrow } from "../svgCode";
+import { Ebook, Compass, RightArrow } from "../svgCode";
 import { Link, useLocation } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Div } from "../ComponentesFeed/div";
 
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
-  const localiton = useLocation();
   const { ebookSaved, setStyleCardActive, publication, postModified } =
     useContext(AppContext);
-  const { stylePatchFeed, stylePatchProfile, getBookSave, user } =
+  const { stylePatchFeed, stylePatchProfile, user } =
     useRequisicoes({});
-
-  const Ebook = ebook;
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"

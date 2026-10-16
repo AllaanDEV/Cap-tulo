@@ -1,15 +1,15 @@
 import { useParams } from "react-router";
-import { x } from "../svgCode";
+import { X } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AppContext from "../context";
 
 export default function DeleteImgIcon() {
-  const X = x;
+  const XIcon = X;
   const { id: paramsId } = useParams();
   const { token } = useRequisicoes({});
   const { openOrCloseDialog } = useContext(AppContext);
-const [imagemUrl, setImagemUrl] = useState("url_da_imagem_atual.jpg");
+  const [, setImagemUrl] = useState("url_da_imagem_atual.jpg");
 
   const deleteIcon = async (e) => {
     e.preventDefault();
@@ -42,7 +42,7 @@ const [imagemUrl, setImagemUrl] = useState("url_da_imagem_atual.jpg");
       onClick={deleteIcon} type="button"
     >
       <div className="w-8 h-8 text-white">
-        <X />
+        <XIcon />
       </div>
     </button>
   );

@@ -1,14 +1,12 @@
 import { useContext, useEffect } from "react";
-import { Trending } from "../svgCode";
+import { Trending, Star } from "../svgCode";
 import { Div } from "./div";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import AppContext from "../context";
-import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
-import { Star } from "../svgCode";
 
 export function TrendingSideBar() {
   const { arrayFeedbacksEbooks } = useRequisicoes({});
-  const { feedbacksArray, order} = useContext(AppContext);
+  const { order } = useContext(AppContext);
 
   useEffect(() => {
     arrayFeedbacksEbooks();
@@ -45,11 +43,6 @@ export function TrendingSideBar() {
                   <span className="text-sm">
                     {ebook.data.ebook.ebook.volumeInfo.title}
                   </span>
-                  {/* {ebook.data.ebook.ebook.volumeInfo.subtitle && (
-                    <span className="text-xs text-black/70">
-                      {ebook.data.ebook.ebook.volumeInfo.subtitle}
-                    </span>
-                  )} */}
 
                   <div className="flex gap-1 items-center">
                     <Star fill={true} size={13}></Star>

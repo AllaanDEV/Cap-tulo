@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../context";
 
 import { Active } from "../svgCode";
@@ -12,8 +12,6 @@ export function EbookProgress({ book, className, ...props }) {
     setProgressEbook,
     styleCardActive,
     setStyleCardActive,
-    disabledCardActive,
-    publications,
     PostModified,
     publication,
   } = useContext(AppContext);
@@ -24,18 +22,10 @@ export function EbookProgress({ book, className, ...props }) {
 
   const locationPatch = location.pathname === `/feed/${user.id}`;
 
-  const [progress, setProgress] = useState();
-
   useEffect(() => {
-    // const randomNumber = Math.floor(Math.random() * 100) + 1;
-
-    // setProgress(randomNumber);
-
     // Estado compartilhado pelo Context
     setProgressEbook((prev) => [book?.progress, ...prev]);
   }, []);
-
-  // const validationStyle= publications?.find((publication) => publication.postModified.ebook.ebook.volumeInfo.title === book.ebook.volumeInfo.title)
 
   const styleDisable = publication
     .filter((postUser) => postUser.authorId === user.id)

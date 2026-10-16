@@ -19,7 +19,6 @@ export function EditProfile() {
     setEditValue,
     midiaIcon,
     editValue,
-    editRequisicao,
     deletePhoto,
     setMidiaIcon,
     setDeletePhoto, themeOn
