@@ -6,14 +6,12 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayPosts({ post }) {
   const { id: paramsId } = useParams();
-  // const { state } = useLocation();
-  const { search, publication, editValue, searchValue,  feedFilter } =
+  const { search, publication, searchValue, feedFilter } =
     useContext(AppContext);
-  const { fetchProfile, likesGet } = useRequisicoes({ post });
+  const { fetchProfile } = useRequisicoes({ post });
 
   useEffect(() => {
     fetchProfile();
-    //   likesGet();
   }, [paramsId]);
 
   const postsToRender = searchValue ? search : publication;

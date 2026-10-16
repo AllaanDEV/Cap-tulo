@@ -3,13 +3,12 @@ import AppContext from "../context";
 import { UsersInfo } from "./usersInfo";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Info } from "./info";
-import { XSavedEbook, Trending, Group, Circle, logout } from "../svgCode";
+import { XSavedEbook, Trending, Group, Logout } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
-import { Link, useNavigate } from "react-router";
-import { Progress } from "../ComponentsPerfil/progress";
+import { useNavigate } from "react-router";
 import { ContainerGoal } from "./containerGoal";
 
-const Logout = logout;
+const LogoutIcon = Logout;
 
 export function DialogOptionsMobile() {
   const navigate = useNavigate();
@@ -17,10 +16,6 @@ export function DialogOptionsMobile() {
   const {
     optionsDialog,
     setOptionsDialog,
-    toggleDialog,
-    goal,
-    ebookSaved,
-    progressAllEbooks,
   } = useContext(AppContext);
   const { user, logout } = useRequisicoes({});
   const [closing, setClosing] = useState(false);
@@ -54,7 +49,6 @@ export function DialogOptionsMobile() {
   const options = [
     { Icon: Trending, name: "Em alta" },
     { Icon: Group, name: "Buscar" },
-    // { Icon: Circle, name: "Meta de leitura" },
   ];
 
   const validationPage = (index) => {
@@ -129,7 +123,7 @@ export function DialogOptionsMobile() {
                 (logout(5), setOptionsDialog(false));
               }}
             >
-              <Logout size={"1em"}></Logout>
+              <LogoutIcon size={"1em"}></LogoutIcon>
               Sair
             </button>
           </div>

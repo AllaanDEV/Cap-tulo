@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { Div } from "./div";
 import { ContainerButtons } from "./containerButtons";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";

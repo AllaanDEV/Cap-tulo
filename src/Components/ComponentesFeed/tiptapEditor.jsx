@@ -5,7 +5,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import Mention from "@tiptap/extension-mention";
 import { UserSuggestions } from "./userSuggestions";
 import { ReactRenderer } from "@tiptap/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "../context";
 import { EventButton } from "../ComponentsPerfil/eventButton";
 import { XIconProfile } from "../svgCode";
@@ -13,52 +13,34 @@ import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { EbookCitation } from "./ebookCitation";
 import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
-import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { ButtonPostar } from "./buttonPostar";
 import { PostModifiedContainer } from "./postModifiedContainer";
-// import { useEffect, useState } from "react";
 
 export function TipTapEditor({ onEditorReady }) {
   const {
     imgIdUrl,
-    urls,
     setImgIdUrl,
     gifData,
     setGifData,
-    publication,
-    setPublication,
-    setSearch,
     valuePostsCitation,
-    hasText,
     setHasText,
     styleCardActive,
-    valuePostCitation,
     postModified,
-    setValuePostCitation,
     containerModified,
-    setContainerModified,
-    postCitation,
-    typePost,
     ebookSaved,
     contentEmoji,
     setContentHtml,
-    canPost,
     focusEditorTrigger,
-    setDialogSubHeader,
     setClearEditor,
     themeOn,
   } = useContext(AppContext);
-  //   const [users, setUsers] = useState([]);
 
-  const { nameIcon, user, photoValueFeed, fetchProfile, newPost } =
+  const { nameIcon, user, photoValueFeed, fetchProfile } =
     useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
-
-  // const [hasText, setHasText] = useState(false);
-  const [getMidiaUrl, setGetMidiaUrl] = useState();
 
   useEffect(() => {
     fetchProfile();

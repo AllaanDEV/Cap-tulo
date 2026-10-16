@@ -1,12 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
 import { AnimationTransiton, Star } from "../svgCode";
-import { House, Circle } from "../svgCode";
+import { House } from "../svgCode";
 import { Compass } from "../svgCode";
-import { book, logout, Group, save, spiral, Person } from "../svgCode";
-import { useRequisicoes } from "./hooks/useRequisicoes";
+import { Book, Logout, Save, Person } from "../svgCode";
 import { useLocation, useNavigate } from "react-router";
 
 import { gsap } from "gsap";
@@ -136,32 +135,12 @@ export function Context({ children }) {
   const [likesCommentList, setLikesCommentList] = useState([]);
 
   useEffect(() => {
-    setAtualizar(atualizar);
-  }, [atualizar]);
-
-  useEffect(() => {
-    setIconsProfile(iconsProfile);
-  }, [iconsProfile]);
-
-  useEffect(() => {
     fetch("/api/posts")
       .then((response) => {
         return response.json();
       })
       .then((data) => setPublication(data));
   }, [editRequisicao]);
-
-  //    useEffect(()=>{
-  //     const allFollowers= async() =>{
-  //       const response = await fetch ("/allFollowers")
-  //       const data= await response.json()
-  // setFollowers(data)
-  // console.log("ALLflow", data)
-  //     }
-  //     allFollowers()
-  //    },[])
-
-  const imgId = document.getElementById("post-midia");
 
   const [imgIdUrl, setImgIdUrl] = useState([]);
 
@@ -173,11 +152,9 @@ export function Context({ children }) {
       content.onload = (e) => {
         const urlObj = e.target.result;
 
-        // imgId.src = e.target.result;
-        // imgId.style.display = "block";
         if (Array.isArray(imgIdUrl)) {
           setImgIdUrl((prev) => [...prev, urlObj]);
-          return
+          return;
         }
 
         setImgIdUrl([urlObj]);
@@ -202,7 +179,6 @@ export function Context({ children }) {
       : 0;
 
   const [followerPost, setFollowerPost] = useState(false);
-  const textareaRef = document.getElementById("textearea");
 
   const [postSaved, setPostSaved] = useState([]);
   const [option, setOption] = useState("Feed");
@@ -271,10 +247,10 @@ export function Context({ children }) {
   const options = [
     { icon: House, name: "Feed" },
     { icon: Compass, name: "Explorar" },
-    { icon: book, name: "Minha estante" },
+    { icon: Book, name: "Minha estante" },
     { icon: Person, name: "Perfil" },
-    { icon: save, name: "Quero ler" },
-    { icon: logout, name: "sair" },
+    { icon: Save, name: "Quero ler" },
+    { icon: Logout, name: "sair" },
   ];
 
   const canPost = Boolean(
@@ -376,7 +352,6 @@ export function Context({ children }) {
 
     tl.to(paths, {
       drawSVG: "100%",
-      // strokeWidth: 2500,
       duration: 1.5,
       stagger: 0.08,
       ease: "power1.inOut",
@@ -498,7 +473,6 @@ export function Context({ children }) {
         followers,
         setFollowers,
         midia,
-        imgId,
         imgIdUrl,
         setImgIdUrl,
         dialogGif,
@@ -559,7 +533,6 @@ export function Context({ children }) {
         likesCommentList,
         setLikesCommentList,
         options,
-        logout,
         canPost,
         optionsDialog,
         setOptionsDialog,

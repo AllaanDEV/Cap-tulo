@@ -18,12 +18,11 @@ export function FormEditProfile({ active, ...props }) {
     editValue,
     setMidiaIcon,
     editRequisicao,
-    setEditRequisicao,
     setDeletePhoto,
     deletePhoto,
     midiaIcon,
   } = useContext(AppContext);
-  const { user, fetchProfile, photoValueFeed, token } = useRequisicoes({});
+  const { user, fetchProfile, photoValueFeed } = useRequisicoes({});
 
   useEffect(() => {
     fetchProfile();

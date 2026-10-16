@@ -1,16 +1,13 @@
-import logo from "../assets/transparent-logo.svg";
 import { Input } from "./ComponentsForm/input";
-import { ContainerForm } from "./ComponentsForm/containerForm";
 import { Form } from "./ComponentsForm/form";
 import { ButtonLogin } from "./ComponentsForm/buttonLogin";
-import { Remenber } from "./ComponentsForm/remenber";
-import { use, useContext } from "react";
+import { useContext } from "react";
 import AppContext from "./context";
 import { useNavigate } from "react-router";
 import { QuestionButton } from "./ComponentsForm/questionButton";
 
 export function FormRegister({ onSwitch }) {
-  const { Register, setFormsOn} = useContext(AppContext);
+  const { Register } = useContext(AppContext);
   const navigate = useNavigate();
 
   const registerData = async (e) => {
@@ -40,16 +37,8 @@ export function FormRegister({ onSwitch }) {
         <Input type="email" placeholder="Example@email.com"></Input>
         <Input type="password" placeholder="Digite sua senha"></Input>
 
-        {/* <Remenber>
-            <div className="flex gap-1">
-              <input type="checkbox" required></input>
-              <p>lembrar</p>
-            </div>
-          </Remenber> */}
-
         <ButtonLogin
           className="bg-wine py-1 rounded-sm text-white text-center font-normal mt-3"
-          // to="/auth/login"
           onClick={() => onSwitch(false)}
         >
        Login

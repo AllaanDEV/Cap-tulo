@@ -4,8 +4,6 @@ import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { createPortal } from "react-dom";
 
-import searchIcon from "../../assets/svgIcons/search-line.svg";
-
 export function DialogGif({className}) {
   const gifRef = useRef(null);
   const inputRef = useRef(null);

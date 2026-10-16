@@ -9,7 +9,6 @@ export function UsersInfo({
   post,
   users,
   following,
-  followerUserId,
   className,
 }) {
   const { user, nameIcon, fetchProfile, photoValueFeed } =

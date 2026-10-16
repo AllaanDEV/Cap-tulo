@@ -1,69 +1,42 @@
 import { Div } from "./div";
-import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { configuration, Like } from "../svgCode";
+import { Configuration } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
-import { Share } from "../svgCode";
-import { Comment } from "../svgCode";
 import { memo } from "react";
 
-import { save } from "../svgCode";
-// import daenerys from "../../assets/dragoes-daenerys.webp";
 import { Info } from "./info";
-import { ButtonPost } from "./buttonPost";
 
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { CommentsList } from "./commentsList";
 
-import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../context";
-import { Link, useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { EbookCitation } from "./ebookCitation";
-import { ContainerEbooks } from "../ComponentsPerfil/containerEbooks";
-import { EbookProgress } from "../ComponentsPerfil/ebookProgress";
 import { UsersInfo } from "./usersInfo";
 import { DialogPostFocus } from "./dialogPostFocus";
 import { ContainerButtonsPost } from "./containerButtonsPost";
 import { PostModifiedContainer } from "./postModifiedContainer";
-import { TimeAgo } from "./timeAgo";
 import { CarouselImages } from "./carolselImages";
 
-const Save = save;
-const Icon = configuration;
+const Icon = Configuration;
 
 export const Post = memo(function Post({ post }) {
   const { id: paramsId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [currentImage, setCurrentImage] = useState(0);
-  const imagesContainerRef = useRef(null);
-
   const {
     setPostId,
-    editValue,
-    styleCardActive,
-    ebookSaved,
-    followers,
     setPostFocus,
-    dataPostFocus,
     setLike,
     setDataPostFocus,
-    like,
   } = useContext(AppContext);
-
-  // const [like, setLike] = useState([]);
-  // const [liked, setLiked] = useState(false);
-  // const [liking, setLiking] = useState(false);
-  // const likeLock = useRef(false);
 
   const [postComment, setPostComment] = useState(!post);
   setPostId(post);
 
   const {
     postDelete,
-    LikeButton,
-    nameIcon,
     user,
 
     fetchProfile,
@@ -84,7 +57,6 @@ export const Post = memo(function Post({ post }) {
     likesGet();
   }, [paramsId]);
 
-  console.log("SETLIKE", like);
   useEffect(() => {
     if (post?.type === "feedback") {
       arrayFeedbacksEbooks();
@@ -116,14 +88,6 @@ export const Post = memo(function Post({ post }) {
     return () => clearTimeout(timer);
   }, [showComments]);
 
-  useEffect(() => {
-    setCurrentImage(0);
-    imagesContainerRef.current?.scrollTo({
-      left: 0,
-      behavior: "instant",
-    });
-  }, [post?.id]);
-
   return (
     <>
       <Div className=" animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -135,7 +99,7 @@ export const Post = memo(function Post({ post }) {
               <summary className="list-none marker:hidden">
                 <Icon></Icon>
               </summary>
-              <div className="bg-bermuda absolute left-2.5 px-2 rounded-sm">
+              <div className="bg-bermuda absolute right-2 px-2 rounded-sm bg-border">
                 {post?.authorId === user.id ? (
                   <button
                     className="hover:text-wine"
@@ -217,8 +181,6 @@ export const Post = memo(function Post({ post }) {
               ></PostModifiedContainer>
             )
           )}
-
-          {/* <img src={daenerys}></img> */}
         </section>
 
         <Lines className="mt-2"></Lines>

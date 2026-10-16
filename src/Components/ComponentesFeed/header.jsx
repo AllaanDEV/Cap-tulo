@@ -1,27 +1,21 @@
 import logo from "../../assets/transparent-logo.svg";
 
 import searchIcon from "../../assets/svgIcons/search-line.svg";
-import notificationIcon from "../../assets/svgIcons/notification-line.svg";
 
-import addIcon from "../../assets/svgIcons/add.svg";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 import { Notification, Theme, Vector } from "../svgCode";
 
 export function Header() {
-  const { id: profileId } = useParams();
-
   const inputRef = useRef(null);
-  const navigate = useNavigate();
   const location = useLocation();
 
   const {
-    openOrCloseDialog,
     publication,
     setSearch,
     ebooks,

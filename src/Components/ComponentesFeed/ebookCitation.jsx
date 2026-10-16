@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { CitationIcon } from "../svgCode";
-import App from "../../App";
 import AppContext from "../context";
 
 export function EbookCitation({ text, title, authors, className, ...props }) {

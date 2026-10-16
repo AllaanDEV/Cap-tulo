@@ -1,4 +1,4 @@
-export function quotation({ color = "var(--color-wine)" }) {
+export function Quotation({ color = "var(--color-wine)" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ export const Star = ({ size, fill, onClick, color = "var(--color-star)" }) => {
   );
 };
 
-export const ebook = ({ color = "var(--color-ebook)" }) => {
+export const Ebook = ({ color = "var(--color-ebook)" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ export const ebook = ({ color = "var(--color-ebook)" }) => {
   );
 };
 
-export const gallery = ({ imgIdUrl }) => {
+export const Gallery = ({ imgIdUrl }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ export const gallery = ({ imgIdUrl }) => {
   );
 };
 
-export const configuration = () => {
+export const Configuration = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +212,7 @@ export const Share = () => {
   );
 };
 
-export const save = ({ filled = false, className = "", ...props }) => {
+export const Save = ({ filled = false, className = "", ...props }) => {
   return (
     <svg
       {...props}
@@ -282,7 +282,7 @@ export const Compass = () => {
   );
 };
 
-export const book = ({ size }) => {
+export const Book = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -324,7 +324,7 @@ export const Group = () => {
   );
 };
 
-export const spiral = () => {
+export const Spiral = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +341,7 @@ export const spiral = () => {
   );
 };
 
-export const pencil = () => {
+export const PencilIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -364,7 +364,7 @@ export const pencil = () => {
   );
 };
 
-export const maps = () => {
+export const Maps = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +387,7 @@ export const maps = () => {
   );
 };
 
-export const calendar = () => {
+export const Calendar = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -412,7 +412,7 @@ export const calendar = () => {
   );
 };
 
-export const link = () => {
+export const LinkIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -435,7 +435,7 @@ export const link = () => {
   );
 };
 
-export const camera = () => {
+export const Camera = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -463,7 +463,7 @@ export const camera = () => {
   );
 };
 
-export const logout = ({ size }) => {
+export const Logout = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -521,7 +521,7 @@ export const XSavedEbook = ({ size }) => {
     </svg>
   );
 };
-export const faceHappy = () => {
+export const FaceHappy = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -801,7 +801,7 @@ export const Pencil = () => {
   );
 };
 
-export const Person = ({ size }) => {
+export const Person = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

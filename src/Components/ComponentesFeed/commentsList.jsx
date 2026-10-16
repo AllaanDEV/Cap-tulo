@@ -2,17 +2,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import { Lines } from "../ComponentsForm/lines";
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
-import { configuration, faceHappy, Send, Like } from "../svgCode";
+import { Configuration, Send, Like } from "../svgCode";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { createPortal } from "react-dom";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { DialogImoji } from "./dialogEmoji";
 import { ButtonPost } from "./buttonPost";
 import { TimeAgo } from "./timeAgo";
 
-const FaceHappy = faceHappy;
-const Icon = configuration;
+const Icon = Configuration;
 
 export function CommentsList({ post }) {
   const {
@@ -21,23 +18,16 @@ export function CommentsList({ post }) {
     setPostEdit,
     editValue,
     postComment,
-    setPublication,
     postFocus,
-    setDialogEmoji,
-    dialogEmoji,
     contentEmoji,
     setContentEmoji,
     postSaved,
-    isLiked,
     handleLike,
     liking,
     like,
     setLike,
     themeOn,
   } = useContext(AppContext);
-
-  const [toggleDialogEmojisComment, setToggleDialogEmojisComment] =
-    useState(false);
 
   const textareaRef = useRef(null);
 
@@ -49,7 +39,6 @@ export function CommentsList({ post }) {
     nameIcon,
     user,
     Saves,
-    LikeButton,
     LikesComment,
     isCommentLiked,
     getCommentLikesCount,
@@ -97,7 +86,6 @@ export function CommentsList({ post }) {
   );
 
   const [comment, setComment] = useState("");
-  // const [itemsVisible, setItemsVisible] = useState(5);
 
   useEffect(() => {
     getLikesComments();

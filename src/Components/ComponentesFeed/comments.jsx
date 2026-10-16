@@ -6,7 +6,7 @@ import AppContext from "../context";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
 
 export function Comments({ comment }) {
-  const { toggleComments, SETEDIT, setPostEdit, editValue } =
+  const { toggleComments, SETEDIT, editValue } =
     useContext(AppContext);
 
   const { commentDelete, photoValueFeed, fetchProfile, nameIcon } =
@@ -51,7 +51,6 @@ export function Comments({ comment }) {
               className="hover:text-wine"
               onClick={() => {
                 SETEDIT(comment.authorId);
-                // setPostEdit(post);
                 toggleComments();
               }}
             >

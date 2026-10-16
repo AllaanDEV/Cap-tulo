@@ -1,11 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import logo from "../../assets/transparent-logo.svg";
 
-import { useNavigate } from "react-router";
 import { gsap } from "gsap";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 
-import { AnimationTransiton } from "../svgCode";
 import { FormLogin } from "../formLogin";
 import { FormRegister } from "../formRegister";
 import AppContext from "../context";
@@ -22,7 +20,7 @@ const images = [
 ];
 
 export function ContainerForm() {
-  const { formsOn, setFormsOn, iniciarTransicao, Login } =
+  const { formsOn, setFormsOn, iniciarTransicao } =
     useContext(AppContext);
 
   const [current, setCurrent] = useState(0);
