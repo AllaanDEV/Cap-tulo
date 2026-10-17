@@ -73,6 +73,7 @@ export function SearchUsersSidebar() {
     .filter((users) => users.id !== user.id)
     .slice(0, 5);
 
+    console.log("usersVisible", usersVisible)
   return (
     <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <section>

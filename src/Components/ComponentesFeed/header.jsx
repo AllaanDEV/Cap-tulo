@@ -18,7 +18,6 @@ export function Header() {
   const {
     publication,
     setSearch,
-    ebooks,
     setBookSearch,
     setSearchValue,
     postId,
@@ -28,8 +27,20 @@ export function Header() {
     themes,
   } = useContext(AppContext);
 
-  const { nameIcon, user, fetchProfile, photoValueFeed, postFollowers } =
-    useRequisicoes({});
+  const {
+    nameIcon,
+    user,
+    fetchProfile,
+    photoValueFeed,
+    postFollowers,
+    searchBooks,
+  } = useRequisicoes({});
+
+  const [isSearchingBooks, setIsSearchingBooks] = useState(false);
+
+  // Refs para debounce e cancelamento da busca de livros na API
+  const booksSearchTimer = useRef(null);
+  const booksSearchController = useRef(null);
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user?.id,
@@ -64,16 +75,32 @@ export function Header() {
 
       return setSearch(filterPublications);
     } else if (location.pathname === "/ebooks") {
-      setSearchValue(e.target.value);
-      const booksFilter = ebooks.filter((ebook) => {
-        return (
-          padrao(ebook.volumeInfo?.authors?.join(" ")).includes(
-            padrao(e.target.value),
-          ) || padrao(ebook.volumeInfo?.title).includes(padrao(e.target.value))
-        );
-      });
+      const term = e.target.value;
 
-      return setBookSearch(booksFilter);
+      setSearchValue(term);
+
+      // Cancela a busca anterior (timer e requisição em andamento)
+      if (booksSearchTimer.current) {
+        clearTimeout(booksSearchTimer.current);
+      }
+
+      booksSearchController.current?.abort();
+
+      if (!term.trim()) {
+        setIsSearchingBooks(false);
+        return setBookSearch([]);
+      }
+
+      setIsSearchingBooks(true);
+
+      // Debounce: busca na API após o usuário parar de digitar,
+      // independente da lista já carregada na página.
+      booksSearchTimer.current = setTimeout(async () => {
+        const results = await searchBooks(term);
+
+        setIsSearchingBooks(false);
+        setBookSearch(results);
+      }, 400);
     }
   };
 
@@ -152,7 +179,11 @@ export function Header() {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Buscar livros, leitores..."
+              placeholder={
+                isSearchingBooks
+                  ? "Buscando livros..."
+                  : "Buscar livros, leitores..."
+              }
               className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
               w-[clamp(2rem,40vw,30rem)]"
               onInput={(e) => Search(e)}

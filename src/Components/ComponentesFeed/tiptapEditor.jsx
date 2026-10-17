@@ -35,7 +35,7 @@ export function TipTapEditor({ onEditorReady }) {
     themeOn,
   } = useContext(AppContext);
 
-  const { nameIcon, user, photoValueFeed, fetchProfile } =
+  const { nameIcon, user, photoValueFeed, fetchProfile, searchUsersMention } =
     useRequisicoes({});
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
@@ -78,11 +78,7 @@ export function TipTapEditor({ onEditorReady }) {
       Mention.configure({
         suggestion: {
           items: async ({ query }) => {
-            const response = await fetch(
-              `http://localhost:3000/users?search=${encodeURIComponent(query)}`,
-            );
-
-            return await response.json();
+            return await searchUsersMention(query);
           },
 
           render: () => {

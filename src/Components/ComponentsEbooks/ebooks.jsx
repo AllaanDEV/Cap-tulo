@@ -11,7 +11,7 @@ export function Ebook(ebook) {
 
   const { ebookSaved, themeOn } = useContext(AppContext);
 
-  const { token, getBookSave, user } = useRequisicoes({});
+  const { saveBook } = useRequisicoes({});
 
   const [details, setDetails] = useState(false);
 
@@ -19,21 +19,8 @@ export function Ebook(ebook) {
     setDetails(!details);
   };
 
-  const saveBook = async () => {
-    const response = await fetch("http://localhost:3000/api/books/saved", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(ebook.ebook),
-    });
-
-    if (response.ok) {
-      await getBookSave(user.id);
-    }
-
-    return response;
+  const saveBookEbook = async () => {
+    await saveBook(ebook.ebook);
   };
 
   const isSaved = ebookSaved?.some(
@@ -87,7 +74,7 @@ export function Ebook(ebook) {
                 ? "text-yellow-600"
                 : "text-[#995d43] hover:text-yellow-600"
             }`}
-            onClick={saveBook}
+            onClick={saveBookEbook}
           >
             <SaveIcon size="1.5em" filled={isSaved} />
           </button>

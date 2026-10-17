@@ -3,7 +3,7 @@ import { Info } from "./info";
 
 import { useContext, useEffect } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import AppContext from "../context";
 import { UsersInfo } from "./usersInfo";
 import { ContainerGoal } from "./containerGoal";
@@ -18,20 +18,11 @@ const formatarParaK = (numero) => {
 export function SideBar() {
   const { id: paramsId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const {
-    user,
-    allFollowers,
-    getBookSave,
-    postNumberGet,
-  } = useRequisicoes({});
-  const {
-    followers,
-    ebookSaved,
-    option,
-    setOption,
-    options,
-  } = useContext(AppContext);
+  const { user, allFollowers, getBookSave, postNumberGet } = useRequisicoes({});
+  const { followers, ebookSaved, option, setOption, options, editRequisicao } =
+    useContext(AppContext);
 
   const { logout } = useRequisicoes({});
 
@@ -39,6 +30,11 @@ export function SideBar() {
     allFollowers();
     getBookSave(user.id);
   }, []);
+
+  // Recarrega a estante da sidebar quando um livro é salvo/removido.
+  useEffect(() => {
+    getBookSave(user.id);
+  }, [editRequisicao]);
 
   const seguindoProfileId = followers.filter((f) => f.following === user.id);
   const seguindo = followers.filter((f) => f.userId === user.id);
@@ -61,10 +57,11 @@ export function SideBar() {
     } else if (location.pathname == `/feed/${user.id}`) {
       setOption("Feed");
     } else if (location.pathname == `/ebooks`) {
-      setOption("Minha estante");
+      setOption("Explorar");
+    } else if (location.pathname == `/auth/logout`) {
+      setOption("sair");
     }
   }, [location]);
-
 
   return (
     <aside className="fixed top-20">
@@ -95,7 +92,17 @@ export function SideBar() {
                 className={`flex gap-2 items-center hover:bg-border py-2 pl-2 rounded-2xl ${option == o.name ? "bg-wine/15 text-wine enabled:hover:bg-border" : ""}`}
                 onClick={() => {
                   setOption(o.name);
-                  logout(index);
+                  if (o.name === "Explorar") {
+                    navigate("/ebooks");
+                  } else if (o.name === "Minha estante") {
+                    navigate(`/perfil/${user.id}`);
+                  } else if (o.name === "sair") {
+                    navigate("/auth/logout");
+                  } else if (o.name === "Feed") {
+                    navigate(`/feed/${user.id}`);
+                  } else if (o.name === "Perfil") {
+                    navigate(`/perfil/${user.id}`);
+                  }
                 }}
               >
                 <Icon size="1em"></Icon>

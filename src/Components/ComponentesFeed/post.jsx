@@ -88,6 +88,12 @@ export const Post = memo(function Post({ post }) {
     return () => clearTimeout(timer);
   }, [showComments]);
 
+
+
+
+  if(post.authorId === user.id){
+    console.log("POST", post) 
+  }
   return (
     <>
       <Div className=" animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
