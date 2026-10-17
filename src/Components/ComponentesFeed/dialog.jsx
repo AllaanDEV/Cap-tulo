@@ -7,7 +7,7 @@ export function Dialog() {
   const { openOrCloseDialog, dialog, publication, setPublication, setSearch } =
     useContext(AppContext);
 
-  const { token, user } = useRequisicoes({});
+  const { user, newPostSimple } = useRequisicoes({});
 
   const dialogRef = useRef(null);
   const midiaRef = useRef(null);
@@ -29,46 +29,21 @@ export function Dialog() {
       return;
     }
 
-    fetch("http://localhost:3000/api/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        content: formData.get("content"),
-        midia: formData.get("midia"),
-        author: user.name,
-        userName: user.userName,
-        likes: 0,
-        comments: [],
-      }),
-    }).then((res) =>
-      res.json().then((data) => {
-        localStorage.setItem("newPost", JSON.stringify(data));
-        const posts = [data, ...publication];
-        setSearch(posts);
+    newPostSimple({
+      content: formData.get("content"),
+      midia: formData.get("midia"),
+      author: user.name,
+      userName: user.userName,
+    }).then((data) => {
+      // localStorage.setItem("newPost", JSON.stringify(data));
+      const posts = [data, ...publication];
+      setSearch(posts);
 
-        e.target.reset();
+      e.target.reset();
 
-        return setPublication(posts);
-      }),
-    );
+      return setPublication(posts);
+    });
   };
-
-  // const photoIcon = (evento) => {
-  //   const file = evento.target.files[0];
-
-  //   if (file) {
-  //     const content = new FileReader();
-  //     content.onload = (e) => {
-  //       midiaRef.current.src = e.target.result;
-  //       midiaRef.current.style.display = "block";
-  //     };
-
-  //     content.readAsDataURL(file);
-  //   }
-  // };
 
   return (
     <dialog
@@ -78,9 +53,6 @@ export function Dialog() {
     >
       <Form active={newPost}>
         <textarea name="content"></textarea>
-        {/* <label>
-          <input type="file" onChange={photoIcon}></input>
-        </label> */}
 
         <img name="midia" ref={midiaRef}></img>
         <p>TESTE</p>

@@ -3,11 +3,13 @@ import AppContext from "../context";
 import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { createPortal } from "react-dom";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function DialogGif({className}) {
   const gifRef = useRef(null);
   const inputRef = useRef(null);
   const { dialogGif, setDialogGif, setGifData, themeOn } = useContext(AppContext);
+  const { getGifs: fetchGifs } = useRequisicoes({});
 
   const [busca, setBusca] = useState("options");
   const [arrayGifs, setArrayGifs] = useState([]);
@@ -35,11 +37,7 @@ export function DialogGif({className}) {
   const [gifOffset, setGifOffset] = useState();
 
   const getGifs = async (add, searchTerm = busca) => {
-    const response = await fetch(
-      `/api/gifs?busca=${encodeURIComponent(searchTerm)}&offset=${gifOffset}`,
-    );
-
-    const data = await response.json();
+    const data = await fetchGifs(searchTerm, gifOffset);
 
     if (add) {
       setArrayGifs((prev) => [...prev, ...data]);
@@ -76,7 +74,7 @@ export function DialogGif({className}) {
 
   const itemsDefault = [
     {
-      name: "Happy",
+      name: "Feliz",
       url: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2lyNnNkNW14a3l2a245cnFodXlja2FyaHljbWh3b3ZpbXV2emV0cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Dy6KtvPNfNVAIEx7O6/giphy.gif",
     },
     {
@@ -114,7 +112,7 @@ export function DialogGif({className}) {
     >
       <div className="h-full overflow-y-auto scrollbar-none  bg-border">
         <div className="flex items center justify-between p-3">
-          <span className={` text-2xl font-extrabold front-fraunce ${themeOn ? "text-black" : "text-white"}`}>Escolha uma gif</span>
+          <span className={` text-2xl font-extrabold front-fraunce ${themeOn ? "text-black" : "text-white"}`}>Escolha um gif</span>
           <button
             onClick={() => {
               (setDialogGif((prev) => !prev),

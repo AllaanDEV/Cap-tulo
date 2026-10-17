@@ -6,7 +6,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayEbooks() {
   const { ebooks, setEbooks, bookSearch, searchValue, themeOn } = useContext(AppContext);
-  const { getBookSave, user} = useRequisicoes({});
+  const { getBookSave, user, getBooks } = useRequisicoes({});
 
   const [page, setPage] = useState(0);
   const [booksContador, setBooksContador] = useState(0);
@@ -35,10 +35,9 @@ export function ArrayEbooks() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/api/books?q=${allBooks}&page=${page}`);
-      const res = await response.json();
+      const res = await getBooks(allBooks, page);
 
-      setEbooks((prev) => [...prev, ...(res ?? [])]);
+      setEbooks((prev) => [...prev, ...res]);
     }
     fetchData();
   }, [page]);

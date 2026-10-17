@@ -10,7 +10,7 @@ export function EditProfile() {
   const dialogRef = useRef(null);
   const { id: profileId } = useParams();
 
-  const { token, fetchProfile } = useRequisicoes({});
+  const { fetchProfile, editProfileRequest, editUserRequest } = useRequisicoes({});
   const {
     dialog,
     openOrCloseDialog,
@@ -43,26 +43,16 @@ export function EditProfile() {
     const formData = new FormData(e.target);
 
     try {
-      const edit = await fetch(
-        `http://localhost:3000/profileEdit/${profileId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: formData.get("name").trim(),
-            username: formData.get("username").trim(),
-            bios: formData.get("bios")?.trim() || null,
-            location: formData.get("location")?.trim() || null,
-            link: formData.get("link")?.trim() || null,
-            midiaIcon: deletePhoto
-              ? null
-              : midiaIcon || editValue.dataPerfil.midiaIcon || null,
-          }),
-        },
-      );
+      const edit = await editProfileRequest(profileId, {
+        name: formData.get("name").trim(),
+        username: formData.get("username").trim(),
+        bios: formData.get("bios")?.trim() || null,
+        location: formData.get("location")?.trim() || null,
+        link: formData.get("link")?.trim() || null,
+        midiaIcon: deletePhoto
+          ? null
+          : midiaIcon || editValue.dataPerfil.midiaIcon || null,
+      });
 
       if (edit.ok) {
         setEditRequisicao((previousValue) => !previousValue);
@@ -83,23 +73,10 @@ export function EditProfile() {
     const formData = new FormData(e.target);
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/updateUser/${profileId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: formData.get("name").trim(),
-            userName: formData.get("username").trim(),
-          }),
-        },
-      );
-      const data = await response.json();
-
-      localStorage.setItem("user", JSON.stringify(data.user));
+      const response = await editUserRequest(profileId, {
+        name: formData.get("name").trim(),
+        userName: formData.get("username").trim(),
+      });
 
       return response;
     } catch (error) {

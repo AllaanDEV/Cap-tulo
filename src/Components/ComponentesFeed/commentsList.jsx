@@ -114,7 +114,7 @@ export function CommentsList({ post }) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={1}
-              className={`w-full px-5 py-3 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md ${
+              className={`w-full px-5 py-3 outline-none bg-transparent resize-none placeholder:text-xs sm:placeholder:text-md scrollbar-none ${
                 themeOn ? "text-black" : "text-white"
               }`}
               placeholder="Dê a sua opinião!"
@@ -169,7 +169,7 @@ export function CommentsList({ post }) {
                     </div>
                   </div>
 
-                  <div className="pl-4 pr-2 pb-5 pt-1 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
+                  <div className="min-w-0 flex-1 pl-4 pr-2 pb-5 pt-1 bg-background border border-border items-center rounded-b-3xl rounded-tr-3xl">
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2 items-center">
                         <h3
@@ -187,7 +187,7 @@ export function CommentsList({ post }) {
                           <Icon />
                         </summary>
 
-                        <div className="bg-border absolute px-2 rounded-sm flex flex-col">
+                        <div className="bg-border absolute right-4 px-2 rounded-sm flex flex-col">
                           <button
                             type="button"
                             className="hover:text-wine"
@@ -214,7 +214,7 @@ export function CommentsList({ post }) {
                     </div>
 
                     <p
-                      className={` pr-20 ${themeOn ? "text-black" : "text-white"}`}
+                      className={` [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full ${themeOn ? "text-black" : "text-white"}`}
                     >
                       {c.text}
                     </p>

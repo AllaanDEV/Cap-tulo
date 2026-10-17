@@ -39,8 +39,10 @@ export function ArrayPost() {
     hasAnimatedInitialPosts.current = true;
   }
 
+console.log("postsToRender", postsToRender)
+
   return (
-    <ul className="flex flex-col gap-5 mb-25 sm:mb-0">
+    <ul className="flex flex-col gap-5 sm:mb-0">
       {postsToRender.length > 0 ? (
         postsToRender.map((p) => (
           <>

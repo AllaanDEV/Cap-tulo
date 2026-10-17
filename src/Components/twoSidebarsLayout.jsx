@@ -20,7 +20,7 @@ export function TwoSidebarsLayout() {
           </aside>
 
           {/* Conteúdo da página */}
-          <section className="w-full lg:w-auto shrink-0 mt-10 sm:mt-12.5">
+          <section className="w-full lg:w-auto shrink-0 mt-10 sm:mt-12.5 mb-15">
             <Outlet />
           </section>
 

@@ -8,10 +8,18 @@ import { Div } from "../ComponentesFeed/div";
 
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
-  const { ebookSaved, setStyleCardActive, publication, postModified } =
+  const { ebookSaved, setStyleCardActive, publication, postModified, editRequisicao } =
     useContext(AppContext);
-  const { stylePatchFeed, stylePatchProfile, user } =
+  const { stylePatchFeed, stylePatchProfile, user, getBookSave } =
     useRequisicoes({});
+
+  // Quando um livro é salvo (ou removido) em qualquer página,
+  // recarrega a estante para esta tela atualizar na hora.
+  useEffect(() => {
+    if (stylePatchFeed || stylePatchProfile) {
+      getBookSave(user.id);
+    }
+  }, [editRequisicao]);
 
   const styleFeed = stylePatchFeed
     ? " 2xl:grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))]"
@@ -34,7 +42,11 @@ export function ArrayBookSaved({ profile }) {
       setStyleCardActive(ebookSaved[0] ?? null);
     }
   }, [postModified, ebookSaved, publication, user.id]);
-  const [itemsVisible, setItemsVisible] = useState(4);
+  const [itemsVisibleState, setItemsVisible] = useState(4);
+
+  // No feed (ComplexPost) mostra todos os livros salvos;
+  // no perfil mantém a paginação com "Ver mais".
+  const itemsVisible = stylePatchFeed || stylePatchProfile ? ebookSaved.length : itemsVisibleState;
 
   const hasMore = itemsVisible < ebookSaved.length;
   const canShowLess = itemsVisible > 4;

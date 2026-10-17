@@ -25,26 +25,13 @@ export function ContainerEbooks({
     postModified,
     containerModified,
   } = useContext(AppContext);
-  const { token, user } = useRequisicoes({});
+  const { user, deleteSavedBook: deleteSavedBookRequest } = useRequisicoes({});
   const location = useLocation();
 
   const deleteSavedBook = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/books/ebookDelete/${book.ebook.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
-      },
-    );
-    const data = await response.json();
+    const data = await deleteSavedBookRequest(book.ebook.id);
     setEbookSaved(data);
-    return response;
+    return data;
   };
 
   console.log("VAAAAAAAAAAAAPO",{

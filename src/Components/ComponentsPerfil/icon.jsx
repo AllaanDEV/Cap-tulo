@@ -71,6 +71,10 @@ export function Icon() {
     fetchProfile,
     allFollowers,
     getBookSave,
+    getPostsProfile,
+    getProfileEditData,
+    saveProfileTheme,
+    getProfileTheme,
   } = useRequisicoes({ setLike });
 
   const navRef = useRef(null);
@@ -94,11 +98,9 @@ export function Icon() {
   }, [buttonFocus]);
 
   useEffect(() => {
-    fetch("/api/posts")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => setPublication(data));
+    getPostsProfile()
+      .then((data) => setPublication(data))
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
@@ -134,7 +136,7 @@ export function Icon() {
 
   useEffect(() => {
     getBookSave(profileId);
-  }, [profileId, token]);
+  }, [profileId, token, editRequisicao]);
 
   const filterFeed = (index) => {
     if (index === 0) {
@@ -149,52 +151,25 @@ export function Icon() {
   };
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchPerfil = async () => {
       if (!profileId || !token) return;
 
       try {
-        const response = await fetch(
-          `http://localhost:3000/profileEdit/${profileId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        const dataPerfil = await response.json();
+        const dataPerfil = await getProfileEditData(profileId);
         setEditValue((prev) => ({ ...prev, dataPerfil }));
       } catch (error) {
         console.error("Erro ao buscar perfil:", error);
       }
     };
 
-    fetchProfile();
+    fetchPerfil();
   }, [profileId, token, editRequisicao, profile]);
 
   const responseSrc = async () => {
-    const responsePost = await fetch(
-      `http://localhost:3000/profileTheme/${profileId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          midiaTheme: midiaTheme || null,
-        }),
-      },
-    );
+    const responsePost = await saveProfileTheme(profileId, midiaTheme);
 
     if (responsePost.ok) {
-      const responseGet = await fetch(
-        `http://localhost:3000/profileTheme/${profileId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const data = await responseGet.json();
+      const data = await getProfileTheme(profileId);
       setEditValue((prev) => ({ ...prev, data }));
     }
   };
@@ -212,15 +187,7 @@ export function Icon() {
 
   useEffect(() => {
     const get = async () => {
-      const responseGet = await fetch(
-        `http://localhost:3000/profileTheme/${profileId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const data = await responseGet.json();
+      const data = await getProfileTheme(profileId);
       setEditValue((prev) => ({ ...prev, data }));
     };
     get();

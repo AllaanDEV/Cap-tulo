@@ -49,9 +49,9 @@ export function DialogPostFocus() {
   
 
   // Verifica se o post possui um tipo especial.
-  const isModifiedPost = Boolean(
-    dataPostFocus?.type?.trim()
-  );
+ const isModifiedPost = ["feedback", "resenha"].includes(
+  dataPostFocus?.type
+);
 
   // Verifica o progresso de leitura do livro.
   const ebookProgressFocus = ebookSaved

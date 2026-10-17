@@ -15,7 +15,7 @@ export function ReadingPace() {
     usersList,       setGoalUser
   } = useContext(AppContext);
 
-  const { user, postNumberGet, userUP } = useRequisicoes({});
+  const { user, postNumberGet, userUP, saveGoal } = useRequisicoes({});
   const { id: paramsId } = useParams();
 
 
@@ -59,18 +59,7 @@ const postNumber = async () => {
   setSavingGoal(true);
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/goalNumber/${paramsId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          number: goalDraft,
-        }),
-      }
-    );
+    const response = await saveGoal(paramsId, goalDraft);
 
     if (!response.ok) {
       throw new Error("Erro ao salvar a meta de leitura.");

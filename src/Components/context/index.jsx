@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import AppContext from ".";
 
 import { useComments } from "./hooks/useComments";
+import {
+  registerRequest,
+  loginRequest,
+  getPostsFeed,
+} from "./hooks/useRequisicoes";
 import { AnimationTransiton, Star } from "../svgCode";
 import { House } from "../svgCode";
 import { Compass } from "../svgCode";
@@ -28,41 +33,27 @@ export function Context({ children }) {
 
   const Register = async ({ name, email, password, userName }) => {
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, userName }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
+      // Requisição movida para "useRequisicoes" (registerRequest)
+      await registerRequest({ name, email, password, userName });
 
       return { success: true };
     } catch (error) {
-      alert("Email ou senha já cadastrados");
+      alert(
+        error.message === "Falha de conexão"
+          ? "Não foi possível realizar o cadastro. Verifique sua conexão e tente novamente."
+          : "Email ou senha já cadastrados",
+      );
       return { success: false, error: error.message };
     }
   };
 
   const Login = async ({ email, password }) => {
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      // Requisição movida para "useRequisicoes" (loginRequest)
+      const responseJson = await loginRequest({ email, password });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-
-      const responseJson = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", JSON.stringify(responseJson.token));
-        localStorage.setItem("user", JSON.stringify(responseJson.user));
-      }
+      localStorage.setItem("token", JSON.stringify(responseJson.token));
+      localStorage.setItem("user", JSON.stringify(responseJson.user));
 
       return { success: true, userId: responseJson.user.id };
     } catch (error) {
@@ -135,11 +126,12 @@ export function Context({ children }) {
   const [likesCommentList, setLikesCommentList] = useState([]);
 
   useEffect(() => {
-    fetch("/api/posts")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => setPublication(data));
+    // Requisição movida para "useRequisicoes" (getPostsFeed)
+    getPostsFeed()
+      .then((data) => setPublication(data))
+      .catch(() => {
+        alert("Não foi possível carregar o feed. Tente novamente mais tarde.");
+      });
   }, [editRequisicao]);
 
   const [imgIdUrl, setImgIdUrl] = useState([]);
@@ -249,7 +241,7 @@ export function Context({ children }) {
     { icon: Compass, name: "Explorar" },
     { icon: Book, name: "Minha estante" },
     { icon: Person, name: "Perfil" },
-    { icon: Save, name: "Quero ler" },
+    // { icon: Save, name: "Quero ler" },
     { icon: Logout, name: "sair" },
   ];
 
@@ -340,7 +332,14 @@ export function Context({ children }) {
       return;
     }
 
+    // Interrompe animações anteriores
     gsap.killTweensOf(paths);
+
+    // Reseta completamente o estado inicial
+    gsap.set(paths, {
+      drawSVG: "0%",
+      visibility: "hidden",
+    });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -348,8 +347,12 @@ export function Context({ children }) {
       },
     });
 
-    tl.set(paths, { visibility: "visible" });
+    // Mostra os caminhos já zerados
+    tl.set(paths, {
+      visibility: "visible",
+    });
 
+    // Desenha o SVG progressivamente
     tl.to(paths, {
       drawSVG: "100%",
       duration: 1.5,
@@ -357,10 +360,12 @@ export function Context({ children }) {
       ease: "power1.inOut",
     });
 
+    // Navega depois que o desenho termina
     tl.call(() => {
       navigate(`/feed/${userId}`);
     });
 
+    // Apaga o desenho progressivamente
     tl.to(paths, {
       drawSVG: "100% 100%",
       duration: 1,
@@ -368,15 +373,12 @@ export function Context({ children }) {
       ease: "power1.inOut",
     });
 
-    tl.set(paths, {
-      clearProps: "strokeWidth,visibility",
-    });
-
+    // Limpa e oculta os caminhos
     tl.set(paths, {
       drawSVG: "0%",
+      visibility: "hidden",
+      clearProps: "strokeWidth",
     });
-
-    tl.set(paths, { visibility: "hidden" });
   };
 
   const [deletePhoto, setDeletePhoto] = useState(false);

@@ -3,6 +3,7 @@ import AppContext from "../context";
 import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { ContainerTags } from "../ComponentsPerfil/containerTags";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function DialogEmoji({
   emojiContainerRef,
@@ -22,6 +23,9 @@ export function DialogEmoji({
   const [loadingEmojis, setLoadingEmojis] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchError, setSearchError] = useState(false);
+
+  const { getEmojis: fetchEmojis, searchEmojis: fetchSearchEmojis } =
+    useRequisicoes({});
 
   const isOpen = toggleDialogEmojisComment || dialogEmoji;
   const isSearching = search.trim().length > 0;
@@ -57,15 +61,8 @@ export function DialogEmoji({
       setLoadingEmojis(true);
 
       try {
-        const response = await fetch("/api/emojis", {
-          signal: controller.signal,
-        });
+        const data = await fetchEmojis(controller.signal);
 
-        if (!response.ok) {
-          throw new Error("Erro ao carregar emojis");
-        }
-
-        const data = await response.json();
         setEmojis(Array.isArray(data) ? data : []);
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -104,16 +101,8 @@ export function DialogEmoji({
 
     const timeout = setTimeout(async () => {
       try {
-        const response = await fetch(
-          `/api/emojis/search/${encodeURIComponent(query)}`,
-          { signal: controller.signal },
-        );
+        const data = await fetchSearchEmojis(query, controller.signal);
 
-        if (!response.ok) {
-          throw new Error("Erro ao pesquisar emojis");
-        }
-
-        const data = await response.json();
         setSearchList(Array.isArray(data) ? data : []);
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -177,8 +166,7 @@ export function DialogEmoji({
               <XSavedEbook />
             </button>
           </div>
-
-          {/* Pesquisa fixa */}
+          
           <form
             className="flex w-full shrink-0 items-center border border-border rounded-full my-1"
             onSubmit={(e) => e.preventDefault()}

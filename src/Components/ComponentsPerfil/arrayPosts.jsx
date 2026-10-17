@@ -16,6 +16,7 @@ export function ArrayPosts({ post }) {
 
   const postsToRender = searchValue ? search : publication;
 
+  console.log("POPSTS", post)
   return (
     <>
       <ul className="flex flex-col gap-5">

@@ -7,7 +7,7 @@ import AppContext from "../context";
 export default function DeleteImgIcon() {
   const XIcon = X;
   const { id: paramsId } = useParams();
-  const { token } = useRequisicoes({});
+  const { deleteImgPerfil: deleteImgPerfilRequest } = useRequisicoes({});
   const { openOrCloseDialog } = useContext(AppContext);
   const [, setImagemUrl] = useState("url_da_imagem_atual.jpg");
 
@@ -16,16 +16,8 @@ export default function DeleteImgIcon() {
     openOrCloseDialog();
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/profilePerfilIcon/${paramsId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await deleteImgPerfilRequest(paramsId);
+
     if (response.ok) {
       setImagemUrl(null); // Remove a imagem do estado para sumir da tela na hora
     }
