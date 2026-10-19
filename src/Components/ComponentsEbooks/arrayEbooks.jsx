@@ -16,11 +16,10 @@ export function ArrayEbooks() {
   const [termoAtivo, setTermoAtivo] = useState("");
 
   const categorias = [
+    "game of thrones",
     "Sousou no Frieren",
     "evangelion",
-    "game of thrones",
     "Stranger Things",
-    "DragonBall",
     "Codigo Da Vinci",
     "breaking bad",
     "The Sopranos",
@@ -85,7 +84,10 @@ export function ArrayEbooks() {
       <ul className="grid gap-x-3 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {displayedBooks.map((e) => {
           return (
-            <li key={e.etag} className="animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]">
+            <li
+              key={e.etag}
+              className="animate-[appear_500ms_cubic-bezier(0.22,1,0.36,1)_both]"
+            >
               <Ebook ebook={e}></Ebook>
             </li>
           );
@@ -97,7 +99,7 @@ export function ArrayEbooks() {
           onClick={() => {
             (setPage(page + 1), setAllBooks(categorias[booksContador]));
           }}
-          className= { ` w-[40vw] ${themeOn ? "text-[#995d43]" : "text-[#765242]"}`}
+          className={` w-[40vw] ${themeOn ? "text-[#995d43]" : "text-[#765242]"}`}
         >
           Carregar mais
         </ButtonBook>
