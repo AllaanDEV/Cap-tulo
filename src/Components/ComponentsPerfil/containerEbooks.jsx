@@ -20,11 +20,8 @@ export function ContainerEbooks({
   onClick,
   ...props
 }) {
-  const {
-    setEbookSaved,
-    postModified,
-    containerModified,
-  } = useContext(AppContext);
+  const { setEbookSaved, postModified, containerModified } =
+    useContext(AppContext);
   const { user, deleteSavedBook: deleteSavedBookRequest } = useRequisicoes({});
   const location = useLocation();
 
@@ -34,12 +31,6 @@ export function ContainerEbooks({
     return data;
   };
 
-  console.log("VAAAAAAAAAAAAPO",{
-  styleDisable,
-  postModified,
-  pathname: location.pathname,
-  userId: user.id,
-});
   return (
     <div
       {...props}
@@ -68,7 +59,6 @@ export function ContainerEbooks({
           : ""
       } group relative ${styleActive} ${className}`}
     >
-
       {(location.pathname === `/feed/${user.id}` ||
         location.pathname === `/perfil/${user.id}`) &&
       containerModified === false ? (

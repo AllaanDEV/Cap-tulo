@@ -195,13 +195,13 @@ export const Share = () => {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="1.8"
+      stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
       class="lucide lucide-share2 lucide-share-2"
       aria-hidden="true"
-      data-id="element-76"
-      data-mp="3u8vaibq1ick9"
+      data-id="element-246"
+      data-mp="igw0yc0ki6ly"
     >
       <circle cx="18" cy="5" r="3"></circle>
       <circle cx="6" cy="12" r="3"></circle>

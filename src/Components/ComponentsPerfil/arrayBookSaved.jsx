@@ -8,8 +8,13 @@ import { Div } from "../ComponentesFeed/div";
 
 export function ArrayBookSaved({ profile }) {
   const location = useLocation();
-  const { ebookSaved, setStyleCardActive, publication, postModified, editRequisicao } =
-    useContext(AppContext);
+  const {
+    ebookSaved,
+    setStyleCardActive,
+    publication,
+    postModified,
+    editRequisicao,
+  } = useContext(AppContext);
   const { stylePatchFeed, stylePatchProfile, user, getBookSave } =
     useRequisicoes({});
 
@@ -46,7 +51,8 @@ export function ArrayBookSaved({ profile }) {
 
   // No feed (ComplexPost) mostra todos os livros salvos;
   // no perfil mantém a paginação com "Ver mais".
-  const itemsVisible = stylePatchFeed || stylePatchProfile ? ebookSaved.length : itemsVisibleState;
+  const itemsVisible =
+    stylePatchFeed || stylePatchProfile ? ebookSaved.length : itemsVisibleState;
 
   const hasMore = itemsVisible < ebookSaved.length;
   const canShowLess = itemsVisible > 4;

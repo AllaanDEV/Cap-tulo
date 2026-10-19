@@ -5,6 +5,40 @@ import { useNavigate } from "react-router";
 // Chave (URL base) de todas as requisições do projeto
 export const KEY = "http://localhost:3000/";
 
+// ===== Cache simples de leitura com TTL + deduplicação de requisições em voo.
+// Evita que dezenas de componentes montados ao mesmo tempo disparem a mesma
+// requisição repetidas vezes (motivo principal da lentidão da navegação).
+const requestCache = {};
+
+export function cachedRequest(key, fn, ttl = 5000) {
+  const now = Date.now();
+  const entry = requestCache[key];
+
+  if (entry && now - entry.time < ttl) {
+    return entry.promise;
+  }
+
+  const promise = Promise.resolve()
+    .then(fn)
+    .catch((error) => {
+      delete requestCache[key];
+      throw error;
+    });
+
+  requestCache[key] = { promise, time: now };
+
+  return promise;
+}
+
+// Invalida o cache manualmente (usado após edições/mutações de dados).
+export function invalidateRequestCache(key) {
+  if (key) {
+    delete requestCache[key];
+  } else {
+    Object.keys(requestCache).forEach((k) => delete requestCache[k]);
+  }
+}
+
 // ===== Requisições que não dependem do contexto (usadas pelo próprio Context)
 // Vindas de "context/index.jsx"
 export const registerRequest = async ({ name, email, password, userName }) => {
@@ -72,6 +106,7 @@ export function useRequisicoes({ post, setLike }) {
     setImgIdUrl,
     gifData,
     setEbookSaved,
+    setMyEbookSaved,
     setHasText,
     valuePostsCitation,
     starFilled,
@@ -87,6 +122,9 @@ export function useRequisicoes({ post, setLike }) {
     setFilterUsers,
     dataPostFocus,
     setDataPostFocus,
+    like,
+    photoValueFeed,
+    setPhotoValueFeed,
     setGoal,
     setPostSaved,
     setEditValue,
@@ -105,7 +143,9 @@ export function useRequisicoes({ post, setLike }) {
   };
 
   const [comments, setComments] = useState(false);
-  const [photoValueFeed, setPhotoValueFeed] = useState([]);
+
+  // photoValueFeed/setPhotoValueFeed agora vêm do Context (compartilhado entre
+  // todos os componentes) — ver "context/index.jsx".
 
   const postDelete = async (data) => {
     const res = await fetch(`${KEY}api/posts/${post.id}`, {
@@ -277,69 +317,168 @@ export function useRequisicoes({ post, setLike }) {
   };
 
   const LikeButton = async () => {
-    const likesPost = await fetch(`${KEY}api/posts/${post.id}/like`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        userId: user.id,
-      }),
-    }).catch((error) => {
-      console.error(error);
-      return null;
+    // ===== Atualização otimista: reflete o like na UI imediatamente, ANTES da
+    // requisição. Sem isso, o botão só mudava quando `likesGet` terminava.
+    const wasLiked = like?.some(
+      (p) =>
+        p.postId === post.id && p.userId === user.id && p.validation === true,
+    );
+
+    const optimisticLikeEntry = {
+      postId: post.id,
+      userId: user.id,
+      validation: !wasLiked,
+    };
+
+    const optimisticPost = {
+      ...post,
+      likes: (post.likes || 0) + (wasLiked ? -1 : 1),
+    };
+
+    // 1. Aplica o estado otimista (UI atualiza na hora).
+    setLike((prev) => {
+      const withoutThis = (prev || []).filter(
+        (p) => !(p.postId === post.id && p.userId === user.id),
+      );
+
+      // Se a validação ficou false, a interação sai da lista.
+      return optimisticLikeEntry.validation
+        ? [...withoutThis, optimisticLikeEntry]
+        : withoutThis;
     });
 
-    if (!likesPost || !likesPost.ok) {
-      alert("Não foi possível curtir o post. Tente novamente mais tarde.");
-      throw new Error("Erro ao atualizar like");
-    }
+    setPublication((prev) =>
+      prev?.map((p) => (p.id === post.id ? optimisticPost : p)),
+    );
 
-    const data = await likesPost.json();
+    setSearch((prev) =>
+      prev?.map((p) => (p.id === post.id ? optimisticPost : p)),
+    );
 
-    // Atualiza a lista global de likes.
-    await likesGet();
+    setDataPostFocus((prev) =>
+      prev && prev.id === post.id
+        ? { ...prev, likes: optimisticPost.likes }
+        : prev,
+    );
 
-    // Atualiza o contador do post aberto na dialog.
-    setDataPostFocus((prev) => {
-      if (!prev || prev.id !== data.post.id) {
-        return prev;
+    try {
+      const likesPost = await fetch(`${KEY}api/posts/${post.id}/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+      });
+
+      if (!likesPost || !likesPost.ok) {
+        throw new Error("Erro ao atualizar like");
       }
 
-      return {
-        ...prev,
-        likes: data.post.likes,
-      };
-    });
+      const data = await likesPost.json();
 
-    return likesPost;
+      // 2. Confirma com os dados do servidor (fonte da verdade).
+      setPublication((prev) =>
+        prev?.map((p) =>
+          p.id === data.post.id ? { ...p, likes: data.post.likes } : p,
+        ),
+      );
+
+      setSearch((prev) =>
+        prev?.map((p) =>
+          p.id === data.post.id ? { ...p, likes: data.post.likes } : p,
+        ),
+      );
+
+      setDataPostFocus((prev) => {
+        if (!prev || prev.id !== data.post.id) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          likes: data.post.likes,
+        };
+      });
+
+      // Sincroniza a lista global de curtidas em segundo plano
+      // (sem bloquear a UI — o estado otimista já cobre o feedback).
+      invalidateRequestCache("likes");
+      likesGet().catch(() => {});
+
+      return likesPost;
+    } catch (error) {
+      // 3. Reverte o estado otimista se a requisição falhou.
+      console.error(error);
+      alert("Não foi possível curtir o post. Tente novamente mais tarde.");
+
+      setLike((prev) => {
+        const withoutThis = (prev || []).filter(
+          (p) => !(p.postId === post.id && p.userId === user.id),
+        );
+
+        return wasLiked
+          ? [...withoutThis, { ...optimisticLikeEntry, validation: true }]
+          : withoutThis;
+      });
+
+      const revertedPost = {
+        ...post,
+        likes: (post.likes || 0) + (wasLiked ? 0 : 0),
+      };
+
+      setPublication((prev) =>
+        prev?.map((p) => (p.id === post.id ? revertedPost : p)),
+      );
+
+      setSearch((prev) =>
+        prev?.map((p) => (p.id === post.id ? revertedPost : p)),
+      );
+
+      setDataPostFocus((prev) =>
+        prev && prev.id === post.id
+          ? { ...prev, likes: revertedPost.likes }
+          : prev,
+      );
+
+      throw error;
+    }
   };
 
   const likesGet = async (post) => {
-    const response = await fetch(`${KEY}api/posts/likes`).catch((error) => {
-      console.error(error);
-      return null;
+    const data = await cachedRequest("likes", async () => {
+      const response = await fetch(`${KEY}api/posts/likes`).catch((error) => {
+        console.error(error);
+        return null;
+      });
+
+      if (!response) {
+        alert(
+          "Não foi possível carregar as curtidas. Tente novamente mais tarde.",
+        );
+        return null;
+      }
+
+      const likesData = await response.json();
+
+      if (!response.ok) {
+        alert(
+          "Não foi possível carregar as curtidas. Tente novamente mais tarde.",
+        );
+        throw new Error("Erro ao buscar likes");
+      }
+
+      return likesData;
     });
 
-    if (!response) {
-      alert(
-        "Não foi possível carregar as curtidas. Tente novamente mais tarde.",
-      );
-      return null;
+    if (data !== null) {
+      setLike(data);
     }
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(
-        "Não foi possível carregar as curtidas. Tente novamente mais tarde.",
-      );
-      throw new Error("Erro ao buscar likes");
-    }
-
-    setLike(data);
-    setEditRequisicao((previousValue) => !previousValue);
+    // Não alterna mais "editRequisicao" aqui: isso reexecutava o getPostsFeed
+    // do Context em cadeia a cada curtida, causando o loop de renderizações.
 
     if (!post) {
       return data;
@@ -361,14 +500,33 @@ export function useRequisicoes({ post, setLike }) {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`${KEY}profileEdit/?t=${Date.now()}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const data = await cachedRequest("profile", async () => {
+        const response = await fetch(`${KEY}profileEdit/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return await response.json();
       });
 
-      const data = await response.json();
+      // Faz MERGE por userId em vez de substituir a lista inteira.
+      // Substituir fazia as fotos sumirem quando uma resposta vinha parcial
+      // ou vazia durante uma transição de rota (só o refresh recuperava),
+      // pois entradas válidas de outros usuários eram descartadas.
+      if (Array.isArray(data)) {
+        setPhotoValueFeed((prev) => {
+          const byId = new Map();
 
-      setPhotoValueFeed(data);
-      return data;
+          [...(Array.isArray(prev) ? prev : []), ...data].forEach((item) => {
+            if (item && item.userId != null) {
+              byId.set(String(item.userId), item);
+            }
+          });
+
+          return [...byId.values()];
+        });
+      }
+
+      return Array.isArray(data) ? data : photoValueFeed;
     } catch (error) {
       console.error("Erro ao buscar perfil:", error);
       alert("Não foi possível carregar o perfil. Tente novamente mais tarde.");
@@ -376,24 +534,38 @@ export function useRequisicoes({ post, setLike }) {
   };
 
   const allFollowers = async () => {
-    const response = await fetch(`${KEY}allFollowers`).catch((error) => {
-      console.error(error);
-      return null;
+    const data = await cachedRequest("followers", async () => {
+      const response = await fetch(`${KEY}allFollowers`).catch((error) => {
+        console.error(error);
+        return null;
+      });
+
+      if (!response) {
+        alert(
+          "Não foi possível carregar os seguidores. Tente novamente mais tarde.",
+        );
+        return null;
+      }
+
+      return await response.json();
     });
 
-    if (!response) {
-      alert(
-        "Não foi possível carregar os seguidores. Tente novamente mais tarde.",
-      );
-      return;
+    if (data !== null) {
+      setFollowers(data);
     }
 
-    const data = await response.json();
-    return setFollowers(data);
+    return data;
   };
 
   const getBookSave = async (profileId) => {
     try {
+      // Sem um id de perfil não há o que buscar (evita chamadas inválidas
+      // durante transições de rota, que disparavam alertas de erro).
+      if (!profileId) {
+        setEbookSaved([]);
+        return;
+      }
+
       setEbookSaved([]);
 
       const response = await fetch(`${KEY}api/books/saved/${profileId}`, {
@@ -402,18 +574,33 @@ export function useRequisicoes({ post, setLike }) {
         },
       });
 
-      const data = await response.json();
+      // 404 significa que o perfil não tem nenhum livro salvo — não é erro.
+      if (response.status === 404) {
+        setEbookSaved([]);
+
+        if (String(profileId) === String(user?.id)) {
+          setMyEbookSaved([]);
+        }
+
+        return;
+      }
+
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao buscar livros");
+        throw new Error(data?.error || "Erro ao buscar livros");
       }
 
       setEbookSaved(Array.isArray(data) ? data : []);
+
+      // Quando o perfil buscado é o do usuário logado, mantém também a
+      // cópia dedicada usada pela sidebar (meta de leitura), para que os
+      // dados não se percam ao visitar um perfil diferente.
+      if (String(profileId) === String(user?.id)) {
+        setMyEbookSaved(Array.isArray(data) ? data : []);
+      }
     } catch (error) {
       console.error(error.message);
-      alert(
-        "Não foi possível carregar os livros salvos. Tente novamente mais tarde.",
-      );
       setEbookSaved([]);
     }
   };
@@ -472,50 +659,83 @@ export function useRequisicoes({ post, setLike }) {
   const stylePatchProfile = location.pathname === `/perfil/${user?.id}`;
 
   const arrayFeedbacksEbooks = async () => {
-    const response = await fetch(`${KEY}api/books/feedbacks`).catch((error) => {
-      console.error(error);
-      return null;
+    const data = await cachedRequest("feedbacks", async () => {
+      const response = await fetch(`${KEY}api/books/feedbacks`).catch(
+        (error) => {
+          console.error(error);
+          return null;
+        },
+      );
+
+      if (!response) {
+        alert(
+          "Não foi possível carregar as resenhas dos livros. Tente novamente mais tarde.",
+        );
+        return null;
+      }
+
+      return await response.json();
     });
 
-    if (!response) {
-      alert(
-        "Não foi possível carregar as resenhas dos livros. Tente novamente mais tarde.",
-      );
-      return;
+    if (data !== null) {
+      setFeedbacksArray(data);
     }
 
-    const data = await response.json();
-
-    return setFeedbacksArray(data);
+    return data;
   };
 
   const followersPost = async (profileId) => {
-    const response = await fetch(`${KEY}user/followers/${profileId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        user: user.name,
-        userId: user.id,
-      }),
-    }).catch((error) => {
-      console.error(error);
-      return null;
+    // ===== Atualização otimista: alterna o estado de seguir na UI antes da
+    // requisição. O botão muda na hora, sem esperar o servidor responder.
+    const wasFollowing = followers.some(
+      (f) => f.userId === user.id && f.following === profileId,
+    );
+
+    setFollowers((prev) => {
+      const withoutThis = (prev || []).filter(
+        (f) => !(f.userId === user.id && f.following === profileId),
+      );
+
+      return wasFollowing
+        ? withoutThis
+        : [...withoutThis, { userId: user.id, following: profileId }];
     });
 
-    if (!response) {
-      alert(
-        "Não foi possível seguir este usuário. Tente novamente mais tarde.",
-      );
-      return;
-    }
+    try {
+      const response = await fetch(`${KEY}user/followers/${profileId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: user.name,
+          userId: user.id,
+        }),
+      });
 
-    if (response.ok) {
-      // userUP();
-      allFollowers();
-    } else {
+      if (!response || !response.ok) {
+        throw new Error();
+      }
+
+      // Confirma com o servidor: recarrega a lista de seguidores em segundo
+      // plano (a UI já foi atualizada otimisticamente).
+      invalidateRequestCache("followers");
+      allFollowers().catch(() => {});
+    } catch (error) {
+      console.error(error);
+
+      // Reverte o estado otimista em caso de falha.
+      setFollowers((prev) => {
+        const withoutThis = (prev || []).filter(
+          (f) => !(f.userId === user.id && f.following === profileId),
+        );
+
+        return wasFollowing
+          ? [...withoutThis, { userId: user.id, following: profileId }]
+          : withoutThis;
+      });
+
       alert(
         "Não foi possível seguir este usuário. Tente novamente mais tarde.",
       );
@@ -523,25 +743,29 @@ export function useRequisicoes({ post, setLike }) {
   };
 
   const userUP = async (users) => {
-    const response = await fetch(`${KEY}updateUser`).catch((error) => {
-      console.error(error);
-      return null;
+    const data = await cachedRequest("users", async () => {
+      const response = await fetch(`${KEY}updateUser`).catch((error) => {
+        console.error(error);
+        return null;
+      });
+
+      if (!response) {
+        alert(
+          "Não foi possível carregar os usuários. Tente novamente mais tarde.",
+        );
+        return null;
+      }
+
+      return await response.json();
     });
 
-    if (!response) {
-      alert(
-        "Não foi possível carregar os usuários. Tente novamente mais tarde.",
-      );
-      return;
+    if (data !== null) {
+      setUsersList(data);
+      setFilterUsers(data);
     }
 
-    const data = await response.json();
-  
-    setUsersList(data);
-    setFilterUsers(data);
-
-    if (users && response.ok) {
-      allFollowers();
+    if (users && data !== null) {
+      await allFollowers();
       return followersPost(users);
     }
   };
@@ -553,7 +777,10 @@ export function useRequisicoes({ post, setLike }) {
       if (response.status === 404) {
         setGoal(null);
 
-        if (paramsId === user?.id) {
+        // Comparação via String(): o id da URL vem como texto e o do storage
+        // pode ser número — com === estrito o setGoalUser nunca era atingido
+        // e a meta da sidebar se perdia ao voltar de outros perfis.
+        if (String(paramsId) === String(user?.id)) {
           setGoalUser(null);
         }
 
@@ -568,7 +795,7 @@ export function useRequisicoes({ post, setLike }) {
 
       setGoal(data);
 
-      if (paramsId === user?.id) {
+      if (String(paramsId) === String(user?.id)) {
         setGoalUser(data);
       }
 
@@ -1079,6 +1306,10 @@ export function useRequisicoes({ post, setLike }) {
 
     if (!edit.ok) {
       alert("Não foi possível editar seu perfil. Tente novamente mais tarde.");
+    } else {
+      // Sem invalidar o cache, fetchProfile() podia devolver a lista antiga
+      // de fotos (TTL de 5s) e a foto nova demorava a aparecer.
+      invalidateRequestCache("profile");
     }
 
     return edit;
@@ -1138,6 +1369,8 @@ export function useRequisicoes({ post, setLike }) {
       alert(
         "Não foi possível excluir a imagem de perfil. Tente novamente mais tarde.",
       );
+    } else {
+      invalidateRequestCache("profile");
     }
 
     return response;

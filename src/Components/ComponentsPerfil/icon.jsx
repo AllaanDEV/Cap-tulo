@@ -1,4 +1,10 @@
-import { useContext, useEffect, useRef, useState, useLayoutEffect } from "react";
+import {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import { PencilIcon, Calendar, Maps, LinkIcon, Notification } from "../svgCode";
 import { ContainerTags } from "./containerTags";
 import Camera from "../../assets/camera-1-remix.png";
@@ -62,6 +68,7 @@ export function Icon() {
     feedFilter,
     setFeedFilter,
     themeOn,
+    seguindoProfileId,
   } = useContext(AppContext);
 
   const {
@@ -211,7 +218,6 @@ export function Icon() {
     }
   };
 
-  console.log("bioNUL", editValue);
   const bioNull =
     editValue && profileId == user.id
       ? "coloque uma descrição sobre você!"
@@ -221,13 +227,11 @@ export function Icon() {
     allFollowers();
   }, [profileId]);
 
-
-  const seguindoProfileId = followers.filter((f) => f.following === profileId);
+  // const seguindoProfileId = followers.filter((f) => f.following === profileId);
 
   const seguindo = followers.filter(
     (f) => f.userId === (profile?.authorId || profile?.id || user.id),
   );
-
 
   return (
     <Container className="border border-border">
@@ -289,7 +293,7 @@ export function Icon() {
               className={`flex justify-end gap-2  mt-5 ${themeOn ? "text-black" : "text-white"}`}
             >
               <ContainerTags>
-              <Notification ></Notification>
+                <Notification></Notification>
               </ContainerTags>
               {profileId !== user.id ? null : (
                 <ContainerTags onClick={openOrCloseDialog}>
@@ -321,7 +325,7 @@ export function Icon() {
               </div>
               <p>{editValue?.dataPerfil?.bios || bioNull}</p>
             </div>
-            <div className="flex gap-5">
+            <div className="flex gap-5 flex-wrap ">
               {bios
                 .filter((b) => b.description)
                 .map((b) => {
@@ -352,7 +356,7 @@ export function Icon() {
                     setStyleButtonFollowersList("followers"));
                 }}
               >
-                seguidores: {seguindoProfileId?.length}
+                seguidores: {seguindoProfileId(profileId)?.length}
               </button>
             </div>
             {/* <div className="flex gap-2 flex-wrap text-black/50">

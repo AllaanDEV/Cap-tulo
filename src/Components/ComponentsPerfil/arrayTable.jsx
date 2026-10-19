@@ -1,17 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import AppContext from "../context";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useParams } from "react-router";
 
 export function ArrayTable() {
   const { id: paramsId } = useParams();
   const { publication, ebookSaved } = useContext(AppContext);
-  const { fetchProfile } = useRequisicoes({});
 
-  useEffect(() => {
-    publication;
-    fetchProfile();
-  }, []);
+  // fetchProfile no mount era redundante: os dados já vêm do layout global.
 
   const userPublications = publication.filter((p) => p.authorId === paramsId);
   const read = ebookSaved.filter((ebook) => ebook.progress === 100);

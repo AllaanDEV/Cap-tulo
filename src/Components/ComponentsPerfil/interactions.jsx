@@ -64,7 +64,8 @@ export function Interactions() {
   return (
     <>
       {listFullFilter.length > 0 && (
-        <ul>
+        <ul
+        className="flex flex-col gap-5">
           {listFullFilter.map((post) => (
             <li key={post.id}>
               <Post post={post} />

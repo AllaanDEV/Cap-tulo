@@ -16,19 +16,22 @@ export function ArrayPosts({ post }) {
 
   const postsToRender = searchValue ? search : publication;
 
-  console.log("POPSTS", post)
   return (
     <>
       <ul className="flex flex-col gap-5">
         {postsToRender
           .filter((p) => p.authorId === paramsId)
-          .map((p) => (
-            <li key={p.id}>
-              <Post post={p} />
-            </li>
-          ))}
+          .map((p) => {
+            return (
+              <li key={p.id}>
+                <Post post={p} />
+              </li>
+            );
+          })}
       </ul>
-      {postsToRender.length === 0 &&  feedFilter === "posts" && <span className="mx-auto text-sm text-wine">Publique algo!</span>}
+      {postsToRender.length === 0 && feedFilter === "posts" && (
+        <span className="mx-auto text-sm text-wine">Publique algo!</span>
+      )}
     </>
   );
 }

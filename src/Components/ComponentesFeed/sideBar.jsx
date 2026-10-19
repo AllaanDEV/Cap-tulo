@@ -21,25 +21,31 @@ export function SideBar() {
   const navigate = useNavigate();
 
   const { user, allFollowers, getBookSave, postNumberGet } = useRequisicoes({});
-  const { followers, ebookSaved, option, setOption, options, editRequisicao } =
+  const { followers, myEbookSaved, option, setOption, options, editRequisicao } =
     useContext(AppContext);
-
-  const { logout } = useRequisicoes({});
 
   useEffect(() => {
     allFollowers();
     getBookSave(user.id);
   }, []);
 
-  // Recarrega a estante da sidebar quando um livro é salvo/removido.
   useEffect(() => {
-    getBookSave(user.id);
+    // Dados globais agora vêm com cache/dedup do useRequisicoes;
+    // a estante só recarrega de fato quando houve uma mutação.
+    if (editRequisicao) {
+      getBookSave(user.id);
+    }
   }, [editRequisicao]);
 
   const seguindoProfileId = followers.filter((f) => f.following === user.id);
   const seguindo = followers.filter((f) => f.userId === user.id);
 
-  const read = ebookSaved.filter((ebook) => ebook.progress === 100);
+  // "Lidos" usa a cópia dedicada do usuário logado (myEbookSaved).
+  // Usar ebookSaved aqui mostrava os livros lidos do perfil em visita,
+  // alterando as estatísticas da sidebar ao navegar entre perfis.
+  const read = (myEbookSaved || []).filter(
+    (ebook) => ebook.progress === 100,
+  );
 
   const stats = [
     { status: "Lidos", number: formatarParaK(read.length) },

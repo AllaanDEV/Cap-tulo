@@ -52,7 +52,7 @@ export function TipTapEditor({ onEditorReady }) {
 
   const stylesGrid =
     imgIdUrl?.length === 1
-      ? "grid-cols-1 w-auto max-h-auto sm:max-w-[25vw] sm:max-h-[20vw] "
+      ? "grid-cols-1 w-auto max-h-auto sm:max-w-[25vw] sm:max-h-[20vw] xl:max-h-[40vw] xl:max-w-full"
       : imgIdUrl?.length === 2
         ? "grid-cols-2 gap-1 w-full h-[50vw] sm:h-[25vw] mx-auto"
         : "grid-cols-2 grid-rows-2 grid-flow-row gap-1 max-h-[60vw] sm:w-full sm:h-[40vw] lg:h-[25vw]";
@@ -223,7 +223,6 @@ export function TipTapEditor({ onEditorReady }) {
     [&_.ProseMirror]:sm:px-5
     [&_.ProseMirror]:break-words
  ${themeOn ? "text-black" : "text-white"}`}
-
           ></EditorContent>
         </div>
         <ButtonPostar

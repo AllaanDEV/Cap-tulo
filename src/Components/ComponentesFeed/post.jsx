@@ -25,22 +25,13 @@ export const Post = memo(function Post({ post }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    setPostId,
-    setPostFocus,
-    setLike,
-    setDataPostFocus,
-  } = useContext(AppContext);
+  const { setPostFocus, setLike, setDataPostFocus } = useContext(AppContext);
 
   const [postComment, setPostComment] = useState(!post);
-  setPostId(post);
 
   const {
     postDelete,
     user,
-
-    fetchProfile,
-    likesGet,
 
     arrayFeedbacksEbooks,
   } = useRequisicoes({
@@ -52,11 +43,8 @@ export const Post = memo(function Post({ post }) {
     setPostComment(!postComment);
   };
 
-  useEffect(() => {
-    fetchProfile();
-    likesGet();
-  }, [paramsId]);
-
+  // Dados globais (perfil e likes) são carregados uma única vez no layout,
+  // não a cada post — evita dezenas de requisições idênticas por navegação.
   useEffect(() => {
     if (post?.type === "feedback") {
       arrayFeedbacksEbooks();
@@ -88,12 +76,6 @@ export const Post = memo(function Post({ post }) {
     return () => clearTimeout(timer);
   }, [showComments]);
 
-
-
-
-  if(post.authorId === user.id){
-    console.log("POST", post) 
-  }
   return (
     <>
       <Div className=" animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -101,21 +83,23 @@ export const Post = memo(function Post({ post }) {
           <div className="flex gap-3 justify-between">
             <UsersInfo post={post} />
 
-            <details className="flex flex-col items-end relative">
-              <summary className="list-none marker:hidden">
-                <Icon></Icon>
-              </summary>
-              <div className="bg-bermuda absolute right-2 px-2 rounded-sm bg-border">
-                {post?.authorId === user.id ? (
-                  <button
-                    className="hover:text-wine"
-                    onClick={() => postDelete(post, paramsId)}
-                  >
-                    Deletar
-                  </button>
-                ) : null}
-              </div>
-            </details>
+            {user.id === post.authorId && (
+              <details className="flex flex-col items-end relative">
+                <summary className="list-none marker:hidden">
+                  <Icon></Icon>
+                </summary>
+                <div className="bg-bermuda absolute right-2 px-2 rounded-sm bg-border">
+                  {post?.authorId === user.id ? (
+                    <button
+                      className="hover:text-wine"
+                      onClick={() => postDelete(post, paramsId)}
+                    >
+                      Deletar
+                    </button>
+                  ) : null}
+                </div>
+              </details>
+            )}
           </div>
 
           <p
@@ -142,7 +126,7 @@ export const Post = memo(function Post({ post }) {
                   className="w-full object-contain sm:max-h-[35vw] "
                 />
               ) : Array.isArray(post?.midia) ? (
-                 <CarouselImages images={post.midia} />
+                <CarouselImages images={post.midia} />
               ) : null}
             </Info>
           )}

@@ -1,28 +1,40 @@
 import { useParams } from "react-router";
 import { X } from "../svgCode";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import AppContext from "../context";
 
 export default function DeleteImgIcon() {
   const XIcon = X;
   const { id: paramsId } = useParams();
-  const { deleteImgPerfil: deleteImgPerfilRequest } = useRequisicoes({});
-  const { openOrCloseDialog } = useContext(AppContext);
-  const [, setImagemUrl] = useState("url_da_imagem_atual.jpg");
+  const {
+    deleteImgPerfil: deleteImgPerfilRequest,
+    getProfileEditData,
+    fetchProfile,
+  } = useRequisicoes({});
+  const { openOrCloseDialog, setEditValue, setEditRequisicao } =
+    useContext(AppContext);
 
   const deleteIcon = async (e) => {
     e.preventDefault();
-    openOrCloseDialog();
 
     try {
       const response = await deleteImgPerfilRequest(paramsId);
 
-    if (response.ok) {
-      setImagemUrl(null); // Remove a imagem do estado para sumir da tela na hora
-    }
+      if (response.ok) {
+        // Re-busca os dados do perfil: o backend grava midiaIcon = null e a UI
+        // (icon.jsx lê editValue.dataPerfil.midiaIcon) só atualiza se o
+        // editValue for recarregado — antes só um estado local mudava.
+        const dataPerfil = await getProfileEditData(paramsId);
+        setEditValue((prev) => ({ ...prev, dataPerfil }));
+        fetchProfile();
+        setEditRequisicao((v) => !v);
+      }
+
+      openOrCloseDialog();
       return response;
     } catch (error) {
+      openOrCloseDialog();
       throw new Error("Falha ao deletar a imagem de perfil!", { cause: error });
     }
   };

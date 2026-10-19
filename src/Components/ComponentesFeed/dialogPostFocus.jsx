@@ -46,12 +46,9 @@ export function DialogPostFocus() {
       dialog.close();
     }
   }, [postFocus]);
-  
 
   // Verifica se o post possui um tipo especial.
- const isModifiedPost = ["feedback", "resenha"].includes(
-  dataPostFocus?.type
-);
+  const isModifiedPost = ["feedback", "resenha"].includes(dataPostFocus?.type);
 
   // Verifica o progresso de leitura do livro.
   const ebookProgressFocus = ebookSaved
@@ -59,7 +56,7 @@ export function DialogPostFocus() {
     .find(
       (progress) =>
         progress.ebook.ebook?.id ===
-        dataPostFocus?.postModified?.ebook?.ebook?.id
+        dataPostFocus?.postModified?.ebook?.ebook?.id,
     );
 
   // Verifica se o post possui mídia.
@@ -68,8 +65,7 @@ export function DialogPostFocus() {
   const hasMedia =
     media &&
     media !== "listNull" &&
-    (media?.type === "gif" ||
-      (Array.isArray(media) && media.length > 0));
+    (media?.type === "gif" || (Array.isArray(media) && media.length > 0));
 
   // O layout divide a dialog se houver mídia ou conteúdo de livro.
   const hasTwoColumns = isModifiedPost || hasMedia;
@@ -84,42 +80,40 @@ export function DialogPostFocus() {
     >
       <section
         className={`h-full w-full min-w-0 ${
-          hasTwoColumns
-            ? "grid grid-cols-2"
-            : "flex flex-col"
+          hasTwoColumns ? "grid grid-cols-2" : "flex flex-col"
         }`}
       >
-
         {isModifiedPost ? (
           <div className="bg-background flex flex-col mx-auto p-4 w-full h-full min-w-0 overflow-y-auto">
             <div className="rounded-lg flex flex-col items-center">
               <img
                 src={
-                  dataPostFocus?.postModified?.ebook?.ebook
-                    ?.volumeInfo?.imageLinks?.thumbnail
+                  dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
+                    ?.imageLinks?.thumbnail
                 }
                 alt={
-                  dataPostFocus?.postModified?.ebook?.ebook
-                    ?.volumeInfo?.title
+                  dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo?.title
                 }
                 className="rounded-lg h-90 w-auto max-w-full object-contain"
               />
 
               <div className="flex flex-col items-center gap-2 w-full">
                 <div className="flex flex-col gap-1 mt-2 items-center text-center">
-                  <h4 className={`text-2xl font-fraunce ${themeOn ? "text-black" : "text-white"}`}>
+                  <h4
+                    className={`text-2xl font-fraunce ${themeOn ? "text-black" : "text-white"}`}
+                  >
                     {
-                      dataPostFocus?.postModified?.ebook?.ebook
-                        ?.volumeInfo?.title
+                      dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
+                        ?.title
                     }
                   </h4>
 
-                  {dataPostFocus?.postModified?.ebook?.ebook
-                    ?.volumeInfo?.subtitle && (
+                  {dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
+                    ?.subtitle && (
                     <span className="text-xs text-gray">
                       {
-                        dataPostFocus?.postModified?.ebook?.ebook
-                          ?.volumeInfo?.subtitle
+                        dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
+                          ?.subtitle
                       }
                     </span>
                   )}
@@ -127,8 +121,8 @@ export function DialogPostFocus() {
 
                 <p className="text-[#765242]">
                   {
-                    dataPostFocus?.postModified?.ebook?.ebook
-                      ?.volumeInfo?.description
+                    dataPostFocus?.postModified?.ebook?.ebook?.volumeInfo
+                      ?.description
                   }
                 </p>
               </div>
@@ -144,10 +138,7 @@ export function DialogPostFocus() {
                   className="w-full object-contain"
                 />
               ) : Array.isArray(media) ? (
-                <CarouselImages
-                  key={dataPostFocus?.id}
-                  images={media}
-                />
+                <CarouselImages key={dataPostFocus?.id} images={media} />
               ) : null}
             </Info>
           </div>
@@ -155,9 +146,7 @@ export function DialogPostFocus() {
 
         <div
           className={`h-full min-h-0 min-w-0 overflow-y-auto bg-border/50 flex flex-col relative text-inherit ${
-            hasTwoColumns
-              ? "border-l border-border"
-              : "w-full flex-1"
+            hasTwoColumns ? "border-l border-border" : "w-full flex-1"
           }`}
         >
           <div className="flex justify-between w-full items-start p-3 sticky top-0 z-50 border-b border-border">
@@ -189,31 +178,27 @@ export function DialogPostFocus() {
                 <EbookCitation
                   text={dataPostFocus.postModified?.content}
                   title={
-                    dataPostFocus.postModified?.ebook?.ebook
-                      ?.volumeInfo?.title
+                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo?.title
                   }
                   authors={
-                    dataPostFocus.postModified?.ebook?.ebook
-                      ?.volumeInfo?.authors
+                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
+                      ?.authors
                   }
                 />
               ) : dataPostFocus?.type === "feedback" ? (
                 <PostModifiedContainer
                   title={
-                    dataPostFocus.postModified?.ebook?.ebook
-                      ?.volumeInfo?.title
+                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo?.title
                   }
                   subtitle={
-                    dataPostFocus.postModified?.ebook?.ebook
-                      ?.volumeInfo?.subtitle
+                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
+                      ?.subtitle
                   }
                   thumbnail={
-                    dataPostFocus.postModified?.ebook?.ebook
-                      ?.volumeInfo?.imageLinks?.thumbnail
+                    dataPostFocus.postModified?.ebook?.ebook?.volumeInfo
+                      ?.imageLinks?.thumbnail
                   }
-                  starsNumber={
-                    dataPostFocus.postModified?.starsEbook
-                  }
+                  starsNumber={dataPostFocus.postModified?.starsEbook}
                   type={dataPostFocus?.type}
                 />
               ) : dataPostFocus?.type === "resenha" ? (
@@ -228,10 +213,7 @@ export function DialogPostFocus() {
             <div className="w-full">
               <Lines />
 
-              <ContainerButtonsPost
-                className="my-3"
-                post={dataPostFocus}
-              />
+              <ContainerButtonsPost className="my-3" post={dataPostFocus} />
 
               <div className="flex gap-2 w-full border-t-[2px] px-4 border-border mt-4">
                 <CommentsList post={dataPostFocus} />

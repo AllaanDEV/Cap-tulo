@@ -9,7 +9,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 import { useLocation } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { Notification, Theme, Vector } from "../svgCode";
+import { Notification, Theme, Vector, Search} from "../svgCode";
 
 export function Header() {
   const inputRef = useRef(null);
@@ -46,9 +46,13 @@ export function Header() {
     (photo) => photo.userId == user?.id,
   );
 
+  // O perfil já é carregado com cache/dedup pelo layout; aqui só recarrega
+  // quando uma edição de perfil aconteceu (editRequisicao alterna).
   useEffect(() => {
-    fetchProfile();
-  }, [location.pathname, editRequisicao]);
+    if (editRequisicao) {
+      fetchProfile();
+    }
+  }, [editRequisicao]);
 
   const Search = (e) => {
     const padrao = (text) => {
@@ -169,13 +173,14 @@ export function Header() {
           </div>
 
           <div className="relative">
-            <div className="">
+            {/* <div className="">
               <img
                 src={searchIcon}
                 className="absolute inset-y-3.5 flex items-center pl-3 pointer-events-none"
                 alt=""
               />
-            </div>
+      
+            </div> */}
             <input
               ref={inputRef}
               type="text"
@@ -184,10 +189,10 @@ export function Header() {
                   ? "Buscando livros..."
                   : "Buscar livros, leitores..."
               }
-              className="bg-white rounded-4xl placeholder:pl-8 placeholder:text-gray h-10 border border-border
-              w-[clamp(2rem,40vw,30rem)]"
+              className="bg-white rounded-4xl placeholder:text-gray h-10 border border-border
+  w-[clamp(2rem,40vw,30rem)] text-black pl-5"
               onInput={(e) => Search(e)}
-            ></input>
+            />
           </div>
         </div>
 

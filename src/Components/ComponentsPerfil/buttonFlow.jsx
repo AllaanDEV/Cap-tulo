@@ -1,5 +1,4 @@
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useEffect } from "react";
 import { useLocation } from "react-router";
 
 export function ButtonFlow({
@@ -11,17 +10,14 @@ export function ButtonFlow({
 }) {
   const {
     followersPost,
-    fetchProfile,
     userUP,
     validationFollowers,
   } = useRequisicoes({});
 
   const location = useLocation();
 
-  useEffect(() => {
-    fetchProfile();
-    userUP();
-  }, []);
+  // fetchProfile/userUP no mount eram redundantes: o layout já carrega
+  // esses dados globalmente (e agora com cache/dedup no useRequisicoes).
 
   const validation = () => {
     if (location.pathname.startsWith("/feed")) {
@@ -41,7 +37,7 @@ export function ButtonFlow({
     <button
       onClick={validation}
       {...props}
-      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full `}
+      className={`${className} ${style} cursor-pointer transition duration-300 border border-gray py-1 px-2 rounded-full text-sm `}
     >
       {isFollowing
         ? "Deixar de seguir"

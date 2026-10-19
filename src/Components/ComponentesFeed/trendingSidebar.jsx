@@ -12,7 +12,6 @@ export function TrendingSideBar() {
     arrayFeedbacksEbooks();
   }, []);
 
-
   return (
     <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <div className="flex gap-2 items-center text-wine w-full">
