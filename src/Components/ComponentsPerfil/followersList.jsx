@@ -16,26 +16,29 @@ export function FollowersList() {
     setListFollowersPerfil,
     styleButtonFollowersList,
     setStyleButtonFollowersList,
-    filterFollowers,
+    filterFollowers, seguindoProfileId
   } = useContext(AppContext);
 
-  const { userUP, user, getFollowBack } = useRequisicoes({});
+  const { userUP, user, getFollowBack} = useRequisicoes({});
 
-useEffect(() => {
-  userUP();
+  useEffect(() => {
+    userUP();
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
-  // allFollowers()
-}, []);
+    // allFollowers()
+  }, []);
 
-  const profile = usersList.find((perfil) => perfil.id === paramsId);
+  // Comparação frouxa: o id da URL (string) e o id da lista (número)
+  // podem ter tipos diferentes — com === estrito o perfil não era
+  // encontrado e a lista de seguidores aparecia vazia após navegar.
+  const profile = usersList.find((perfil) => perfil.id == paramsId);
   // const profileFilter= profile.filter((perfil))
 
-  console.log("profile", profile);
+  // const seguindoProfileId = followers.filter((f) => f.following === paramsId);
 
   return (
     <Container className="border border-border">
@@ -76,12 +79,13 @@ useEffect(() => {
           <Lines></Lines>
         </div>
 
-        {profile?.followersArray?.length > 0 &&
+        {seguindoProfileId(paramsId)?.length > 0 &&
         styleButtonFollowersList === "followers" ? (
           <ul className="w-full flex items-start flex-col gap-5 px-2">
-            {profile.followersArray.map((follower) => {
+            {seguindoProfileId(paramsId).map((follower) => {
+
               const usersData = usersList.find(
-                (perfil) => perfil.id === follower.userId,
+                (perfil) => perfil.id == follower.userId,
               );
 
               const followBack = getFollowBack(follower.userId);
@@ -106,7 +110,7 @@ useEffect(() => {
                     <ButtonFlow
                       userId={usersData.id}
                       followBack={followBack}
-                className="sm:px-10 px-4"
+                      className="sm:px-10 px-4"
                     ></ButtonFlow>
                   )}
                 </li>
@@ -117,8 +121,12 @@ useEffect(() => {
           styleButtonFollowersList === "following" && (
             <ul className="w-full flex items-start flex-col gap-5 px-2">
               {filterFollowers(paramsId).map((following, index) => {
+                              // console.log("FOLLOWINGF", following)
                 return (
-                  <li key={index} className="flex text-xs justify-between w-full sm:px-10 gap-2">
+                  <li
+                    key={index}
+                    className="flex text-xs justify-between w-full sm:px-10 gap-2"
+                  >
                     <UsersInfo
                       following={following}
                       followerUserId={following.userId}

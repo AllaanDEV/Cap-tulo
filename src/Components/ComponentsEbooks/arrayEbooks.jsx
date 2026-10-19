@@ -5,11 +5,15 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayEbooks() {
-  const { ebooks, setEbooks, bookSearch, searchValue, themeOn } = useContext(AppContext);
+  const { ebooks, setEbooks, bookSearch, searchValue, themeOn, setBookSearch } =
+    useContext(AppContext);
   const { getBookSave, user, getBooks } = useRequisicoes({});
 
   const [page, setPage] = useState(0);
   const [booksContador, setBooksContador] = useState(0);
+  // Termo da busca em andamento: o "Carregar mais" deve trazer mais livros
+  // do MESMO termo (próxima página), e não de categorias aleatórias.
+  const [termoAtivo, setTermoAtivo] = useState("");
 
   const categorias = [
     "Sousou no Frieren",
@@ -35,12 +39,21 @@ export function ArrayEbooks() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getBooks(allBooks, page);
+      // Quando há um termo ativo (busca no header), pagina o resultado da
+      // busca; sem termo, pagina a categoria atual como antes.
+      const res = await getBooks(termoAtivo || allBooks, page);
 
-      setEbooks((prev) => [...prev, ...res]);
+      if (!Array.isArray(res) || res.length === 0) return;
+
+      setEbooks((prev) => {
+        const combinado = [...prev, ...res];
+
+        // Deduplica por id para não repetir livros ao paginar.
+        return [...new Map(combinado.map((book) => [book.id, book])).values()];
+      });
     }
     fetchData();
-  }, [page]);
+  }, [page, termoAtivo]);
 
   useEffect(() => {
     setBooksContador(booksContador + 1);
@@ -55,6 +68,13 @@ export function ArrayEbooks() {
   ];
 
   const displayedBooks = searchValue ? arraySetBook : arraySetEbooks;
+
+  // Mantém sincronizado com o campo de busca do header: quando o termo muda,
+  // reseta a paginação para começar a busca do zero.
+  useEffect(() => {
+    setTermoAtivo(searchValue);
+    setPage(0);
+  }, [searchValue]);
 
   useEffect(() => {
     getBookSave(user.id);

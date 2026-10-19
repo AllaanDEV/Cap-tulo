@@ -167,11 +167,11 @@ export function DialogGif({className}) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-1 mt-5">
+          <ul className="grid grid-cols-2 gap-1 mt-5">
             {arrayGifs.length === 0 &&
               itemsDefault.map((i) => {
                 return (
-                  <div
+                  <li
                     key={i.url}
                     className="relative overflow-hidden rounded-xs"
                   >
@@ -184,10 +184,10 @@ export function DialogGif({className}) {
                     <span className="absolute bottom-2 left-2 text-lg font-extrabold text-white drop-shadow-md">
                       {i.name}
                     </span>
-                  </div>
+                  </li>
                 );
               })}
-          </div>
+          </ul>
           {arrayGifs.length > 0 && (
             <button
               onClick={() => getGifs(true)}

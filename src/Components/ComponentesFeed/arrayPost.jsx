@@ -39,8 +39,6 @@ export function ArrayPost() {
     hasAnimatedInitialPosts.current = true;
   }
 
-console.log("postsToRender", postsToRender)
-
   return (
     <ul className="flex flex-col gap-5 sm:mb-0">
       {postsToRender.length > 0 ? (
@@ -83,11 +81,13 @@ console.log("postsToRender", postsToRender)
         </div>
       )}
 
-      {followerPost !== "saved" && followerPost !== "followers"  && !searchValue && (
-        <span className="text-xs text-wine mx-auto sm:mb-20">
-          {user.name}, acho que você leu demais 🫣
-        </span>
-      )}
+      {followerPost !== "saved" &&
+        followerPost !== "followers" &&
+        !searchValue && (
+          <span className="text-xs text-wine mx-auto sm:mb-20">
+            {user.name}, acho que você leu demais 🫣
+          </span>
+        )}
     </ul>
   );
 }

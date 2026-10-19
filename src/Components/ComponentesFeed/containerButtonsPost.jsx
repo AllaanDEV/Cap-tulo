@@ -54,7 +54,7 @@ export function ContainerButtonsPost({ post, openComments, className }) {
         <div>
           <ButtonPost>
             <Share />
-            <span className="hidden sm:block">Compartilhar</span>
+            <span className="hidden sm:block ">Compartilhar</span>
           </ButtonPost>
         </div>
       </div>

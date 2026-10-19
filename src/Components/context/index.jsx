@@ -10,7 +10,7 @@ import {
 import { AnimationTransiton, Star } from "../svgCode";
 import { House } from "../svgCode";
 import { Compass } from "../svgCode";
-import { Book, Logout, Save, Person } from "../svgCode";
+import { Book, Logout, Person } from "../svgCode";
 import { useLocation, useNavigate } from "react-router";
 
 import { gsap } from "gsap";
@@ -94,6 +94,10 @@ export function Context({ children }) {
   const [atualizar, setAtualizar] = useState(false);
   const [iconsProfile, setIconsProfile] = useState({});
   const [ebookSaved, setEbookSaved] = useState([]);
+  // Livros salvos do usuário LOGADO. Fica separado de "ebookSaved" (que
+  // carrega os livros do perfil visitado) para que a sidebar não perca
+  // os dados da meta ao entrar em um perfil diferente.
+  const [myEbookSaved, setMyEbookSaved] = useState([]);
   const [styleCardActive, setStyleCardActive] = useState(null);
   const [ebooks, setEbooks] = useState([]);
   const [bookSearch, setBookSearch] = useState([]);
@@ -117,13 +121,18 @@ export function Context({ children }) {
   const [contentHtml, setContentHtml] = useState();
   const [dialogEmoji, setDialogEmoji] = useState(false);
   const [contentEmoji, setContentEmoji] = useState();
-  const [feedbacksArray, setFeedbacksArray] = useState();
+  const [feedbacksArray, setFeedbacksArray] = useState([]);
   const [postFocus, setPostFocus] = useState(false);
   const [dataPostFocus, setDataPostFocus] = useState();
   const [goal, setGoal] = useState({ number: 0 });
   const [goalUser, setGoalUser] = useState();
 
   const [likesCommentList, setLikesCommentList] = useState([]);
+
+  // Fotos/ícones de perfil de todos os usuários. VIVE NO CONTEXT (compartilhado)
+  // e não como estado local do hook useRequisicoes — antes, cada componente
+  // mantinha sua própria cópia e precisava de um fetchProfile() no mount.
+  const [photoValueFeed, setPhotoValueFeed] = useState([]);
 
   useEffect(() => {
     // Requisição movida para "useRequisicoes" (getPostsFeed)
@@ -381,6 +390,10 @@ export function Context({ children }) {
     });
   };
 
+  const seguindoProfileId = (paramsId) => {
+    return followers.filter((f) => f.following === paramsId);
+  };
+
   const [deletePhoto, setDeletePhoto] = useState(false);
   const [feedFilter, setFeedFilter] = useState("todos");
 
@@ -514,6 +527,8 @@ export function Context({ children }) {
         setDataPostFocus,
         like,
         setLike,
+        myEbookSaved,
+        setMyEbookSaved,
         goal,
         setGoal,
         progressAllEbooks,
@@ -561,6 +576,11 @@ export function Context({ children }) {
         themeOn,
         setThemeOn,
         themes,
+        seguindoProfileId,
+
+        // Dados compartilhados de perfil (fotos/ícones de todos os usuários)
+        photoValueFeed,
+        setPhotoValueFeed,
       }}
     >
       <div

@@ -26,8 +26,8 @@ export function Comments({ comment }) {
     <div className="flex gap-2">
       <div className="flex flex-col items-start">
         <PerfilIcon to={`/perfil/${comment.authorId}`}>
-          {photo?.midiaIcon && photo.authorId === comment.authorId ? (
-            <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
+          {photo?.midiaIcon ? (
+          <ImgPerfil src={photo?.midiaIcon}></ImgPerfil>
           ) : (
             <p className="m-auto text-[1rem] font-medium font-serif text-white">
               {nameIcon(comment.author)}

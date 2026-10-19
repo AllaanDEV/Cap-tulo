@@ -6,10 +6,8 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Form } from "../ComponentsForm/form";
 import { XIconProfile, XSavedEbook } from "../svgCode";
 import { EventButton } from "./eventButton";
-import { useParams } from "react-router";
 
 export function FormEditProfile({ active, ...props }) {
-  const { id: paramsId } = useParams();
   const inputFile = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -25,14 +23,14 @@ export function FormEditProfile({ active, ...props }) {
   const { user, fetchProfile, photoValueFeed } = useRequisicoes({});
 
   useEffect(() => {
-    fetchProfile();
-  }, [editRequisicao, paramsId]);
+    if (editRequisicao) {
+      fetchProfile();
+    }
+  }, [editRequisicao]);
 
   const photo = (photoValueFeed ? photoValueFeed : []).find(
     (photo) => photo.userId == user.id,
   );
-
-  console.log("PHOTO,", photoValueFeed);
 
   const [form, setForm] = useState({
     name: "",

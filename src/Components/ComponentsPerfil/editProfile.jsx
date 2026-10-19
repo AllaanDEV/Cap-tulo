@@ -10,7 +10,14 @@ export function EditProfile() {
   const dialogRef = useRef(null);
   const { id: profileId } = useParams();
 
-  const { fetchProfile, editProfileRequest, editUserRequest } = useRequisicoes({});
+  const {
+    fetchProfile,
+    editProfileRequest,
+    editUserRequest,
+    getProfileEditData,
+    token,
+    editRequisicao,
+  } = useRequisicoes({});
   const {
     dialog,
     openOrCloseDialog,
@@ -66,8 +73,23 @@ export function EditProfile() {
   };
 
   useEffect(() => {
-    setEditValue({});
-  }, [profileId]);
+    // Sincroniza o perfil da URL atual em editValue.dataPerfil. Usar
+    // "setEditValue({})" aqui apagava dataPerfil/data ao desmontar (ex.: ao
+    // abrir a lista de seguidores), o que fazia a foto e o tema sumirem ao
+    // voltar — só o F5 recuperava.
+    if (!profileId || !token) return;
+
+    const fetchPerfil = async () => {
+      try {
+        const dataPerfil = await getProfileEditData(profileId);
+        setEditValue((prev) => ({ ...prev, dataPerfil }));
+      } catch (error) {
+        console.error("Erro ao buscar perfil:", error);
+      }
+    };
+
+    fetchPerfil();
+  }, [profileId, token, editRequisicao]);
 
   const editUser = async (e) => {
     const formData = new FormData(e.target);

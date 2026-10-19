@@ -49,7 +49,7 @@ export function PostModifiedContainer({
               )}
             </div>
 
-            <p className="text-xs text-black/70">
+            <p className={`text-xs ${themeOn ? "text-gray" : "text-white/50"}`} >
               {book?.ebook?.volumeInfo?.subtitle || subtitle}
             </p>
             {(postModified || type) === "feedback" && (

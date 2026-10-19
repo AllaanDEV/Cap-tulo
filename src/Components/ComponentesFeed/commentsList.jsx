@@ -173,44 +173,46 @@ export function CommentsList({ post }) {
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2 items-center">
                         <h3
-                          className={`${themeOn ? "text-black" : "text-white"}`}
+                          className={`${themeOn ? "text-black" : "text-white"} text-sm`}
                         >
                           {c.author}
                         </h3>
                         <span className="text-gray text-xs">@{c.userName}</span>
                       </div>
 
-                      <details
-                        className={` flex flex-col ${themeOn ? "text-black" : "text-white"}`}
-                      >
-                        <summary className="list-none marker:hidden">
-                          <Icon />
-                        </summary>
+                      {user.id === c.authorId && (
+                        <details
+                          className={` flex flex-col ${themeOn ? "text-black" : "text-white"}`}
+                        >
+                          <summary className="list-none marker:hidden">
+                            <Icon />
+                          </summary>
 
-                        <div className="bg-border absolute right-4 px-2 rounded-sm flex flex-col">
-                          <button
-                            type="button"
-                            className="hover:text-wine"
-                            onClick={() => {
-                              SETEDIT(c.id);
-                              setPostEdit(post);
-                              toggleComments();
-                            }}
-                          >
-                            Editar
-                          </button>
+                          <div className="bg-border absolute right-4 px-2 rounded-sm flex flex-col">
+                            <button
+                              type="button"
+                              className="hover:text-wine"
+                              onClick={() => {
+                                SETEDIT(c.id);
+                                setPostEdit(post);
+                                toggleComments();
+                              }}
+                            >
+                              Editar
+                            </button>
 
-                          <button
-                            type="button"
-                            className="hover:text-wine"
-                            onClick={() => {
-                              commentDelete(c);
-                            }}
-                          >
-                            Excluir
-                          </button>
-                        </div>
-                      </details>
+                            <button
+                              type="button"
+                              className="hover:text-wine"
+                              onClick={() => {
+                                commentDelete(c);
+                              }}
+                            >
+                              Excluir
+                            </button>
+                          </div>
+                        </details>
+                      )}
                     </div>
 
                     <p

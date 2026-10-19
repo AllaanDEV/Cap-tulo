@@ -35,7 +35,6 @@ export function EbookProgress({ book, className, ...props }) {
         bookSaved.postModified.ebook.ebook.volumeInfo.title ===
         book.ebook.volumeInfo.title,
     );
-  console.log("STYLEDISLABE", styleDisable);
 
   return (
     <ContainerEbooks
@@ -56,7 +55,6 @@ export function EbookProgress({ book, className, ...props }) {
               : setStyleCardActive(book)
           : null
       }
-
       book={book}
       className={className}
       {...props}

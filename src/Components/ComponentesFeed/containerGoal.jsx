@@ -7,8 +7,7 @@ import { Link } from "react-router";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ContainerGoal() {
-  const { ebookSaved, progressAllEbooks, goalUser, editRequisicao } =
-    useContext(AppContext);
+  const { myEbookSaved, goalUser, editRequisicao } = useContext(AppContext);
 
   const { user, goalUserLogged } = useRequisicoes({});
 
@@ -21,13 +20,33 @@ export function ContainerGoal() {
     goalUserLogged(user.id);
   }, [user?.id, editRequisicao, goalUserLogged]);
 
+  // Usa a cópia DEDICADA do usuário logado (myEbookSaved), preservada pelo
+  // getBookSave. Usar ebookSaved aqui mostrava os livros do perfil que está
+  // sendo VISITADO, alterando o progresso da sidebar para o perfil em tela.
   const booksRead =
-    ebookSaved?.filter((ebook) => ebook.progress === 100).length ?? 0;
+    myEbookSaved?.filter((ebook) => ebook.progress === 100).length ?? 0;
 
-  // Evita exibir temporariamente a meta de outro usuário
-  const goalNumber = goalUser?.userId === user?.id ? goalUser.number : 0;
+  // A meta vem SEMPRE de goalUser (buscada pelo id do usuário logado via
+  // goalUserLogged), nunca de "goal" (que é a meta do perfil visitado).
+  const goalNumber = goalUser?.number ?? 0;
 
   const difference = Math.max(0, goalNumber - booksRead);
+
+  // Progresso calculado localmente com os dados do usuário logado.
+  // O progressAllEbooks do Context usa "goal" + "ebookSaved" (do perfil
+  // visitado), o que alterava o % da sidebar ao navegar entre perfis.
+  const progressMyGoal =
+    goalNumber > 0
+      ? Math.min(
+          (myEbookSaved.reduce(
+            (acc, ebook) => acc + (ebook.progress || 0) / 100,
+            0,
+          ) /
+            goalNumber) *
+            100,
+          100,
+        )
+      : 0;
 
   const textDifference =
     difference <= 5
@@ -51,7 +70,7 @@ export function ContainerGoal() {
             {booksRead} de {goalNumber} livros
           </p>
 
-          <Progress goal={progressAllEbooks.toFixed()} className="w-full" />
+          <Progress goal={progressMyGoal.toFixed()} className="w-full" />
 
           <span className="text-gray text-xs">
             {difference === 0 ? (

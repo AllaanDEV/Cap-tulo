@@ -2,7 +2,7 @@ import { Div } from "./div";
 import { Group, Search } from "../svgCode";
 import { useContext, useEffect } from "react";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { UsersInfo } from "./usersInfo";
 import { ButtonFlow } from "../ComponentsPerfil/buttonFlow";
 import AppContext from "../context";
@@ -16,25 +16,13 @@ export function SearchUsersSidebar() {
     themeOn,
   } = useContext(AppContext);
 
-  const location = useLocation();
-
-  const {
-    user,
-    fetchProfile,
-    userUP,
-    getFollowBack,
-  } = useRequisicoes({});
+  const { user, userUP, getFollowBack } = useRequisicoes({});
 
   const { id: paramsId } = useParams();
 
   useEffect(() => {
-    fetchProfile();
     userUP();
-
-    if (location.pathname === "/feed/" || location.pathname === "/perfil/") {
-      userUP();
-    }
-  }, [location]);
+  }, [paramsId]);
 
   const alphabeticalOrder = [...usersList].sort((a, b) =>
     a.name.localeCompare(b.name),
@@ -73,7 +61,6 @@ export function SearchUsersSidebar() {
     .filter((users) => users.id !== user.id)
     .slice(0, 5);
 
-    console.log("usersVisible", usersVisible)
   return (
     <Div className="w-full sm:mt-0 lg:w-[40vw] xl:w-full">
       <section>
