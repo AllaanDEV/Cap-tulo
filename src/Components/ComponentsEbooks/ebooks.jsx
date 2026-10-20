@@ -9,7 +9,8 @@ import AppContext from "../context";
 export function Ebook(ebook) {
   const SaveIcon = Save;
 
-  const { ebookSaved, themeOn } = useContext(AppContext);
+  const { ebookSaved, themeOn, setPostFocus, setDataPostFocus } =
+    useContext(AppContext);
 
   const { saveBook } = useRequisicoes({});
 
@@ -28,9 +29,20 @@ export function Ebook(ebook) {
   );
 
   const style= themeOn ? "text-[#995d43]" : "text-[#765242]"
+  // Abre a dialog de foco (mesma do feed) quando o livro é clicado em telas SM+.
+  const openBookFocus = () => {
+    if (window.innerWidth < 640) return;
+    setDataPostFocus({
+      type: "bookFocus",
+      postModified: { ebook: ebook.ebook },
+    });
+    setPostFocus((prev) => !prev);
+  };
+
   return (
     <article
-      className={`overflow-hidden rounded-lg border  bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg ${themeOn ? "bg-[#fffaf3] border-[#e1d1ba]" : " bg-border border-gray"}`}
+      onClick={openBookFocus}
+      className={`cursor-pointer overflow-hidden rounded-lg border  bg-[#fffaf3] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lg ${themeOn ? "bg-[#fffaf3] border-[#e1d1ba]" : " bg-border border-gray"}`}
     >
       <div className="relative overflow-hidden rounded-md bg-[#f1eadf]">
         <img
@@ -63,7 +75,7 @@ export function Ebook(ebook) {
         <div className="flex items-center justify-between mt-4">
           <button
             onClick={toggleDetails}
-            className="font-serif text-[12px] text-[#995d43]/80 hover:text-[#995d43]"
+            className="font-serif text-[12px] text-[#995d43]/80 hover:text-[#995d43] sm:hidden"
           >
             Detalhes
           </button>
@@ -74,7 +86,11 @@ export function Ebook(ebook) {
                 ? "text-yellow-600"
                 : "text-[#995d43] hover:text-yellow-600"
             }`}
-            onClick={saveBookEbook}
+            onClick={(e) => {
+              // Evita que o clique no botão abrir a dialog.
+              e.stopPropagation();
+              saveBookEbook();
+            }}
           >
             <SaveIcon size="1.5em" filled={isSaved} />
           </button>

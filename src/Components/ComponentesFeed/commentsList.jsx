@@ -47,6 +47,7 @@ export function CommentsList({ post }) {
 
   const dataCommentForm = async (e) => {
     e.preventDefault();
+  setComment("");
 
     const formData = new FormData(e.target);
     const content = formData.get("comment");
