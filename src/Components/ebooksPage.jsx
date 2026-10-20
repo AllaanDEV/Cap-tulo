@@ -3,6 +3,7 @@ import { ArrayEbooks } from "./ComponentsEbooks/arrayEbooks";
 import { EbookEmphasis } from "./ComponentsEbooks/ebookEmphasis";
 import { Hero } from "./ComponentsEbooks/hero";
 import { SearchBook } from "./ComponentsEbooks/searchBook";
+import { DialogPostFocus } from "./ComponentesFeed/dialogPostFocus";
 
 export function EbooksPage() {
   return (
@@ -15,6 +16,7 @@ export function EbooksPage() {
           <ArrayEbooks></ArrayEbooks>
         </section>
       </main>
+      <DialogPostFocus></DialogPostFocus>
     </Container>
   );
 }

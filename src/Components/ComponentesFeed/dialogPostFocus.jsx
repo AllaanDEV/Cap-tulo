@@ -10,6 +10,7 @@ import { EbookCitation } from "./ebookCitation";
 import { Info } from "./info";
 import { PostModifiedContainer } from "./postModifiedContainer";
 import { CarouselImages } from "./carolselImages";
+import { DetailsBook } from "../ComponentsEbooks/detailsBook";
 
 export function DialogPostFocus() {
   const {
@@ -47,6 +48,9 @@ export function DialogPostFocus() {
     }
   }, [postFocus]);
 
+  // Foco vindo da página de ebooks: o item clicado é um livro, não um post.
+  const isBookFocus = dataPostFocus?.type === "bookFocus";
+
   // Verifica se o post possui um tipo especial.
   const isModifiedPost = ["feedback", "resenha"].includes(dataPostFocus?.type);
 
@@ -68,7 +72,7 @@ export function DialogPostFocus() {
     (media?.type === "gif" || (Array.isArray(media) && media.length > 0));
 
   // O layout divide a dialog se houver mídia ou conteúdo de livro.
-  const hasTwoColumns = isModifiedPost || hasMedia;
+  const hasTwoColumns = isBookFocus || isModifiedPost || hasMedia;
 
   return (
     <dialog
@@ -83,8 +87,37 @@ export function DialogPostFocus() {
           hasTwoColumns ? "grid grid-cols-2" : "flex flex-col"
         }`}
       >
-        {isModifiedPost ? (
-          <div className="bg-background flex flex-col mx-auto p-4 w-full h-full min-w-0 overflow-y-auto">
+        {isBookFocus ? (
+          <div className="bg-background flex flex-col mx-auto p-4 w-full h-full min-w-0 overflow-y-auto scrollbar-none">
+            <div className="rounded-lg flex flex-col items-center">
+              <img
+                src={
+                  dataPostFocus?.postModified?.ebook?.volumeInfo?.imageLinks
+                    ?.thumbnail
+                }
+                alt={dataPostFocus?.postModified?.ebook?.volumeInfo?.title}
+                className="rounded-lg h-90 w-auto max-w-full object-contain"
+              />
+
+              <div className="flex flex-col items-center gap-2 w-full">
+                <div className="flex flex-col gap-1 mt-2 items-center text-center">
+                  <h4
+                    className={`text-2xl font-fraunce ${themeOn ? "text-black" : "text-white"}`}
+                  >
+                    {dataPostFocus?.postModified?.ebook?.volumeInfo?.title}
+                  </h4>
+
+                  {dataPostFocus?.postModified?.ebook?.volumeInfo?.subtitle && (
+                    <span className="text-xs text-gray">
+                      {dataPostFocus?.postModified?.ebook?.volumeInfo?.subtitle}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isModifiedPost ? (
+          <div className="bg-background flex flex-col mx-auto p-4 w-full h-full min-w-0 overflow-y-auto scrollbar-none">
             <div className="rounded-lg flex flex-col items-center">
               <img
                 src={
@@ -129,7 +162,7 @@ export function DialogPostFocus() {
             </div>
           </div>
         ) : hasMedia ? (
-          <div className="bg-background flex flex-col justify-center p-4 w-full h-full min-w-0 overflow-y-auto">
+          <div className="bg-background flex flex-col justify-center p-4 w-full h-full min-w-0 overflow-y-auto scrollbar-none">
             <Info className="rounded-lg">
               {media?.type === "gif" ? (
                 <img
@@ -145,12 +178,12 @@ export function DialogPostFocus() {
         ) : null}
 
         <div
-          className={`h-full min-h-0 min-w-0 overflow-y-auto bg-border/50 flex flex-col relative text-inherit ${
+          className={`h-full min-h-0 min-w-0 overflow-y-auto bg-border/50 flex flex-col relative text-inherit scrollbar-none ${
             hasTwoColumns ? "border-l border-border" : "w-full flex-1"
           }`}
         >
           <div className="flex justify-between w-full items-start p-3 sticky top-0 z-50 border-b border-border">
-            <UsersInfo post={dataPostFocus} />
+            {!isBookFocus && <UsersInfo post={dataPostFocus} />}
 
             <button
               onClick={() => {
@@ -165,16 +198,59 @@ export function DialogPostFocus() {
 
           <div className="flex flex-col items-start gap-5 w-full flex-1">
             <div className="p-4 w-full gap-2 flex flex-col">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: dataPostFocus?.content ?? "",
-                }}
-                className={`text h-auto w-full ${
-                  themeOn ? "text-black" : "text-white"
-                }`}
-              />
+              {isBookFocus ? (
+                <>
+                  <p
+                    className={`text h-auto w-full text-[#765242]`}
+                  >
+                    {
+                      dataPostFocus?.postModified?.ebook?.volumeInfo
+                        ?.description
+                    }
+                  </p>
 
-              {dataPostFocus?.type === "citation" ? (
+                  <div className="grid grid-cols-3 gap-6">
+                    <DetailsBook
+                      label="PÁGINAS"
+                      value={
+                        dataPostFocus?.postModified?.ebook?.volumeInfo
+                          ?.pageCount
+                      }
+                    />
+                    <DetailsBook
+                      label="IDIOMA"
+                      value={
+                        dataPostFocus?.postModified?.ebook?.volumeInfo?.language
+                      }
+                    />
+                    <DetailsBook
+                      label="PUBLICADO"
+                      value={
+                        dataPostFocus?.postModified?.ebook?.volumeInfo
+                          ?.publishedDate
+                      }
+                    />
+                  </div>
+
+                  <DetailsBook
+                    label="AUTORES"
+                    value={dataPostFocus?.postModified?.ebook?.volumeInfo?.authors?.join(
+                      ", ",
+                    )}
+                  />
+                </>
+              ) : (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: dataPostFocus?.content ?? "",
+                  }}
+                  className={`text h-auto w-full ${
+                    themeOn ? "text-black" : "text-white"
+                  }`}
+                />
+              )}
+
+              {!isBookFocus && dataPostFocus?.type === "citation" ? (
                 <EbookCitation
                   text={dataPostFocus.postModified?.content}
                   title={
@@ -210,15 +286,17 @@ export function DialogPostFocus() {
               ) : null}
             </div>
 
-            <div className="w-full">
-              <Lines />
+            {!isBookFocus && (
+              <div className="w-full">
+                <Lines />
 
-              <ContainerButtonsPost className="my-3" post={dataPostFocus} />
+                <ContainerButtonsPost className="my-3" post={dataPostFocus} />
 
-              <div className="flex gap-2 w-full border-t-[2px] px-4 border-border mt-4">
-                <CommentsList post={dataPostFocus} />
+                <div className="flex gap-2 w-full border-t-[2px] px-4 border-border mt-4">
+                  <CommentsList post={dataPostFocus} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
