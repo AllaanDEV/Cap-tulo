@@ -1,9 +1,9 @@
 
-<img src="src/assets/transparent-logo.svg">
+<img src="src/assets/maz.svg">
 
 # 📚 Capítulo
 
-O Capítulo é uma aplicação web voltada para leitores, criada para compartilhar experiências literárias, descobrir novos livros e interagir com uma comunidade de pessoas que gostam de leitura.![Uploading transparent-logo.svg…]()
+O Capítulo é uma aplicação web voltada para leitores, criada para compartilhar experiências literárias, descobrir novos livros e interagir com uma comunidade de pessoas que gostam de leitura.
 
 
 ## ✨ Funcionalidades
