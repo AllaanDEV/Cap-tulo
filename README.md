@@ -1,16 +1,177 @@
-# React + Vite
+# 📚 Capítulo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O Capítulo é uma aplicação web voltada para leitores, criada para compartilhar experiências literárias, descobrir novos livros e interagir com uma comunidade de pessoas que gostam de leitura.
 
-Currently, two official plugins are available:
+<img width="1587" height="764" alt="{1B66C3E2-7AA4-480C-AC5A-8A7024B6CF03}" src="https://github.com/user-attachments/assets/3e667af2-edbf-47ca-937b-92429090ee64" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Funcionalidades
 
-## React Compiler
+- Feed com publicações de livros.
+- Usuários simulando.
+- Curtidas e comentários.
+- Perfis personalizados.
+- Busca e exploração de qualquer livro.
+- temas dinâmicos.
+- Acompanhamento de progresso e metas de leitura.
+- Salvamento de livros.
+- Pesquisa e envio de GIFs.
+- Seletor e busca de emojis.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🖼️ Prévia do projeto
 
-## Expanding the ESLint configuration
+### Livros
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Exploração de livros](<img width="1588" height="764" alt="{017FAF47-54EB-45D6-9253-C7C979AF83C9}" src="https://github.com/user-attachments/assets/ce4f27a7-a693-428b-87b5-94c6164ee162" />
+)
+
+### Perfil
+
+![Perfil de leitor](<img width="1586" height="762" alt="{EB33D6A6-2A28-4894-B1F6-BE0F9774C849}" src="https://github.com/user-attachments/assets/589a5c27-888a-4e8f-b8e6-d94082b897d2" />
+)
+
+## 🛠️ Tecnologias utilizadas
+
+**Frontend**
+- React
+- Vite
+- JavaScript
+- Tailwind CSS
+- React Router
+- TipTap 
+
+**Backend**
+- Node.js
+- Express
+
+**APIs externas**
+- [Google Books API](https://developers.google.com/books/docs/v1/using)
+- [GIPHY API](https://developers.giphy.com/docs/api/quick-start-guide/)
+- [Open Emoji API](https://emoji-api.com/)
+
+## 🚀 Como executar o projeto
+
+### Pré-requisitos
+
+- Node.js e npm instalados.
+- Git instalado.
+- Chaves de API configuradas conforme as instruções abaixo.
+
+### 1. Clone o repositório
+
+```bash
+git clone URL_DO_REPOSITORIO
+cd Capítulo
+```
+
+Substitua `URL_DO_REPOSITORIO` pela URL HTTPS do repositório no GitHub.
+
+### 2. Instale as dependências do frontend
+
+Na pasta principal do projeto:
+
+```bash
+npm install
+```
+
+### 3. Instale as dependências do backend
+
+Entre na pasta do backend:
+
+```bash
+cd backend-capítulo
+npm install
+```
+
+### 4. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` dentro de `backend-capítulo/`, seguindo o modelo `.env.example`.
+
+Preencha as chaves conforme as instruções da próxima seção.
+
+### 5. Inicie o backend
+
+Dentro da pasta `backend-capítulo/`:
+
+```bash
+node server.js
+```
+
+Mantenha esse terminal aberto.
+
+### 6. Inicie o frontend
+
+Abra outro terminal na pasta principal `Capítulo` e execute:
+
+```bash
+npm run dev
+```
+
+Acesse o endereço local informado pelo Vite no terminal.
+
+## 🔑 Configuração das APIs
+
+As chaves são necessárias para que as funcionalidades que dependem das APIs externas funcionem corretamente.
+
+**Não compartilhe suas chaves reais.** O arquivo `.env` deve permanecer local e não deve ser enviado ao GitHub.
+
+### 1. GIPHY API — GIFs
+
+1. Acesse o [GIPHY Developers](https://developers.giphy.com/dashboard/).
+2. Entre ou crie uma conta.
+3. Crie um aplicativo e obtenha uma API key.
+4. Abra `backend-capítulo/.env`.
+5. Configure a variável com o nome esperado pelo backend:
+
+```env
+GIPHY_API_KEY=COLOQUE_SUA_CHAVE_AQUI
+```
+
+Confirme o nome da variável no `server.js`; se o código usar outro nome, mantenha o nome esperado pelo código.
+
+### 2. Google Books API — livros
+
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+2. Crie ou selecione um projeto.
+3. Habilite a Google Books API no catálogo de APIs.
+4. Acesse a página de credenciais e crie uma chave de API.
+5. Adicione a chave ao arquivo `backend-capítulo/.env`:
+
+```env
+GOOGLE_BOOKS_API_KEY=COLOQUE_SUA_CHAVE_AQUI
+```
+
+### 3. Open Emoji API — emojis
+
+1. Acesse [emoji-api.com](https://emoji-api.com/).
+2. Solicite sua chave de API gratuita.
+3. Adicione a chave ao arquivo `backend-capítulo/.env`:
+
+```env
+IMOJIS_API_KEY=COLOQUE_SUA_CHAVE_AQUI
+```
+
+### Exemplo de arquivo `.env`
+
+O arquivo real deve conter suas chaves. O exemplo abaixo é apenas ilustrativo:
+
+```env
+GOOGLE_BOOKS_API_KEY= *chave*
+GIFS_GIPHY_API_KEY= *chave*
+EMOJIS_API_KEY= *chave*
+```
+
+> Os nomes das variáveis precisam corresponder exatamente aos usados pelo backend. Após alterar o `.env`, reinicie o servidor.
+
+## 🔒 Segurança
+
+- Nunca envie o arquivo `.env` ao GitHub.
+- Não coloque chaves secretas diretamente no código-fonte.
+- Mantenha o `.env.example` sem credenciais reais.
+- Configure restrições e limites de uso nas plataformas que oferecem esses recursos.
+
+## 📌 Observações
+
+O projeto utiliza APIs externas, que podem ter limites de requisições ou exigir credenciais próprias.
+
+Os dados de demonstração e o armazenamento da aplicação dependem da implementação atual do projeto. Consulte o código para entender as limitações de persistência.
+
