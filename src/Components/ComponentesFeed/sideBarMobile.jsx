@@ -12,7 +12,7 @@ export function SideBarMobile() {
   const location = useLocation();
 
   const {
-    options,
+    option,
     setOption,
     setOptionsDialog,
     focusEditor,
@@ -36,7 +36,7 @@ export function SideBarMobile() {
         <div className="flex gap-8 lg:hidden">
           <SideBarMobileButtons
             option="Feed"
-            options={options}
+            activeOption={option}
             setOption={setOption}
             to={`/feed/${user.id}`}
           >
@@ -45,7 +45,7 @@ export function SideBarMobile() {
 
           <SideBarMobileButtons
             option="Explorar"
-            options={options}
+            activeOption={option}
             setOption={setOption}
             navigate={navigate}
             to="/ebooks"
@@ -69,7 +69,7 @@ export function SideBarMobile() {
         <div className="flex gap-8">
           <SideBarMobileButtons
             option="Perfil"
-            options={options}
+            activeOption={option}
             setOption={setOption}
             navigate={navigate}
             to={`/perfil/${user.id}`}
@@ -80,7 +80,7 @@ export function SideBarMobile() {
 
           <SideBarMobileButtons
             option="Menu"
-            options={options}
+            activeOption={option}
             setOption={setOption}
             navigate={navigate}
             setOptionsDialog={setOptionsDialog}

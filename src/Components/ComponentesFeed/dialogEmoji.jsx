@@ -88,16 +88,20 @@ export function DialogEmoji({
     const query = search.trim();
 
     if (!query) {
-      setSearchList([]);
-      setSearchError(false);
-      setLoadingSearch(false);
-      return;
+      const reset = setTimeout(() => {
+        setSearchList([]);
+        setSearchError(false);
+        setLoadingSearch(false);
+      }, 0);
+      return () => clearTimeout(reset);
     }
 
     const controller = new AbortController();
 
-    setLoadingSearch(true);
-    setSearchError(false);
+    const start = setTimeout(() => {
+      setLoadingSearch(true);
+      setSearchError(false);
+    }, 0);
 
     const timeout = setTimeout(async () => {
       try {
@@ -118,6 +122,7 @@ export function DialogEmoji({
     }, 300);
 
     return () => {
+      clearTimeout(start);
       clearTimeout(timeout);
       controller.abort();
     };

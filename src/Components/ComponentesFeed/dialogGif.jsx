@@ -7,7 +7,6 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function DialogGif({className}) {
   const gifRef = useRef(null);
-  const inputRef = useRef(null);
   const { dialogGif, setDialogGif, setGifData, themeOn } = useContext(AppContext);
   const { getGifs: fetchGifs } = useRequisicoes({});
 
@@ -51,22 +50,21 @@ export function DialogGif({className}) {
   };
 
   const handleDefaultItemClick = async (name) => {
-    if (inputRef.current) {
-      inputRef.current.value = name;
-    }
-
+    setInputValue(name);
     setBusca(name);
 
     await getGifs(false, name);
   };
 
+  const [inputValue, setInputValue] = useState("");
+
   const valueDefault = (exit) => {
-    const valueInput = inputRef.current.value;
+    const valueInput = inputValue;
     if (valueInput === "") {
       setBusca("options");
       setArrayGifs([]);
     } else if (exit) {
-      inputRef.current.value = "";
+      setInputValue("");
       setArrayGifs([]);
       setBusca("options");
     }
@@ -103,7 +101,7 @@ export function DialogGif({className}) {
     <dialog
       ref={gifRef}
       onCancel={() => setDialogGif((prev) => !prev)}
-      className={`fixed z-[9999] w-full h-[80vh] 
+      className={`fixed z-[9999] w-full h-[80vh]
 
         sm:w-[70vw] md:w-[60vw] lg:w-[40vw]
          m-auto rounded-2xl scrollbar-none
@@ -131,10 +129,11 @@ export function DialogGif({className}) {
               <Search></Search>
             </div>
             <input
-              ref={inputRef}
               type="text"
               placeholder="Pesquisar Gifs"
-              onInput={(e) => {
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
                 (setBusca(e.target.value.trim()), valueDefault());
               }}
               className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"

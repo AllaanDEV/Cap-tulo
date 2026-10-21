@@ -41,13 +41,17 @@ export function FormEditProfile({ active, ...props }) {
   });
 
   useEffect(() => {
-    setForm({
-      name: editValue?.name ?? "",
-      username: editValue?.username ?? "",
-      bios: editValue?.bios ?? "",
-      location: editValue?.location ?? "",
-      link: editValue?.link ?? "",
-    });
+    const timer = setTimeout(() => {
+      setForm({
+        name: editValue?.name ?? "",
+        username: editValue?.username ?? "",
+        bios: editValue?.bios ?? "",
+        location: editValue?.location ?? "",
+        link: editValue?.link ?? "",
+      });
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [editValue]);
 
   const changeInput = (event) => {

@@ -8,7 +8,7 @@ import { DialogPostFocus } from "./ComponentesFeed/dialogPostFocus";
 export function EbooksPage() {
   return (
     <Container>
-      <main className="text-border">
+      <main>
         <section className=" w-[95vw] sm:w-[90vw] lg:w-[60vw] xl:w-[40vw] mx-auto">
           <Hero></Hero>
           <EbookEmphasis></EbookEmphasis>

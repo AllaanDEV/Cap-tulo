@@ -2,10 +2,29 @@ import { useContext } from "react";
 import { ButtonBook } from "./buttonBook";
 import { DetailsBook } from "./detailsBook";
 import AppContext from "../context";
+import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { Star } from "../svgCode";
 
 export function EbookEmphasis() {
-  const { order } = useContext(AppContext);
+  const { order, ebookSaved } = useContext(AppContext);
+  const { saveBook } = useRequisicoes({});
+
+  // Livro em destaque = o com maior nota na lista "order".
+  const bookEmphasis = order[0];
+
+  // order[0].data tem a forma { ebook: { ebook: <livro> } } — o servidor
+  // espera apenas o objeto do livro (id, etag, volumeInfo), como em ebooks.jsx.
+  const saveBookEmphasis = async () => {
+    const livro = bookEmphasis?.data?.ebook?.ebook ?? bookEmphasis?.data?.ebook;
+
+    if (!livro) return;
+    await saveBook(livro);
+  };
+
+  const isSaved = ebookSaved?.some(
+    (savedBook) =>
+      savedBook?.ebook?.id === bookEmphasis?.data?.ebook?.ebook?.id,
+  );
 
   return (
     <section className="flex flex-col gap-5 border-b border-[#e7d8c3] py-14 md:grid-cols-[300px_1fr] md:py-16">
@@ -14,13 +33,13 @@ export function EbookEmphasis() {
           LEITURA DA SEMANA
         </span>
 
-        <h3 className="mt-4 font-serif text-4xl font-semibold md:text-5xl">
+        <h3 className="mt-4 font-serif text-4xl font-semibold md:text-5xl text-wine">
           {order[0]?.data?.ebook?.ebook?.volumeInfo.title}
         </h3>
 
         {order[0]?.data?.ebook?.ebook?.volumeInfo?.authors && (
           <p className="mt-2 font-serif text-lg italic text-[#8f583d]">
-            por{order[0]?.data?.ebook?.ebook?.volumeInfo?.authors}
+            por {order[0]?.data?.ebook?.ebook?.volumeInfo?.authors}
           </p>
         )}
 
@@ -37,7 +56,10 @@ export function EbookEmphasis() {
             label="IDIOMA"
             value={order[0]?.data?.ebook?.ebook?.volumeInfo?.language}
           />
-          <DetailsBook label="GÊNERO" value={order[0]?.data?.ebook?.volumeInfo?.categories} />
+          <DetailsBook
+            label="GÊNERO"
+            value={order[0]?.data?.ebook?.volumeInfo?.categories}
+          />
           <DetailsBook
             label="PUBLICADO"
             value={order[0]?.data?.ebook?.ebook?.volumeInfo?.publishedDate}
@@ -50,7 +72,13 @@ export function EbookEmphasis() {
             Ler agora — grátis
           </button>
 
-          <ButtonBook>♧ &nbsp; Salvar na estante</ButtonBook>
+          <ButtonBook
+            className="text-black"
+            onClick={saveBookEmphasis}
+            disabled={!bookEmphasis}
+          >
+            ♧ &nbsp; {isSaved ? "Salvo na estante" : "Salvar na estante"}
+          </ButtonBook>
 
           {/* <button className="px-3 py-3 text-sm text-[#806254]">
             ♧ &nbsp; Ouvir amostra
@@ -75,7 +103,7 @@ export function EbookEmphasis() {
       <div className="rounded-md bg-[#f3eadc] p-4">
         <img
           src={order[0]?.data.ebook.ebook.volumeInfo.imageLinks?.thumbnail}
-            alt={order[0]?.data?.ebook?.ebook?.volumeInfo.title}
+          alt={order[0]?.data?.ebook?.ebook?.volumeInfo.title}
           className="aspect-[3/4] h-auto w-full rounded-sm object-cover"
         />
       </div>

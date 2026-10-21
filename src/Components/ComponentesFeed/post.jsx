@@ -113,7 +113,7 @@ export const Post = memo(function Post({ post }) {
 
           {post?.midia !== "listNull" && (
             <Info
-              className="rounded-xs cursor-pointer text-center"
+              className="rounded-xl cursor-pointer text-center"
               onClick={() => {
                 validationsPostFocus();
                 setDataPostFocus(post);

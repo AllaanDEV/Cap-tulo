@@ -1,7 +1,5 @@
 import logo from "../../assets/transparent-logo.svg";
 
-import searchIcon from "../../assets/svgIcons/search-line.svg";
-
 import { PerfilIcon } from "../ComponentsForm/perfilIcon";
 import { useContext, useEffect, useRef, useState } from "react";
 import AppContext from "../context";
@@ -9,7 +7,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 import { useLocation } from "react-router";
 import { ImgPerfil } from "../ComponentsPerfil/imgPerfil";
-import { Notification, Theme, Vector, Search} from "../svgCode";
+import { Notification, Theme, Vector } from "../svgCode";
 
 export function Header() {
   const inputRef = useRef(null);
@@ -149,7 +147,9 @@ export function Header() {
     const validIndex =
       Number.isInteger(index) && index >= 0 && index < themes.length;
 
-    applyTheme(validIndex ? index : 0);
+    const timer = setTimeout(() => applyTheme(validIndex ? index : 0), 0);
+
+    return () => clearTimeout(timer);
   }, [user?.id, themes]);
 
   // Alterna o tema e salva a preferência

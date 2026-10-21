@@ -1,6 +1,8 @@
+import { useContext } from "react";
+import AppContext from "../context";
 
 export function SearchBook() {
-
+  const {themeOn}=useContext(AppContext)
   // const categoriesSearch = (e) => {
   //     setSearchValue(e.target.value);
 
@@ -19,15 +21,17 @@ export function SearchBook() {
 
   return (
     <section className="py-5 flex flex-col justify-center border-b border-[#e7d8c3] mb-5">
-        <div className="mx-auto text-center">
-          <h3 className="font-serif text-4xl sm:text-6xl font-semibold">Toda a estante</h3>
-          <p className="mt-1 text-sm text-[#866653]">
-            9 títulos novos este mês
-          </p>
-        </div>
+      <div className="mx-auto text-center">
+        <h3
+          className={`  font-serif text-4xl sm:text-6xl font-semibold ${themeOn ? "text-[#4b2a07]" : "text-white/50"}`}
+        >
+          Toda a estante
+        </h3>
+        <p className="mt-1 text-sm text-[#866653]">9 títulos novos este mês</p>
+      </div>
 
-        {/* <div className="grid gap-2 sm:grid-cols-3"> */}
-          {/* <div className="flex h-11 items-center gap-2 rounded-md border border-[#dfcfb8] bg-[#fffaf3] px-4 w-[50vw]">
+      {/* <div className="grid gap-2 sm:grid-cols-3"> */}
+      {/* <div className="flex h-11 items-center gap-2 rounded-md border border-[#dfcfb8] bg-[#fffaf3] px-4 w-[50vw]">
             <span className="text-[#9b806f]">⌕</span>
             <input
               type="text"
@@ -38,7 +42,7 @@ export function SearchBook() {
             />
           </div> */}
 
-          {/* <SelectBookCase>
+      {/* <SelectBookCase>
             <option>Todos os idiomas</option>
             <option>Português</option>
             <option>Inglês</option>

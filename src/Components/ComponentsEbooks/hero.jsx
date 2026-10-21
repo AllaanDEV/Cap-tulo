@@ -1,7 +1,13 @@
+import { useContext } from "react";
+import AppContext from "../context";
+
 export function Hero() {
+  const { themeOn } = useContext(AppContext);
   return (
     <section className="border-b border-[#e7d8c3] py-5 md:pt-15 px-5">
-      <h1 className="max-w-3xl font-serif text-4xl font-semibold leading-[1.05] md:text-6xl">
+      <h1
+        className={`max-w-3xl font-serif text-4xl font-semibold leading-[1.05] md:text-6xl ${themeOn ? "text-[#4b2a07]" : "text-white/50"}`}
+      >
         Livros liberados para toda a comunidade
       </h1>
 

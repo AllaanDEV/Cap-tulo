@@ -25,13 +25,14 @@ export function DialogOptionsMobile() {
     if (!dialog) return;
 
     if (optionsDialog) {
-      setClosing(false);
+      const open = setTimeout(() => setClosing(false), 0);
+      const cleanup = () => clearTimeout(open);
 
       if (!dialog.open) {
         dialog.showModal();
       }
 
-      return;
+      return cleanup;
     }
 
     if (!dialog.open) return;

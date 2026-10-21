@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Post } from "./post";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
@@ -9,7 +9,6 @@ export function ArrayPost() {
   const { publication, search, followerPost, searchValue, postSaved } =
     useContext(AppContext);
 
-  const hasAnimatedInitialPosts = useRef(false);
   const { postFollowers, user } = useRequisicoes({});
 
   const [on, setOn] = useState(false);
@@ -26,18 +25,17 @@ export function ArrayPost() {
 
   useEffect(() => {
     if (followerPost === "saved") {
-      setOn(false);
+      const hide = setTimeout(() => setOn(false), 0);
       const timer = setTimeout(() => {
         setOn(true);
       }, 4000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(hide);
+        clearTimeout(timer);
+      };
     }
   }, [followerPost]);
-
-  if (postsToRender.length > 0) {
-    hasAnimatedInitialPosts.current = true;
-  }
 
   return (
     <ul className="flex flex-col gap-5 sm:mb-0">
