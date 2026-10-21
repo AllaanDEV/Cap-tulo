@@ -9,10 +9,10 @@ O Capítulo é uma aplicação web voltada para leitores, criada para compartilh
 ## ✨ Funcionalidades
 
 - Feed com publicações de livros.
-- Usuários simulando.
+- Usuários simulados.
 - Curtidas e comentários.
 - Perfis personalizados.
-- Busca e exploração de qualquer livro.
+- Busca e exploração de qualquer livro que você queira.
 - temas dinâmicos.
 - Acompanhamento de progresso e metas de leitura.
 - Salvamento de livros.
