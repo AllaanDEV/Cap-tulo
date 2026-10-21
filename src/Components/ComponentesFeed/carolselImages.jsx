@@ -6,12 +6,13 @@ export function CarouselImages({ images = [] }) {
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
-    setCurrentImage(0);
+    const timer = setTimeout(() => setCurrentImage(0), 0);
 
     imagesContainerRef.current?.scrollTo({
       left: 0,
       behavior: "instant",
     });
+    return () => clearTimeout(timer);
   }, [images]);
 
   if (!Array.isArray(images) || images.length === 0) {

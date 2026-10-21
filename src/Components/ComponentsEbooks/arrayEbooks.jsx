@@ -5,7 +5,7 @@ import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 
 export function ArrayEbooks() {
-  const { ebooks, setEbooks, bookSearch, searchValue, themeOn, setBookSearch } =
+  const { ebooks, setEbooks, bookSearch, searchValue, themeOn } =
     useContext(AppContext);
   const { getBookSave, user, getBooks } = useRequisicoes({});
 
@@ -55,7 +55,11 @@ export function ArrayEbooks() {
   }, [page, termoAtivo]);
 
   useEffect(() => {
-    setBooksContador(booksContador + 1);
+    const timer = setTimeout(() => {
+      setBooksContador((prev) => prev + 1);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [allBooks]);
 
   const arraySetEbooks = [
@@ -71,8 +75,12 @@ export function ArrayEbooks() {
   // Mantém sincronizado com o campo de busca do header: quando o termo muda,
   // reseta a paginação para começar a busca do zero.
   useEffect(() => {
-    setTermoAtivo(searchValue);
-    setPage(0);
+    const timer = setTimeout(() => {
+      setTermoAtivo(searchValue);
+      setPage(0);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [searchValue]);
 
   useEffect(() => {

@@ -1,4 +1,3 @@
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -15,9 +14,9 @@ import { EmAltaPageMobile } from "./Components/EmAltaPageMobile.jsx";
 import { SearchUsersPageMobile } from "./Components/searchUsersPageMobile.jsx";
 import { ScrollToTop } from "./Components/scrollToTop.jsx";
 import { LogoutPage } from "./Components/logoutPage.jsx";
-import { Forms } from "./Components/forms.jsx";
 
 import { ProtectedRoute } from "./Components/protectedRoute.jsx";
+import { ContainerForm } from "./Components/ComponentsForm/containerForm.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,10 +25,9 @@ createRoot(document.getElementById("root")).render(
 
       <Context>
         <Routes>
-          
           <Route path="auth">
             <Route path="logout" element={<LogoutPage />} />
-            <Route path="register" element={<Forms />} />
+            <Route path="register" element={<ContainerForm />} />
           </Route>
 
           <Route element={<ProtectedRoute />}>
@@ -44,19 +42,13 @@ createRoot(document.getElementById("root")).render(
 
               <Route path="EmAlta" element={<EmAltaPageMobile />} />
 
-              <Route
-                path="SearchUsers"
-                element={<SearchUsersPageMobile />}
-              />
+              <Route path="SearchUsers" element={<SearchUsersPageMobile />} />
 
-              <Route
-                path="feed/:id/:postId"
-                element={<PostFocusMobile />}
-              />
+              <Route path="feed/:id/:postId" element={<PostFocusMobile />} />
             </Route>
           </Route>
 
-          <Route path="*" element={<Forms />} />
+          <Route path="*" element={<ContainerForm />} />
         </Routes>
       </Context>
     </BrowserRouter>
