@@ -49,11 +49,9 @@ O Capítulo é uma aplicação web voltada para leitores, criada para compartilh
 ### 1. Clone o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/AllaanDEV/Cap-tulo.git
 cd Capítulo
 ```
-
-Substitua `URL_DO_REPOSITORIO` pela URL HTTPS do repositório no GitHub.
 
 ### 2. Instale as dependências do frontend
 
