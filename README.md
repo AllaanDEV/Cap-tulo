@@ -1,5 +1,5 @@
 
-<img src="src/assets/maz.svg">
+<img src="src/assets/transparent-logo.svg">
 
 # 📚 Capítulo
 
