@@ -21,13 +21,13 @@ O Capítulo é uma aplicação web voltada para leitores, criada para compartilh
 
 ### Livros
 
-![Exploração de livros](<img width="1588" height="764" alt="{017FAF47-54EB-45D6-9253-C7C979AF83C9}" src="https://github.com/user-attachments/assets/ce4f27a7-a693-428b-87b5-94c6164ee162" />
-)
+<img width="1588" height="764" alt="{017FAF47-54EB-45D6-9253-C7C979AF83C9}" src="https://github.com/user-attachments/assets/ce4f27a7-a693-428b-87b5-94c6164ee162" />
+
 
 ### Perfil
 
-![Perfil de leitor](<img width="1586" height="762" alt="{EB33D6A6-2A28-4894-B1F6-BE0F9774C849}" src="https://github.com/user-attachments/assets/589a5c27-888a-4e8f-b8e6-d94082b897d2" />
-)
+<img width="1586" height="762" alt="{EB33D6A6-2A28-4894-B1F6-BE0F9774C849}" src="https://github.com/user-attachments/assets/589a5c27-888a-4e8f-b8e6-d94082b897d2" />
+
 
 ## 🛠️ Tecnologias utilizadas
 
