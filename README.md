@@ -9,16 +9,28 @@ Primordialmente tive a ideia de criar o Capítulo pra praticar o uso de requisi�
 
 ## ✨ Funcionalidades
 
-- Feed com publicações de livros.
-- Usuários simulados.
-- Curtidas e comentários.
-- Perfis personalizados.
 - Busca e exploração de qualquer livro que você queira.
+- Avaliação de livros
+- Feed com publicações personalizadas de livros.
+- Usuários simulados.
+- Curtidas, comentários (edição e exclusão), salvamento de posts.
+- Lista de qualquer interação em seu perfil
+- Perfis personalizados.
 - temas dinâmicos.
 - Acompanhamento de progresso e metas de leitura.
 - Salvamento de livros.
 - Pesquisa e envio de GIFs.
 - Seletor e busca de emojis.
+
+## Feed
+<img width="1586" height="683" alt="{9B746EAE-EF7B-4C66-A0BB-D577E4652054}" src="https://github.com/user-attachments/assets/17586311-9105-4010-9621-ed77ab24cd98" />
+
+## Post
+<img width="1585" height="685" alt="{BF96B7D3-E470-4307-AEBC-CAE9294AB885}" src="https://github.com/user-attachments/assets/57bdb4ad-1247-47c7-bd5a-c132d6d38551" />
+
+## Perfil
+<img width="1585" height="686" alt="{99CD8C4B-A122-4E24-A75A-A622A6BB976E}" src="https://github.com/user-attachments/assets/cb500231-debd-4def-9b1f-c05ef744a3b9" />
+
 
 ## 🛠️ Tecnologias utilizadas
 
