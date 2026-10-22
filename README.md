@@ -5,7 +5,7 @@
 
 O Capítulo é uma aplicação web voltada para leitores, criada para compartilhar experiências literárias, descobrir novos livros e interagir com uma comunidade de pessoas que gostam de leitura.
 
-Primordialmente tive a ideia de criar o Capítulo pra praticar o uso de requisições para o consumo de APIs, com isso praticando tailwind, hooks React e permanência de objetos (objetos complexos). As requisições são puro JS de propósito para praticar no vanilla, sem o uso de bibliotecas como Axios, que por facilitar o processo creio que não aprenderia 100% se algo desse errado.
+Primordialmente tive a ideia de criar o Capítulo pra praticar o uso de requisições para o consumo de APIs, com isso praticando tailwind, hooks React e permanência de objetos (objetos complexos). As requisições são puro JS de propósito, fiz isso para praticar no vanilla sem o uso de bibliotecas como Axios, que por facilitar o processo creio que não aprenderia 100% se algo desse errado.
 
 ## ✨ Funcionalidades
 
