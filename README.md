@@ -158,13 +158,14 @@ IMOJIS_API_KEY=COLOQUE_SUA_CHAVE_AQUI
 O arquivo real deve conter suas chaves. O exemplo abaixo é apenas ilustrativo:
 
 ```env
-GOOGLE_BOOKS_API_KEY= *chave*
-GIFS_GIPHY_API_KEY= *chave*
-EMOJIS_API_KEY= *chave*
+GOOGLE_BOOKS_API_KEY=*chave*
+GIFS_GIPHY_API_KEY=*chave*
+EMOJIS_API_KEY=*chave*
 ```
 
 > Os nomes das variáveis precisam corresponder exatamente aos usados pelo backend. Após alterar o `.env`, reinicie o servidor.
 
+Obs: Não deve haver espaços entre o nome da variável de ambiente e a própria chave, assim como os exemplos acima
 ## 🔒 Segurança
 
 - Nunca envie o arquivo `.env` ao GitHub.
