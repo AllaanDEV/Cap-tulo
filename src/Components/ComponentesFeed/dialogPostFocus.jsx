@@ -48,13 +48,10 @@ export function DialogPostFocus() {
     }
   }, [postFocus]);
 
-  // Foco vindo da página de ebooks: o item clicado é um livro, não um post.
   const isBookFocus = dataPostFocus?.type === "bookFocus";
 
-  // Verifica se o post possui um tipo especial.
   const isModifiedPost = ["feedback", "resenha"].includes(dataPostFocus?.type);
 
-  // Verifica o progresso de leitura do livro.
   const ebookProgressFocus = ebookSaved
     .filter((ebook) => ebook.userId === user?.id)
     .find(
@@ -71,14 +68,13 @@ export function DialogPostFocus() {
     media !== "listNull" &&
     (media?.type === "gif" || (Array.isArray(media) && media.length > 0));
 
-  // O layout divide a dialog se houver mídia ou conteúdo de livro.
   const hasTwoColumns = isBookFocus || isModifiedPost || hasMedia;
 
   return (
     <dialog
       ref={dialogFocus}
       onCancel={() => setPostFocus(false)}
-      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-300 ease-out overflow-hidden ${
+      className={`w-[60vw] h-[40vw] m-auto rounded-3xl bg-primary transform transition-all duration-300 ease-out overflow-hidden backdrop:bg-black/3  ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
