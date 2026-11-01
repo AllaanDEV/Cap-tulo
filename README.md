@@ -1,36 +1,40 @@
-
-<img src="src/assets/transparent-logo.svg">
+ <img src="src/assets/transparent-logo.svg" />
 
 # 📚 Capítulo
 
 O Capítulo é uma aplicação web voltada para leitores, criada para compartilhar experiências literárias, descobrir novos livros e interagir com uma comunidade de pessoas que gostam de leitura.
 
-Primordialmente tive a ideia de criar o Capítulo pra praticar o uso de requisições para o consumo de APIs, com isso praticando tailwind, hooks React e permanência de objetos (objetos complexos). As requisições são puro JS de propósito, fiz isso para praticar no vanilla sem o uso de bibliotecas como Axios, que por facilitar o processo creio que não aprenderia 100% se algo desse errado.
+Primordialmente, tive a ideia de criar o Capítulo para praticar o uso de requisições para o consumo de APIs, além de aprofundar meus conhecimentos em Tailwind CSS, React Hooks e persistência de objetos complexos.
+
+As requisições REST são feitas com JavaScript puro de propósito, sem bibliotecas como Axios. A intenção foi praticar o funcionamento das requisições nativamente, entendendo melhor cada etapa do processo e como lidar com possíveis erros.
 
 ## ✨ Funcionalidades
 
-- Busca e exploração de qualquer livro que você queira.
-- Avaliação de livros
-- Feed com publicações personalizadas de livros.
+- Busca e exploração de livros.
+- Avaliação de livros.
+- Feed com publicações personalizadas sobre livros.
 - Usuários simulados.
-- Curtidas, comentários (edição e exclusão), salvamento de posts.
-- Lista de qualquer interação em seu perfil
+- Curtidas e comentários (edição e exclusão).
+- Salvamento de publicações.
+- Histórico de interações no perfil.
 - Perfis personalizados.
-- temas dinâmicos.
+- Temas dinâmicos.
 - Acompanhamento de progresso e metas de leitura.
 - Salvamento de livros.
 - Pesquisa e envio de GIFs.
 - Seletor e busca de emojis.
 
 ## Feed
-<img width="1586" height="683" alt="{9B746EAE-EF7B-4C66-A0BB-D577E4652054}" src="https://github.com/user-attachments/assets/17586311-9105-4010-9621-ed77ab24cd98" />
+
+<img width="1586" height="683" alt="Feed" src="https://github.com/user-attachments/assets/17586311-9105-4010-9621-ed77ab24cd98" />
 
 ## Post
-<img width="1585" height="685" alt="{BF96B7D3-E470-4307-AEBC-CAE9294AB885}" src="https://github.com/user-attachments/assets/57bdb4ad-1247-47c7-bd5a-c132d6d38551" />
+
+<img width="1585" height="685" alt="Post" src="https://github.com/user-attachments/assets/57bdb4ad-1247-47c7-bd5a-c132d6d38551" />
 
 ## Perfil
-<img width="1585" height="686" alt="{99CD8C4B-A122-4E24-A75A-A622A6BB976E}" src="https://github.com/user-attachments/assets/cb500231-debd-4def-9b1f-c05ef744a3b9" />
 
+<img width="1585" height="686" alt="Perfil" src="https://github.com/user-attachments/assets/cb500231-debd-4def-9b1f-c05ef744a3b9" />
 
 ## 🛠️ Tecnologias utilizadas
 
@@ -42,13 +46,16 @@ Primordialmente tive a ideia de criar o Capítulo pra praticar o uso de requisi�
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![TipTap](https://img.shields.io/badge/TipTap-000000?style=for-the-badge&logo=github&logoColor=white)
+![Apollo Client](https://img.shields.io/badge/Apollo_Client-311C87?style=for-the-badge&logo=apollographql&logoColor=white)
 
 ### Backend
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
 
-**APIs externas**
+### APIs externas
+
 - [Google Books API](https://developers.google.com/books/docs/v1/using)
 - [GIPHY API](https://developers.giphy.com/docs/api/quick-start-guide/)
 - [Open Emoji API](https://emoji-api.com/)
@@ -89,27 +96,51 @@ npm install
 
 Crie um arquivo `.env` dentro de `backend-capítulo/`, seguindo o modelo `.env.example`.
 
-Preencha as chaves conforme as instruções da próxima seção.
+Preencha as chaves conforme as instruções da seção [Configuração das APIs](#-configuração-das-apis).
 
-### 5. Inicie o backend
+### 5. Inicie os servidores
+
+O projeto utiliza três processos independentes durante a execução: o servidor REST, o servidor GraphQL e o servidor de desenvolvimento do frontend.
+
+**Terminal 1 — Backend REST (Express)**
 
 Dentro da pasta `backend-capítulo/`:
 
 ```bash
-node server.js
+npm run dev
 ```
 
-Mantenha esse terminal aberto.
+O servidor Express será iniciado na porta `3000`.
 
-### 6. Inicie o frontend
+**Terminal 2 — Backend GraphQL (JSON GraphQL Server)**
 
-Abra outro terminal na pasta principal `Capítulo` e execute:
+Abra outro terminal, entre novamente na pasta `backend-capítulo/` e execute:
+
+```bash
+npm run server:graphql
+```
+
+O servidor GraphQL será iniciado na porta `3001`, utilizando os dados definidos em `dataBase/index.js`.
+
+**Terminal 3 — Frontend (Vite)**
+
+Abra um terceiro terminal na pasta principal `Capítulo` e execute:
 
 ```bash
 npm run dev
 ```
 
 Acesse o endereço local informado pelo Vite no terminal.
+
+**Resumo dos servidores:**
+
+| Serviço | Tecnologia | Porta |
+|---|---|---|
+| Frontend | Vite | 5173 (padrão) |
+| Backend REST | Express | 3000 |
+| Backend GraphQL | JSON GraphQL Server | 3001 |
+
+Mantenha os três terminais abertos enquanto estiver utilizando a aplicação.
 
 ## 🔑 Configuração das APIs
 
@@ -123,13 +154,7 @@ As chaves são necessárias para que as funcionalidades que dependem das APIs ex
 2. Entre ou crie uma conta.
 3. Crie um aplicativo e obtenha uma API key.
 4. Abra `backend-capítulo/.env`.
-5. Configure a variável com o nome esperado pelo backend:
-
-```env
-GIPHY_API_KEY=COLOQUE_SUA_CHAVE_AQUI
-```
-
-Confirme o nome da variável no `server.js`; se o código usar outro nome, mantenha o nome esperado pelo código.
+5. Configure a variável com o nome esperado pelo backend.
 
 ### 2. Google Books API — livros
 
@@ -137,35 +162,28 @@ Confirme o nome da variável no `server.js`; se o código usar outro nome, mante
 2. Crie ou selecione um projeto.
 3. Habilite a Google Books API no catálogo de APIs.
 4. Acesse a página de credenciais e crie uma chave de API.
-5. Adicione a chave ao arquivo `backend-capítulo/.env`:
-
-```env
-GOOGLE_BOOKS_API_KEY=COLOQUE_SUA_CHAVE_AQUI
-```
+5. Adicione a chave ao arquivo `backend-capítulo/.env`.
 
 ### 3. Open Emoji API — emojis
 
 1. Acesse [emoji-api.com](https://emoji-api.com/).
 2. Solicite sua chave de API gratuita.
-3. Adicione a chave ao arquivo `backend-capítulo/.env`:
-
-```env
-IMOJIS_API_KEY=COLOQUE_SUA_CHAVE_AQUI
-```
+3. Adicione a chave ao arquivo `backend-capítulo/.env`.
 
 ### Exemplo de arquivo `.env`
 
 O arquivo real deve conter suas chaves. O exemplo abaixo é apenas ilustrativo:
 
 ```env
-GOOGLE_BOOKS_API_KEY=*chave*
-GIFS_GIPHY_API_KEY=*chave*
-EMOJIS_API_KEY=*chave*
+GOOGLE_BOOKS_API_KEY=SUA_CHAVE
+GIFS_GIPHY_API_KEY=SUA_CHAVE
+EMOJIS_API_KEY=SUA_CHAVE
 ```
 
-> Os nomes das variáveis precisam corresponder exatamente aos usados pelo backend. Após alterar o `.env`, reinicie o servidor.
+Os nomes das variáveis precisam corresponder exatamente aos utilizados pelo backend. Após alterar o `.env`, reinicie o servidor.
 
-Obs: Não deve haver espaços entre o nome da variável de ambiente e a própria chave, assim como os exemplos acima
+**Observação:** não deve haver espaços entre o nome da variável de ambiente e o valor da chave.
+
 ## 🔒 Segurança
 
 - Nunca envie o arquivo `.env` ao GitHub.
@@ -177,5 +195,8 @@ Obs: Não deve haver espaços entre o nome da variável de ambiente e a própria
 
 O projeto utiliza APIs externas, que podem ter limites de requisições ou exigir credenciais próprias.
 
-Os dados de demonstração e o armazenamento da aplicação dependem da implementação atual do projeto. Consulte o código para entender as limitações de persistência.
+O backend disponibiliza endpoints REST por meio do Express e um servidor GraphQL independente por meio do JSON GraphQL Server.
 
+O servidor GraphQL utiliza os dados definidos na pasta `dataBase/`, enquanto o frontend consome as consultas por meio do Apollo Client.
+
+Os dados de demonstração e o armazenamento da aplicação dependem da implementação atual do projeto. Consulte o código para entender as limitações de persistência.
