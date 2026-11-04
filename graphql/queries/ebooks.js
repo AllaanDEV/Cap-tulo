@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_EBOOKS = gql`
+export const GET_ALL_EBOOKS = gql`
   query GetEbooks($q: String, $page: Int) {
     ebooks(q: $q, page: $page) {
       id
@@ -22,3 +22,11 @@ export const GET_EBOOKS = gql`
     }
   }
 `;
+
+// export const GET_EBOOKS_USERS= gql`
+// query GetEbooksUsers($id: ID){
+//   ebooks(id: $id){
+
+//   }
+// }
+// `

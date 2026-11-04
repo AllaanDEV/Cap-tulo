@@ -1,4 +1,4 @@
-import { feedbackEbooks, postsIniciais, users } from "../../dataBase/index.js";
+import { feedbackEbooks, postsIniciais, users} from "../../dataBase/index.js";
 import { GraphQLScalarType, Kind } from "graphql";
 import ebookResolvers from "./resolverEbook.js";
 

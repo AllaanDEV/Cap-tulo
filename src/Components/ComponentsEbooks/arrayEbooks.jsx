@@ -4,7 +4,7 @@ import { ButtonBook } from "./buttonBook";
 import AppContext from "../context";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { useQuery } from "@apollo/client/react";
-import { GET_EBOOKS } from "../../../graphql/queries/ebooks";
+import { GET_ALL_EBOOKS } from "../../../graphql/queries/ebooks";
 
 export function ArrayEbooks() {
   const { ebooks, setEbooks, bookSearch, searchValue, themeOn } =
@@ -37,7 +37,7 @@ export function ArrayEbooks() {
 
   const [allBooks, setAllBooks] = useState(categorias[0]);
 
-  const { data, loading, error, refetch } = useQuery(GET_EBOOKS, {
+  const { data, loading, error, refetch } = useQuery(GET_ALL_EBOOKS, {
     variables: {
       q: termoAtivo?.trim() || allBooks,
       page: page,

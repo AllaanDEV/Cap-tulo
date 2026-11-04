@@ -16,7 +16,6 @@ router.get("/", async (_, res) => {
   res.json(data);
 });
 
-
 router.get("/search/:search", async (req, res) => {
   const { search } = req.params;
 
@@ -35,7 +34,6 @@ router.get("/search/:search", async (req, res) => {
 
   return res.status(200).json(data);
 });
-
 
 router.get("/search/categories/:categorie", async (req, res) => {
   const { categorie } = req.params;

@@ -10,7 +10,7 @@ export function DialogEmoji({
   toggleDialogEmojisComment,
   setToggleDialogEmojisComment,
 }) {
-  const { setContentEmoji, dialogEmoji, setDialogEmoji, themeOn} =
+  const { setContentEmoji, dialogEmoji, setDialogEmoji, themeOn } =
     useContext(AppContext);
 
   const inputRef = useRef(null);
@@ -161,7 +161,11 @@ export function DialogEmoji({
           onCancel={closeDialog}
         >
           <div className="flex w-full justify-between items-start p-1 shrink-0">
-            <span className= {` text-2xl font-extrabold ${themeOn ? "text-black" : "text-white"}`}>EMOJIS</span>
+            <span
+              className={` text-2xl font-extrabold ${themeOn ? "text-black" : "text-white"}`}
+            >
+              EMOJIS
+            </span>
 
             <button
               type="button"
@@ -171,7 +175,7 @@ export function DialogEmoji({
               <XSavedEbook />
             </button>
           </div>
-          
+
           <form
             className="flex w-full shrink-0 items-center border border-border rounded-full my-1"
             onSubmit={(e) => e.preventDefault()}
@@ -249,16 +253,19 @@ export function DialogEmoji({
                 </div>
               ) : searchList.length > 0 ? (
                 <ul className="flex flex-wrap">
-                  {searchList.map((item, index) => (
-                    <li
-                      key={item.unicodeName ?? `${item.character}-${index}`}
-                      onClick={() => selectEmoji(item.character)}
-                      className="cursor-pointer text-2xl"
-                      title={item.unicodeName}
-                    >
-                      {item.character}
-                    </li>
-                  ))}
+                  {searchList.map((item, index) => {
+                    console.log("ITEM PESQUISA", item);
+                    return (
+                      <li
+                        key={item.unicodeName ?? `${item.character}-${index}`}
+                        onClick={() => selectEmoji(item.character)}
+                        className="cursor-pointer text-2xl"
+                        title={item.unicodeName}
+                      >
+                        {item.character}
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
                 <div>
@@ -284,22 +291,29 @@ export function DialogEmoji({
                 >
                   <Lines className="border-[2px] mt-1" />
 
-                  <span className={`text-lg font-bold ${themeOn ? "text-black" : "text-white"}`}>
+                  <span
+                    className={`text-lg font-bold ${themeOn ? "text-black" : "text-white"}`}
+                  >
                     {group?.charAt(0).toUpperCase() + group?.slice(1)}
                   </span>
 
                   <ul className="flex flex-wrap justify-center">
                     {emojis
                       .filter((emoji) => emoji.group === group)
-                      .map((item, index) => (
-                        <li
-                          key={item.unicodeName ?? `${item.character}-${index}`}
-                          onClick={() => selectEmoji(item.character)}
-                          className="cursor-pointer text-2xl"
-                        >
-                          <span>{item.character}</span>
-                        </li>
-                      ))}
+                      .map((item, index) => {
+                        console.log("item", item);
+                        return (
+                          <li
+                            key={
+                              item.unicodeName ?? `${item.character}-${index}`
+                            }
+                            onClick={() => selectEmoji(item.character)}
+                            className="cursor-pointer text-2xl"
+                          >
+                            <span>{item.character}</span>
+                          </li>
+                        );
+                      })}
                   </ul>
                 </div>
               ))

@@ -80,11 +80,50 @@ const typeDefs = gql`
     type: String
   }
 
+  #GIFs
+  type Url {
+    url: String
+  }
+
+  type Original {
+    url: Url
+  }
+
+  type Images {
+    original: Original
+  }
+
+  type Gif {
+    id: ID
+    title: String
+    images: Images
+  }
+
+
+#Emojis
+type Emojis{
+  character: String
+  unicodeName: String
+  group: String
+}
+
   type Query {
+    # Google Books
     ebooks(q: String = "fiction", page: Int = 0): [Ebook]
+
+    # Giphy
+    gifs(busca: String, offset: Int = 0): [Gif]
+
+    # Emojis
+    emojis: [Emojis]
+    searchEmojis(search: String!): [Emojis]
+    emojisByCategory(categorie: String!): [Emojis]
+
+    # Dados locais
     allFeedbackEbooks: [FeedbackEbook]
     allPostsIniciais: [PostInicial]
     allUsers: [User]
+
   }
 `;
 
