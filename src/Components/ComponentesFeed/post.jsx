@@ -43,8 +43,6 @@ export const Post = memo(function Post({ post }) {
     setPostComment(!postComment);
   };
 
-  // Dados globais (perfil e likes) são carregados uma única vez no layout,
-  // não a cada post — evita dezenas de requisições idênticas por navegação.
   useEffect(() => {
     if (post?.type === "feedback") {
       arrayFeedbacksEbooks();

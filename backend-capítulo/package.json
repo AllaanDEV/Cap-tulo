@@ -5,17 +5,21 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "server:graphql": "json-graphql-server dataBase/index.js --port 3001"
+    "server:graphql": "node graphql/server.js"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "graphql": "^16.14.2",
     "json-graphql-server": "^3.3.2",
     "jsonwebtoken": "^9.0.3",
     "mime-types": "^3.0.2",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@apollo/server": "^5.5.1",
+    "graphql": "^16.14.2",
+    "graphql-tag": "^2.12.7"
   }
 }

@@ -36,6 +36,7 @@ export function EbookProgress({ book, className, ...props }) {
         book.ebook.volumeInfo.title,
     );
 
+    console.log("book", book)
   return (
     <ContainerEbooks
       styleActive={

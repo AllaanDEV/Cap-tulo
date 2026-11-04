@@ -21,7 +21,6 @@ export function FormRegister({ onSwitch }) {
     const password = dataFormRegister.get("password");
 
     const data = await Register({ email, password, name, userName });
-    console.log(data);
     if (data.success == true) {
       navigate("/auth/login");
     } else {

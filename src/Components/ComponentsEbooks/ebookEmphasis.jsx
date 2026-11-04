@@ -9,10 +9,9 @@ export function EbookEmphasis() {
   const { order, ebookSaved } = useContext(AppContext);
   const { saveBook } = useRequisicoes({});
 
-  // Livro em destaque = o com maior nota na lista "order".
+  // Livro em destaque
   const bookEmphasis = order[0];
 
-  // order[0].data tem a forma { ebook: { ebook: <livro> } } — o servidor
   // espera apenas o objeto do livro (id, etag, volumeInfo), como em ebooks.jsx.
   const saveBookEmphasis = async () => {
     const livro = bookEmphasis?.data?.ebook?.ebook ?? bookEmphasis?.data?.ebook;

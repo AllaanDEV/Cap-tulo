@@ -79,6 +79,7 @@ export function Header() {
     } else if (location.pathname === "/ebooks") {
       const term = e.target.value;
 
+ 
       setSearchValue(term);
 
       // Cancela a busca anterior (timer e requisição em andamento)

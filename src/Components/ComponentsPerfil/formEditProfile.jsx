@@ -66,8 +66,6 @@ export function FormEditProfile({ active, ...props }) {
   const photoIcon = (evento) => {
     const file = evento.target.files[0];
 
-    console.log("Arquivo selecionado:", file);
-
     if (!file) return;
 
     const formatosPermitidos = ["image/jpeg", "image/png", "image/webp"];

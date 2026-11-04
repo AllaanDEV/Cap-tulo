@@ -121,7 +121,7 @@ export function FollowersList() {
           styleButtonFollowersList === "following" && (
             <ul className="w-full flex items-start flex-col gap-5 px-2">
               {filterFollowers(paramsId).map((following, index) => {
-                              // console.log("FOLLOWINGF", following)
+          
                 return (
                   <li
                     key={index}

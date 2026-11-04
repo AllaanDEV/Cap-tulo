@@ -9,10 +9,16 @@ import AppContext from "../context";
 export function Ebook(ebook) {
   const SaveIcon = Save;
 
-  const { ebookSaved, themeOn, setPostFocus, setDataPostFocus } =
-    useContext(AppContext);
+  const {
+    ebookSaved,
+    setEbookSaved,
+    user,
+    themeOn,
+    setPostFocus,
+    setDataPostFocus,
+  } = useContext(AppContext);
 
-  const { saveBook } = useRequisicoes({});
+  const { saveBook, deleteSavedBook, getBookSave } = useRequisicoes({});
 
   const [details, setDetails] = useState(false);
 
@@ -20,15 +26,24 @@ export function Ebook(ebook) {
     setDetails(!details);
   };
 
-  const saveBookEbook = async () => {
-    await saveBook(ebook.ebook);
-  };
-
   const isSaved = ebookSaved?.some(
     (savedBook) => savedBook?.ebook?.id === ebook?.ebook?.id,
   );
 
-  const style= themeOn ? "text-[#995d43]" : "text-[#765242]"
+  // Alterna entre salvar e remover o livro da estante.
+  const saveBookEbook = async () => {
+    if (isSaved) {
+      const updatedBooks = await deleteSavedBook(ebook.ebook.id);
+      if (updatedBooks) {
+        setEbookSaved(updatedBooks);
+        await getBookSave(user.id);
+      }
+    } else {
+      await saveBook(ebook.ebook);
+    }
+  };
+
+  const style = themeOn ? "text-[#995d43]" : "text-[#765242]";
   // Abre a dialog de foco (mesma do feed) quando o livro é clicado em telas SM+.
   const openBookFocus = () => {
     if (window.innerWidth < 640) return;
@@ -59,15 +74,13 @@ export function Ebook(ebook) {
       </div>
 
       <div className="pt-4">
-        <h4 className="font-serif text-xl font-semibold">{ebook.title}</h4>
-
+        <h3 className={`mt-1 font-serif text-sm italic ${style}`}>
+          {ebook.ebook.volumeInfo?.title}
+        </h3>
         <p
-          className={`mt-1 font-serif text-sm italic ${style}`}
+          className={`mt-1 mb-5 font-serif text-[12px] italic ${themeOn ? "text-[#995d43]/60" : "text-[#765242]/80"}`}
         >
-          {ebook.ebook.volumeInfo.title}
-        </p>
-        <p className= {`mt-1 mb-5 font-serif text-[12px] italic ${themeOn ? "text-[#995d43]/60" : "text-[#765242]/80"}`}>
-          {ebook.ebook.volumeInfo.subtitle}
+          {ebook.ebook.volumeInfo?.subtitle}
         </p>
 
         <Lines></Lines>
@@ -87,7 +100,6 @@ export function Ebook(ebook) {
                 : "text-[#995d43] hover:text-yellow-600"
             }`}
             onClick={(e) => {
-              // Evita que o clique no botão abrir a dialog.
               e.stopPropagation();
               saveBookEbook();
             }}

@@ -12,8 +12,16 @@ router.get("/", async (req, res) => {
 
   const startIndex = Number(page) * 40;
 
+const params = new URLSearchParams({
+  q,
+  maxResults: "40",
+  startIndex: String(startIndex),
+  projection: "full",
+  key,
+});
+
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=40&startIndex=${startIndex}&key=${key}`,
+    `https://www.googleapis.com/books/v1/volumes?${params}`,
   );
 
   const data = await response.json();
