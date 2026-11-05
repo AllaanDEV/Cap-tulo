@@ -81,12 +81,9 @@ const typeDefs = gql`
   }
 
   #GIFs
-  type Url {
-    url: String
-  }
 
   type Original {
-    url: Url
+    url: String
   }
 
   type Images {

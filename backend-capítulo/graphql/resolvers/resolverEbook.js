@@ -1,6 +1,6 @@
-const GOOGLE_BOOKS_KEY = process.env.GOOGLE_BOOKS_API_KEY;
-const GIPHY_KEY = process.env.GIPHY_API_KEY;
-const EMOJIS_KEY = process.env.EMOJIS_API_KEY;
+const GOOGLE_BOOKS_API_KEY = globalThis.process?.env.GOOGLE_BOOKS_API_KEY;
+const GIFS_GIPHY_API_KEY = globalThis.process?.env.GIFS_GIPHY_API_KEY;
+const EMOJIS_API_KEY = globalThis.process?.env?.EMOJIS_API_KEY;
 
 const resolvers = {
   Query: {
@@ -13,7 +13,7 @@ const resolvers = {
         maxResults: "40",
         startIndex: String(startIndex),
         projection: "full",
-        key: GOOGLE_BOOKS_KEY,
+        key: GOOGLE_BOOKS_API_KEY,
       });
 
       const response = await fetch(
@@ -36,28 +36,38 @@ const resolvers = {
       const params = new URLSearchParams({
         q: busca,
         limit: "10",
-        api_key: GIPHY_KEY,
+        api_key: GIFS_GIPHY_API_KEY,
         offset: String(offset),
         rating: "g",
       });
 
-      const response = await fetch(
-        `https://api.giphy.com/v1/gifs/search?${params}`,
-      );
+      try {
+        const response = await fetch(
+          `https://api.giphy.com/v1/gifs/search?${params}`,
+        );
 
-      if (!response.ok) {
-        throw new Error("Erro ao buscar GIFs na Giphy.");
+        const data = await response.json();
+
+        console.log("DATA", data);
+
+        if (!response.ok) {
+          console.error("STATUS:", response.status);
+          console.error("RESPOSTA GIPHY:", data);
+
+          throw new Error(data.message || "Erro ao buscar GIFs na Giphy.");
+        }
+
+        return data.data ?? [];
+      } catch (error) {
+        console.error("ERRO ORIGINAL GIPHY:", error);
+        throw error;
       }
-
-      const data = await response.json();
-
-      return data.data ?? [];
     },
 
     // Emojis
     emojis: async () => {
       const response = await fetch(
-        `https://emoji-api.com/emojis?access_key=${EMOJIS_KEY}`,
+        `https://emoji-api.com/emojis?access_key=${EMOJIS_API_KEY}`,
       );
 
       if (!response.ok) {
@@ -69,7 +79,7 @@ const resolvers = {
 
     searchEmojis: async (_, { search }) => {
       const response = await fetch(
-        `https://emoji-api.com/emojis?search=${encodeURIComponent(search)}&access_key=${EMOJIS_KEY}`,
+        `https://emoji-api.com/emojis?search=${encodeURIComponent(search)}&access_key=${EMOJIS_API_KEY}`,
       );
 
       if (!response.ok) {
@@ -81,7 +91,7 @@ const resolvers = {
 
     emojisByCategory: async (_, { categorie }) => {
       const response = await fetch(
-        `https://emoji-api.com/categories/${encodeURIComponent(categorie)}?access_key=${EMOJIS_KEY}`,
+        `https://emoji-api.com/categories/${encodeURIComponent(categorie)}?access_key=${EMOJIS_API_KEY}`,
       );
 
       if (!response.ok) {
