@@ -4,14 +4,26 @@ import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { createPortal } from "react-dom";
 import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useQuery } from "@apollo/client/react";
+import { GET_GIFS } from "../../../graphql/queries/ebooks";
 
-export function DialogGif({className}) {
+export function DialogGif({ className }) {
   const gifRef = useRef(null);
-  const { dialogGif, setDialogGif, setGifData, themeOn } = useContext(AppContext);
+  const { dialogGif, setDialogGif, setGifData, themeOn } =
+    useContext(AppContext);
   const { getGifs: fetchGifs } = useRequisicoes({});
 
   const [busca, setBusca] = useState("options");
   const [arrayGifs, setArrayGifs] = useState([]);
+  const [gifOffset, setGifOffset] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+
+  const { data, loading, error } = useQuery(GET_GIFS, {
+    variables: {
+      busca: inputValue,
+      offset: gifOffset,
+    },
+  });
 
   useEffect(() => {
     if (dialogGif) {
@@ -33,40 +45,40 @@ export function DialogGif({className}) {
     };
   }, [dialogGif]);
 
-  const [gifOffset, setGifOffset] = useState();
-
-  const getGifs = async (add, searchTerm = busca) => {
-    const data = await fetchGifs(searchTerm, gifOffset);
-
+  const getGifs = (add) => {
     if (add) {
-      setArrayGifs((prev) => [...prev, ...data]);
       setGifOffset((prev) => prev + 10);
-      return;
     }
-
-    setGifOffset();
-    setArrayGifs(data);
-    setGifOffset(10);
   };
 
   const handleDefaultItemClick = async (name) => {
+    setGifOffset(0);
+    setArrayGifs([]);
     setInputValue(name);
-    setBusca(name);
-
-    await getGifs(false, name);
   };
 
-  const [inputValue, setInputValue] = useState("");
+  useEffect(() => {
+    if (data?.gifs) {
+      const newList = new Map(data.gifs.map((gif) => [gif.id, gif]));
 
-  const valueDefault = (exit) => {
-    const valueInput = inputValue;
-    if (valueInput === "") {
+      setArrayGifs((prev) => {
+        const combined = new Map([...prev, ...newList]);
+
+        return combined;
+      });
+    }
+  }, [data]);
+
+  const valueDefault = (exit, value) => {
+    if (value === "") {
       setBusca("options");
+      setGifOffset(0);
       setArrayGifs([]);
     } else if (exit) {
       setInputValue("");
       setArrayGifs([]);
       setBusca("options");
+      setGifOffset(0);
     }
   };
 
@@ -97,6 +109,12 @@ export function DialogGif({className}) {
     },
   ];
 
+  useEffect(() => {
+    if (error) {
+      console.warn("Erro na renderização de gifs:", error);
+    }
+  }, [error]);
+
   return createPortal(
     <dialog
       ref={gifRef}
@@ -110,7 +128,11 @@ export function DialogGif({className}) {
     >
       <div className="h-full overflow-y-auto scrollbar-none  bg-border">
         <div className="flex items center justify-between p-3">
-          <span className={` text-2xl font-extrabold front-fraunce ${themeOn ? "text-black" : "text-white"}`}>Escolha um gif</span>
+          <span
+            className={` text-2xl font-extrabold front-fraunce ${themeOn ? "text-black" : "text-white"}`}
+          >
+            Escolha um gif
+          </span>
           <button
             onClick={() => {
               (setDialogGif((prev) => !prev),
@@ -133,27 +155,28 @@ export function DialogGif({className}) {
               placeholder="Pesquisar Gifs"
               value={inputValue}
               onChange={(e) => {
-                setInputValue(e.target.value);
-                (setBusca(e.target.value.trim()), valueDefault());
+                setInputValue(e.target.value.trim());
+                (setBusca(e.target.value.trim()),
+                  valueDefault(false, e.target.value));
               }}
               className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  getGifs();
                   valueDefault();
                 }
               }}
             ></input>
           </label>
 
-          {arrayGifs && (
+          {[...arrayGifs.values()]?.length > 0 && (
             <div className="mt-5 columns-2 gap-1">
-              {arrayGifs?.map((g) => {
+              {[...arrayGifs.values()]?.map((g) => {
                 return (
                   <img
-                    key={g.id}
-                    src={g.images.original.url}
-                    alt={g.title}
+                    key={g?.id}
+                    src={g?.images?.original?.url}
+                    alt={g?.title}
+                    title={g?.title}
                     className="mb-1 w-full break-inside-avoid rounded-md object-cover transition-transform duration-200 hover:scale-105 cursor-pointer"
                     onClick={() => {
                       setGifData(g);
@@ -166,8 +189,12 @@ export function DialogGif({className}) {
             </div>
           )}
 
+          {loading && [...arrayGifs.values()]?.length === 0 && (
+            <span className="w-full flex justify-center">Carregando...</span>
+          )}
+
           <ul className="grid grid-cols-2 gap-1 mt-5">
-            {arrayGifs.length === 0 &&
+            {[...arrayGifs.values()]?.length === 0 &&
               itemsDefault.map((i) => {
                 return (
                   <li
@@ -187,15 +214,20 @@ export function DialogGif({className}) {
                 );
               })}
           </ul>
-          {arrayGifs.length > 0 && (
+          {[...arrayGifs.values()]?.length > 0 && (
             <button
               onClick={() => getGifs(true)}
               className="w-full mt-2 bg-primary/20 border-border py-2 rounded-xs  hover:bg-primary/40"
             >
-              Buscar mais
+              {loading ? "buscaaando..." : "Buscar mais"}
             </button>
           )}
-
+          {error && [...arrayGifs.values()]?.length > 0 && (
+            <span className="w-full justify-center flex">
+              Não consegimos buscar os gifs, consulte o console para mais
+              informações. Tente reiniciar a página
+            </span>
+          )}
           <div className="mt-full"></div>
         </div>
       </div>

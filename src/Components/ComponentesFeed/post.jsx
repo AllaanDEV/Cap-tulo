@@ -74,6 +74,8 @@ export const Post = memo(function Post({ post }) {
     return () => clearTimeout(timer);
   }, [showComments]);
 
+
+  console.log("POSTMIDIA", post.midia)
   return (
     <>
       <Div className=" animate-[expandPost_450ms_cubic-bezier(0.22,1,0.36,1)_both]">
@@ -82,7 +84,7 @@ export const Post = memo(function Post({ post }) {
             <UsersInfo post={post} />
 
             {user.id === post.authorId && (
-              <details className="flex flex-col items-end relative">
+              <details className="flex flex-col items-end relative cursor-pointer">
                 <summary className="list-none marker:hidden">
                   <Icon></Icon>
                 </summary>
@@ -117,7 +119,7 @@ export const Post = memo(function Post({ post }) {
                 setDataPostFocus(post);
               }}
             >
-              {post?.midia?.type === "gif" ? (
+              {post?.midia?.images?.original ? (
                 <img
                   src={post?.midia?.images?.original?.url}
                   alt={post?.midia?.title}

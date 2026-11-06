@@ -66,7 +66,7 @@ export function DialogPostFocus() {
   const hasMedia =
     media &&
     media !== "listNull" &&
-    (media?.type === "gif" || (Array.isArray(media) && media.length > 0));
+    (media?.images?.original || (Array.isArray(media) && media.length > 0));
 
   const hasTwoColumns = isBookFocus || isModifiedPost || hasMedia;
 
@@ -160,10 +160,11 @@ export function DialogPostFocus() {
         ) : hasMedia ? (
           <div className="bg-background flex flex-col justify-center p-4 w-full h-full min-w-0 overflow-y-auto scrollbar-none">
             <Info className="rounded-lg">
-              {media?.type === "gif" ? (
+              {media?.images?.original ? (
                 <img
                   src={media?.images?.original?.url}
                   alt={media?.title}
+                  title={media?.title}
                   className="w-full object-contain"
                 />
               ) : Array.isArray(media) ? (

@@ -3,7 +3,8 @@ import AppContext from "../context";
 import { Search, XSavedEbook } from "../svgCode";
 import { Lines } from "../ComponentsForm/lines";
 import { ContainerTags } from "../ComponentsPerfil/containerTags";
-import { useRequisicoes } from "../context/hooks/useRequisicoes";
+import { useQuery } from "@apollo/client/react";
+import { GET_EMOJIS, GET_SEARCH_EMOJIS } from "../../../graphql/queries/ebooks";
 
 export function DialogEmoji({
   emojiContainerRef,
@@ -13,19 +14,16 @@ export function DialogEmoji({
   const { setContentEmoji, dialogEmoji, setDialogEmoji, themeOn } =
     useContext(AppContext);
 
-  const inputRef = useRef(null);
   const menuRef = useRef(null);
   const groupRefs = useRef({});
 
   const [emojis, setEmojis] = useState([]);
   const [searchList, setSearchList] = useState([]);
   const [search, setSearch] = useState("");
-  const [loadingEmojis, setLoadingEmojis] = useState(false);
-  const [loadingSearch, setLoadingSearch] = useState(false);
-  const [searchError, setSearchError] = useState(false);
 
-  const { getEmojis: fetchEmojis, searchEmojis: fetchSearchEmojis } =
-    useRequisicoes({});
+  const { data, loading, error, refetch } = useQuery(
+    search ? GET_SEARCH_EMOJIS : GET_EMOJIS,
+  );
 
   const isOpen = toggleDialogEmojisComment || dialogEmoji;
   const isSearching = search.trim().length > 0;
@@ -51,94 +49,42 @@ export function DialogEmoji({
     };
   }, [isOpen]);
 
-  // Carrega a lista completa de emojis
   useEffect(() => {
-    if (!isOpen) return;
-
-    const controller = new AbortController();
-
-    const fetchData = async () => {
-      setLoadingEmojis(true);
-
-      try {
-        const data = await fetchEmojis(controller.signal);
-
-        setEmojis(Array.isArray(data) ? data : []);
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Erro ao carregar emojis:", error);
-          setEmojis([]);
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoadingEmojis(false);
-        }
-      }
-    };
-
-    fetchData();
-
-    return () => controller.abort();
-  }, [isOpen]);
-
-  // Pesquisa automática com debounce e cancelamento
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const query = search.trim();
-
-    if (!query) {
-      const reset = setTimeout(() => {
-        setSearchList([]);
-        setSearchError(false);
-        setLoadingSearch(false);
-      }, 0);
-      return () => clearTimeout(reset);
+    if (!search.trim()) {
+      setSearchList([]);
+      return;
     }
-
-    const controller = new AbortController();
-
-    const start = setTimeout(() => {
-      setLoadingSearch(true);
-      setSearchError(false);
-    }, 0);
-
     const timeout = setTimeout(async () => {
       try {
-        const data = await fetchSearchEmojis(query, controller.signal);
+        const { data } = await refetch({
+          search: search.trim(),
+        });
 
-        setSearchList(Array.isArray(data) ? data : []);
+        setSearchList(data?.searchEmojis ?? []);
       } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Erro ao pesquisar emojis:", error);
-          setSearchList([]);
-          setSearchError(true);
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoadingSearch(false);
-        }
+        console.error(error);
+        setSearchList([]);
       }
     }, 300);
 
-    return () => {
-      clearTimeout(start);
-      clearTimeout(timeout);
-      controller.abort();
-    };
-  }, [search, isOpen]);
+    return () => clearTimeout(timeout);
+  }, [search, refetch]);
 
-  const tagsEmojis = [
-    { tag: "😆", categorie: "smileys-emotion" },
-    { tag: "👁️", categorie: "people-body" },
-    { tag: "🐵", categorie: "animals-nature" },
-    { tag: "🍇", categorie: "food-drink" },
-    { tag: "🌚", categorie: "travel-places" },
-    { tag: "🎃", categorie: "activities" },
-    { tag: "🕶️", categorie: "objects" },
-    { tag: "⚠️", categorie: "symbols" },
-    { tag: "🚩", categorie: "Flags" },
-  ];
+
+  useEffect(() => {
+    if (data?.emojis) {
+      setEmojis(data?.emojis);
+    }
+  }, [data]);
+
+
+  useEffect(() => {
+    if (error) {
+      console.warn("Erro ao renderizar emojis,", error);
+    }
+  }, [error]);
+
+  if (!isOpen) return null;
 
   const selectEmoji = (character) => {
     setContentEmoji(character);
@@ -151,7 +97,17 @@ export function DialogEmoji({
     setToggleDialogEmojisComment(false);
   };
 
-  if (!isOpen) return null;
+  const tagsEmojis = [
+    { tag: "😆", categorie: "smileys-emotion" },
+    { tag: "👁️", categorie: "people-body" },
+    { tag: "🐵", categorie: "animals-nature" },
+    { tag: "🍇", categorie: "food-drink" },
+    { tag: "🌚", categorie: "travel-places" },
+    { tag: "🎃", categorie: "activities" },
+    { tag: "🕶️", categorie: "objects" },
+    { tag: "⚠️", categorie: "symbols" },
+    { tag: "🚩", categorie: "Flags" },
+  ];
 
   return (
     <div className="bg-primary">
@@ -211,9 +167,6 @@ export function DialogEmoji({
                   <ContainerTags
                     className="hover:bg-gray/20 text-xl"
                     onClick={() => {
-                      const container = emojiContainerRef?.current;
-                      if (!container) return;
-
                       const targetKey = Object.keys(groupRefs.current).find(
                         (key) =>
                           key.trim().toLowerCase() ===
@@ -243,18 +196,17 @@ export function DialogEmoji({
 
           <div className="flex-1 min-h-0 overflow-y-auto">
             {isSearching ? (
-              loadingSearch ? (
+              loading ? (
                 <div className="mx-auto w-fit mt-5">
                   <p>Pesquisando emojis...</p>
                 </div>
-              ) : searchError ? (
-                <div>
+              ) : error ? (
+                <div className="w-full flex justify-center">
                   <p>Não foi possível pesquisar emojis. Tente novamente.</p>
                 </div>
-              ) : searchList.length > 0 ? (
+              ) : searchList?.length > 0 ? (
                 <ul className="flex flex-wrap">
-                  {searchList.map((item, index) => {
-                    console.log("ITEM PESQUISA", item);
+                  {searchList?.map((item, index) => {
                     return (
                       <li
                         key={item.unicodeName ?? `${item.character}-${index}`}
@@ -268,11 +220,11 @@ export function DialogEmoji({
                   })}
                 </ul>
               ) : (
-                <div>
+                <div className="w-full flex justify-center">
                   <p>Nenhum emoji encontrado.</p>
                 </div>
               )
-            ) : loadingEmojis ? (
+            ) : loading ? (
               <div>
                 <img
                   src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzRldTk4ejllNXR2bDJ5NHlsNmRtc21xanNlMjMzYWxlZmVzaDhwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mtrWumAn1N9Hg27BrI/giphy.gif"
@@ -280,7 +232,8 @@ export function DialogEmoji({
                   alt="Carregando emojis"
                 />
               </div>
-            ) : emojis.length > 0 ? (
+            ) : (
+              emojis.length > 0 &&
               [...new Set(emojis.map((emoji) => emoji.group))].map((group) => (
                 <div
                   key={group}
@@ -301,7 +254,6 @@ export function DialogEmoji({
                     {emojis
                       .filter((emoji) => emoji.group === group)
                       .map((item, index) => {
-                        console.log("item", item);
                         return (
                           <li
                             key={
@@ -317,14 +269,6 @@ export function DialogEmoji({
                   </ul>
                 </div>
               ))
-            ) : (
-              <div>
-                <img
-                  src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzRldTk4ejllNXR2bDJ5NHlsNmRtc21xanNlMjMzYWxlZmVzaDhwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mtrWumAn1N9Hg27BrI/giphy.gif"
-                  className="w-full h-auto"
-                  alt=""
-                />
-              </div>
             )}
           </div>
         </div>

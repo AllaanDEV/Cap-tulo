@@ -23,10 +23,37 @@ export const GET_ALL_EBOOKS = gql`
   }
 `;
 
-// export const GET_EBOOKS_USERS= gql`
-// query GetEbooksUsers($id: ID){
-//   ebooks(id: $id){
+export const GET_GIFS = gql`
+  query GetGifs($busca: String, $offset: Int) {
+    gifs(busca: $busca, offset: $offset) {
+      id
+      title
+      images {
+        original {
+          url
+        }
+      }
+    }
+  }
+`;
 
-//   }
-// }
-// `
+export const GET_EMOJIS = gql`
+  query GetEmojis {
+    emojis {
+      character
+      unicodeName
+      group
+    }
+  }
+`;
+
+export const GET_SEARCH_EMOJIS = gql`
+  query GetSearchEmojis($search: String!) {
+   searchEmojis(search: $search) {
+      character
+      unicodeName
+      group
+    }
+  }
+`;
+  
