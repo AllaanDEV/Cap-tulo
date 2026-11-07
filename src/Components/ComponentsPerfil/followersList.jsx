@@ -131,12 +131,12 @@ export function FollowersList() {
                       following={following}
                       followerUserId={following.userId}
                     ></UsersInfo>
-                    {following.userId === user.id && (
+          
                       <ButtonFlow
                         userId={following.following}
                         className="sm:px-10 px-4"
                       ></ButtonFlow>
-                    )}
+                   
                   </li>
                 );
               })}

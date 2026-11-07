@@ -685,8 +685,7 @@ export function useRequisicoes({ post, setLike }) {
   };
 
   const followersPost = async (profileId) => {
-    // ===== Atualização otimista: alterna o estado de seguir na UI antes da
-    // requisição. O botão muda na hora, sem esperar o servidor responder.
+
     const wasFollowing = followers.some(
       (f) => f.userId === user.id && f.following === profileId,
     );
@@ -718,8 +717,6 @@ export function useRequisicoes({ post, setLike }) {
         throw new Error();
       }
 
-      // Confirma com o servidor: recarrega a lista de seguidores em segundo
-      // plano (a UI já foi atualizada otimisticamente).
       invalidateRequestCache("followers");
       allFollowers().catch(() => {});
     } catch (error) {
@@ -777,9 +774,6 @@ export function useRequisicoes({ post, setLike }) {
       if (response.status === 404) {
         setGoal(null);
 
-        // Comparação via String(): o id da URL vem como texto e o do storage
-        // pode ser número — com === estrito o setGoalUser nunca era atingido
-        // e a meta da sidebar se perdia ao voltar de outros perfis.
         if (String(paramsId) === String(user?.id)) {
           setGoalUser(null);
         }
@@ -1089,47 +1083,6 @@ export function useRequisicoes({ post, setLike }) {
     return response;
   };
 
-  // Vinda de "ComponentsEbooks/arrayEbooks.jsx"
-  const getBooks = async (term, page) => {
-    const response = await fetch(
-      `${KEY}api/books?q=${term}&page=${page}`,
-    ).catch((error) => {
-      console.error(error);
-      return null;
-    });
-
-    if (!response) {
-      alert("Não foi possível carregar os livros. Tente novamente mais tarde.");
-      return [];
-    }
-
-    const res = await response.json();
-
-    return res ?? [];
-  };
-
-  // Busca de livros usada pelo header na página de livros.
-  // Busca diretamente na API, independente da lista já carregada.
-  const searchBooks = async (term) => {
-    if (!term || !term.trim()) return [];
-
-    const response = await fetch(
-      `${KEY}api/books?q=${encodeURIComponent(term.trim())}&page=0`,
-    ).catch((error) => {
-      console.error(error);
-      return null;
-    });
-
-    if (!response) {
-      alert("Não foi possível buscar os livros. Tente novamente mais tarde.");
-      return [];
-    }
-
-    const res = await response.json();
-
-    return res ?? [];
-  };
-
   // Vinda de "saves.jsx"
   const getPostsSavedPage = async () => {
     const response = await fetch(`${KEY}api/posts/saved`).catch((error) => {
@@ -1147,72 +1100,7 @@ export function useRequisicoes({ post, setLike }) {
     return await response.json();
   };
 
-  // Vinda de "ComponentesFeed/dialogGif.jsx"
-  const getGifs = async (busca, offset) => {
-    const response = await fetch(
-      `${KEY}api/gifs?busca=${encodeURIComponent(busca)}&offset=${offset}`,
-    ).catch((error) => {
-      console.error(error);
-      return null;
-    });
 
-    if (!response) {
-      alert("Não foi possível carregar os gifs. Tente novamente mais tarde.");
-      return [];
-    }
-
-    return await response.json();
-  };
-
-  // Vindas de "ComponentesFeed/dialogEmoji.jsx"
-  const getEmojis = async (signal) => {
-    const response = await fetch(`${KEY}api/emojis`, { signal }).catch(
-      (error) => {
-        if (error.name === "AbortError") return null;
-
-        console.error(error);
-        return null;
-      },
-    );
-
-    if (!response) {
-      if (signal?.aborted) return null;
-
-      alert("Não foi possível carregar os emojis. Tente novamente mais tarde.");
-      throw new Error("Erro ao carregar emojis");
-    }
-
-    if (!response.ok) {
-      throw new Error("Erro ao carregar emojis");
-    }
-
-    return await response.json();
-  };
-
-  const searchEmojis = async (query, signal) => {
-    const response = await fetch(
-      `${KEY}api/emojis/search/${encodeURIComponent(query)}`,
-      { signal },
-    ).catch((error) => {
-      if (error.name === "AbortError") return null;
-
-      console.error(error);
-      return null;
-    });
-
-    if (!response) {
-      if (signal?.aborted) return null;
-
-      alert("Não foi possível pesquisar emojis. Tente novamente mais tarde.");
-      throw new Error("Erro ao pesquisar emojis");
-    }
-
-    if (!response.ok) {
-      throw new Error("Erro ao pesquisar emojis");
-    }
-
-    return await response.json();
-  };
 
   // Vinda de "ComponentesFeed/tiptapEditor.jsx"
   const searchUsersMention = async (query) => {
@@ -1307,8 +1195,6 @@ export function useRequisicoes({ post, setLike }) {
     if (!edit.ok) {
       alert("Não foi possível editar seu perfil. Tente novamente mais tarde.");
     } else {
-      // Sem invalidar o cache, fetchProfile() podia devolver a lista antiga
-      // de fotos (TTL de 5s) e a foto nova demorava a aparecer.
       invalidateRequestCache("profile");
     }
 
@@ -1500,12 +1386,7 @@ export function useRequisicoes({ post, setLike }) {
     goalUserLogged,
     newPostSimple,
     saveBook,
-    getBooks,
-    searchBooks,
     getPostsSavedPage,
-    getGifs,
-    getEmojis,
-    searchEmojis,
     searchUsersMention,
     deleteSavedBook,
     saveGoal,

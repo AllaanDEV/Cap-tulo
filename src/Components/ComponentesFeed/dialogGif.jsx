@@ -11,9 +11,7 @@ export function DialogGif({ className }) {
   const gifRef = useRef(null);
   const { dialogGif, setDialogGif, setGifData, themeOn } =
     useContext(AppContext);
-  const { getGifs: fetchGifs } = useRequisicoes({});
 
-  const [busca, setBusca] = useState("options");
   const [arrayGifs, setArrayGifs] = useState([]);
   const [gifOffset, setGifOffset] = useState(0);
   const [inputValue, setInputValue] = useState("");
@@ -71,13 +69,12 @@ export function DialogGif({ className }) {
 
   const valueDefault = (exit, value) => {
     if (value === "") {
-      setBusca("options");
       setGifOffset(0);
       setArrayGifs([]);
     } else if (exit) {
       setInputValue("");
-      setArrayGifs([]);
-      setBusca("options");
+      setArrayGifs([])
+
       setGifOffset(0);
     }
   };
@@ -136,7 +133,7 @@ export function DialogGif({ className }) {
           <button
             onClick={() => {
               (setDialogGif((prev) => !prev),
-                setBusca("options"),
+      
                 valueDefault(true));
             }}
             className="cursor-pointer"
@@ -156,7 +153,8 @@ export function DialogGif({ className }) {
               value={inputValue}
               onChange={(e) => {
                 setInputValue(e.target.value.trim());
-                (setBusca(e.target.value.trim()),
+                (
+       
                   valueDefault(false, e.target.value));
               }}
               className="bg-gray w-full bg- rounded-full py-2 border border-border pl-8"

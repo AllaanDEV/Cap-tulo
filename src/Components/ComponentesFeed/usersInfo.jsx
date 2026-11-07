@@ -26,22 +26,19 @@ export function UsersInfo({ post, users, following, className }) {
       user?.userName,
   };
 
-  // Verifica se você segue o usuário do card.
   const isFollowing = followers.some(
     (f) => f.userId === user?.id && f.following === profile.id,
   );
 
-  // Verifica se o usuário do card segue você.
   const followsYou = followers.some(
     (f) => f.userId === profile.id && f.following === user?.id,
   );
 
-  // Comparação frouxa (==): o userId da API e o id vindo da URL/estado
-  // podem ter tipos diferentes (string x number), o que quebrava o ícone.
   const photo = (photoValueFeed || []).find(
     (photo) => photo.userId == profile.id,
   );
 
+  console.log("FOLLOWING", users)
   return (
     <div className={`flex gap-2 items-start justify-center ${className || ""}`}>
       <PerfilIcon to={`/perfil/${profile.id}`} state={{ profile }}>
@@ -59,6 +56,10 @@ export function UsersInfo({ post, users, following, className }) {
           <span className={`${themeOn ? "text-black" : "text-white"} text-sm`}>
             {profile.name}
           </span>
+
+          {users?.id === user.id && (
+            <span className="text-gray text-sm">·  Você</span>
+          )}
 
           {post?.type === "resenha" && (
             <p className="text-gray">

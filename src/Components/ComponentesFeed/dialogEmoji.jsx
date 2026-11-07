@@ -7,7 +7,6 @@ import { useQuery } from "@apollo/client/react";
 import { GET_EMOJIS, GET_SEARCH_EMOJIS } from "../../../graphql/queries/ebooks";
 
 export function DialogEmoji({
-  emojiContainerRef,
   toggleDialogEmojisComment,
   setToggleDialogEmojisComment,
 }) {
@@ -141,7 +140,6 @@ export function DialogEmoji({
             </div>
 
             <input
-              ref={inputRef}
               type="text"
               value={search}
               placeholder="Pesquisar emojis..."

@@ -6,11 +6,11 @@ import mime from "mime-types";
 
 import {users} from "./dataBase/dataBaseUsers.js"
 import {postsIniciais} from "./dataBase/dataBasePosts.js"
+import {allFollowers} from "./dataBase/dataBaseAllFollowers.js"
+import {dadosPerfil} from "./dataBase/dataBaseProfileData.js"
 
 import { feedbackEbooks } from "./dataBase/dataBaseEbooks.js";
 import booksRouter from "./booksApi.js";
-import gifsRouter from "./gifsApi.js";
-import emojisRouter from "./emojisApi.js";
 
 import express from "express";
 import cors from "cors";
@@ -29,8 +29,8 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cors());
 app.use(express.json());
 app.use("/api/books", booksRouter);
-app.use("/api/gifs", gifsRouter);
-app.use("/api/emojis", emojisRouter);
+// app.use("/api/gifs", gifsRouter);
+// app.use("/api/emojis", emojisRouter);
 
 const swaggerOptions = {
   definition: {
@@ -220,7 +220,7 @@ app.post("/api/posts", (req, res) => {
 
 // 3. Deletar um post
 app.delete("/api/posts/:id", (req, res) => {
-  const { id, newUser } = req.params;
+  const { id } = req.params;
   const tokenString = req.headers.authorization.split(" ");
   const decoded = jwt.verify(tokenString[1], "minha_chave_super_secreta");
   const postClear = posts.find((p) => p.id === id);
@@ -301,7 +301,7 @@ app.post("/api/posts/:id/comments", (req, res) => {
   if (!post) {
     return res.status(404).json({ error: "Post não encontrado" });
   }
-  const randomNumber = Math.floor(Math.random() * 100) + 1;
+  // const randomNumber = Math.floor(Math.random() * 100) + 1;
 
   const newComment = {
     id: Date.now().toString(),
@@ -533,54 +533,6 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-// Simulação de um banco de dados simples (ou perfil do usuário)
-// let posts = [
-//   {
-//     id: "1",
-//     author: "Maria",
-//     content: "Estudando JavaScript hoje!",
-//     likes: 2,
-//     comments: [],
-//   },
-//   {
-//     id: "2",
-//     author: "João",
-//     content: "Conectando o front ao back-end!",
-//     likes: 4,
-//     comments: [],
-//   },
-// ];
-
-// Lista para armazenar os IDs dos posts salvos pelo usuário
-// let postsSalvos = [];
-
-// 1. Rota para salvar ou remover dos salvos (Toggle Bookmark)
-// app.post("/api/posts/:id/save", (req, res) => {
-//   const { id } = req.params;
-
-//   // Verifica se o post realmente existe
-//   const post = posts.find((p) => p.id === id);
-//   if (!post) {
-//     return res.status(404).json({ error: "Post não encontrado." });
-//   }
-
-//   // Verifica se o post já está salvo
-//   const index = postsSalvos.indexOf(id);
-
-//   if (index > -1) {
-//     // Se já estiver salvo, remove da lista (desalvar)
-//     postsSalvos.splice(index, 1);
-//     return res
-//       .status(200)
-//       .json({ message: "Post removido dos salvos.", saved: false });
-//   } else {
-//     // Se não estiver salvo, adiciona na lista
-//     postsSalvos.push(id);
-//     return res
-//       .status(200)
-//       .json({ message: "Post salvo com sucesso!", saved: true });
-//   }
-// });
 
 let saved = [];
 
@@ -640,159 +592,6 @@ app.get("/api/posts/:id", (req, res) => {
 
   return res.status(200).json(post);
 });
-
-const dadosPerfil = {
-  1729000000001: {
-    bios: "Leio 3 páginas e já considero desenvolvimento pessoal. ??",
-    location: "São Paulo, SP",
-    link: "https://example.com/gabriel-lendo",
-  },
-  1729000000002: {
-    bios: "40% gato, 60% poeira estelar e 100% sem pagar aluguel. ??",
-    location: "Via Láctea, planeta Terra",
-    link: "https://example.com/miau-cosmico",
-  },
-  1729000000003: {
-    bios: "Minha lista de livros é maior que minha disposição.",
-    location: "Campinas, SP",
-    link: "https://example.com/ana-leitora",
-  },
-  1729000000004: {
-    bios: "Forte como café, emocionalmente leite morno. ?",
-    location: "Cafeteria do Multiverso",
-    link: "https://example.com/cafe-com-leite",
-  },
-  1729000000005: {
-    bios: "Só mais um capítulo. Mentira, são mais 47.",
-    location: "Curitiba, PR",
-    link: "https://example.com/lucas-mais-um-capitulo",
-  },
-  1729000000006: {
-    bios: "Disponível para conversas profundas e viagens interplanetárias. ??",
-    location: "Anéis de Saturno, bloco B",
-    link: "https://example.com/lua-fora-de-orbita",
-  },
-  1729000000007: {
-    bios: "Personagem principal de um livro que ainda não comecei.",
-    location: "Rio de Janeiro, RJ",
-    link: "https://example.com/bia-protagonista",
-  },
-  1729000000008: {
-    bios: "Não sou sobremesa. Sou um estilo de vida. ??",
-    location: "Geladeira, prateleira de cima",
-    link: "https://example.com/pudim-supremo",
-  },
-  1729000000009: {
-    bios: "Leitor profissional, comprador compulsivo de livros.",
-    location: "Belo Horizonte, MG",
-    link: "https://example.com/pedro-estante-infinita",
-  },
-  1729000000010: {
-    bios: "Visualizo tudo, respondo nunca. ??",
-    location: "Entre o mundo real e o Wi-Fi",
-    link: "https://example.com/fantasma-visto",
-  },
-  1729000000011: {
-    bios: "Romances fictícios porque os reais estáo em manutenão.",
-    location: "Florianópolis, SC",
-    link: "https://example.com/julia-romances",
-  },
-  1729000000012: {
-    bios: "Uma batata pequena diante do universo. ??",
-    location: "Galáxia do Puruí",
-    link: "https://example.com/batata-intergalactica",
-  },
-  1729000000013: {
-    bios: "Leio fantasia para fugir dos boletos da realidade.",
-    location: "Santos, SP",
-    link: "https://example.com/matheus-fantasia",
-  },
-  1729000000014: {
-    bios: "Previsão do dia: 90% de chance de ficar em casa. ???",
-    location: "Acima da sua cidade, talvez chovendo",
-    link: "https://example.com/nuvem-depressiva",
-  },
-  1729000000015: {
-    bios: "Coleciono livros, marcadores e problemas imaginãorios.",
-    location: "Porto Alegre, RS",
-    link: "https://example.com/lari-entre-paginas",
-  },
-  1729000000016: {
-    bios: "Carregando personalidade... 99% há três horas.",
-    location: "Atrês do monitor",
-    link: "https://example.com/pixel-sem-sinal",
-  },
-  1729000000017: {
-    bios: "Leitor de madrugada, arrependido de manhã.",
-    location: "Brasília, DF",
-    link: "https://example.com/joao-sem-sono",
-  },
-  1729000000018: {
-    bios: "Respira. Bebe Água. Ignora os problemas. ??",
-    location: "Lago tranquilo, perto de um jacaré",
-    link: "https://example.com/capivara-paz",
-  },
-  1729000000019: {
-    bios: "Se o casal não ficar junto no final, eu viro vilã.",
-    location: "Recife, PE",
-    link: "https://example.com/duda-casal-endgame",
-  },
-  1729000000020: {
-    bios: "Bio não encontrada. Tente novamente após o próximo capítulo.",
-    location: "Página não encontrada",
-    link: "https://example.com/erro-404",
-  },
-  1729000000021: {
-    bios: "Crítico literário autoproclamado desde ontem.",
-    location: "Goiânia, GO",
-    link: "https://example.com/rafa-opina",
-  },
-  1729000000022: {
-    bios: "Durmo de dia e julgo personagens às 3 da manhã. ??",
-    location: "Caverna 13, setor das sombras",
-    link: "https://example.com/morcego-madrugada",
-  },
-  1729000000023: {
-    bios: "Meu tipo favorito? Personagem literário emocionalmente indisponível.",
-    location: "Salvador, BA",
-    link: "https://example.com/bela-ficcao",
-  },
-  1729000000024: {
-    bios: "Duas metades, um recheio e zero estabilidade emocional. ??",
-    location: "Pacote aberto na cozinha",
-    link: "https://example.com/biscoito-recheio",
-  },
-  1729000000025: {
-    bios: "Leio livros enormes para fugir de conversas curtas.",
-    location: "Manaus, AM",
-    link: "https://example.com/vitin-leitor",
-  },
-  1729000000026: {
-    bios: "Au-au.exe iniciado. Carinho detectado. Bateria fraca. ??",
-    location: "Tomada mais próxima",
-    link: "https://example.com/robozinho.exe",
-  },
-  1729000000027: {
-    bios: "Minha linguagem do amor é indicar livros e cobrar a leitura.",
-    location: "Niterói, RJ",
-    link: "https://example.com/manu-indica",
-  },
-  1729000000028: {
-    bios: "Penso, logo coaxo. ??",
-    location: "Lago existencialista",
-    link: "https://example.com/sapo-pensa",
-  },
-  1729000000029: {
-    bios: "Protagonista de uma história que nem o autor entende.",
-    location: "São José dos Campos, SP",
-    link: "https://example.com/enzo-protagonista",
-  },
-  1729000000030: {
-    bios: "Conexão instável, sinal forte quando ninguém está olhando. ??",
-    location: "Rede protegida por senha",
-    link: "https://example.com/wifi-gratis-talvez",
-  },
-};
 
 let profileEdit = users.map((user) => ({
   userId: user.id,
@@ -971,190 +770,6 @@ app.delete("/profilePerfilIcon/:id", (req, res) => {
     .json({ message: "Foto de perfil apagada com sucesso" });
 });
 
-//seguidores
-let allFollowers = [
-  {
-    user: "Ana Clara Souza",
-    userId: "1729000000003",
-    following: "1729000000001",
-  },
-  {
-    user: "Gabriel Oliveira",
-    userId: "1729000000001",
-    following: "1729000000005",
-  },
-  {
-    user: "Pudim",
-    userId: "1729000000008",
-    following: "1729000000003",
-  },
-  {
-    user: "Lua de Saturno",
-    userId: "1729000000006",
-    following: "1729000000018",
-  },
-  {
-    user: "Pedro Henrique Lima",
-    userId: "1729000000009",
-    following: "1729000000001",
-  },
-  {
-    user: "Capivara Zen",
-    userId: "1729000000018",
-    following: "1729000000008",
-  },
-  {
-    user: "Beatriz Costa",
-    userId: "1729000000007",
-    following: "1729000000011",
-  },
-  {
-    user: "Fantasma Online",
-    userId: "1729000000010",
-    following: "1729000000003",
-  },
-  {
-    user: "Julia Ferreira",
-    userId: "1729000000011",
-    following: "1729000000009",
-  },
-  {
-    user: "Matheus Santos",
-    userId: "1729000000013",
-    following: "1729000000006",
-  },
-  {
-    user: "Nuvem Cinza",
-    userId: "1729000000014",
-    following: "1729000000013",
-  },
-  {
-    user: "Larissa Almeida",
-    userId: "1729000000015",
-    following: "1729000000007",
-  },
-  {
-    user: "Pixel Perdido",
-    userId: "1729000000016",
-    following: "1729000000020",
-  },
-  {
-    user: "João Pedro Ribeiro",
-    userId: "1729000000017",
-    following: "1729000000015",
-  },
-  {
-    user: "Maria Eduarda Silva",
-    userId: "1729000000019",
-    following: "1729000000011",
-  },
-  {
-    user: "Rafael Carvalho",
-    userId: "1729000000021",
-    following: "1729000000002",
-  },
-  {
-    user: "Morcego Noturno",
-    userId: "1729000000022",
-    following: "1729000000016",
-  },
-  {
-    user: "Isabela Rodrigues",
-    userId: "1729000000023",
-    following: "1729000000019",
-  },
-  {
-    user: "Biscoito Recheado",
-    userId: "1729000000024",
-    following: "1729000000008",
-  },
-  {
-    user: "Vitor Mendes",
-    userId: "1729000000025",
-    following: "1729000000021",
-  },
-  {
-    user: "Manuela Gomes",
-    userId: "1729000000027",
-    following: "1729000000023",
-  },
-  {
-    user: "Sapo Filosófico",
-    userId: "1729000000028",
-    following: "1729000000014",
-  },
-  {
-    user: "Enzo Barros",
-    userId: "1729000000029",
-    following: "1729000000005",
-  },
-  {
-    user: "Wi-Fi do Vizinho",
-    userId: "1729000000030",
-    following: "1729000000027",
-  },
-  {
-    user: "Gabriel Oliveira",
-    userId: "1729000000001",
-    following: "1729000000018",
-  },
-  {
-    user: "Ana Clara Souza",
-    userId: "1729000000003",
-    following: "1729000000024",
-  },
-  {
-    user: "Café com Leite",
-    userId: "1729000000004",
-    following: "1729000000010",
-  },
-  {
-    user: "Robô de Estimação",
-    userId: "1729000000026",
-    following: "1729000000004",
-  },
-  {
-    user: "Lucas Martins",
-    userId: "1729000000005",
-    following: "1729000000029",
-  },
-  {
-    user: "Batata Cósmica",
-    userId: "1729000000012",
-    following: "1729000000022",
-  },
-  {
-    user: "Rafael Carvalho",
-    userId: "1729000000021",
-    following: "1729000000030",
-  },
-  {
-    user: "Isabela Rodrigues",
-    userId: "1729000000023",
-    following: "1729000000017",
-  },
-  {
-    user: "Manuela Gomes",
-    userId: "1729000000027",
-    following: "1729000000012",
-  },
-  {
-    user: "Pudim",
-    userId: "1729000000008",
-    following: "1729000000026",
-  },
-  {
-    user: "Julia Ferreira",
-    userId: "1729000000011",
-    following: "1729000000025",
-  },
-  {
-    user: "Enzo Barros",
-    userId: "1729000000029",
-    following: "1729000000014",
-  },
-];
-
 app.post("/user/followers/:id", (req, res) => {
   const { user, userId } = req.body;
   const { id } = req.params;
@@ -1169,13 +784,21 @@ app.post("/user/followers/:id", (req, res) => {
     (followers) => followers.userId === userId,
   );
 
+  // Deixar de seguir
   if (unfollow) {
     userChosen.followersNumber -= 1;
 
-    allFollowers = allFollowers.filter(
-      (follower) => !(follower.userId === userId && follower.following === id),
+    // Remove do array geral
+    const index = allFollowers.findIndex(
+      (follower) =>
+        follower.userId === userId && follower.following === id,
     );
 
+    if (index !== -1) {
+      allFollowers.splice(index, 1);
+    }
+
+    // Remove do array do usuário
     userChosen.followersArray = userChosen.followersArray.filter(
       (follower) => follower.userId !== userId,
     );
@@ -1183,14 +806,16 @@ app.post("/user/followers/:id", (req, res) => {
     return res.status(201).json(userChosen.followersArray);
   }
 
+  // Seguir
   const newFollow = {
-    user: user,
-    userId: userId,
+    user,
+    userId,
     following: id,
   };
 
   allFollowers.push(newFollow);
 
+  // Remove possíveis duplicados
   const arraySetFollowers = [
     ...new Map(
       allFollowers.map((followers) => [
@@ -1200,7 +825,12 @@ app.post("/user/followers/:id", (req, res) => {
     ).values(),
   ];
 
-  allFollowers = arraySetFollowers;
+  // Atualiza o array original sem trocar sua referência
+  allFollowers.splice(
+    0,
+    allFollowers.length,
+    ...arraySetFollowers,
+  );
 
   userChosen.followersNumber += 1;
   userChosen.followersArray.push(newFollow);

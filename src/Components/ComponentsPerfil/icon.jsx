@@ -359,18 +359,7 @@ export function Icon() {
                 seguidores: {seguindoProfileId(profileId)?.length}
               </button>
             </div>
-            {/* <div className="flex gap-2 flex-wrap text-black/50">
-              {tags.map((t, index) => {
-                return (
-                  <p
-                    key={index}
-                    className="rounded-full border border-border  px-3 text-center bg-background flex items-center"
-                  >
-                    {t.description}
-                  </p>
-                );
-              })}
-            </div> */}
+
             <div class="grid grid-cols-3 border border-border rounded-2xl bg-background /60 divide-x divide-y divide-border overflow-hidden text-center lg:grid-rows-1 lg:grid-cols-3 lg:divide-y-0">
               <ArrayTable profile={profile}></ArrayTable>
             </div>

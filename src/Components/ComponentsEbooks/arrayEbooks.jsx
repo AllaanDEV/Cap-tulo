@@ -7,9 +7,9 @@ import { useQuery } from "@apollo/client/react";
 import { GET_ALL_EBOOKS } from "../../../graphql/queries/ebooks";
 
 export function ArrayEbooks() {
-  const { ebooks, setEbooks, bookSearch, searchValue, themeOn } =
+  const { ebooks, setEbooks, searchValue, themeOn } =
     useContext(AppContext);
-  const { getBookSave, user, getBooks } = useRequisicoes({});
+  const { getBookSave, user } = useRequisicoes({});
 
   const [page, setPage] = useState(0);
   const [booksContador, setBooksContador] = useState(0);

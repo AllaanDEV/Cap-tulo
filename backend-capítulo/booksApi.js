@@ -2,32 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import {feedbackEbooks, savedBooks} from "./dataBase/dataBaseEbooks.js"
 
-const key = process.env.GOOGLE_BOOKS_API_KEY;
-
 const router = express.Router();
-
-
-// router.get("/", async (req, res) => {
-//   const { q = "fiction", page = 0 } = req.query;
-
-//   const startIndex = Number(page) * 40;
-
-// const params = new URLSearchParams({
-//   q,
-//   maxResults: "40",
-//   startIndex: String(startIndex),
-//   projection: "full",
-//   key,
-// });
-
-//   const response = await fetch(
-//     `https://www.googleapis.com/books/v1/volumes?${params}`,
-//   );
-
-//   const data = await response.json();
-
-//   res.json(data.items ?? []);
-// });
 
 router.post("/saved", (req, res) => {
   const ebook = req.body;

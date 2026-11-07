@@ -5,6 +5,7 @@ import { useRequisicoes } from "../context/hooks/useRequisicoes";
 import { XSavedEbook } from "../svgCode";
 import { useLocation } from "react-router";
 import { ArrayStars } from "../ComponentesFeed/arrayStars";
+import { DeleteButton } from "../ComponentesFeed/deleteButton";
 
 export function ContainerEbooks({
   children,
@@ -17,6 +18,7 @@ export function ContainerEbooks({
   starsEbook,
   starsNumber,
   styleDisable,
+  delet,
   onClick,
   ...props
 }) {
@@ -95,6 +97,7 @@ export function ContainerEbooks({
           </div>
           {children}
         </div>
+        {delet && <DeleteButton className="items-end w-fit flex"></DeleteButton>}
       </div>
     </div>
   );

@@ -277,14 +277,16 @@ export function TipTapEditor({ onEditorReady }) {
         <EbookCitation
           className="mt-5"
           text={valuePostsCitation}
-          title={styleCardActive?.ebook.volumeInfo.title}
-          authors={styleCardActive?.ebook.volumeInfo.authors}
+          title={styleCardActive?.ebook?.volumeInfo?.title}
+          authors={styleCardActive?.ebook?.volumeInfo?.authors}
+          delet={true}
         ></EbookCitation>
       ) : containerModified && postModified === "feedback" ? (
         <ContainerEbooks
-          title={styleCardActive.ebook.volumeInfo.title}
-          subtitle={styleCardActive.ebook.volumeInfo.subtitle}
-          thumbnail={styleCardActive.ebook.volumeInfo.imageLinks?.thumbnail}
+          title={styleCardActive?.ebook?.volumeInfo?.title}
+          subtitle={styleCardActive?.ebook?.volumeInfo?.subtitle}
+          thumbnail={styleCardActive?.ebook?.volumeInfo?.imageLinks?.thumbnail}
+          delet={true}
           className={"mt-5"}
         ></ContainerEbooks>
       ) : (
